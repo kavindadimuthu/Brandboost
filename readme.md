@@ -1,4 +1,4 @@
-#Sitemap for Brandboost
+# Sitemap for Brandboost
 <img width="4960" alt="Brandboost Sitemap" src="https://github.com/user-attachments/assets/15e41c43-55c8-4a38-b778-9d5a20b650d7">
 
 # Custom MVC PHP Framework
