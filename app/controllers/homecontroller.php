@@ -1,10 +1,10 @@
 <?php
 class HomeController extends Controller {
     public function index() {
-        $this->view('home/index');
+        $this->view('pages/common/index');
     }
     public function about() {
-        $this->view('home/about');
+        $this->view('pages/common/about');
     }
 }
 

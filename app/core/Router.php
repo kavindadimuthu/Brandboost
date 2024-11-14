@@ -10,7 +10,7 @@ class Router {
 
     public function __construct() {
         $url = $this->parseUrl();
-        print_r($url);  // This will print the URL array
+        // print_r($url);  // This will print the URL array
 
         if (isset($url[1]) && file_exists(__DIR__ . '/../controllers/' . $url[1] . '.php')) {
             $this->controller = $url[1] ;
