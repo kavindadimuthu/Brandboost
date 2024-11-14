@@ -24,8 +24,8 @@
     <header>
         <div><h1>Brandboost</h1></div>
         <div class="menu-links">
-            <a href="http://localhost:8000/adminviewcontroller/adminDashboard">Admin Dashboard page</a>
-            <a href="http://localhost:8000/homecontroller/about">about page</a>
+            <a href="http://localhost:8000/homecontroller/about">About page</a>
+            <a href="http://localhost:8000/homecontroller/contact">Contact page</a>
             <button onclick="window.location.href='/homecontroller/register'">Register</button>
             <button onclick="window.location.href='/homecontroller/login'">Login</button>
         </div>

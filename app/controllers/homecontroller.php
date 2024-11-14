@@ -27,5 +27,8 @@ class HomeController extends Controller {
     public function about() {
         $this->view('pages/common/about');
     }
+    public function contact() {
+        $this->view('pages/common/contact');
+    }
 }
 
