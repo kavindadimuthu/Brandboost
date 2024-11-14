@@ -26,8 +26,8 @@
         <div class="menu-links">
             <a href="http://localhost:8000/adminviewcontroller/adminDashboard">Admin Dashboard page</a>
             <a href="http://localhost:8000/homecontroller/about">about page</a>
-            <button class="login-button" onclick="window.location.href='#'">Register</button>
-            <button class="login-button" onclick="window.location.href='/homecontroller/login'">Login</button>
+            <button onclick="window.location.href='/homecontroller/register'">Register</button>
+            <button onclick="window.location.href='/homecontroller/login'">Login</button>
         </div>
     </header>
     <center><h1>Welcome to the Home Page</h1></center>
