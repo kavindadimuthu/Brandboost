@@ -22,8 +22,6 @@
                 </div>
             </div>
             
-        <a href="#" class="back-link">Back to complaints page</a>
-
         
         <div class="section">
             <h2>Complainer details</h2>

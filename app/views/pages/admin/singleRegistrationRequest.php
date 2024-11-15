@@ -24,8 +24,6 @@
             </div>
         </div>
 
-        <a href="#" class="back-link">Back to registrations page</a>
-
         <div class="section">
           <h2>New user details</h2>
           <div id="userDetails"></div>
