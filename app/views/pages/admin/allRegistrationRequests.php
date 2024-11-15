@@ -17,9 +17,9 @@
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
     <div>
-        <h1>All registrationRequests page</h1>
-        <p>Here shows list of all registration requests which is made by new users</p>
-        <button onclick="window.location.href='/adminviewcontroller/singleRegistrationRequest'">Go to single registration request view</button>
+        <h1>Single Registration Request page</h1>
+        <p>Here shows registration form of a user</p>
+        <button onclick="window.location.href='/adminviewcontroller/allRegistrationRequests'">Go back to all registration requests view</button>
     </div>
 </body>
 </html>
