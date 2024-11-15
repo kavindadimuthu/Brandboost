@@ -9,6 +9,9 @@ class AdminViewController extends Controller {
     public function singleInfluencer() {
         $this->view('pages/admin/singleInfluencer');
     }
+    public function singleDesigner() {
+        $this->view('pages/admin/singleDesigner');
+    }
 
     public function singleUserPackage() {
         $this->view('pages/admin/singleUserPackage');
