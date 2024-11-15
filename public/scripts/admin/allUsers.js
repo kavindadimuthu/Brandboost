@@ -16,7 +16,7 @@ function renderUserCards(users) {
     users.forEach(user => {
         // Create user card HTML structure
         const userCard = `
-            <div class="card-outer">
+            <div class="card-outer" onclick="window.location.href='/adminviewcontroller/singleUser'">
                 <div class="user-image">
                     <img src="${user.image}" alt="${user.name}">
                 </div>

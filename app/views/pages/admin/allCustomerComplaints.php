@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User complaints UI</title>
+    <title>All customers</title>
     <link rel="stylesheet" href="../../styles/admin/complaints.css">
     <link rel="stylesheet" href="../../styles/admin/sidebar.css">
     <script src="../../scripts/admin/complaints.js" defer></script>

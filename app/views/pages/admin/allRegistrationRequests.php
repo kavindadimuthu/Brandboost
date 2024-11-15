@@ -6,7 +6,7 @@
     <title>Registration requests UI</title>
     <link rel="stylesheet" href="../../styles/admin/complaints.css">
     <link rel="stylesheet" href="../../styles/admin/sidebar.css">
-    <script src="../../scripts/admin/complaints.js" defer></script>
+    <script src="../../scripts/admin/allRegistrationRequests.js" defer></script>
 </head>
 <body>
     <div class="container">

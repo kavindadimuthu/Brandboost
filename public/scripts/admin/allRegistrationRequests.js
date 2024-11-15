@@ -30,7 +30,7 @@ function renderComplaints(complaints) {
 
         // Create a new table row for each complaint
         const row = `
-            <tr onclick="window.location.href='/adminviewcontroller/singleCustomerComplaint'">
+            <tr onclick="window.location.href='/adminviewcontroller/singleRegistrationRequest'">
                 <td>${complaint.user}</td>
                 <td>${complaint.date}</td>
                 <td>${complaint.complaint}</td>
