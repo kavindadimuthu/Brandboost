@@ -17,5 +17,7 @@
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
     <h1>Admin Dashboard</h1>
+    
+    
 </body>
 </html>

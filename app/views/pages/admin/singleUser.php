@@ -16,6 +16,11 @@
 </head>
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
-    <h1>singleUser page</h1>
+    <div>
+        <h1>SingleUser page</h1>
+        <p>Here shows profile view of a user</p>
+        <button onclick="window.location.href='/adminviewcontroller/allusers'">Go back to all users view</button>
+        <button onclick="window.location.href='/adminviewcontroller/singleuserpackage'">Go to single user package view</button>
+    </div>
 </body>
 </html>

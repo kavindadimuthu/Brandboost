@@ -16,6 +16,10 @@
 </head>
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
-    <h1>All Users page</h1>
+    <div>
+        <h1>All Users page</h1>
+        <p>Here shows list of all users registered in platform</p>
+        <button onclick="window.location.href='/adminviewcontroller/singleuser'">Go to single user view</button>
+    </div>
 </body>
 </html>

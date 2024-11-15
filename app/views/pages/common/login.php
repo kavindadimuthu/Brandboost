@@ -22,10 +22,11 @@
 <body>
     <h1>Login Page</h1>
     <div class="button-container">
-        <button class="login-button" onclick="window.location.href='/influencer-login'">Log in as Influencer</button>
-        <button class="login-button" onclick="window.location.href='/designer-login'">Log in as Designer</button>
-        <button class="login-button" onclick="window.location.href='/business-login'">Log in as Business</button>
-        <button class="login-button" onclick="window.location.href='/adminviewcontroller/adminDashboard'">Log in as Admin</button>
+        <button class="login-button" onclick="window.location.href='/InfluencerViewController/influencerDashboard'">Log in as Influencer</button>
+        <button class="login-button" onclick="window.location.href='/DesignerViewController/designerDashboard'">Log in as Designer</button>
+        <button class="login-button" onclick="window.location.href='/BusinessViewController/businessHomepage'">Log in as Business</button>
+        <button class="login-button" onclick="window.location.href='/AdminViewController/adminDashboard'">Log in as Admin</button>
+        <button onclick="window.location.href='/homecontroller/index'">Back to home</button>
     </div>
 </body>
 </html></div></body>

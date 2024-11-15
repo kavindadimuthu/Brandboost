@@ -16,6 +16,10 @@
 </head>
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
-    <h1>singleCustomerComplaint page</h1>
+    <div>
+        <h1>Single Customer Complaint page</h1>
+        <p>Here shows content of a customer complaint</p>
+        <button onclick="window.location.href='/adminviewcontroller/allCustomerComplaints'">Go back to all customer complaints view</button>
+    </div>
 </body>
 </html>

@@ -16,6 +16,10 @@
 </head>
 <body>
     <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
-    <h1>All Customer Complaints page</h1>
+    <div>
+        <h1>All registrationRequests page</h1>
+        <p>Here shows list of all registration requests which is made by new users</p>
+        <button onclick="window.location.href='/adminviewcontroller/singleRegistrationRequest'">Go to single registration request view</button>
+    </div>
 </body>
 </html>
