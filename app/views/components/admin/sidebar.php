@@ -4,13 +4,14 @@
     <ul>
         <li><a href="http://localhost:8000/adminviewcontroller/adminDashboard">Dashboard</a></li>
         <li><a href="http://localhost:8000/adminviewcontroller/allusers">Users</a></li>
-        <li><a href="http://localhost:8000/adminviewcontroller/registrationRequests">Registrations</a></li>
-        <li><a href="http://localhost:8000/adminviewcontroller/customerComplaints">Complaints</a></li>
+        <li><a href="http://localhost:8000/adminviewcontroller/allRegistrationRequests">Registrations</a></li>
+        <li><a href="http://localhost:8000/adminviewcontroller/allCustomerComplaints">Complaints</a></li>
     </ul>
 
     <div class="user-section">
         <img src="/assets/user_logo.png" alt="User Image">
         <span class="username">John Doe</span>
+        <button onclick="window.location.href='/homecontroller/login'">Logout</button>
     </div>
 </div>
 

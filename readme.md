@@ -1,3 +1,6 @@
+# Sitemap for Brandboost
+<img width="4960" alt="Brandboost Sitemap" src="https://github.com/user-attachments/assets/15e41c43-55c8-4a38-b778-9d5a20b650d7">
+
 # Custom MVC PHP Framework
 
 This document provides an overview of a custom MVC (Model-View-Controller) PHP framework. It outlines the general structure and components typically found in such a framework to help you understand the project better.
