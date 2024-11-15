@@ -36,6 +36,25 @@ body {
     justify-content: space-between;
 }
 
+.back-button{
+    display: flex;
+    justify-content: end;
+    height: 40px;
+}
+
+.back-btn{
+    background-color: #5865f2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: #4854d6;
+}
+
 .back-link {
     color: #666;
     text-decoration: none;

@@ -19,7 +19,9 @@
       <div class="main-content">
         <div class="heading">
             <h1>Registration Request</h1>
-
+            <div class="back-button">
+                    <div class="back-btn" onclick="window.location.href='/adminviewcontroller/allRegistrationRequests'">Back </div>
+            </div>
         </div>
 
         <a href="#" class="back-link">Back to registrations page</a>

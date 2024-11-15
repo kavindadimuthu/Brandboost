@@ -46,8 +46,8 @@
           <div class="main-content">
             <div class="heading">
                 <h1>Influencer</h1>
-                <div class="logout-button">
-                    <div class="logout-btn">Logout</div>
+                <div class="back-button">
+                    <div class="back-btn" onclick="window.location.href='/adminviewcontroller/allusers'">Back to all users</div>
                 </div>
             </div>
 

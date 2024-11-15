@@ -1,4 +1,3 @@
-
 const users = [
     { name: 'John Doe', role: 'Designer', image: '../../assets/user_logo.png' },
     { name: 'Jane Smith', role: 'Influencer', image: '../../assets/user_logo.png' },
@@ -14,9 +13,25 @@ function renderUserCards(users) {
     userContainer.innerHTML = ''; // Clear previous cards if any
 
     users.forEach(user => {
+        // Map roles to paths
+        let rolePath;
+        switch (user.role.toLowerCase()) {
+            case 'designer':
+                rolePath = 'singleDesigner';
+                break;
+            case 'influencer':
+                rolePath = 'singleInfluencer';
+                break;
+            case 'business owner':
+                rolePath = 'singleBusinessOwner';
+                break;
+            default:
+                rolePath = 'singleUser'; // Default path
+        }
+
         // Create user card HTML structure
         const userCard = `
-            <div class="card-outer" onclick="window.location.href='/adminviewcontroller/singleUser'">
+            <div class="card-outer" onclick="window.location.href='/adminviewcontroller/${rolePath}'">
                 <div class="user-image">
                     <img src="${user.image}" alt="${user.name}">
                 </div>
@@ -31,8 +46,6 @@ function renderUserCards(users) {
     });
 }
 
-
 window.onload = function() {
     renderUserCards(users); // Renders 6 users dynamically
-
 };

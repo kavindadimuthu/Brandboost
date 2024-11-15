@@ -17,6 +17,9 @@
         <div class="main-content">
             <div class="heading">
                 <h1>Complaint ID #56980036</h1>
+                <div class="back-button">
+                    <div class="back-btn" onclick="window.location.href='/adminviewcontroller/allCustomerComplaints'">Back</div>
+                </div>
             </div>
             
         <a href="#" class="back-link">Back to complaints page</a>
