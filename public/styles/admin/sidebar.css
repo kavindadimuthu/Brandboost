@@ -34,42 +34,60 @@ body {
 .sidebar li:hover {
     background-color: #0056b3; /* Darker blue on hover */
     border-radius: 10px;
+    transform: scale(1.03);
 }
 
 .sidebar a {
     color: #fff;
     text-decoration: none;
     display: block; /* Full clickable area */
+    width: 100%; /* Full width */
 }
 
-/* Active tab style */
-.sidebar li.active {
+/* Make sure the active class style is not overridden */
+.sidebar ul li.active {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
 }
 
-.sidebar li.active a {
+.sidebar ul li.active a {
     color: #007bff; /* Blue text for the active tab */
 }
 
-/* Logged-in user section */
-.user-section {
-    padding: 20px;
-    padding-bottom: 50px;
-    border-top: 1px solid #ddd;
-    display: flex;
-    align-items: center;
+
+.bottom-section {
+    margin-bottom: 30px;
 }
 
-.user-section img {
+/* Logged-in user section */
+.user-section, .logout-button {
+    padding: 15px 0; /* Adjust padding for a balanced look */
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Space out user info and logout button */
+    color: #fff;
+    font-size: 0.9em;
+    cursor: pointer;
+    
+}
+
+.user-section:hover, .logout-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-radius: 8px;
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.user-section img, .logout-button img {
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 35px; /* Slightly smaller for balance */
+    height: 35px;
     margin-right: 10px;
 }
 
-.user-section .username {
+.user-section .username .logout-button .logout-btn {
     color: #fff;
     font-size: 1em;
 }

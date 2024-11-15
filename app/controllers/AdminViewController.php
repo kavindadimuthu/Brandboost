@@ -6,8 +6,11 @@ class AdminViewController extends Controller {
     public function allUsers() {
         $this->view('pages/admin/allUsers');
     }
-    public function singleUser() {
-        $this->view('pages/admin/singleUser');
+    public function singleInfluencer() {
+        $this->view('pages/admin/singleInfluencer');
+    }
+    public function singleDesigner() {
+        $this->view('pages/admin/singleDesigner');
     }
 
     public function singleUserPackage() {
