@@ -54,22 +54,25 @@ body {
 }
 
 /* Logged-in user section */
-.user-section {
-    padding: 20px;
-    padding-bottom: 50px;
+.user-section, .logout-button {
+    padding: 15px 0; /* Adjust padding for a balanced look */
     border-top: 1px solid #ddd;
     display: flex;
     align-items: center;
+    justify-content: center; /* Space out user info and logout button */
+    color: #fff;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
-.user-section img {
+.user-section img, .logout-button img {
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 35px; /* Slightly smaller for balance */
+    height: 35px;
     margin-right: 10px;
 }
 
-.user-section .username {
+.user-section .username .logout-button .logout-btn {
     color: #fff;
     font-size: 1em;
 }

@@ -104,9 +104,7 @@
     
         <!-- New right-side column for registered users -->
         <div class="right-sidebar">
-            <div class="logout-button">
-                <div class="logout-btn">Logout</div>
-             </div>
+
 
 
             <div class="registered-users">

@@ -11,7 +11,11 @@
     <div class="user-section">
         <img src="/assets/user_logo.png" alt="User Image">
         <span class="username">John Doe</span>
-        <button onclick="window.location.href='/homecontroller/login'">Logout</button>
+        <!-- <button onclick="window.location.href='/homecontroller/login'">Logout</button> -->
+    </div>
+    <div class="logout-button">
+        <img src="/assets/logout-icon.png" alt="logout icon">
+        <span class="logout-btn">Logout</span>
     </div>
 </div>
 
