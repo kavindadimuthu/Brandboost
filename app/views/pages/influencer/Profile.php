@@ -10,7 +10,6 @@
 <body>
     <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
-    <h1>This is Influencer Dashboard Page</h1>
-
+    <h1>This is Influencer profile view</h1>
 </body>
 </html>

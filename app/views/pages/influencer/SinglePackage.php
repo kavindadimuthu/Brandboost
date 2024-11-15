@@ -10,7 +10,8 @@
 <body>
     <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
-    <h1>This is Influencer Dashboard Page</h1>
+    <h1>This is Influencer Single package page</h1>
 
+    <button onclick="window.location.href='/influencerViewController/influencerPackages'">Back to all packages</button>
 </body>
 </html>
