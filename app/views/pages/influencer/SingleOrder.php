@@ -12,6 +12,6 @@
 
     <h1>This is Influencer Single order page</h1>
 
-    <button onclick="window.location.href='/influencerViewController/influencerPackages'">Back to all orders</button>
+    <button onclick="window.location.href='/influencerViewController/allOrders'">Back to all orders</button>
 </body>
 </html>
