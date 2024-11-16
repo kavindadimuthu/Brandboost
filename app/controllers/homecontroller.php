@@ -30,5 +30,12 @@ class HomeController extends Controller {
     public function contact() {
         $this->view('pages/common/contact');
     }
+
+
+
+    
+    public function productCard() {
+        $this->view('components/common/productCard');
+    }
 }
 
