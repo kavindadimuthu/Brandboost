@@ -6,7 +6,7 @@
     <title>Home</title>
     <style>
         header{
-            display: flex;
+            /* display: flex; */
             justify-content: space-between;
         }
         .menu-links {
@@ -28,7 +28,12 @@
             <a href="http://localhost:8000/homecontroller/contact">Contact page</a>
             <button onclick="window.location.href='/homecontroller/register'">Register</button>
             <button onclick="window.location.href='/homecontroller/login'">Login</button>
+            
         </div>
+        <?php include __DIR__ . '/../../components/common/serviceCard.php'; ?>
+        <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
+
+
     </header>
     <center><h1>Welcome to the Home Page</h1></center>
 </body>
