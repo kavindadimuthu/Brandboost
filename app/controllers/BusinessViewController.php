@@ -39,6 +39,12 @@ class BusinessViewController extends Controller {
     public function viewDesignerPackages(){
         $this->view('pages/business/ViewDesignerPackages');
     }
+    public function influencerPackageInside(){
+        $this->view('pages/business/InfluencerPackageInside');
+    }
+    public function designerPackageInside(){
+        $this->view('pages/business/DesignerPackageInside');
+    }
     public function influencerProfile(){
         $this->view('pages/business/InfluencerProfile');
     }
