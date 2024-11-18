@@ -13,8 +13,9 @@
         <nav>
           <ul>
             <li data-tab="dashboard" class="active"><a href="http://localhost:8000/InfluencerViewController/influencerDashboard">Dashboard</a></li>
-            <li data-tab="orders"><a href="http://localhost:8000/InfluencerViewController/allOrders">Orders</a></li>
+            <li data-tab="orders"><a href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a></li>
             <li data-tab="gigs"><a href="http://localhost:8000/InfluencerViewController/influencerPackages">Packages</a></li>
+            <li data-tab="reviews"><a href="http://localhost:8000/InfluencerViewController/influencerReviews">Reviews</a></li>
             <li data-tab="earnings"><a href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a></li>
           </ul>
         </nav>
