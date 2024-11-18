@@ -60,13 +60,13 @@
     }
 
     .bottombar {
-      background-color: gray;
-      height: 200px; /* Fixed height for the footer */
+      background-color: white;
+      height: 600px; /* Fixed height for the footer */
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
+      color: #686de0;
       text-align: center;
     }
   </style>
@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="bottombar">
-      <!-- <?php include __DIR__ . '/../../components/common/carousel.php'; ?> -->
+      <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
     </div>
   </div>
 </body>

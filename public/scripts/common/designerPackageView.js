@@ -47,23 +47,23 @@ const reviews = [
     }
 ];
 
-const recommendedServices = [
-    {
-        title: "Logo Design",
-        image: "https://via.placeholder.com/250",
-        price: "$99"
-    },
-    {
-        title: "Business Card Design",
-        image: "https://via.placeholder.com/250",
-        price: "$49"
-    },
-    {
-        title: "Social Media Kit",
-        image: "https://via.placeholder.com/250",
-        price: "$149"
-    }
-];
+// const recommendedServices = [
+//     {
+//         title: "Logo Design",
+//         image: "https://via.placeholder.com/250",
+//         price: "$99"
+//     },
+//     {
+//         title: "Business Card Design",
+//         image: "https://via.placeholder.com/250",
+//         price: "$49"
+//     },
+//     {
+//         title: "Social Media Kit",
+//         image: "https://via.placeholder.com/250",
+//         price: "$149"
+//     }
+// ];
 
 // Render Functions
 function renderThumbnails() {
@@ -133,21 +133,21 @@ function renderReviews() {
     });
 }
 
-function renderRecommended() {
-    const grid = document.getElementById('recommendedGrid');
-    recommendedServices.forEach(service => {
-        const div = document.createElement('div');
-        div.className = 'recommended-card';
-        div.innerHTML = `
-            <img src="${service.image}" alt="${service.title}">
-            <div class="recommended-info">
-                <div class="recommended-title">${service.title}</div>
-                <div class="recommended-price">Starting at ${service.price}</div>
-            </div>
-        `;
-        grid.appendChild(div);
-    });
-}
+// function renderRecommended() {
+//     const grid = document.getElementById('recommendedGrid');
+//     recommendedServices.forEach(service => {
+//         const div = document.createElement('div');
+//         div.className = 'recommended-card';
+//         div.innerHTML = `
+//             <img src="${service.image}" alt="${service.title}">
+//             <div class="recommended-info">
+//                 <div class="recommended-title">${service.title}</div>
+//                 <div class="recommended-price">Starting at ${service.price}</div>
+//             </div>
+//         `;
+//         grid.appendChild(div);
+//     });
+// }
 
 // Initialize all sections
 document.addEventListener('DOMContentLoaded', () => {
@@ -156,5 +156,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAboutContent();
     renderDeliveryFormats();
     renderReviews();
-    renderRecommended();
+    // renderRecommended();
 });
