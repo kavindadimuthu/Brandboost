@@ -12,9 +12,18 @@
 <body>
     <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
+    
     <div class="container">
-        <h1>Packages</h1>
+        <div class="title">
+            <h1>Packages</h1>
+        </div>
+
+        <div class="button">
+            <a href="http://localhost:8000/InfluencerViewController/createpackage"><button class="packages-button">New Package</button></a>
+        </div>
+       
     </div>
+
     
           <?php include __DIR__ . '/../../components/influencer/packagesTable.php'; ?>
 </body>
