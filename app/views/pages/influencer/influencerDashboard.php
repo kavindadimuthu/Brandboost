@@ -81,14 +81,17 @@
         }
       });
     </script>
-    
+        
   </div>
-
+  <h2>Active Orders</h2>
+  <div class="header-row">
+            <a href="http://localhost:8000/InfluencerViewController/AllOrders" class="show-all">Show All ></a>
+        </div>
+    
 </div>
-
-    <?php include __DIR__ . '/../../components/influencer/orderTable.php'; ?>
+    
     <script src="/public/scripts/influencer/influencerDashboard.js"></script>
-  
+    <?php include __DIR__ . '/../../components/influencer/orderTable.php'; ?>
 
     </body>
 </html>

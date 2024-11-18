@@ -8,10 +8,6 @@
 
 <body>
     <div class="orders-container">
-        <div class="header-row">
-            <h2>Active Orders</h2>
-            <a href="#" class="show-all">Show All ></a>
-        </div>
         
         <table class="orders-table">
             <thead>

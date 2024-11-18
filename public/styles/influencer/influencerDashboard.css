@@ -5,13 +5,14 @@ body {
   
   .all{
     display:block;
-    margin: 50px 300px;
+    margin: 0 300px;
+
   }
 
   .container {
     display: flex;
     justify-content: space-between;
-    margin: auto;
+    margin: 50px 0;
   }
   
   .metric-card1 {
@@ -78,7 +79,8 @@ body {
   .order-status-chart {
     width: 100%; /* Make the chart container stretch to the full width of the parent */
     height: 500px;
-    margin: 20px auto; /* Add margin to the top and bottom, no auto centering */
+    margin-top: 20px; /* Add margin to the top and bottom, no auto centering */
+    margin-bottom: 50px;
     background-color: #fff;
     border-radius: 8px; /* Round the corners */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
@@ -88,6 +90,9 @@ body {
     padding-left: 30%;
   }
   
-
+  .show-all {
+    color: #666;
+    text-decoration: none;
+}
   
   
