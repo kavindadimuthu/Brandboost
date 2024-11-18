@@ -43,5 +43,7 @@ class HomeController extends Controller {
     public function cardSlider() {
         $this->view('components/common/cardSlider');
     }
+
+
 }
 

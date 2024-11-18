@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="../styles/common/serviceCard.css">
+    <link rel="stylesheet" href="../../styles/common/serviceCard.css">
+    <link rel="stylesheet" href="../../styles/common/navbarStyles.css">
+    <link rel="stylesheet" href="../../styles/common/footerStyles.css">
+
     <style>
         body {
             background-color: #f5f5f5;
@@ -43,7 +46,13 @@
         </div>
     </header>
 
+    <?php include __DIR__ . '/../../components/common/navbar.php'; ?>
+
+
     <center><h1>Welcome to the Home Page</h1></center>
     <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
+
+    <?php include __DIR__ . '/../../components/common/footer.php'; ?>
+
 </body>
 </html>
