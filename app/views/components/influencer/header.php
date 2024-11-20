@@ -8,7 +8,7 @@
 <body>
     <header>
         <div class="brand-boost">
-            <img src="../assets/Logo.svg" alt="logo">
+            <img src="../assets/brandboost.png" alt="logo">
         </div>
         <nav>
           <ul>
