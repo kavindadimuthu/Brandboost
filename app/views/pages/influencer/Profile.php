@@ -15,7 +15,7 @@
     <h2>Profile</h2>
     <div class="profile-card">
       <div class="profile-header">
-        <img src="../../assets/layer.png" alt="Profile Picture" class="profile-picture">
+        <img src="../../assets/user_logo.png" alt="Profile Picture" class="profile-picture">
         <div class="profile-details">
           <h3>Ariana Grande</h3>
           <p>@arianagrande80</p>
