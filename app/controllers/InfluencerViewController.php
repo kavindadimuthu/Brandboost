@@ -9,7 +9,7 @@ class InfluencerViewController extends Controller {
     public function influencerPackages() {
         $this->view('pages/influencer/InfluencerPackages');
     }
-    public function singlePackage() {
+    public function singlepackage() {
         $this->view('pages/influencer/SinglePackage');
     }
     public function createPackage() {
@@ -32,5 +32,9 @@ class InfluencerViewController extends Controller {
     }
     public function chat(){
         $this->view('pages/influencer/Chat');
+    }
+
+    public function influencerpreviewprofile(){
+        $this->view('pages/influencer/InfluencerPreviewProfile');
     }
 }

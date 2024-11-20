@@ -84,6 +84,10 @@
         <input type="checkbox" name="platform" value="tiktok" id="tiktok">
         <label for="tiktok">TikTok</label>
         </div>
+        <div>
+        <input type="checkbox" name="platform" value="tiktok" id="tiktok">
+        <label for="tiktok">Youtube</label>
+        </div>
     </div>
       <label>Upload Files: <input type="file" name="sampleFiles" multiple accept=".png,.jpg"></label>
       <button id="backStep3">Back</button>

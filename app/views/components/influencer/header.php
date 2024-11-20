@@ -19,10 +19,10 @@
           </ul>
         </nav>
         <div class="user-menu">
-          <div class="search-bar">
+          <!-- <div class="search-bar">
             <input type="text" placeholder="Search...">
             <img src="../assets/search-icon.png" alt="Search Icon" class="search-icon">
-          </div>
+          </div> -->
           <div class="chat-icon" onclick="window.location.href='/InfluencerViewController/chat'">
             <img src="../assets/chat-icon.svg" alt="chat">
           </div>
