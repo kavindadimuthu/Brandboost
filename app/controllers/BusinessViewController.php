@@ -54,4 +54,8 @@ class BusinessViewController extends Controller {
     public function chat(){
         $this->view('pages/business/Chat');
     }
+
+    public function register(){
+        $this->view('pages/register/businessOwner');
+    }
 }

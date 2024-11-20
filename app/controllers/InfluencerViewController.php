@@ -30,4 +30,8 @@ class InfluencerViewController extends Controller {
     public function chat(){
         $this->view('pages/influencer/Chat');
     }
+
+    public function register(){
+        $this->view('pages/register/influencer');
+    }
 }

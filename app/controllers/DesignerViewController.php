@@ -30,4 +30,8 @@ class DesignerViewController extends Controller {
     public function chat(){
         $this->view('pages/designer/Chat');
     }
+
+    public function register(){
+        $this->view('pages/register/designer');
+    }
 }

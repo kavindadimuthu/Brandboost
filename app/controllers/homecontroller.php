@@ -45,5 +45,10 @@ class HomeController extends Controller {
     }
 
 
+    public function chooseRole() {
+        $this->view('pages/register/chooseRole');
+    }
+
+
 }
 
