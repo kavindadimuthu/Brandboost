@@ -31,7 +31,8 @@
         <label for="fileUpload">Browse</label>
         <div class="upload-buttons">
           <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
-          <button type="submit" class="upload-btn">Upload</button>
+
+          <a href="http://localhost:8000/InfluencerViewController/singleorder"><button type="submit" class="upload-btn">Upload</button></a>
         </div>
       </div>
     </form>
