@@ -1,0 +1,311 @@
+:root {
+    --purple-color: #636ae8;
+  }
+  
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Headings */
+  .heading {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 600;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 24px;
+    color: #fff;
+    display: inline-block;
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .login-btn {
+    background-color: transparent;
+    color: var(--purple-color);
+  }
+  
+  .register-btn {
+    background-color: var(--purple-color);
+    color: #fff;
+  }
+  
+  .scroll-btn {
+    background-color: #fff;
+    color: #6358FF;
+  }
+  
+  .learn-more-btn {
+    font-family: Inter;
+    color: #636AE8FF;
+    background: #FFFFFFFF;
+    opacity: 1;
+    border-radius: 26px;
+    border-width: 1px;
+    border-color: #636AE8FF;
+    border-style: solid;
+  }
+  
+  .cta-btn {
+    color: #FFFFFFFF;
+    background: #E8618CFF;
+    padding: 10px 40px;
+  }
+  
+  /* ------------------------------ */
+  
+  
+  /* Common containers & wrappers */
+  header,
+  section,
+  footer {
+    width: 100%;
+  }
+  
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* ------------------------- */
+  
+  
+  /* Header Section Styles */
+  header {
+    background-color: #fff;
+    color: var(--purple-color);
+    padding: 10px 0;
+  }
+  
+  header>.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .header-logo img {
+    height: 60px;
+    margin-right: 10px;
+  }
+  
+  .nav_list {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav_list_item a {
+    font-size: 1rem;
+    color: var(--purple-color);
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  /* ------------------ */
+  
+  
+  
+  
+  
+  
+  
+  /* About Us Section Styles */
+  .aboutus {
+    padding: 80px 0;
+  }
+  
+  .aboutus>.wrapper {
+    display: flex;
+  }
+  
+  .aboutus-content {}
+  
+  .aboutus-content > .heading{
+    text-align: left;
+  }
+  .aboutus-content > .heading::after {
+    content: "";
+    display: block;
+    margin-bottom: 2rem;
+  }
+  
+  .aboutus .description {
+    font-size: 1.4rem; 
+    line-height: 36px; 
+    font-weight: 400; 
+    color: #6E7787FF;
+    margin-right: 3rem;
+  }
+  
+  .aboutus-image {
+    max-width: 700px;
+  }
+  
+  /* -------------------- */
+  
+  
+  
+  
+  /* Our Values section styles */
+  .our-values {
+    padding: 80px 0;
+    background-color: #ebebeb;
+  }
+  
+  .our-values>.wrapper>.heading::after {
+    content: "";
+    display: block;
+    margin-bottom: 50px;
+  }
+  
+  .values-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .value-card {
+    max-width: 30%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .value-card img {
+    width: 100%;
+  }
+  
+  .value-card>.description {
+    text-align: center;
+    margin: 0 20px;
+  }
+  
+  .value-card>.description::after {
+    content: "";
+    display: block;
+    height: 1rem;
+  }
+  
+  /* ------------------------- */
+  
+  
+  
+  
+  
+  
+  /* Our mission Section Styles */
+  
+  .our-mission {
+    padding: 80px 0;
+    background-color: #f3f3f3;
+    background-image: url('../../assets/images/about/Group\ 60.png');
+    /* background-size: 120%; */
+    background-position: right center;
+  }
+  
+  .our-mission>.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .our-mission p {
+    font-family: Inter;
+    /* Body */
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 400;
+    color: #323842FF;
+  }
+  
+  
+  
+  
+  
+  /* -------------------- */
+  
+  
+  
+  /* Footer Styles */
+  .footer {
+    background-color: #F5F5F5;
+    padding: 80px 0;
+  }
+  
+  .footer-upper-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .footer-section ul li a {
+    color: #555;
+    text-decoration: none;
+    line-height: 2em;
+  }
+  
+  .footer-lower-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: solid 1px #ccc;
+  }
+  
+  .language-selection select {
+    border: none;
+    background-color: transparent;
+    color: #555;
+  }
+  
+  .copyright {
+    color: #555;
+  }
+  
+  .social-media-links img {
+    height: 20px;
+    margin-left: 10px;
+  }
+  
+  /* ---------------------------- */
