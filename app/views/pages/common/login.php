@@ -4,29 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <style>
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-        }
-        .login-button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="../../styles/register/register.css">
 </head>
 <body>
-    <h1>Login Page</h1>
-    <div class="button-container">
-        <button class="login-button" onclick="window.location.href='/InfluencerViewController/influencerDashboard'">Log in as Influencer</button>
-        <button class="login-button" onclick="window.location.href='/DesignerViewController/designerDashboard'">Log in as Designer</button>
-        <button class="login-button" onclick="window.location.href='/BusinessViewController/businessHomepage'">Log in as Business</button>
-        <button class="login-button" onclick="window.location.href='/AdminViewController/adminDashboard'">Log in as Admin</button>
-        <button onclick="window.location.href='/homecontroller/index'">Back to home</button>
-    </div>
+    <header>
+        <div class="header-container">
+            <img src="../../assets/Logo.svg" alt="Brandboost Logo" class="logo">
+            <nav>
+                <ul class="nav-icons">
+                    <!-- <li><a href="#"><img src="message-icon.png" alt="Messages"></a></li> -->
+                    <li><a href="#"><img src="../../assets/contact-us.png" alt="contact"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="register-container">
+            <form class="register-form">
+                <div class="form-header">
+                    <!-- <img src="brandboost-logo.png" alt="Brandboost Logo" class="form-logo"> -->
+                    <h2>Login</h2>
+                </div>
+
+        
+
+                <div class="form-group">
+                    <input type="email" placeholder="E mail" required>
+                </div>
+
+                
+
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+
+                
+
+                
+
+                <div class="form-group" style="font-size: small;">
+                    <label for="forgot-p"> <a href="#">forgot password</a></label>
+                    
+                </div>
+
+                <div class="form-group">
+                    <button class="submit-button" type="submit">Login</button>
+                </div>
+
+                <div class="form-group" style="font-size: small;">
+                    <label for="privacy">Don't hava an account? <a href="#">Register here</a></label>
+                </div>
+                
+            </form>
+        </div>
+    </main>
 </body>
-</html></div></body>
+</html>
