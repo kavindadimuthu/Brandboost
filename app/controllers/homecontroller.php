@@ -14,13 +14,13 @@ class HomeController extends Controller {
         $this->view('pages/common/register');
     }
     public function registerBusiness(){
-        $this->view('pages/common/registerBusiness');
+        $this->view('pages/register/businessOwner');
     }
     public function registerInfluencer(){
-        $this->view('pages/common/registerInfluencer');
+        $this->view('pages/register/influencer');
     }
     public function registerDesigner(){
-        $this->view('pages/common/registerDesigner');
+        $this->view('pages/register/designer');
     }
 
 

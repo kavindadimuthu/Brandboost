@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business owner Register</title>
     <link rel="stylesheet" href="../../styles/register/register.css">
 </head>
+
 <body>
     <header>
         <div class="header-container">
@@ -21,56 +23,51 @@
 
     <main>
         <div class="register-container">
-            <form class="register-form">
+
+
+            <form class="register-form" method="post" action="/RegisterController/register" enctype="multipart/form-data">
                 <div class="form-header">
-                    <!-- <img src="brandboost-logo.png" alt="Brandboost Logo" class="form-logo"> -->
-                    <h2>Business owner Register</h2>
+                    <h2>Business Owner Register</h2>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" placeholder="First Name" required>
-                    <input type="text" placeholder="Last Name" required>
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="email" placeholder="E mail" required>
+                    <input type="email" name="email" placeholder="E-mail" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="tel" placeholder="Phone Number" required>
+                    <input type="tel" name="phone_number" placeholder="Phone Number" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="password" placeholder="Password" required>
-                    <input type="password" placeholder="Confirm Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" placeholder="Business/Company Name" required>
-                    <input type="text" placeholder="Address" required>
-                    <input type="url" placeholder="Business/Company web page URL">
-                    <input type="url" placeholder="Any social media platform URL of the business/company">
+                    <!-- <input type="text" name="business_name" placeholder="Business/Company Name" required> -->
+                    <!-- <input type="text" name="address" placeholder="Address" required> -->
+                    <!-- <input type="url" name="website_url" placeholder="Business/Company Web Page URL"> -->
+                    <!-- <input type="url" name="social_media_url" placeholder="Social Media Platform URL"> -->
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class="upload-section">
-                        <h3>Upload business registration details</details></h3>
-                        <form action="/upload" method="POST" enctype="multipart/form-data">
-                            <label for="file-upload">Choose file to upload:</label>
-                            <input type="file" id="file-upload" name="file-upload" accept="image/*, .pdf, .doc, .docx">
-                        </form>
+                        <h3>Upload Business Registration Details</h3>
+                        <label for="file-upload">Choose file to upload:</label>
+                        <input type="file" id="file-upload" name="business_document"
+                            accept="image/*, .pdf, .doc, .docx">
                     </div>
-
-                
-                </div>
-
-                
+                </div> -->
 
                 <div class="form-group">
-                    <input type="checkbox" id="privacy" required>
-                    <label for="privacy">I agree all statements in <a href="#">Privacy Policy for BRANDBOOST</a></label>
-                    <br>
-
+                    <input type="checkbox" id="privacy" name="privacy_policy" required>
+                    <label for="privacy">I agree to all statements in <a href="#">Privacy Policy for
+                            BRANDBOOST</a></label>
                 </div>
 
                 <div class="form-group">
@@ -78,10 +75,13 @@
                 </div>
 
                 <div class="form-group" style="font-size: small;">
-                    <label for="privacy">Already registerd? <a href="#">Login here</a></label>
+                    <label>Already registered? <a href="#">Login here</a></label>
                 </div>
             </form>
+
+
         </div>
     </main>
 </body>
+
 </html>
