@@ -8,21 +8,21 @@
 <body>
     <header>
         <div class="brand-boost">
-            <img src="../assets/Logo.svg" alt="logo">
+            <img src="../assets/brandboost.png" alt="logo">
         </div>
         <nav>
           <ul>
             <li data-tab="dashboard" class="active"><a href="http://localhost:8000/InfluencerViewController/influencerDashboard">Dashboard</a></li>
-            <li data-tab="orders"><a href="http://localhost:8000/InfluencerViewController/allOrders">Orders</a></li>
+            <li data-tab="orders"><a href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a></li>
             <li data-tab="gigs"><a href="http://localhost:8000/InfluencerViewController/influencerPackages">Packages</a></li>
             <li data-tab="earnings"><a href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a></li>
           </ul>
         </nav>
         <div class="user-menu">
-          <div class="search-bar">
+          <!-- <div class="search-bar">
             <input type="text" placeholder="Search...">
             <img src="../assets/search-icon.png" alt="Search Icon" class="search-icon">
-          </div>
+          </div> -->
           <div class="chat-icon" onclick="window.location.href='/InfluencerViewController/chat'">
             <img src="../assets/chat-icon.svg" alt="chat">
           </div>

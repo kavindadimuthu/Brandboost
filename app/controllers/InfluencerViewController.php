@@ -4,12 +4,12 @@ class InfluencerViewController extends Controller {
         $this->view('pages/influencer/InfluencerDashboard');
     }
     public function profile() {
-        $this->view('pages/influencer/Profile');
+        $this->view('pages/influencer/InfluencerPreviewProfile');
     }
     public function influencerPackages() {
-        $this->view('pages/influencer/AllPackages');
+        $this->view('pages/influencer/InfluencerPackages');
     }
-    public function singlePackage() {
+    public function singlepackage() {
         $this->view('pages/influencer/SinglePackage');
     }
     public function createPackage() {
@@ -26,6 +26,9 @@ class InfluencerViewController extends Controller {
     }
     public function earnings(){
         $this->view('pages/influencer/Earnings');
+    }
+    public function InfluencerReviews(){
+        $this->view('pages/influencer/InfluencerReviews');
     }
     public function chat(){
         $this->view('pages/influencer/Chat');

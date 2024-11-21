@@ -1,0 +1,134 @@
+ body {
+    display: block;
+    font-family: Arial, sans-serif;
+    margin: auto;
+    padding: 0;
+    background: #f9f9f9;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }  
+  
+  .profile-container {
+    width: 800px; /* Increased width */
+    margin: 50px auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile-container h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  
+  .profile-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-picture {
+    position: relative;
+    cursor: pointer;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    margin-right: 100px;
+  }
+  
+  .edit-icon {
+    position: absolute;
+    bottom: 10px; /* Position it near the bottom of the image */
+    right: 10px; /* Align to the bottom-right of the image */
+    font-size: 20px;
+    color: #fff;
+    background-color: #686de0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .profile-picture:hover + .edit-icon {
+    opacity: 1; /* Show the edit icon on hover */
+  }
+  
+  
+  .profile-details h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #444;
+  }
+  
+  .profile-details p {
+    margin: 5px 0 0;
+    color: #777;
+  }
+  
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Add spacing between rows */
+  }
+  
+  form .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  form label {
+    width: 35%; /* Labels take up 35% of the row */
+    font-size: 14px;
+    color: #444;
+  }
+  
+  form input {
+    width: 60%; /* Input fields take up the remaining space */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .buttons{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  form button {
+    background-color: #686de0; /* Primary color */
+    color: #fff; /* Text color for better contrast */
+    height: 45px; /* Slightly taller for better clickability */
+    padding: 0 20px; /* Add padding for a spacious look */
+    font-size: 16px; /* Larger font for readability */
+    font-weight: 300; /* Bold text for emphasis */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor to indicate interactivity */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  form button:hover {
+    background-color: #535bc4; /* Darker shade on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  }
+  
