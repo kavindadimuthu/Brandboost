@@ -8,8 +8,8 @@
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/designer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
-    <h1>This is designer chat page</h1>
+    <h1>This is Influencer chat page</h1>
 </body>
 </html>
