@@ -10,7 +10,8 @@
 <body>
     <?php include __DIR__ . '/../../components/designer/header.php'; ?>
 
-    <h1>This is designer Dashboard Page</h1>
+    <h1>This is designer Single order page</h1>
 
+    <button onclick="window.location.href='/DesignerViewController/allOrders'">Back to all orders</button>
 </body>
 </html>

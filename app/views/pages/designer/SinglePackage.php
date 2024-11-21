@@ -10,7 +10,8 @@
 <body>
     <?php include __DIR__ . '/../../components/designer/header.php'; ?>
 
-    <h1>This is designer Dashboard Page</h1>
+    <h1>This is designer Single package page</h1>
 
+    <button onclick="window.location.href='/DesignerViewController/designerPackages'">Back to all packages</button>
 </body>
 </html>

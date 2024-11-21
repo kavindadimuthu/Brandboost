@@ -4,7 +4,7 @@ class InfluencerViewController extends Controller {
         $this->view('pages/influencer/InfluencerDashboard');
     }
     public function profile() {
-        $this->view('pages/influencer/Profile');
+        $this->view('pages/influencer/InfluencerPreviewProfile');
     }
     public function influencerPackages() {
         $this->view('pages/influencer/InfluencerPackages');
@@ -34,7 +34,7 @@ class InfluencerViewController extends Controller {
         $this->view('pages/influencer/Chat');
     }
 
-    public function influencerpreviewprofile(){
-        $this->view('pages/influencer/InfluencerPreviewProfile');
+    public function register(){
+        $this->view('pages/register/influencer');
     }
 }
