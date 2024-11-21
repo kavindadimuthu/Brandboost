@@ -6,7 +6,6 @@
   <title>UI Layout with Flexbox</title>
   <link rel="stylesheet" href="../../styles/common/designerPackageView.css">
   <link rel="stylesheet" href="../../styles/influencer/header.css">
-  <link rel="stylesheet" href="../../styles/admin/sidebar.css">
   <script src="../../scripts/common/designerPackageView.js"></script>
   <style>
     * {
@@ -15,10 +14,10 @@
       box-sizing: border-box;
     }
 
-    /* html, body {
+    html, body {
       height: 100%;
       width: 100%;
-    } */
+    }
 
     body {
       font-family: Arial, sans-serif;
@@ -36,6 +35,7 @@
     }
 
     .header {
+      /* background-color: blue; */
       height: 50px; /* Fixed height for the header */
       flex-shrink: 0;
     }
@@ -43,23 +43,20 @@
     .main-content {
       display: flex;
       flex-grow: 1;
-      /* margin: 20px; */
-    }
-
-    .sidebar-container, .sidebar{
-      width: 250px; /* Fixed width for the left sidebar */
-      flex-shrink: 0;
-      margin-right: 20px;
+      height: auto;
+      margin: 20px;
     }
 
     .main {
+      /* background-color: white; */
       flex-grow: 1; /* Fill the remaining space */
     }
 
-    .right-sidebar {
-      width: 370px; /* Fixed width for the right sidebar */
+    .sidebar {
+      /* background-color: red; */
+      width: 370px; /* Fixed width for the sidebar */
       flex-shrink: 0; /* Prevent shrinking */
-      margin: 20px;
+      margin-top:20px;
     }
 
     .bottombar {
@@ -76,21 +73,20 @@
 </head>
 <body>
   <div class="outer-container">
-    <!-- <div class="header">
+    <div class="header">
         <?php include __DIR__ . '/../../components/businessman/header.php'; ?>
-    </div> -->
+    </div>
     <div class="main-content">
-      <div class="sidebar-container">
-        <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
-      </div>
       <div class="main">
         <?php include __DIR__ . '/../../components/common/designerPackageView.php'; ?>
       </div>
-      <div class="right-sidebar">
+      <div class="sidebar">
         <?php include __DIR__ . '/../../components/common/packageCard.php'; ?>
       </div>
     </div>
-    
+    <div class="bottombar">
+      <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
+    </div>
   </div>
 </body>
 </html>

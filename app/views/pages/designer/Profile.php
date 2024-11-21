@@ -10,7 +10,6 @@
 <body>
     <?php include __DIR__ . '/../../components/designer/header.php'; ?>
 
-    <h1>This is designer Dashboard Page</h1>
-
+    <h1>This is designer profile view</h1>
 </body>
 </html>
