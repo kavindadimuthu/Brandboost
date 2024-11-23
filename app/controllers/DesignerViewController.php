@@ -7,9 +7,9 @@ class DesignerViewController extends Controller {
         $this->view('pages/designer/Profile');
     }
     public function designerPackages() {
-        $this->view('pages/designer/AllPackages');
+        $this->view('pages/designer/DesignerPackages');
     }
-    public function singlePackage() {
+    public function singlepackage() {
         $this->view('pages/designer/SinglePackage');
     }
     public function createPackage() {
@@ -27,11 +27,18 @@ class DesignerViewController extends Controller {
     public function earnings(){
         $this->view('pages/designer/Earnings');
     }
+    public function designerReviews(){
+        $this->view('pages/designer/DesignerReviews');
+    }
     public function chat(){
         $this->view('pages/designer/Chat');
     }
 
     public function register(){
         $this->view('pages/register/designer');
+    }
+
+    public function designerpreviewprofile(){
+        $this->view('pages/designer/DesignerPreviewProfile');
     }
 }
