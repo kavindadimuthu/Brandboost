@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+
     <style>
         * {
             box-sizing: border-box;
@@ -85,6 +86,7 @@
     <div>
         <a href="http://localhost:8000/homecontroller/login">Go to login</a>
     </div>
+
 </body>
 
 </html>
