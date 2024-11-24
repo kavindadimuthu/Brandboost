@@ -19,7 +19,7 @@
         </div>
 
         <div class="button">
-            <a href="http://localhost:8000/DesignerViewController/createpackage"><button class="packages-button">New Package</button></a>
+            <a href="http://localhost:8000/DesignerViewController/createGig"><button class="packages-button">New Package</button></a>
         </div>
        
     </div>

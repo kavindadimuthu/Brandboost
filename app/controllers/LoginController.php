@@ -36,7 +36,6 @@ class LoginController extends Controller
                         header('Location: /admin/dashboard');
                         break;
                     case 'businessman':
-
                         header('Location: /BusinessViewController/profile');
                         break;
                     case 'influencer':

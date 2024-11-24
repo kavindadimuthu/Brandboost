@@ -34,7 +34,7 @@
         <div class="upload-buttons">
           <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
 
-          <a href="http://localhost:8000/DesignerViewController/singleorder"><button type="submit"
+          <a href="http://localhost:8000/DesignerViewController/singleOrder"><button type="submit"
               class="upload-btn">Upload</button></a>
         </div>
       </div>
