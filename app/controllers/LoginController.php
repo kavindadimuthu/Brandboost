@@ -36,14 +36,13 @@ class LoginController extends Controller
                         header('Location: /admin/dashboard');
                         break;
                     case 'businessman':
-
                         header('Location: /BusinessViewController/profile');
                         break;
                     case 'influencer':
                         header('Location: /InfluencerViewController/influencerDashboard');
                         break;
                     case 'designer':
-                        header('Location: /DesignerViewController/designerDashboard');
+                        header('Location: /DesignerViewController/createGig');
                         break;
                     default:
                         echo "Unknown role. Unable to navigate.";

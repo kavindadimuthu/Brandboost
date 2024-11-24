@@ -12,8 +12,8 @@ class DesignerViewController extends Controller {
     public function singlepackage() {
         $this->view('pages/designer/SinglePackage');
     }
-    public function createPackage() {
-        $this->view('pages/designer/CreatePackage');
+    public function createGig() {
+        $this->view('pages/designer/CreateGig');
     }
     public function allOrders() {
         $this->view('pages/designer/AllOrders');
