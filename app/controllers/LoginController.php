@@ -42,7 +42,7 @@ class LoginController extends Controller
                         header('Location: /InfluencerViewController/influencerDashboard');
                         break;
                     case 'designer':
-                        header('Location: /DesignerViewController/createGig');
+                        header('Location: /DesignerViewController/designerDashboard');
                         break;
                     default:
                         echo "Unknown role. Unable to navigate.";
@@ -59,7 +59,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        session_start();
+        // session_start();
         session_destroy();
         header('Location: /login');
         exit();

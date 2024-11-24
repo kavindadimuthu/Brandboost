@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Gig</title>
-    <link rel="stylesheet" href="../../styles/influencer/header.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/influencer/CreatePackage.css">
 </head>
 <body>
-    <!-- <?php include __DIR__ . '/../../components/designer/header.php'; ?> -->
+<?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     <div class="container">
         <form action="/DesignerDataController/createGig" method="POST">

@@ -42,7 +42,7 @@ class DesignerDataController extends Controller {
 
             if ($result) {
                 echo "Gig created successfully!";
-                // header("Location: /designerviewcontroller/designerPackages?success=true");
+                header("Location: /designerviewcontroller/designerGigs?success=true");
                 // exit;
             } else {
                 echo "Failed to create gig. Please try again.";
