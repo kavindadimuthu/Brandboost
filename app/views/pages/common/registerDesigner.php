@@ -20,6 +20,8 @@
 
         <form class="register-form" method="post" action="/RegisterController/register" enctype="multipart/form-data">
 
+            <input type="hidden" name="role" value="designer">
+            
             <div class="form-group">
                 <input type="text" name="first_name" placeholder="First Name" required>
             </div>
@@ -34,10 +36,17 @@
             <div class="form-group">
                 <input type="tel" name="phone_number" placeholder="Phone Number" required>
             </div>
-            
+
             <div class="form-group">
-                <input type="text" name="skill" placeholder="Skills" required>
+                <select name="gender" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
             </div>
+            
+            <!-- <div class="form-group">
+                <input type="text" name="skill" placeholder="Skills" required>
+            </div> -->
 
             <div class="form-group">
                 <input type="password" name="password" placeholder="Password" required>

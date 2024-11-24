@@ -20,6 +20,8 @@
 
         <form class="register-form" method="post" action="/RegisterController/register" enctype="multipart/form-data">
 
+            <input type="hidden" name="role" value="businessman">
+
             <div class="form-group">
                 <input type="text" name="first_name" placeholder="First Name" required>
             </div>
@@ -34,6 +36,13 @@
             <div class="form-group">
                 <input type="tel" name="phone_number" placeholder="Phone Number" required>
             </div>
+            
+            <div class="form-group">
+                <select name="gender" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <input type="password" name="password" placeholder="Password" required>
@@ -42,14 +51,14 @@
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                     <div class="upload-section">
-                        <!-- <div>Upload Business Registration Details</div> -->
+                        <div>Upload Business Registration Details</div>
                         <label for="file-upload">Upload Business Registration Details</label>
                         <input type="file" id="file-upload" name="business_document"
                             accept="image/*, .pdf, .doc, .docx">
                     </div>
-                </div>
+            </div> -->
 
             <div class="form-group-tick">
                 <input type="checkbox" id="privacy" name="privacy_policy" required>

@@ -5,10 +5,12 @@ class RegisterController extends Controller{
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $role = $_POST['role'];
             $firstName = $_POST['first_name'];
             $lastName = $_POST['last_name'];
             $email = $_POST['email'];
             $phone = $_POST['phone_number'];
+            $gender = $_POST['gender'];
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirm_password'];
             $privacyPolicy = isset($_POST['privacy_policy']);
@@ -17,7 +19,7 @@ class RegisterController extends Controller{
             if ($password === $confirmPassword && $privacyPolicy) {
                 $this->model('UserModel');
                 $userModel = new UserModel();
-                if ($userModel->registerUser($firstName, $lastName, $email, $phone, $password)) {
+                if ($userModel->registerUser( $firstName, $lastName, $email, $phone, $password, $role, $gender)) {
                     echo "Registration successful for $firstName $lastName.";
                 } else {
                     echo "Error saving to the database.";

@@ -63,7 +63,7 @@ body {
     margin-bottom: 5px;
   }
   
-  .form-group input {
+  .form-group input, .form-group select {
     width: 100%;
     padding: 12px 20px;
     outline: none;
@@ -73,7 +73,11 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #f1f1f1;
   }
-  input::placeholder{
+  input::placeholder {
+    font-size: 1rem;
+    color: #b3b3b3;
+  }
+  option::placeholder {
     font-size: 1rem;
     color: #b3b3b3;
   }
