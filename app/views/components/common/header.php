@@ -60,7 +60,7 @@
                     <ul>
                         <li><span>
                             <?php 
-                                echo $_SESSION['user_name']
+                                echo $_SESSION['user_name'];
                             ?>
                         </span></li>
                         <li><a href="http://localhost:8000/InfluencerViewController/profile">Profile</a></li>
