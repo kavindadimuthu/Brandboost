@@ -1,5 +1,12 @@
 <?php
 class AdminViewController extends Controller {
+
+    public function __construct() {
+        // session_start();
+        // if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+        //     header('location: /');
+        // }
+    }
     public function adminDashboard() {
         $this->view('pages/admin/adminDashboard');
     }
@@ -28,6 +35,10 @@ class AdminViewController extends Controller {
     }
     public function singleRegistrationRequest() {
         $this->view('pages/admin/singleRegistrationRequest');
+    }
+
+    public function viewAllFaqs() {
+        $this->view('pages/admin/viewAllFaqs');
     }
 }
 

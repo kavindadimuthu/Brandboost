@@ -7,8 +7,6 @@
         <nav class="header-nav-links">
             <ul class="nav-list">
                 <?php
-                    session_start();
-
                     if(isset($_SESSION['role']) && $_SESSION['role'] == 'businessman'){
                         echo '
                         <li class="nav-list-item" data-tab="about"><a
