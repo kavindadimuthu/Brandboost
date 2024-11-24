@@ -19,4 +19,12 @@ class UserModel {
         $this->db->bind(':gender', $gender);
         return $this->db->execute();
     }
+
+    public function getUserByEmail($email)
+    {
+        $query = "SELECT * FROM users WHERE email = :email";
+        $this->db->query($query);
+        $this->db->bind(':email', $email);
+        return $this->db->single(); // Fetch a single user record
+    }
 }
