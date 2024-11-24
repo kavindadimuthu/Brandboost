@@ -17,18 +17,18 @@
     </a>
     <div class="login-container">
         <h1>Log In</h1>
-        <form>
+        <form class="register-form" method="post" action="/LoginController/login" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="John Doe" required>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="johnsena@gmail.com" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter at least 8 characters" required>
+                <input type="password" name="password" id="password" placeholder="Enter at least 8 characters" required>
             </div>
             <button type="submit" class="btn">Sign In</button>
         </form>
-        <p>Don't you have an account? <a href="#">Register</a></p>
+        <p>Don't you have an account? <a href="http://localhost:8000/homecontroller/register">Register</a></p>
     </div>
 
 </body>
