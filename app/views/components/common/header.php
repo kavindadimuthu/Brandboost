@@ -62,7 +62,7 @@
                             ?>
                         </span></li>
                         <li><a href="http://localhost:8000/InfluencerViewController/profile">Profile</a></li>
-                        <li><a href="http://localhost:8000/homecontroller/login">Logout</a></li>
+                        <li><a href="http://localhost:8000/LoginController/logout">Logout</a></li>
                     </ul>
                 </div>
             </div>
