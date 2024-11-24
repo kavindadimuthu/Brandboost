@@ -60,7 +60,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        session_start();
+        // session_start();
         session_destroy();
         header('Location: /login');
         exit();

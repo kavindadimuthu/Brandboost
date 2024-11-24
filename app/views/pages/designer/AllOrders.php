@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../styles/influencer/header.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/influencer/orderTable.css">
     <link rel="stylesheet" href="../../styles/influencer/AllOrders.css">
 
 </head>
+
 <body>
-    <?php include __DIR__ . '/../../components/designer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     <div class="container">
         <h1>Customer Orders</h1>
@@ -18,7 +20,9 @@
             <input type="text" placeholder="Search by Order ID or Username">
         </div>
     </div>
-    
-          <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
+
+    <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
+    <script src="../scripts/common/header.js"></script>
 </body>
+
 </html>
