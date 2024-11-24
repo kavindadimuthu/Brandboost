@@ -21,12 +21,12 @@
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'influencer'){
                         echo '
-                        <li class="nav-list-item" data-tab="about"><a
+                        <li class="nav-list-item" data-tab="Dashboard"><a
                             href="http://localhost:8000/InfluencerViewController/influencerDashboard">Dashboard</a></li>
-                        <li class="nav-list-item" data-tab="services"><a
+                        <li class="nav-list-item" data-tab="Orders"><a
                             href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a></li>
-                        <li class="nav-list-item" data-tab="contact"><a
-                            href="http://localhost:8000/InfluencerViewController/influencerPackages">Packages</a></li>
+                        <li class="nav-list-item" data-tab="Promotions"><a
+                            href="http://localhost:8000/InfluencerViewController/influencerPromotions">Promotions</a></li>
                             href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a></li>
                         <li class="nav-list-item" data-tab="contact"><a
                             href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a></li>
@@ -36,8 +36,8 @@
                         echo '
                         <li class="nav-list-item" data-tab="Dashboard"><a
                             href="http://localhost:8000/DesignerViewController/designerDashboard">Dashboard</a></li>
-                        <li class="nav-list-item" data-tab="Packages"><a
-                            href="http://localhost:8000/DesignerViewController/designerPackages">Packages</a></li>
+                        <li class="nav-list-item" data-tab="Gigs"><a
+                            href="http://localhost:8000/DesignerViewController/designerGigs">Gigs</a></li>
                         <li class="nav-list-item" data-tab="Orders"><a
                             href="http://localhost:8000/DesignerViewController/allOrders">Orders</a></li>
                         <li class="nav-list-item" data-tab="Earnings"><a
