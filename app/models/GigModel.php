@@ -55,7 +55,7 @@ class GigModel {
 
     // Get gigs by user_id
     public function getGigsByUserId($userId) {
-        $this->db->query('SELECT * FROM gigs WHERE user_id = :user_id');
+        $this->db->query('SELECT * FROM designer_gig WHERE user_id = :user_id');
         $this->db->bind(':user_id', $userId);
         $results = $this->db->resultSet();
         return $results ?: []; // Return an empty array if no results
@@ -64,7 +64,7 @@ class GigModel {
 
     // Delete a gig by ID and user_id
     public function deleteGigByIdAndUserId($id, $userId) {
-        $this->db->query('DELETE FROM gigs WHERE id = :id AND user_id = :user_id');
+        $this->db->query('DELETE FROM designer_gig WHERE id = :id AND user_id = :user_id');
         $this->db->bind(':id', $id);
         $this->db->bind(':user_id', $userId);
         return $this->db->execute();

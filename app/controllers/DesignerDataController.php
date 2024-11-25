@@ -47,7 +47,11 @@ class DesignerDataController extends Controller {
     }
 
     public function designerGigs() {
-        session_start();
+
+        echo "Designer Gigs Controller";
+        var_dump($gigs); // or print_r($gigs);
+
+        // session_start();
     
         if (!isset($_SESSION['user_id'])) {
             // Redirect to login page if not logged in
@@ -58,9 +62,11 @@ class DesignerDataController extends Controller {
         $userId = $_SESSION['user_id'];
         $gigModel = $this->model('GigModel');
         $gigs = $gigModel->getGigsByUserId($userId);
+
+
     
         // Ensure gigs is always an array
-        $this->view('designer/designerGigs', ['gigs' => $gigs ?: []]);
+        // $this->view('DesignerViewController/designerGigs', ['gigs' => $gigs ?: []]);
     }
     
 

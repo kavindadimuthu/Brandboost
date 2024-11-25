@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -23,27 +23,26 @@
           <th>Actions</th>
         </tr>
       </thead>
-          <tbody id="ordersTableBody">
-            <?php if (isset($data['gigs']) && !empty($data['gigs'])): ?>
-              <?php foreach ($data['gigs'] as $gig): ?>
-                  <tr>
-                      <td><?= htmlspecialchars($gig['title']); ?></td>
-                      <td><?= htmlspecialchars($gig['basic_price']); ?></td>
-                      <td><?= htmlspecialchars($gig['premium_price']); ?></td>
-                      <td><?= htmlspecialchars($gig['status']); ?></td>
-                      <td>
-                          <button onclick="editGig(<?= $gig['id']; ?>)" class="action-btn"><i class="fas fa-edit"></i></button>
-                          <button onclick="confirmDelete(<?= $gig['id']; ?>)" class="action-btn"><i class="fas fa-trash"></i></button>
-                      </td>
-                  </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr>
-                  <td colspan="5">No gigs found.</td>
-              </tr>
-            <?php endif; ?>
-          </tbody>
-
+      <tbody id="ordersTableBody">
+        <?php if (!empty($gigs)): ?>
+          <?php foreach ($gigs as $gig): ?>
+            <tr>
+              <td><?= htmlspecialchars($gig['title']); ?></td>
+              <td><?= htmlspecialchars($gig['basic_price']); ?></td>
+              <td><?= htmlspecialchars($gig['premium_price']); ?></td>
+              <td><?= htmlspecialchars($gig['status']); ?></td>
+              <td>
+                <button onclick="editGig(<?= $gig['id']; ?>)" class="action-btn"><i class="fas fa-edit"></i></button>
+                <button onclick="confirmDelete(<?= $gig['id']; ?>)" class="action-btn"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="5">No gigs found.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
     </table>
   </div>
 
@@ -92,4 +91,4 @@
     }
   </script>
 </body>
-</html>
+</html> -->

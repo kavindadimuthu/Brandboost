@@ -15,7 +15,20 @@ class DesignerViewController extends Controller {
         $this->view('pages/designer/Profile');
     }
     public function designerGigs() {
-        $this->view('pages/designer/DesignerGigs');
+        echo "Designer Gigs Controller";
+
+        if (!isset($_SESSION['user_id'])) {
+            // Redirect to login page if not logged in
+            header('Location: /login');
+            exit();
+        }
+    
+        $userId = $_SESSION['user_id'];
+        $gigModel = $this->model('GigModel');
+        $gigs = $gigModel->getGigsByUserId($userId);
+
+        // $this->view('pages/designer/DesignerGigs');
+        $this->view('pages/designer/DesignerGigs', ['gigs' => $gigs ?: []]);
     }
     public function singleGig() {
         $this->view('pages/designer/SingleGig');
