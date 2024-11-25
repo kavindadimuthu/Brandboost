@@ -43,6 +43,7 @@
             <tbody id="ordersTableBody">
                 <!-- Gigs will be displayed here -->
             <script>
+                
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         const response = await fetch('/designerDataController/designerGigs');
@@ -51,26 +52,33 @@
                         console.log(gigs);
 
                         const tableBody = document.getElementById('ordersTableBody');
-                        tableBody.innerHTML = '';
+                        tableBody.innerHTML = ''; // Clear existing table content
 
                         if (gigs.length > 0) {
                             gigs.forEach(gig => {
+                                // Ensure packages are present and handle package data correctly
+                                const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+                                const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
+
                                 const row = document.createElement('tr');
 
+                                // Dynamically populate the table row
                                 row.innerHTML = `
                                     <td>${gig.title}</td>
-                                    <td>${gig.basic_price}</td>
-                                    <td>${gig.premium_price}</td>
-                                    <td>${gig.status}</td>
+                                    <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
+                                    <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
+                                    <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="editGig(${gig.id})" class="action-btn"><i class="fas fa-edit"></i></button>
-                                        <button onclick="confirmDelete(${gig.id})" class="action-btn"><i class="fas fa-trash"></i></button>
+                                        <button onclick="editGig(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
 
+                                // Append the new row to the table
                                 tableBody.appendChild(row);
                             });
                         } else {
+                            // If no gigs are found, show a message
                             const row = document.createElement('tr');
                             row.innerHTML = '<td colspan="5">No gigs found.</td>';
                             tableBody.appendChild(row);
@@ -79,6 +87,7 @@
                         console.error('Error fetching gigs:', error);
                     }
                 });
+
             </script>
             </tbody>
         </table>

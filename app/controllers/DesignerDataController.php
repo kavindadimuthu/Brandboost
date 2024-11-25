@@ -3,9 +3,6 @@
 class DesignerDataController extends Controller {
 
     public function createGig() {
-
-        // echo "Create Gig Controller";
-        // session_start();
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
@@ -63,10 +60,7 @@ class DesignerDataController extends Controller {
         } else {
             echo json_encode([]);
         }
-
-
     }
-    
 
     // Delete a gig by ID, ensuring it belongs to the logged-in user
     public function deleteGig($id) {
@@ -86,5 +80,6 @@ class DesignerDataController extends Controller {
             echo json_encode(['status' => 'error', 'message' => 'Failed to delete gig or unauthorized action.']);
         }
     }
+
 }
 

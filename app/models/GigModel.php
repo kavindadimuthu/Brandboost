@@ -53,14 +53,43 @@ class GigModel {
         $this->db->execute();
     }
 
-    // Get gigs by user_id
+    
     public function getGigsByUserId($userId) {
-        $this->db->query('SELECT * FROM designer_gig WHERE user_id = :user_id');
+        $this->db->query('
+            SELECT dg.*, dgp.*
+            FROM designer_gig dg
+            LEFT JOIN designer_gig_package_details dgp ON dg.gig_id = dgp.gig_id
+            WHERE dg.user_id = :user_id
+        ');
         $this->db->bind(':user_id', $userId);
         $results = $this->db->resultSet();
-        return $results ?: []; // Return an empty array if no results
+
+        $gigs = [];
+        foreach ($results as $result) {
+            $gigId = $result->gig_id;
+            if (!isset($gigs[$gigId])) {
+                $gigs[$gigId] = [
+                    'gig_id' => $result->gig_id,
+                    'user_id' => $result->user_id,
+                    'title' => $result->title,
+                    'description' => $result->description,
+                    'delivery_formats' => $result->delivery_formats,
+                    'tags' => $result->tags,
+                    'packages' => []
+                ];
+            }
+            $gigs[$gigId]['packages'][] = [
+                'package_type' => $result->package_type,
+                'benefits' => $result->benefits,
+                'delivery_days' => $result->delivery_days,
+                'revisions' => $result->revisions,
+                'price' => $result->price
+            ];
+        }
+
+        return array_values($gigs);
     }
-    
+
 
     // Delete a gig by ID and user_id
     public function deleteGigByIdAndUserId($id, $userId) {
