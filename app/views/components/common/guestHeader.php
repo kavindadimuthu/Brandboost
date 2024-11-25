@@ -6,7 +6,7 @@
             </div>
             <nav class="nav">
                 <ul class="nav_list">
-                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/services'">Services</a></li>
+                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/index'">Home</a></li>
                     <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/about'">About Us</a></li>
                     <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/contact'">Contact Us</a></li>
                     <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/faq'">FAQs</a></li>

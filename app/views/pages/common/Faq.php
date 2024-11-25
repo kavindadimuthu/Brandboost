@@ -165,13 +165,6 @@
             </div>
         </div>
 
-        <div class="categories">
-            <button class="category-btn active" data-category="general">General</button>
-            <button class="category-btn" data-category="companies">Companies</button>
-            <button class="category-btn" data-category="pricing">Pricing</button>
-            <button class="category-btn" data-category="product">Product</button>
-        </div>
-
         <div class="faq-list">
             <!-- FAQ items will be populated by JavaScript -->
         </div>
@@ -188,44 +181,12 @@
     <?php include __DIR__ . '/../../components/common/footer.php'; ?>
 
     <script>
-        // Sample FAQ data - in a real application, this would come from a database
-        const faqData = {
-            general: [
-                {
-                    question: "What is Brandboost?",
-                    answer: "Brandboost is a comprehensive marketing platform that helps businesses grow their online presence."
-                },
-                {
-                    question: "How do I get started?",
-                    answer: "Sign up for an account, complete your profile, and our team will guide you through the setup process."
-                }
-            ],
-            companies: [
-                {
-                    question: "Can I use Brandboost for multiple companies?",
-                    answer: "Yes, our platform supports multiple company profiles under a single account."
-                }
-            ],
-            pricing: [
-                {
-                    question: "What are your pricing plans?",
-                    answer: "We offer flexible pricing plans starting from $29/month. Contact us for custom enterprise solutions."
-                }
-            ],
-            product: [
-                {
-                    question: "What features are included?",
-                    answer: "Our platform includes social media management, analytics, content creation tools, and more."
-                }
-            ]
-        };
-
-        // Function to populate FAQ items
-        function populateFAQs(category) {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/homedatacontroller/fetchAllFaqs');
+            const data = await response.json();
             const faqList = document.querySelector('.faq-list');
             faqList.innerHTML = '';
-
-            faqData[category].forEach(faq => {
+            data.forEach(faq => {
                 const faqItem = document.createElement('div');
                 faqItem.className = 'faq-item';
                 faqItem.innerHTML = `
@@ -239,42 +200,28 @@
                 `;
                 faqList.appendChild(faqItem);
             });
-        }
 
-        // Initialize with general category
-        populateFAQs('general');
-
-        // Category switching
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                populateFAQs(btn.dataset.category);
-            });
-        });
-
-        // FAQ toggle
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.faq-question')) {
-                const answer = e.target.closest('.faq-item').querySelector('.faq-answer');
-                answer.classList.toggle('active');
-            }
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const searchText = e.target.value.toLowerCase();
-            const faqItems = document.querySelectorAll('.faq-item');
-
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question').textContent.toLowerCase();
-                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
-
-                if (question.includes(searchText) || answer.includes(searchText)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+            // FAQ toggle
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.faq-question')) {
+                    const answer = e.target.closest('.faq-item').querySelector('.faq-answer');
+                    answer.classList.toggle('active');
                 }
+            });
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchText = e.target.value.toLowerCase();
+                const faqItems = document.querySelectorAll('.faq-item');
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    if (question.includes(searchText) || answer.includes(searchText)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
         });
     </script>
