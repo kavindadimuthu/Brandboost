@@ -26,6 +26,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,16 +36,17 @@
     <script src="../../scripts/admin/dashboard.js"></script>
 
 </head>
+
 <body>
     <div class="container">
         <div id="sidebar-container">
             <!-- <div id="sidebar"></div> -->
-                 <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
+            <?php include __DIR__ . '/../../components/admin/sidebar.php'; ?>
 
         </div>
         <div class="main-content">
             <h1>Dashboard</h1>
-    
+
             <!-- Main content here -->
             <div class="stats">
                 <div class="influencers">
@@ -63,27 +65,27 @@
                     <p>0%</p>
                 </div>
             </div>
-    
+
             <div class="chart">
                 <h2>Statistics</h2>
                 <div width="600" height="300">
                     <div class="bar-chart">
-            
+
                     </div>
                     <div class="identify">
                         <div class="influencer-identity-outer">
-                            <div class="influencer-identity" ></div>
+                            <div class="influencer-identity"></div>
                             <div class="influencer-name">Influencer orders</div>
                         </div>
                         <div class="designer-identity-outer">
-                            <div class="designer-identity" ></div>
+                            <div class="designer-identity"></div>
                             <div class="designer-name">Designer orders</div>
                         </div>
-            
+
                     </div>
                 </div>
             </div>
-    
+
             <div class="customer-complaints">
                 <h2>Customer Complaints</h2>
                 <table>
@@ -96,12 +98,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div>
         </div>
-    
+
         <!-- New right-side column for registered users -->
         <div class="right-sidebar">
 
@@ -140,15 +142,16 @@
                             <p>Lorem ipsum dolor sit, amet consectetur </p>
                         </div>
                     </div> -->
-                    
+
                 </div>
             </div>
 
-            
+
         </div>
     </div>
-    
 
-   
+
+
 </body>
+
 </html>
