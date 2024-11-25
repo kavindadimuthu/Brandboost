@@ -48,25 +48,23 @@ class DesignerDataController extends Controller {
 
     public function designerGigs() {
 
-        echo "Designer Gigs Controller";
-        var_dump($gigs); // or print_r($gigs);
-
-        // session_start();
-    
         if (!isset($_SESSION['user_id'])) {
-            // Redirect to login page if not logged in
-            header('Location: /login');
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
             exit();
         }
-    
+
         $userId = $_SESSION['user_id'];
         $gigModel = $this->model('GigModel');
+
         $gigs = $gigModel->getGigsByUserId($userId);
 
+        if ($gigs) {
+            echo json_encode($gigs);
+        } else {
+            echo json_encode([]);
+        }
 
-    
-        // Ensure gigs is always an array
-        // $this->view('DesignerViewController/designerGigs', ['gigs' => $gigs ?: []]);
+
     }
     
 

@@ -41,25 +41,45 @@
                 </tr>
             </thead>
             <tbody id="ordersTableBody">
-                <?php print_r($data['gigs']); ?>
-                <?php if (!empty($data['gigs'])): ?>
-                    <?php foreach ($data['gigs'] as $gig): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($gig->title); ?></td>
-                            <td><?= htmlspecialchars($gig->description); ?></td>
-                            <td><?= htmlspecialchars($gig->premium_price); ?></td>
-                            <td><?= htmlspecialchars($gig->status); ?></td>
-                            <td>
-                                <button onclick="editGig(<?= $gig->id; ?>)" class="action-btn"><i class="fas fa-edit"></i></button>
-                                <button onclick="confirmDelete(<?= $gig->id; ?>)" class="action-btn"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="5">No gigs found.</td>
-                    </tr>
-                <?php endif; ?>
+                <!-- Gigs will be displayed here -->
+            <script>
+                document.addEventListener('DOMContentLoaded', async () => {
+                    try {
+                        const response = await fetch('/designerDataController/designerGigs');
+                        const gigs = await response.json();
+
+                        console.log(gigs);
+
+                        const tableBody = document.getElementById('ordersTableBody');
+                        tableBody.innerHTML = '';
+
+                        if (gigs.length > 0) {
+                            gigs.forEach(gig => {
+                                const row = document.createElement('tr');
+
+                                row.innerHTML = `
+                                    <td>${gig.title}</td>
+                                    <td>${gig.basic_price}</td>
+                                    <td>${gig.premium_price}</td>
+                                    <td>${gig.status}</td>
+                                    <td>
+                                        <button onclick="editGig(${gig.id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="confirmDelete(${gig.id})" class="action-btn"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                `;
+
+                                tableBody.appendChild(row);
+                            });
+                        } else {
+                            const row = document.createElement('tr');
+                            row.innerHTML = '<td colspan="5">No gigs found.</td>';
+                            tableBody.appendChild(row);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching gigs:', error);
+                    }
+                });
+            </script>
             </tbody>
         </table>
     </div>

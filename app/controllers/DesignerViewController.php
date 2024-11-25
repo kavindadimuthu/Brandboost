@@ -2,7 +2,6 @@
 class DesignerViewController extends Controller {
 
     public function __construct() {
-        // session_start();
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'designer') {
             header('Location: /login');
         }
@@ -15,20 +14,7 @@ class DesignerViewController extends Controller {
         $this->view('pages/designer/Profile');
     }
     public function designerGigs() {
-        echo "Designer Gigs Controller";
-
-        if (!isset($_SESSION['user_id'])) {
-            // Redirect to login page if not logged in
-            header('Location: /login');
-            exit();
-        }
-    
-        $userId = $_SESSION['user_id'];
-        $gigModel = $this->model('GigModel');
-        $gigs = $gigModel->getGigsByUserId($userId);
-
-        // $this->view('pages/designer/DesignerGigs');
-        $this->view('pages/designer/DesignerGigs', ['gigs' => $gigs ?: []]);
+        $this->view('pages/designer/DesignerGigs');
     }
     public function singleGig() {
         $this->view('pages/designer/SingleGig');
