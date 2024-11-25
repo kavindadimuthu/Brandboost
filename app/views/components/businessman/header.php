@@ -12,10 +12,12 @@
         </div>
         <nav>
           <ul>
-            <li data-tab="dashboard" class="active"><a href="http://localhost:8000/DesignerViewController/designerDashboard">Dashboard</a></li>
-            <li data-tab="orders"><a href="http://localhost:8000/DesignerViewController/allOrders">Orders</a></li>
-            <li data-tab="gigs"><a href="http://localhost:8000/DesignerViewController/designerPackages">Packages</a></li>
-            <li data-tab="earnings"><a href="http://localhost:8000/DesignerViewController/earnings">Earnings</a></li>
+            <li data-tab="dashboard" class="active"><a href="http://localhost:8000/BusinessViewController/businessdashboard">Dashboard</a></li>
+            <li data-tab="orders"><a href="http://localhost:8000/BusinessViewController/ViewInfluencers">Influencers</a></li>
+            <li data-tab="orders"><a href="http://localhost:8000/BusinessViewController/ViewDesigners">Designers</a></li>
+            <li data-tab="gigs"><a href="http://localhost:8000/BusinessViewController/SearchGigs">Gigs</a></li>
+            <li data-tab="earnings"><a href="http://localhost:8000/BusinessViewController/MyOrders">Orders</a></li>
+            <li data-tab="earnings"><a href="http://localhost:8000/BusinessViewController/Payment">Payments</a></li>
           </ul>
         </nav>
         <div class="user-menu">
@@ -23,7 +25,7 @@
             <input type="text" placeholder="Search...">
             <img src="../assets/search-icon.png" alt="Search Icon" class="search-icon">
           </div>
-          <div class="chat-icon" onclick="window.location.href='/DesignerViewController/chat'">
+          <div class="chat-icon" onclick="window.location.href='/BusinessViewController/Chat'">
             <img src="../assets/chat-icon.svg" alt="chat">
           </div>
           <div class="notification-icon" >
@@ -33,7 +35,8 @@
             <img src="../assets/user-icon.svg" alt="User Icon">
             <div class="popup">
               <ul>
-                <li><a href="http://localhost:8000/DesignerViewController/profile">Profile</a></li>
+                <li><a href="http://localhost:8000/BusinessViewController/Profile">Profile</a></li>
+                <li><a href="http://localhost:8000/BusinessViewController/MyComplaints">Complaints</a></li>
                 <li><a href="http://localhost:8000/homecontroller/login">Logout</a></li>
               </ul>
             </div>

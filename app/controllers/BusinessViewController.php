@@ -3,6 +3,9 @@ class BusinessViewController extends Controller {
     // public function businessHomepage() {
     //     $this->view('pages/business/businessHomepage');
     // }
+    public function businessDashboard() {
+        $this->view('pages/business/businessdashboard');
+    }
     public function profile() {
         $this->view('pages/business/Profile');
     }
@@ -57,5 +60,13 @@ class BusinessViewController extends Controller {
 
     public function register(){
         $this->view('pages/register/businessOwner');
+    }
+
+    public function search(){
+        $this->view('pages/business/PersonSearch');
+    }
+
+    public function searchGigs(){
+        $this->view('pages/business/SearchGigs');
     }
 }
