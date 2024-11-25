@@ -5,30 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brandboost | About Us</title>
     <link rel="stylesheet" href="../../styles/common/index.css">
+    <link rel="stylesheet" href="../../styles/common/guestHeader.css">
     <link rel="stylesheet" href="../../styles/common/About.css">
     <link rel="stylesheet" href="../../styles/common/footer.css">
 </head>
 <body>
-    <header>
-        <div class="wrapper">
-            <div class="logo header-logo">
-                <img src="../../assets/images/sample-logo.png" alt="">
-                <span>Brandboost</span>
-            </div>
-            <nav class="nav">
-                <ul class="nav_list">
-                    <li class="nav_list_item"><a href="#">Services</a></li>
-                    <li class="nav_list_item"><a href="#">About Us</a></li>
-                    <li class="nav_list_item"><a href="#">Contact Us</a></li>
-                    <li class="nav_list_item"><a href="#">FAQs</a></li>
-                </ul>
-            </nav>
-            <div class="log-reg">
-                <button class="btn login-btn">Login</button>
-                <button class="btn register-btn">Sign Up</button>
-            </div>
-        </div>
-    </header>
+    <?php include __DIR__ . '/../../components/common/guestHeader.php'; ?>
     
     <section class="aboutus">
         <div class="wrapper">

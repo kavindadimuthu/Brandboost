@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ Page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../styles/common/index.css">
+    <link rel="stylesheet" href="../../styles/common/guestHeader.css">
+    <link rel="stylesheet" href="../../styles/common/footer.css">
     <style>
         * {
             margin: 0;
@@ -16,28 +18,6 @@
 
         body {
             background-color: #f5f7ff;
-        }
-
-        
-
-        .navbar {
-            background-color: #5b6bff;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* .logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        } */
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 2rem;
         }
 
         .container {
@@ -171,21 +151,10 @@
         }
 
     </style>
-    <link rel="stylesheet" href="../../styles/common/index.css">
-    <link rel="stylesheet" href="../../styles/common/footer.css">
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="logo">Brandboost</div>
-        <div class="nav-links">
-            <a href="#">Services</a>
-            <a href="#">About us</a>
-            <a href="#">Contact us</a>
-            <a href="#">FAQs</a>
-            <a href="#">Careers</a>
-        </div>
-    </nav>
+    <?php include __DIR__ . '/../../components/common/guestHeader.php'; ?>
 
     <div class="container">
         <div class="search-section">

@@ -1,13 +1,13 @@
 /* Footer Styles */
 .footer {
     background-color: #F5F5F5;
-    padding: 80px 0;
+    padding: 50px 0;
   }
   
   .footer-upper-container {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
   
   .footer-logo {
@@ -34,6 +34,7 @@
   
   .footer-lower-container {
     display: flex;
+    padding-top: 15px;
     justify-content: space-between;
     align-items: center;
     border-top: solid 1px #ccc;
