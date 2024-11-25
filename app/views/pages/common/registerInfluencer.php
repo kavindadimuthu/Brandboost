@@ -20,6 +20,10 @@
 
         <form class="register-form" method="post" action="/RegisterController/register" enctype="multipart/form-data">
 
+
+            <!-- Hidden input field with constant value -->
+            <input type="hidden" name="role" value="influencer">
+
             <div class="form-group">
                 <input type="text" name="first_name" placeholder="First Name" required>
             </div>
@@ -36,8 +40,15 @@
             </div>
             
             <div class="form-group">
-                <input type="text" name="social_media_link" placeholder="Social media link" required>
+                <select name="gender" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
             </div>
+
+            <!-- <div class="form-group">
+                <input type="text" name="social_media_link" placeholder="Social media link" required>
+            </div> -->
 
             <div class="form-group">
                 <input type="password" name="password" placeholder="Password" required>
@@ -55,7 +66,7 @@
             <div class="form-group">
                 <button type="submit" class="btn">Register</button>
             </div>
-            <p>Already registered? <a href="#">Login here</a></p>
+            <p>Already registered? <a href="http://localhost:8000/homecontroller/login">Login here</a></p>
 
         </form>
 

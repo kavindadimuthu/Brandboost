@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2024 at 03:06 PM
+-- Generation Time: Nov 25, 2024 at 08:30 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -93,6 +93,30 @@ CREATE TABLE `designer_qualifications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `faq`
+--
+
+CREATE TABLE `faq` (
+  `id` int(10) NOT NULL,
+  `question` varchar(200) NOT NULL,
+  `answer` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `faq`
+--
+
+INSERT INTO `faq` (`id`, `question`, `answer`) VALUES
+(1, 'What is the return policy?', 'Our return policy lasts 30 days. If 30 days have gone by since your purchase, we can’t offer you a refund or exchange.'),
+(4, 'How can I contact customer support?', 'You can contact our customer support via email at support@example.com or call us at 123-456-7890.'),
+(12, 'sachith', 'mu kari pakaya'),
+(13, 'kava', 'i am real kava from embiliptiya'),
+(14, 'tharusha', 'medawachchiye kariya\n'),
+(15, 'gaiya', 'mu real kolukarayek');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `influencer_gig`
 --
 
@@ -155,7 +179,18 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`, `gender`) VALUES
 (1, 'gra', 'garw', 'kavindadimuthu260@gmail.com', '', '$2y$10$E38KxN7WBe6rIIazLS8Fh.B.HQItqpTLkoNGpz.j52mK5R31m8BpW', 'admin', 'male'),
-(8, 'Kavindacd', 'Dimuthucd', 'ddvsv@gmail.com', '42554245', '$2y$10$YTNYNmBTCj6rLcHBOf.rP.3Po4cnk9mVJOCssRI2QCGsOE7MZDJXK', 'admin', 'male');
+(8, 'Kavindacd', 'Dimuthucd', 'ddvsv@gmail.com', '42554245', '$2y$10$YTNYNmBTCj6rLcHBOf.rP.3Po4cnk9mVJOCssRI2QCGsOE7MZDJXK', 'admin', 'male'),
+(9, 'bus', 'barista', 'jiji@uhh', '46565', '$2y$10$FATB9BM.oIbRlyM.WBsjyeA0.wRRW4nquuWt1q16lCjWTXoQ0UKUa', 'admin', 'male'),
+(10, 'f', 'fs', 'dfsdae@njlnl', '254425', '$2y$10$ZnJzYaJLM/WYsxZoFD2shuIH1EFwdH41Il2uv0XlN7xODnk1bhsLG', 'admin', 'male'),
+(11, 'te', 'ert', 'dfsdteae@njlnl', '25442355', '$2y$10$QIqgu2QZOhIpfdLP.3PSSeDux18VGYnLxfINgfKTQhPohJqAbbyYO', 'admin', 'male'),
+(12, 'isuru', 'son', 'ysu@tayh', '517929', '$2y$10$MX.bjiyhOXDuuz4Vp979x.iZFtIAjVueY2TVbYVFHNyDYU2ZjEciK', 'admin', 'male'),
+(13, 'tharusha', 'navod', 'tn@gmail.com', '1215366', '$2y$10$pyj9IW2uKi4kaFkYYvjFBekjpR8OpdkHZgFFLNPyZBD9JY6anFf1i', 'admin', 'male'),
+(15, 'te', 'eg', 'gr2EW@GRS', '314', '$2y$10$2EUu5YdQBKzZbIj9aVAtL.FdhjGr4h2GWwdZf4drN4wewaWuFEgJW', 'businessman', 'male'),
+(16, 'cds', 'csd', 'acd@dea', '143', '$2y$10$djyUxN687E2PgZ.Nk4IvReBLu7fsQkvVHo2VCS7AxVlhnoU9KSBMa', 'influencer', 'female'),
+(17, 'qe', 'qwe', 'tnewq@gmail.com', '121536621', '$2y$10$kz5d0RiV5YFYFEDSb8OdDu35z4QOUN/tcogP2qhKYtmEbpoT8Oyyi', 'designer', 'female'),
+(18, 'isuru', 'son', 'isurunaveen27@gmail.com', '5179293424', '$2y$10$n4c/T0BaTQl2c4vFHFeYKOxvmaGeVDJGoYInyNYgjiN.jrvSdDCZS', 'businessman', 'male'),
+(20, 'Kavinda', 'son', 'kawa@gm', '51792932', '$2y$10$qU44XA1Bk93T0vb.QiKFH.FeycWt7YwnCYHAvuCXCXH8azUUsmdnC', 'designer', 'male'),
+(21, 'deemath', 'jaye', 'deema@gmail', '0710718989', '$2y$10$HL0DgTbPs94f7JHlCrXJLOCDttQHuB0M2LrhXSfO6GB7LkmBWFkIW', 'influencer', 'male');
 
 --
 -- Indexes for dumped tables
@@ -193,6 +228,12 @@ ALTER TABLE `designer_gig_package_details`
 --
 ALTER TABLE `designer_qualifications`
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `faq`
+--
+ALTER TABLE `faq`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `influencer_gig`
@@ -238,6 +279,12 @@ ALTER TABLE `designer_gig`
   MODIFY `gig_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `faq`
+--
+ALTER TABLE `faq`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `influencer_gig`
 --
 ALTER TABLE `influencer_gig`
@@ -247,7 +294,7 @@ ALTER TABLE `influencer_gig`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables

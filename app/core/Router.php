@@ -28,6 +28,10 @@ class Router {
 
         $this->params = $url ? array_values($url) : [];
 
+        if (!empty($this->params)) {
+            array_shift($this->params);
+        }
+
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 

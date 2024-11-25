@@ -1,19 +1,27 @@
 <?php
 class DesignerViewController extends Controller {
+
+    public function __construct() {
+        // session_start();
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'designer') {
+            header('Location: /login');
+        }
+    }
+
     public function designerDashboard() {
         $this->view('pages/designer/DesignerDashboard');
     }
     public function profile() {
         $this->view('pages/designer/Profile');
     }
-    public function designerPackages() {
-        $this->view('pages/designer/DesignerPackages');
+    public function designerGigs() {
+        $this->view('pages/designer/DesignerGigs');
     }
-    public function singlepackage() {
-        $this->view('pages/designer/SinglePackage');
+    public function singleGig() {
+        $this->view('pages/designer/SingleGig');
     }
-    public function createPackage() {
-        $this->view('pages/designer/CreatePackage');
+    public function createGig() {
+        $this->view('pages/designer/CreateGig');
     }
     public function allOrders() {
         $this->view('pages/designer/AllOrders');

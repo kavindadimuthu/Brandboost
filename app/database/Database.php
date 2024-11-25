@@ -22,7 +22,8 @@ class Database {
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
-        }
+        }        
+
     }
 
     public static function getInstance() {
@@ -78,4 +79,9 @@ class Database {
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function lastInsertId() {
+        return $this->dbh->lastInsertId();
+    }
+    
 }

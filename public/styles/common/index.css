@@ -1,0 +1,36 @@
+:root {
+    --purple-color: #636ae8;
+  }
+  
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Headings */
+  .heading {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 600;
+  }
+    
+  /* Common containers & wrappers */
+  header,
+  section,
+  footer {
+    width: 100%;
+  }
+  
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  /* ------------------------- */

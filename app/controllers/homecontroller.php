@@ -50,6 +50,10 @@ class HomeController extends Controller {
         $this->view('pages/register/chooseRole');
     }
 
+    public function Faq() {
+        $this->view('pages/common/Faq');
+    }
+
 
 }
 

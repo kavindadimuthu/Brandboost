@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brandboost</title>
     <link rel="stylesheet" href="../styles/common/Landing.css">
+    <link rel="stylesheet" href="../styles/common/footer.css">
 </head>
 <body>
     <header>
@@ -15,10 +16,10 @@
             </div>
             <nav class="nav">
                 <ul class="nav_list">
-                    <li class="nav_list_item"><a href="#">Services</a></li>
-                    <li class="nav_list_item"><a href="#">About Us</a></li>
-                    <li class="nav_list_item"><a href="#">Contact Us</a></li>
-                    <li class="nav_list_item"><a href="#">FAQs</a></li>
+                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/services'">Services</a></li>
+                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/about'">About Us</a></li>
+                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/contact'">Contact Us</a></li>
+                    <li class="nav_list_item"><a onclick="window.location.href='/homecontroller/faq'">FAQs</a></li>
                 </ul>
             </nav>
             <div class="log-reg">
@@ -154,7 +155,8 @@
             <img class="arrow-icon" src="../../assets/images/curved-arrow.png" alt="">
         </div>
     </section>
-    <footer class="footer">
+    <?php include __DIR__ . '/../../components/common/footer.php'; ?>
+    <!-- <footer class="footer">
         <div class="wrapper">
             <div class="footer-upper-container">
                 <div class="footer-section">
@@ -209,6 +211,6 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> -->
 </body>
 </html>
