@@ -52,4 +52,22 @@ class GigModel {
         $this->db->bind(':price', $packageDetails['price']);
         $this->db->execute();
     }
+
+    // Get gigs by user_id
+    public function getGigsByUserId($userId) {
+        $this->db->query('SELECT * FROM gigs WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $userId);
+        $results = $this->db->resultSet();
+        return $results ?: []; // Return an empty array if no results
+    }
+    
+
+    // Delete a gig by ID and user_id
+    public function deleteGigByIdAndUserId($id, $userId) {
+        $this->db->query('DELETE FROM gigs WHERE id = :id AND user_id = :user_id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':user_id', $userId);
+        return $this->db->execute();
+    }
+    
 }
