@@ -62,24 +62,18 @@ class DesignerDataController extends Controller {
         }
     }
 
-    // Delete a gig by ID, ensuring it belongs to the logged-in user
-    public function deleteGig($id) {
-        // session_start();
+public function deleteGig($id) {
+    $userId = $_SESSION['user_id'];
 
-        if (!isset($_SESSION['user_id'])) {
-            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
-            exit();
-        }
+    $gigModel = $this->model('GigModel');
 
-        $userId = $_SESSION['user_id'];
-        $gigModel = $this->model('GigModel');
+    $result = $gigModel->deleteGigByIdAndUserId($id, $userId);
 
-        if ($gigModel->deleteGigByIdAndUserId($id, $userId)) {
-            echo json_encode(['status' => 'success', 'message' => 'Gig deleted successfully.']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to delete gig or unauthorized action.']);
-        }
-    }
+    echo json_encode($result);
+    exit;
+}
+
+
 
 }
 

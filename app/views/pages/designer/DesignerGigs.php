@@ -43,7 +43,7 @@
             <tbody id="ordersTableBody">
                 <!-- Gigs will be displayed here -->
             <script>
-                
+
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         const response = await fetch('/designerDataController/designerGigs');
@@ -107,20 +107,37 @@
 
         function confirmDelete(gigId) {
             selectedGigId = gigId;
+            console.log('Selected Gig ID:', selectedGigId);
+            
             document.getElementById('deleteModal').style.display = 'block';
         }
 
         async function deleteGig() {
             if (selectedGigId !== null) {
+                console.log('Deleting Gig ID:', selectedGigId);
+                
                 try {
-                    const response = await fetch(`/DesignerViewController/deleteGig/${selectedGigId}`, { method: 'DELETE' });
+                    const response = await fetch(`/DesignerDataController/deleteGig/${selectedGigId}`, { 
+                        method: 'DELETE', 
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        },
+                        // Pass the user_id in the request if needed for extra validation
+                        body: JSON.stringify({ user_id: '<?php echo $_SESSION['user_id']; ?>' }) 
+                    });
+                    console.log('Server Response:', response); // Log server response for debugging
+                    
                     const result = await response.json();
+                    console.log('Server Response:', result); // Log server response for debugging
+
 
                     if (result.status === 'success') {
                         alert(result.message);
                         location.reload(); // Refresh the page
                     } else {
                         alert(result.message);
+                        console.error(result.message); // Log the error in console
+
                     }
                 } catch (error) {
                     console.error('Error deleting gig:', error);
@@ -130,14 +147,11 @@
 
         document.getElementById('confirmDelete').addEventListener('click', deleteGig);
         document.getElementById('cancelDelete').addEventListener('click', () => {
-            document.getElementById('deleteModal').style.display = 'none';
-            selectedGigId = null;
+        document.getElementById('deleteModal').style.display = 'none';
+        selectedGigId = null;
         });
-
-        function editGig(gigId) {
-            window.location.href = `/DesignerViewController/editGig/${gigId}`;
-        }
     </script>
+
     <script src="../scripts/common/header.js"></script>
 </body>
 </html>

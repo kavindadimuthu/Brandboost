@@ -91,12 +91,25 @@ class GigModel {
     }
 
 
-    // Delete a gig by ID and user_id
-    public function deleteGigByIdAndUserId($id, $userId) {
-        $this->db->query('DELETE FROM designer_gig WHERE id = :id AND user_id = :user_id');
+public function deleteGigByIdAndUserId($id, $userId) {
+    try {
+        $this->db->query('DELETE FROM designer_gig WHERE gig_id = :id AND user_id = :user_id');
+        
+        // Bind parameters
         $this->db->bind(':id', $id);
         $this->db->bind(':user_id', $userId);
-        return $this->db->execute();
+        
+        if ($this->db->execute()) {
+            return ['status' => 'success', 'message' => 'Gig deleted successfully.'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to delete the gig.'];
+        }
+    } catch (PDOException $e) {
+        // Catch any constraint or database-related errors
+        return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
     }
+}
+
+
     
 }
