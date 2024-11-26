@@ -1,17 +1,8 @@
 <?php
-// require_once '../app/models/GigModel.php';
 
 class DesignerDataController extends Controller {
-    // private $gigModel;
-
-    // public function __construct($dbConnection) {
-    //     $this->gigModel = new GigModel($dbConnection);
-    // }
 
     public function createGig() {
-
-        echo "Create Gig Controller";
-        session_start();
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
@@ -42,7 +33,7 @@ class DesignerDataController extends Controller {
 
             if ($result) {
                 echo "Gig created successfully!";
-                header("Location: /designerviewcontroller/designerGigs?success=true");
+                header("Location: /designerviewcontroller/designerGigs");
                 // exit;
             } else {
                 echo "Failed to create gig. Please try again.";
@@ -51,4 +42,38 @@ class DesignerDataController extends Controller {
             echo "Invalid request or session expired.";
         }
     }
+
+    public function designerGigs() {
+
+        if (!isset($_SESSION['user_id'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+            exit();
+        }
+
+        $userId = $_SESSION['user_id'];
+        $gigModel = $this->model('GigModel');
+
+        $gigs = $gigModel->getGigsByUserId($userId);
+
+        if ($gigs) {
+            echo json_encode($gigs);
+        } else {
+            echo json_encode([]);
+        }
+    }
+
+public function deleteGig($id) {
+    $userId = $_SESSION['user_id'];
+
+    $gigModel = $this->model('GigModel');
+
+    $result = $gigModel->deleteGigByIdAndUserId($id, $userId);
+
+    echo json_encode($result);
+    exit;
 }
+
+
+
+}
+

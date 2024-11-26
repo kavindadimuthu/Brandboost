@@ -52,4 +52,64 @@ class GigModel {
         $this->db->bind(':price', $packageDetails['price']);
         $this->db->execute();
     }
+
+    
+    public function getGigsByUserId($userId) {
+        $this->db->query('
+            SELECT dg.*, dgp.*
+            FROM designer_gig dg
+            LEFT JOIN designer_gig_package_details dgp ON dg.gig_id = dgp.gig_id
+            WHERE dg.user_id = :user_id
+        ');
+        $this->db->bind(':user_id', $userId);
+        $results = $this->db->resultSet();
+
+        $gigs = [];
+        foreach ($results as $result) {
+            $gigId = $result->gig_id;
+            if (!isset($gigs[$gigId])) {
+                $gigs[$gigId] = [
+                    'gig_id' => $result->gig_id,
+                    'user_id' => $result->user_id,
+                    'title' => $result->title,
+                    'description' => $result->description,
+                    'delivery_formats' => $result->delivery_formats,
+                    'tags' => $result->tags,
+                    'packages' => []
+                ];
+            }
+            $gigs[$gigId]['packages'][] = [
+                'package_type' => $result->package_type,
+                'benefits' => $result->benefits,
+                'delivery_days' => $result->delivery_days,
+                'revisions' => $result->revisions,
+                'price' => $result->price
+            ];
+        }
+
+        return array_values($gigs);
+    }
+
+
+public function deleteGigByIdAndUserId($id, $userId) {
+    try {
+        $this->db->query('DELETE FROM designer_gig WHERE gig_id = :id AND user_id = :user_id');
+        
+        // Bind parameters
+        $this->db->bind(':id', $id);
+        $this->db->bind(':user_id', $userId);
+        
+        if ($this->db->execute()) {
+            return ['status' => 'success', 'message' => 'Gig deleted successfully.'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to delete the gig.'];
+        }
+    } catch (PDOException $e) {
+        // Catch any constraint or database-related errors
+        return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+    }
+}
+
+
+    
 }
