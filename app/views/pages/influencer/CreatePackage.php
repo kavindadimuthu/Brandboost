@@ -12,6 +12,7 @@
     <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
     <div class="container">
+    <form action="/InfluencerDataController/createGig" method="POST">
     <!-- Step 1: Select Service Type -->
     <div class="step active" id="step1">
       <h2>Select Service Type</h2>
@@ -24,8 +25,38 @@
       <button id="nextStep1">Next</button>
     </div>
 
-    <!-- Step 2: Add Packages -->
+    <!-- Step 3: Add Details (now Step 2) -->
     <div class="step" id="step2">
+      <h2>Finalize Package</h2>
+      <label>Package Topic: <input type="text" name="packageTopic" required></label>
+      <label>Description: <textarea name="packageDescription" required></textarea></label>
+      
+    <div style="padding:30px 0;">
+        <label>Platform:</label>
+        <div>
+        <input type="checkbox" name="delivery_formats[]" value="facebook" id="facebook">
+        <label for="facebook">Facebook</label>
+        </div>
+        <div>
+        <input type="checkbox" name="delivery_formats[]" value="instagram" id="instagram">
+        <label for="instagram">Instagram</label>
+        </div>
+        <div>
+        <input type="checkbox" name="delivery_formats[]" value="tiktok" id="tiktok">
+        <label for="tiktok">TikTok</label>
+        </div>
+        <div>
+        <input type="checkbox" name="delivery_formats[]" value="tiktok" id="tiktok">
+        <label for="tiktok">Youtube</label>
+        </div>
+    </div>
+      <label>Upload Files: <input type="file" name="sampleFiles" multiple accept=".png,.jpg"></label>
+      <button id="backStep2">Back</button>
+      <button id="nextStep2">Next</button>
+    </div>
+
+    <!-- Step 2: Add Packages (now Step 3) -->
+    <div class="step" id="step3">
       <h2>Add Packages</h2>
       <div class="package">
         <h3>Basic Package</h3>
@@ -50,49 +81,11 @@
         <label>Price: <input type="number" name="standardPrice" required></label>
       </div>
       <div class="package">
-        <h3>Premium Package</h3>
-        <label>Description: <input type="text" name="premiumDescription" required></label>
-        <label>
           
-          <span id="premiumDaysContainer">
-            <input type="number" name="premiumDays" required>
-          </span>
-        </label>
-        <label>Price: <input type="number" name="premiumPrice" required></label>
-      </div>
-      <button id="backStep2">Back</button>
-      <button id="nextStep2">Next</button>
-    </div>
-
-    <!-- Step 3: Add Details -->
-    <div class="step" id="step3">
-      <h2>Finalize Package</h2>
-      <label>Package Topic: <input type="text" name="packageTopic" required></label>
-      <label>Description: <textarea name="packageDescription" required></textarea></label>
-      
-    <div style="padding:30px 0;">
-        <label>Platform:</label>
-        <div>
-        <input type="checkbox" name="platform" value="facebook" id="facebook">
-        <label for="facebook">Facebook</label>
-        </div>
-        <div>
-        <input type="checkbox" name="platform" value="instagram" id="instagram">
-        <label for="instagram">Instagram</label>
-        </div>
-        <div>
-        <input type="checkbox" name="platform" value="tiktok" id="tiktok">
-        <label for="tiktok">TikTok</label>
-        </div>
-        <div>
-        <input type="checkbox" name="platform" value="tiktok" id="tiktok">
-        <label for="tiktok">Youtube</label>
-        </div>
-    </div>
-      <label>Upload Files: <input type="file" name="sampleFiles" multiple accept=".png,.jpg"></label>
       <button id="backStep3">Back</button>
       <button type="submit" id="submitPackage">Submit</button>
     </div>
+  </form>
   </div>
 
   <script>
@@ -109,7 +102,6 @@
   const updateDaysFields = (type) => {
     const basicContainer = document.getElementById("basicDaysContainer");
     const standardContainer = document.getElementById("standardDaysContainer");
-    const premiumContainer = document.getElementById("premiumDaysContainer");
 
     if (type === "promotionDesign") {
       basicContainer.innerHTML = `
@@ -120,14 +112,10 @@
         <label>Design Days: <input type="number" name="standardDesignDays"></label>
         <label>Promotion Days: <input type="number" name="standardPromotionDays"></label>
       `;
-      premiumContainer.innerHTML = `
-        <label>Design Days: <input type="number" name="premiumDesignDays"></label>
-        <label>Promotion Days: <input type="number" name="premiumPromotionDays"></label>
-      `;
+
     } else {
-      basicContainer.innerHTML = `<input type="number" name="basicDays" required>`;
-      standardContainer.innerHTML = `<input type="number" name="standardDays" required>`;
-      premiumContainer.innerHTML = `<input type="number" name="premiumDays" required>`;
+      basicContainer.innerHTML = '<label>Promotion Days: <input type="number" name="basicDays" required></label>';
+      standardContainer.innerHTML = `<label>Promotion Days: <input type="number" name="standardDays" required></label>`;
     }
   };
 
