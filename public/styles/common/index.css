@@ -9,9 +9,14 @@
   }
   
   body {
-    font-family: 'Roboto', sans-serif;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    /* font-family: 'Roboto', sans-serif; */
     margin: 0;
     padding: 0;
+    background-color: #f5f7ff;
   }
   
   /* Headings */
@@ -34,3 +39,56 @@
     padding: 0 20px;
   }
   /* ------------------------- */
+
+
+  /* Buttons */
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 24px;
+    color: #fff;
+    display: inline-block;
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .login-btn {
+    background-color: transparent;
+    color: var(--purple-color);
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .register-btn {
+    background-color: var(--purple-color);
+    color: #fff;
+    /* background-color: #4a6cf7; */
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 5px;
+  }
+  
+  .scroll-btn {
+    background-color: #fff;
+    color: #6358FF;
+  }
+  
+  .learn-more-btn {
+    font-family: Inter;
+    color: #636AE8FF;
+    background: #FFFFFFFF;
+    opacity: 1;
+    border-radius: 26px;
+    border-width: 1px;
+    border-color: #636AE8FF;
+    border-style: solid;
+  }
+  
+  .cta-btn {
+    color: #FFFFFFFF;
+    background: #E8618CFF;
+    padding: 10px 40px;
+  }
+  
+  /* ------------------------------ */
