@@ -73,7 +73,7 @@ public function deletePromotion($id) {
 
     $promotionModel = $this->model('PromotionModel');
 
-    $result = $promotionModel->deleteGigByIdAndUserId($id, $userId);
+    $result = $promotionModel->deletePromotionByIdAndUserId($id, $userId);
 
     echo json_encode($result);
     exit;

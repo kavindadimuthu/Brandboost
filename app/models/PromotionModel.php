@@ -102,4 +102,25 @@ class PromotionModel {
 
         return array_values($gigs);
     }
+
+
+    public function deletePromotionByIdAndUserId($id, $userId) {
+        try {
+            $this->db->query('DELETE FROM influencer_gig WHERE gig_id = :id AND user_id = :user_id');
+            
+            // Bind parameters
+            $this->db->bind(':id', $id);
+            $this->db->bind(':user_id', $userId);
+            
+            if ($this->db->execute()) {
+                return ['status' => 'success', 'message' => 'Promotion deleted successfully.'];
+            } else {
+                return ['status' => 'error', 'message' => 'Failed to delete the promotion.'];
+            }
+        } catch (PDOException $e) {
+            // Catch any constraint or database-related errors
+            return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+        }
+    }
+    
 }
