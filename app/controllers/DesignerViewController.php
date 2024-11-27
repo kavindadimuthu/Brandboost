@@ -23,7 +23,7 @@ class DesignerViewController extends Controller {
         $this->view('pages/designer/CreateGig');
     }
     public function updateGig() {
-        $this->view('pages/designer/GigUpdate');
+        $this->view('pages/designer/gigUpdate');
     }
     public function allOrders() {
         $this->view('pages/designer/AllOrders');

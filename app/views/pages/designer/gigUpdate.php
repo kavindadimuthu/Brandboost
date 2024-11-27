@@ -139,96 +139,116 @@
 
     <script>
     // Function to fetch and populate gig details
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchGigDetails();
-    });
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchGigDetails();
+        });
 
-    async function fetchGigDetails() {
-        const gigId = new URLSearchParams(window.location.search).get('gigId');
-        console.log("Gig ID:", gigId);
+        async function fetchGigDetails() {
+            const gigId = new URLSearchParams(window.location.search).get('gigId');
+            console.log("Gig ID:", gigId);
 
-        if (!gigId) {
-            alert('Gig ID not provided.');
-            return;
-        }
-
-        try {
-            // Use the correct endpoint based on your router's route structure
-            const response = await fetch(`/DesignerDataController/fetchSingleGig/${gigId}`);
-            const gig = await response.json();
-            console.log("Gig details:", gig);
-
-            // Populate form fields with fetched gig details
-            document.getElementById('editTitle').value = gig.title || '';
-            document.getElementById('editDescription').value = gig.description || '';
-            document.getElementById('editDeliveryFormats').value = (gig.delivery_formats || []).join(', ');
-            document.getElementById('editTags').value = (gig.tags || []).join(', ');
-
-            // Basic Package
-            document.getElementById('editBasicPrice').value = gig.basicPackage?.price || '';
-            document.getElementById('editBasicBenefits').value = gig.basicPackage?.benefits || '';
-            document.getElementById('editBasicDeliveryDays').value = gig.basicPackage?.delivery_days || '';
-            document.getElementById('editBasicRevisions').value = gig.basicPackage?.revisions || '';
-
-            // Premium Package
-            document.getElementById('editPremiumPrice').value = gig.premiumPackage?.price || '';
-            document.getElementById('editPremiumBenefits').value = gig.premiumPackage?.benefits || '';
-            document.getElementById('editPremiumDeliveryDays').value = gig.premiumPackage?.delivery_days || '';
-            document.getElementById('editPremiumRevisions').value = gig.premiumPackage?.revisions || '';
-        } catch (error) {
-            console.error("Error fetching gig details:", error);
-            alert("Failed to fetch gig details. Please try again.");
-        }
-    };
-
-    // Function to save updated gig details
-    async function saveGigDetails() {
-        const gigId = new URLSearchParams(window.location.search).get('gigId');
-        if (!gigId) {
-            alert("No gig ID provided in the URL.");
-            return;
-        }
-
-        const updatedGig = {
-            title: document.getElementById('editTitle').value,
-            description: document.getElementById('editDescription').value,
-            delivery_formats: document.getElementById('editDeliveryFormats').value.split(','),
-            tags: document.getElementById('editTags').value.split(','),
-            basic: {
-                price: document.getElementById('editBasicPrice').value,
-                benefits: document.getElementById('editBasicBenefits').value,
-                delivery_days: document.getElementById('editBasicDeliveryDays').value,
-                revisions: document.getElementById('editBasicRevisions').value,
-            },
-            premium: {
-                price: document.getElementById('editPremiumPrice').value,
-                benefits: document.getElementById('editPremiumBenefits').value,
-                delivery_days: document.getElementById('editPremiumDeliveryDays').value,
-                revisions: document.getElementById('editPremiumRevisions').value,
+            if (!gigId) {
+                alert('Gig ID not provided.');
+                return;
             }
-        };
 
-        try {
-            // Update gig by sending a PUT request to the appropriate endpoint
-            const response = await fetch(`/DesignerDataController/updateGig/${gigId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedGig)
-            });
-            const result = await response.json();
+            try {
+                // Use the correct endpoint based on your router's route structure
+                const response = await fetch(`/DesignerDataController/fetchSingleGig/${gigId}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch gig details. Status: ${response.status}`);
+                }
 
-            alert(result.message || "Gig updated successfully.");
-            if (result.status === "success") {
-                window.location.href = "/gigs"; // Redirect to the gigs page after successful update
+                const gig = await response.json();
+                console.log("Gig details:", gig);
+
+                // Populate form fields with fetched gig details
+                document.getElementById('editTitle').value = gig.title || '';
+                document.getElementById('editDescription').value = gig.description || '';
+                document.getElementById('editDeliveryFormats').value = Array.isArray(gig.delivery_formats)
+                    ? gig.delivery_formats.join(', ')
+                    : (gig.delivery_formats || '');
+                document.getElementById('editTags').value = Array.isArray(gig.tags)
+                    ? gig.tags.join(', ')
+                    : (gig.tags || '');
+
+                // Basic Package
+                document.getElementById('editBasicPrice').value = gig.packages[0].price || '';
+                document.getElementById('editBasicBenefits').value = gig.packages[0].benefits || '';
+                document.getElementById('editBasicDeliveryDays').value = gig.packages[0].delivery_days || '';
+                document.getElementById('editBasicRevisions').value = gig.packages[0].revisions || '';
+
+                // Premium Package
+                document.getElementById('editPremiumPrice').value = gig.packages[1].price || '';
+                document.getElementById('editPremiumBenefits').value = gig.packages[1].benefits || '';
+                document.getElementById('editPremiumDeliveryDays').value = gig.packages[1].delivery_days || '';
+                document.getElementById('editPremiumRevisions').value = gig.packages[1].revisions || '';
+            } catch (error) {
+                console.error("Error fetching gig details:", error);
+                alert("Failed to fetch gig details. Please try again.");
             }
-        } catch (error) {
-            console.error("Error saving gig details:", error);
-            alert("Failed to save changes. Please try again.");
         }
-    }
 
-    // Attach event listeners to the Save button
-    document.getElementById('saveEditButton').addEventListener('click', saveGigDetails);
-</script>
+        async function saveGigDetails() {
+            const gigId = new URLSearchParams(window.location.search).get('gigId');
+            if (!gigId) {
+                alert("No gig ID provided in the URL.");
+                return;
+            }
 
+            // Construct the updated gig object
+            const updatedGig = {
+                title: document.getElementById('editTitle').value,
+                description: document.getElementById('editDescription').value,
+                delivery_formats: document.getElementById('editDeliveryFormats').value
+                    .split(',')
+                    .map(format => format.trim()), // Trim whitespace from each format
+                tags: document.getElementById('editTags').value.split(',').map(tag => tag.trim()), // Trim whitespace
+                basic: {
+                    price: parseFloat(document.getElementById('editBasicPrice').value) || 0, // Ensure numeric value
+                    benefits: document.getElementById('editBasicBenefits').value || '',
+                    delivery_days: parseInt(document.getElementById('editBasicDeliveryDays').value) || 0, // Ensure integer
+                    revisions: parseInt(document.getElementById('editBasicRevisions').value) || 0 // Ensure integer
+                },
+                premium: {
+                    price: parseFloat(document.getElementById('editPremiumPrice').value) || 0, // Ensure numeric value
+                    benefits: document.getElementById('editPremiumBenefits').value || '',
+                    delivery_days: parseInt(document.getElementById('editPremiumDeliveryDays').value) || 0, // Ensure integer
+                    revisions: parseInt(document.getElementById('editPremiumRevisions').value) || 0 // Ensure integer
+                }
+            };
+
+            try {
+                const response = await fetch(`/DesignerDataController/updateGig/${gigId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedGig)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to save gig details. Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                alert(result.message || "Gig updated successfully.");
+                if (result.status === "success") {
+                    window.location.href = "/DesignerViewController/designerGigs"; // Redirect to the gigs page after successful update
+                }
+            } catch (error) {
+                console.error("Error saving gig details:", error);
+                alert("Failed to save changes. Please try again.");
+            }
+        }
+
+        // Attach event listener to the Save button after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveButton = document.getElementById('saveEditButton');
+            if (saveButton) {
+                saveButton.addEventListener('click', saveGigDetails);
+            } else {
+                console.error("Save button not found in the DOM.");
+            }
+        });
+
+    </script>
 </html>

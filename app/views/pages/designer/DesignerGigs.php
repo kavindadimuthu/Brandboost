@@ -69,7 +69,7 @@
                                     <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                                     <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="window.location.href='/DesignerViewController/updateGig/gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="window.location.href='/DesignerViewController/updateGig/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
                                         <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
@@ -94,84 +94,7 @@
     </div>
 
 
-    <div id="editModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Edit Gig</h2>
-            <!-- Gig Title -->
-            <label>Title: <input id="editTitle" type="text"></label>
-            
-            <!-- Gig Description -->
-            <label>Description: <textarea id="editDescription"></textarea></label>
-            
-            <!-- Delivery Formats -->
-            <label>Delivery Formats (comma-separated): <input id="editDeliveryFormats" type="text"></label>
-            
-            <!-- Tags -->
-            <label>Tags (comma-separated): <input id="editTags" type="text"></label>
-
-            <!-- Basic Package Details -->
-            <h3>Basic Package</h3>
-            <label>Price: <input id="editBasicPrice" type="number"></label>
-            <label>Benefits: <input id="editBasicBenefits" type="text"></label>
-            <label>Delivery Days: <input id="editBasicDeliveryDays" type="number"></label>
-            <label>Revisions: <input id="editBasicRevisions" type="number"></label>
-
-            <!-- Premium Package Details -->
-            <h3>Premium Package</h3>
-            <label>Price: <input id="editPremiumPrice" type="number"></label>
-            <label>Benefits: <input id="editPremiumBenefits" type="text"></label>
-            <label>Delivery Days: <input id="editPremiumDeliveryDays" type="number"></label>
-            <label>Revisions: <input id="editPremiumRevisions" type="number"></label>
-
-            <!-- Save and Cancel Buttons -->
-            <button id="saveEditButton">Save Changes</button>
-            <button onclick="document.getElementById('editModal').style.display = 'none';">Cancel</button>
-        </div>
-    </div>
-
-    <script>
-        async function editGig(gigId) {
-            const updatedGigData = {
-                title: prompt("Enter new title:"),
-                description: prompt("Enter new description:"),
-                delivery_formats: prompt("Enter new delivery formats (comma-separated):").split(','),
-                tags: prompt("Enter new tags (comma-separated):").split(','),
-                basic: {
-                    benefits: prompt("Enter basic package benefits:"),
-                    delivery_days: prompt("Enter basic package delivery days:"),
-                    revisions: prompt("Enter basic package revisions:"),
-                    price: prompt("Enter basic package price:")
-                },
-                premium: {
-                    benefits: prompt("Enter premium package benefits:"),
-                    delivery_days: prompt("Enter premium package delivery days:"),
-                    revisions: prompt("Enter premium package revisions:"),
-                    price: prompt("Enter premium package price:")
-                }
-            };
-
-            try {
-                const response = await fetch(`/DesignerDataController/updateGig/${gigId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedGigData)
-                });
-
-                const result = await response.json();
-                if (result.status === 'success') {
-                    alert(result.message);
-                    location.reload(); // Refresh the page
-                } else {
-                    alert(result.message);
-                }
-            } catch (error) {
-                console.error('Error updating gig:', error);
-            }
-        }
-
-    </script>
-
-
+    
 
     <!-- Delete Modal -->
     <div id="deleteModal" class="modal" style="display: none;">
