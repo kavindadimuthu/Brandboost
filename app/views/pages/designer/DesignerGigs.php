@@ -69,7 +69,7 @@
                                     <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                                     <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="editGig(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="window.location.href='/DesignerViewController/updateGig/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
                                         <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
@@ -92,6 +92,9 @@
             </tbody>
         </table>
     </div>
+
+
+    
 
     <!-- Delete Modal -->
     <div id="deleteModal" class="modal" style="display: none;">

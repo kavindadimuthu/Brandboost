@@ -62,18 +62,42 @@ class DesignerDataController extends Controller {
         }
     }
 
-public function deleteGig($id) {
-    $userId = $_SESSION['user_id'];
+    public function fetchSingleGig($gigId) {
+        $userId = $_SESSION['user_id'];
 
-    $gigModel = $this->model('GigModel');
+        $gigModel = $this->model('GigModel');
 
-    $result = $gigModel->deleteGigByIdAndUserId($id, $userId);
+        $gig = $gigModel->getGigByGigId($gigId);
 
-    echo json_encode($result);
-    exit;
-}
+        if ($gig) {
+            echo json_encode($gig);
+        } else {
+            echo json_encode([]);
+        }
+    }
 
+    public function updateGig($gigId) {
+        $gigData = json_decode(file_get_contents('php://input'), true);
+        $userId = $_SESSION['user_id'];
 
+        $gigModel = $this->model('GigModel');
+    
+        $result = $gigModel->updateGig($gigId, $userId, $gigData);
+    
+        echo json_encode($result);
+    }
+    
+
+    public function deleteGig($id) {
+        $userId = $_SESSION['user_id'];
+
+        $gigModel = $this->model('GigModel');
+
+        $result = $gigModel->deleteGigByIdAndUserId($id, $userId);
+
+        echo json_encode($result);
+        exit;
+    }
 
 }
 
