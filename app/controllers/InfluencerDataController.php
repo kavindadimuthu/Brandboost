@@ -49,7 +49,7 @@ class InfluencerDataController extends Controller {
         }
     }
 
-    public function influencerPackages() {
+    public function influencerPromotions() {
 
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
@@ -59,7 +59,7 @@ class InfluencerDataController extends Controller {
         $userId = $_SESSION['user_id'];
         $promotionModel = $this->model('PromotionModel');
 
-        $packages = $promotionModel->getGigsByUserId($userId);
+        $packages = $promotionModel->getPromotionsByUserId($userId);
 
         if ($packages) {
             echo json_encode($packages);
@@ -68,7 +68,7 @@ class InfluencerDataController extends Controller {
         }
     }
 
-public function deleteGig($id) {
+public function deletePromotion($id) {
     $userId = $_SESSION['user_id'];
 
     $promotionModel = $this->model('PromotionModel');

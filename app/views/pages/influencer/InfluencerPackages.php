@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../../styles/influencer/header.css">
     <link rel="stylesheet" href="../../styles/influencer/packagesTable.css">
     <link rel="stylesheet" href="../../styles/influencer/InfluencerPackages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
 </head>
 <body>
@@ -15,11 +17,11 @@
     
     <div class="container">
         <div class="title">
-            <h1>Packages</h1>
+            <h1>Promotions</h1>
         </div>
 
         <div class="button">
-            <a href="http://localhost:8000/InfluencerViewController/createpackage"><button class="packages-button">New Package</button></a>
+            <a href="http://localhost:8000/InfluencerViewController/createpackage"><button class="packages-button">New Promotion</button></a>
         </div>
        
     </div>
@@ -45,7 +47,7 @@
 
                 document.addEventListener('DOMContentLoaded', async () => {
                     try {
-                        const response = await fetch('/designerDataController/designerGigs');
+                        const response = await fetch('/influencerDataController/influencerPromotions');
                         const gigs = await response.json();
 
                         console.log(gigs);
@@ -68,7 +70,7 @@
                                     <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                                     <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="editGig(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="editPromotion(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
                                         <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
@@ -111,12 +113,12 @@
             document.getElementById('deleteModal').style.display = 'block';
         }
 
-        async function deleteGig() {
+        async function deletePromotion() {
             if (selectedGigId !== null) {
                 console.log('Deleting Gig ID:', selectedGigId);
                 
                 try {
-                    const response = await fetch(`/DesignerDataController/deleteGig/${selectedGigId}`, { 
+                    const response = await fetch(`/InfluencerDataController/deletePromotion/${selectedGigId}`, { 
                         method: 'DELETE', 
                         headers: { 
                             'Content-Type': 'application/json' 
@@ -144,7 +146,7 @@
             }
         }
 
-        document.getElementById('confirmDelete').addEventListener('click', deleteGig);
+        document.getElementById('confirmDelete').addEventListener('click', deletePromotion);
         document.getElementById('cancelDelete').addEventListener('click', () => {
         document.getElementById('deleteModal').style.display = 'none';
         selectedGigId = null;
