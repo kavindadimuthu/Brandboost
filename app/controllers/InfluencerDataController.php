@@ -1,17 +1,8 @@
 <?php
-// require_once '../app/models/GigModel.php';
 
 class InfluencerDataController extends Controller {
-    // private $gigModel;
 
-    // public function __construct($dbConnection) {
-    //     $this->gigModel = new GigModel($dbConnection);
-    // }
-
-    public function createGig() {
-
-        echo "Create Promotion Controller";
-        session_start();
+    public function createPackage() {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
@@ -19,38 +10,78 @@ class InfluencerDataController extends Controller {
             $gigData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'delivery_formats' => $_POST['platforms'],
+                'platforms' => $_POST['platforms'],
                 'tags' => $_POST['tags'],
                 'basic' => [
                     'benefits' => $_POST['basic']['benefits'],
-                    'designing_days' => $_POST['basic']['designing_days'],
-                    'promotional_days' => $_POST['basic']['promotional_days'],
-                    'revisions' => $_POST['basic']['revisions'],
-                    'price' => $_POST['basic']['price']
+                    'delivery_days' => $_POST['basic']['delivery_days'],
+                    'price' => $_POST['basic']['price'],
+                    'revisions' => $_POST['basic']['revisions']
+                    
                 ],
                 'premium' => [
                     'benefits' => $_POST['premium']['benefits'],
-                    'designing_days' => $_POST['premium']['designing_days'],
-                    'promotional_days' => $_POST['basic']['promotional_days'],
-                    'revisions' => $_POST['premium']['revisions'],
-                    'price' => $_POST['premium']['price']
+                    'delivery_days' => $_POST['premium']['delivery_days'],
+                    'price' => $_POST['premium']['price'],
+                    'revisions' => $_POST['premium']['revisions']
+                    
                 ]
             ];
 
-            $this->model('GigModel');
-            $gigModel = new GigModel();
+            $this->model('PromotionModel');
+            $promotionModel = new PromotionModel();
+            var_dump($promotionModel);
+            echo $userId;
+            echo $gigData['title'];
 
-            $result = $gigModel->createGig($userId, $gigData);
+
+            $result = $promotionModel->createPackage($userId, $gigData);
+            var_dump($result);
 
             if ($result) {
-                echo "Gig created successfully!";
-                header("Location: /influencerdatacontroller/influencerPackages?success=true");
+                echo "Package created successfully!";
+                header("Location: /influencerviewcontroller/influencerPackages");
                 // exit;
             } else {
-                echo "Failed to create gig. Please try again.";
+                echo "Failed to create package. Please try again.";
+                // echo $result;
             }
         } else {
             echo "Invalid request or session expired.";
         }
     }
+
+    public function influencerPackages() {
+
+        if (!isset($_SESSION['user_id'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+            exit();
+        }
+
+        $userId = $_SESSION['user_id'];
+        $promotionModel = $this->model('PromotionModel');
+
+        $packages = $promotionModel->getGigsByUserId($userId);
+
+        if ($packages) {
+            echo json_encode($packages);
+        } else {
+            echo json_encode([]);
+        }
+    }
+
+public function deleteGig($id) {
+    $userId = $_SESSION['user_id'];
+
+    $promotionModel = $this->model('PromotionModel');
+
+    $result = $promotionModel->deleteGigByIdAndUserId($id, $userId);
+
+    echo json_encode($result);
+    exit;
 }
+
+
+
+}
+

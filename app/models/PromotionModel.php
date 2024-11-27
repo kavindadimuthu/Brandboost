@@ -1,26 +1,28 @@
 <?php
-class GigModel {
+class PromotionModel {
     private $db;
 
     public function __construct() {
         $this->db = Database::getInstance();
     }
 
-    public function createGig($userId, $gigData) {
+    public function createPackage($userId, $gigData) {
+        echo "Creating package for user $userId with gig data: ", $gigData['title'];
+    
         try {
-            // Ensure delivery_formats and tags are arrays
-            $deliveryFormats = is_array($gigData['delivery_formats']) ? $gigData['delivery_formats'] : explode(',', $gigData['delivery_formats']);
+            // Ensure platforms and tags are arrays
+            $platforms = is_array($gigData['platforms']) ? $gigData['platforms'] : explode(',', $gigData['platforms']);
             $tags = is_array($gigData['tags']) ? $gigData['tags'] : explode(',', $gigData['tags']);
     
             // Insert common gig details
             $this->db->query("
-                INSERT INTO designer_gig (user_id, title, description, delivery_formats, tags) 
-                VALUES (:user_id, :title, :description, :delivery_formats, :tags)
+                INSERT INTO influencer_gig (user_id, title, description, platforms, tags) 
+                VALUES (:user_id, :title, :description, :platforms, :tags)
             ");
             $this->db->bind(':user_id', $userId);
             $this->db->bind(':title', $gigData['title']);
             $this->db->bind(':description', $gigData['description']);
-            $this->db->bind(':delivery_formats', implode(',', $deliveryFormats));
+            $this->db->bind(':platforms', implode(',', $platforms));
             $this->db->bind(':tags', implode(',', $tags));
             $this->db->execute();
     
@@ -41,15 +43,16 @@ class GigModel {
 
     private function insertGigPackage($gigId, $packageType, $packageDetails) {
         $this->db->query("
-            INSERT INTO designer_gig_package_details (gig_id, package_type, benefits, delivery_days, revisions, price) 
-            VALUES (:gig_id, :package_type, :benefits, :delivery_days, :revisions, :price)
+            INSERT INTO influencer_gig_package_details (gig_id, package_type, benefits, delivery_days, price, revisions) 
+            VALUES (:gig_id, :package_type, :benefits, :delivery_days, :price, :revisions)
         ");
         $this->db->bind(':gig_id', $gigId);
         $this->db->bind(':package_type', $packageType);
         $this->db->bind(':benefits', $packageDetails['benefits']);
         $this->db->bind(':delivery_days', $packageDetails['delivery_days']);
-        $this->db->bind(':revisions', $packageDetails['revisions']);
         $this->db->bind(':price', $packageDetails['price']);
+        $this->db->bind(':revisions', $packageDetails['revisions']);
+        
         $this->db->execute();
     }
 }

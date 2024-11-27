@@ -39,116 +39,53 @@
   </div>
 
   <script>
-    // Sample data structure - replace this with your actual data source
-    const orders = [
-      {
-        id: 1,
-        package: "Design post for FB",
-        orders: "30",
-        revenue: "$500",
-        status: "Active"
-      },
-      {
-        id: 2,
-        package: "Ad Campaign",
-        orders: "50",
-        revenue: "$1200",
-        status: "Paused"
-      },
-      {
-        id: 3,
-        package: "Ad Campaign",
-        orders: "50",
-        revenue: "$1200",
-        status: "Active"
-      }
-    ];
+        let selectedGigId = null;
 
-    let selectedOrderId = null;
-
-    // Function to load data into the table
-    function loadOrdersData(data) {
-      const tableBody = document.getElementById('ordersTableBody');
-      tableBody.innerHTML = ''; // Clear existing content
-
-      data.forEach(order => {
-        const statusClass = order.status.toLowerCase().replace(' ', '-');
-        const row = document.createElement('tr');
-
-        row.innerHTML = `
-          <td>${order.package}</td>
-          <td>${order.orders}</td>
-          <td>${order.revenue}</td>
-          <td><span class="status ${statusClass}">${order.status}</span></td>
-          <td>
-            <button onclick="editOrder(${order.id})" class="action-btn"><i class="fas fa-edit"></i></button>
-            <button onclick="confirmDelete(${order.id})" class="action-btn"><i class="fas fa-trash"></i></button>
-          </td>
-        `;
-
-        tableBody.appendChild(row);
-      });
-    }
-
-    // Function to fetch data from an API
-    async function fetchOrders() {
-      try {
-        // Replace with your API endpoint
-        // const response = await fetch('your-api-endpoint');
-        // const data = await response.json();
-
-        loadOrdersData(orders); // Using sample data for now
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      }
-    }
-
-    // Edit order handler
-    function editOrder(orderId) {
-  const order = orders.find(o => o.id === orderId);
-  if (order) {
-    // Redirect to the create package page with the order ID as a query parameter
-    window.location.href = `http://localhost:8000/InfluencerViewController/singlepackage?id=${order.id}`;
-  }
-}
-
-
-    // Delete order confirmation
-    function confirmDelete(orderId) {
-      selectedOrderId = orderId;
-      document.getElementById('deleteModal').style.display = 'block';
-    }
-
-    // Delete order handler
-    async function deleteOrder() {
-      if (selectedOrderId !== null) {
-        try {
-          // Call your delete API
-          // await fetch(`your-api-endpoint/${selectedOrderId}`, { method: 'DELETE' });
-
-          // For now, remove the order locally
-          const index = orders.findIndex(order => order.id === selectedOrderId);
-          if (index > -1) {
-            orders.splice(index, 1);
-            loadOrdersData(orders);
-          }
-          selectedOrderId = null;
-          document.getElementById('deleteModal').style.display = 'none';
-        } catch (error) {
-          console.error('Error deleting order:', error);
+        function confirmDelete(gigId) {
+            selectedGigId = gigId;
+            console.log('Selected Gig ID:', selectedGigId);
+            
+            document.getElementById('deleteModal').style.display = 'block';
         }
-      }
-    }
 
-    // Modal buttons
-    document.getElementById('confirmDelete').addEventListener('click', deleteOrder);
-    document.getElementById('cancelDelete').addEventListener('click', () => {
-      document.getElementById('deleteModal').style.display = 'none';
-      selectedOrderId = null;
-    });
+        async function deleteGig() {
+            if (selectedGigId !== null) {
+                console.log('Deleting Gig ID:', selectedGigId);
+                
+                try {
+                    const response = await fetch(`/DesignerDataController/deleteGig/${selectedGigId}`, { 
+                        method: 'DELETE', 
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        },
+                        // Pass the user_id in the request if needed for extra validation
+                        body: JSON.stringify({ user_id: '<?php echo $_SESSION['user_id']; ?>' }) 
+                    });
+                    console.log('Server Response:', response); // Log server response for debugging
+                    
+                    const result = await response.json();
+                    console.log('Server Response:', result); // Log server response for debugging
 
-    // Load data when page loads
-    document.addEventListener('DOMContentLoaded', fetchOrders);
-  </script>
+
+                    if (result.status === 'success') {
+                        alert(result.message);
+                        location.reload(); // Refresh the page
+                    } else {
+                        alert(result.message);
+                        console.error(result.message); // Log the error in console
+
+                    }
+                } catch (error) {
+                    console.error('Error deleting gig:', error);
+                }
+            }
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', deleteGig);
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+        document.getElementById('deleteModal').style.display = 'none';
+        selectedGigId = null;
+        });
+    </script>
 </body>
 </html>
