@@ -7,16 +7,20 @@ class PromotionModel {
     }
 
     public function createPackage($userId, $gigData) {
-        echo "Creating package for user $userId with gig data: ", $gigData['title'];
+
     
         try {
+            
+            // echo "Creating package for user $userId";
             // Ensure platforms and tags are arrays
             $platforms = is_array($gigData['platforms']) ? $gigData['platforms'] : explode(',', $gigData['platforms']);
             $tags = is_array($gigData['tags']) ? $gigData['tags'] : explode(',', $gigData['tags']);
     
+            // var_dump($platforms);
+            // var_dump($tags);
             // Insert common gig details
             $this->db->query("
-                INSERT INTO influencer_gig (user_id, title, description, platforms, tags) 
+                INSERT INTO influencer_gig (user_id, title, description, platform, tags) 
                 VALUES (:user_id, :title, :description, :platforms, :tags)
             ");
             $this->db->bind(':user_id', $userId);
@@ -27,6 +31,10 @@ class PromotionModel {
             $this->db->execute();
     
             $gigId = $this->db->lastInsertId();
+
+            echo "Package created for user $userId with gig ID $gigId";
+
+            var_dump($gigId);
 
     
             // Insert basic and premium packages

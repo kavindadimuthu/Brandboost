@@ -30,9 +30,7 @@ class InfluencerDataController extends Controller {
 
             $this->model('PromotionModel');
             $promotionModel = new PromotionModel();
-            var_dump($promotionModel);
-            echo $userId;
-            echo $gigData['title'];
+            // var_dump($promotionModel);
 
 
             $result = $promotionModel->createPackage($userId, $gigData);
