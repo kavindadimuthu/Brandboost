@@ -15,6 +15,9 @@ class InfluencerViewController extends Controller {
     public function createPackage() {
         $this->view('pages/influencer/CreatePackage');
     }
+    public function updatePromotion() {
+        $this->view('pages/influencer/PackageUpdate');
+    }
     public function allOrders() {
         $this->view('pages/influencer/AllOrders');
     }

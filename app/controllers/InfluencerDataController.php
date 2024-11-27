@@ -68,6 +68,31 @@ class InfluencerDataController extends Controller {
         }
     }
 
+    public function fetchSinglePromotion($gigId) {
+        $userId = $_SESSION['user_id'];
+
+        $gigModel = $this->model('PromotionModel');
+
+        $gig = $gigModel->getGigByGigId($gigId);
+
+        if ($gig) {
+            echo json_encode($gig);
+        } else {
+            echo json_encode([]);
+        }
+    }
+
+    public function updatePromotion($gigId) {
+        $gigData = json_decode(file_get_contents('php://input'), true);
+        $userId = $_SESSION['user_id'];
+
+        $gigModel = $this->model('PromotionModel');
+    
+        $result = $gigModel->updateGig($gigId, $userId, $gigData);
+    
+        echo json_encode($result);
+    }
+
 public function deletePromotion($id) {
     $userId = $_SESSION['user_id'];
 
