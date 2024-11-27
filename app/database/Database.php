@@ -4,7 +4,7 @@
 class Database {
     private $host = 'localhost';
     private $user = 'root';
-    private $pass = '';
+    private $pass = 'root';
     private $dbname = 'brandboost'; // Change this to your database name
 
     private $dbh;
