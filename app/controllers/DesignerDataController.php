@@ -99,5 +99,63 @@ class DesignerDataController extends Controller {
         exit;
     }
 
+
+
+
+
+
+
+
+
+    public function addPortfolio() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+    
+            // Check if a file is uploaded
+            if (!isset($_FILES['upload']) || $_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
+                echo json_encode(['status' => 'error', 'message' => 'File upload failed.']);
+                return;
+            }
+    
+            // Process the uploaded file
+            $uploadDir = 'uploads/designer/portfolio'; // Ensure this directory exists and is writable
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+    
+            $fileTmpPath = $_FILES['upload']['tmp_name'];
+            $fileName = uniqid() . '_' . basename($_FILES['upload']['name']);
+            $filePath = $uploadDir . $fileName;
+    
+            if (!move_uploaded_file($fileTmpPath, $filePath)) {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to save uploaded file.']);
+                return;
+            }
+    
+            // Collect portfolio data
+            $portfolioData = [
+                'title' => $_POST['title'],
+                'description' => $_POST['description'],
+                'skills' => $_POST['skills'],
+                'images' => [$filePath], // Add the file path to the images array
+            ];
+    
+            // Call the model
+            $this->model('PortfolioModel');
+            $portfolioModel = new PortfolioModel();
+            $result = $portfolioModel->createPortfolio($userId, $portfolioData);
+    
+            // Send response
+            if ($result['status'] === 'success') {
+                echo json_encode(['status' => 'success', 'message' => $result['message']]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => $result['message']]);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid request or session expired.']);
+        }
+    }
+    
+
 }
 
