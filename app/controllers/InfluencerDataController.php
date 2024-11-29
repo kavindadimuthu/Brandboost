@@ -10,7 +10,7 @@ class InfluencerDataController extends Controller {
             $gigData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'platforms' => $_POST['platforms'],
+                'platform' => $_POST['platform'],
                 'tags' => $_POST['tags'],
                 'basic' => [
                     'benefits' => $_POST['basic']['benefits'],

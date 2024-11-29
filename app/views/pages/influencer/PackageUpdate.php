@@ -95,8 +95,8 @@
         <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
 
         <!-- Delivery Formats -->
-        <label for="editDeliveryFormats">Delivery Formats (comma-separated):</label>
-        <input id="editDeliveryFormats" type="text" placeholder="e.g. PDF, Image, Video" required>
+        <label for="editPlatform">Platforms (comma-separated):</label>
+        <input id="editPlatform" type="text" placeholder="e.g. Facebbok, Tiktok, Youtube, Instagram" required>
 
         <!-- Tags -->
         <label for="editTags">Tags (comma-separated):</label>
@@ -165,9 +165,9 @@
                 // Populate form fields with fetched gig details
                 document.getElementById('editTitle').value = gig.title || '';
                 document.getElementById('editDescription').value = gig.description || '';
-                document.getElementById('editDeliveryFormats').value = Array.isArray(gig.delivery_formats)
-                    ? gig.delivery_formats.join(', ')
-                    : (gig.delivery_formats || '');
+                document.getElementById('editPlatform').value = Array.isArray(gig.platform)
+                    ? gig.platform.join(', ')
+                    : (gig.platform || '');
                 document.getElementById('editTags').value = Array.isArray(gig.tags)
                     ? gig.tags.join(', ')
                     : (gig.tags || '');
@@ -200,7 +200,7 @@
             const updatedPromotion = {
                 title: document.getElementById('editTitle').value,
                 description: document.getElementById('editDescription').value,
-                delivery_formats: document.getElementById('editDeliveryFormats').value
+                platform: document.getElementById('editPlatform').value
                     .split(',')
                     .map(format => format.trim()), // Trim whitespace from each format
                 tags: document.getElementById('editTags').value.split(',').map(tag => tag.trim()), // Trim whitespace

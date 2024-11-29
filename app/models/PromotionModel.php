@@ -12,21 +12,21 @@ class PromotionModel {
         try {
             
             // echo "Creating package for user $userId";
-            // Ensure platforms and tags are arrays
-            $platforms = is_array($gigData['platforms']) ? $gigData['platforms'] : explode(',', $gigData['platforms']);
+            // Ensure platform and tags are arrays
+            $platform = is_array($gigData['platform']) ? $gigData['platform'] : explode(',', $gigData['platform']);
             $tags = is_array($gigData['tags']) ? $gigData['tags'] : explode(',', $gigData['tags']);
     
-            // var_dump($platforms);
+            // var_dump($platform);
             // var_dump($tags);
             // Insert common gig details
             $this->db->query("
                 INSERT INTO influencer_gig (user_id, title, description, platform, tags) 
-                VALUES (:user_id, :title, :description, :platforms, :tags)
+                VALUES (:user_id, :title, :description, :platform, :tags)
             ");
             $this->db->bind(':user_id', $userId);
             $this->db->bind(':title', $gigData['title']);
             $this->db->bind(':description', $gigData['description']);
-            $this->db->bind(':platforms', implode(',', $platforms));
+            $this->db->bind(':platform', implode(',', $platform));
             $this->db->bind(':tags', implode(',', $tags));
             $this->db->execute();
     
