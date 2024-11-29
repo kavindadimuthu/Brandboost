@@ -32,7 +32,9 @@
             <div class="time-left">
                 <h4>Time Left To Delivery</h4>
                 <div id="countdown"></div>
-                <button id="deliverNow">Deliver Now</button>
+                <a href="http://localhost:8000/InfluencerViewController/orderdelivery">
+                    <button id="deliverNow">Deliver Now</button>
+                </a>
             </div>
             <div class="order-details">
                 <h4>Order Details</h4>
@@ -42,7 +44,9 @@
             </div>
             <div class="support-section">
                 <h4>Support</h4>
-                <button id="contactSupport">Contact Us</button>
+                <a href="http://localhost:8000/InfluencerViewController/contactus">
+                    <button id="contactSupport">Contact Us</button>
+                 </a>
             </div>
         </div>
         
@@ -58,8 +62,8 @@ const orderDetails = {
 const messages = [
     { sender: "Kavinda", text: "Hello" },
     { sender: "Me", text: "Hi" },
-    { sender: "Kavinda", text: "MK" },
-    { sender: "Me", text: "MN" },
+    { sender: "Kavinda", text: "How is the project progress" },
+    { sender: "Me", text: "All good" },
     { sender: "Kavinda", text: "ok" },
 ];
 
@@ -105,7 +109,7 @@ function startCountdown() {
         if (timeLeft <= 0) {
             clearInterval(interval);
             countdownElement.innerText = "Delivery Time Reached!";
-            document.getElementById("deliverNow").disabled = true;
+            document.getElementById("deliverNow").disabled = false;
         } else {
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

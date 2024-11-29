@@ -18,21 +18,21 @@
                 <h2>Common Gig Details</h2>
                 <label>Gig Title: <input type="text" name="title" required></label>
                 <label>Description: <textarea name="description" required></textarea></label>
-                <label>Delivery Formats:</label>
+                <label>Platforms:</label>
                 <div>
-                    <input type="checkbox" name="platforms[]" value="facebook" id="facebook">
+                    <input type="checkbox" name="platform[]" value="facebook" id="facebook">
                     <label for="facebook">Facebook</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="platforms[]" value="tiktok" id="tiktok">
+                    <input type="checkbox" name="platform[]" value="tiktok" id="tiktok">
                     <label for="tiktok">Tiktok</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="platforms[]" value="youtube" id="youtube">
+                    <input type="checkbox" name="platform[]" value="youtube" id="youtube">
                     <label for="youtube">Youtube</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="platforms[]" value="instagram" id="instagram">
+                    <input type="checkbox" name="platform[]" value="instagram" id="instagram">
                     <label for="instagram">Instagram</label>
                 </div>
                 <label>Tags: <input type="text" name="tags" placeholder="Comma-separated tags" required></label>

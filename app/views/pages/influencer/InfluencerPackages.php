@@ -70,7 +70,7 @@
                                     <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                                     <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="editPromotion(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="window.location.href='/InfluencerViewController/updatePromotion/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
                                         <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
