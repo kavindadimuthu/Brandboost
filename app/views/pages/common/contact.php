@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Brandboost</title>
     <!-- <link rel="stylesheet" href="style.css"> -->
-     <link rel="stylesheet" href="../../styles/common/footer.css">
+    <link rel="stylesheet" href="../../styles/common/index.css">
+    <link rel="stylesheet" href="../../styles/common/guestHeader.css">
+    <link rel="stylesheet" href="../../styles/common/footer.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
     <style>
         /* Add your custom CSS here */
@@ -23,64 +27,37 @@
             color: #333;
         }
 
-        /* Navigation */
-        nav {
-            padding: 1rem 2rem;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            margin: 0 1rem;
-        }
-
-        .auth-buttons .login {
-            color: #333;
-            text-decoration: none;
-            margin-right: 1rem;
-        }
-
-        .auth-buttons .signup {
-            background: #6366F1;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            text-decoration: none;
-        }
-
-        /* Header */
-        header {
+        .upper-contact-section {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 50px 0;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+        .upper-contact-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
         }
 
         .contact-info {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            align-items: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
         }
 
-        .info-item {
+        .contact-info div {
+            margin: 10px 20px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
         }
 
+        .contact-info div i {
+            margin-right: 10px;
+            color: #4a6cf7;
+        }
+
+        
         /* Contact Section */
         .contact-section {
             background: #6366F1;
@@ -211,48 +188,42 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="../../styles/common/index.css">
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <img src="logo.png" alt="Brandboost">
-            </div>
-            <div class="nav-links">
-                <a href="#">Services</a>
-                <a href="#">About us</a>
-                <a href="#">Contact us</a>
-                <a href="#">FAQs</a>
-                <a href="#">Careers</a>
-            </div>
-            <div class="auth-buttons">
-                <a href="#" class="login">Login</a>
-                <a href="#" class="signup">Sign Up</a>
-            </div>
-        </div>
-    </nav>
+    <?php include __DIR__ . '/../../components/common/guestHeader.php'; ?>
 
-    <!-- Contact Header -->
-    <header>
-        <h1>Contact Us</h1>
+    <!-- Upper Contact Section -->
+    <section class="upper-contact-section">
+        <h1>
+            Contact Us
+        </h1>
         <div class="contact-info">
-            <div class="info-item">
-                <i class="location-icon"></i>
-                <span>Colombo, Sri Lanka</span>
+            <div>
+                <i class="fas fa-map-marker-alt">
+                </i>
+                <span>
+                    Colombo, Sri Lanka
+                </span>
             </div>
-            <div class="info-item">
-                <i class="email-icon"></i>
-                <span>brandboost@email.com</span>
+            <div>
+                <i class="fas fa-envelope">
+                </i>
+                <span>
+                    brandboost@email.com
+                </span>
             </div>
-            <div class="info-item">
-                <i class="phone-icon"></i>
-                <span>+94-77-387-2122</span>
+            <div>
+                <i class="fas fa-phone">
+                </i>
+                <span>
+                    +94-77-387-2122
+                </span>
             </div>
         </div>
-    </header>
+    </section>
+
 
     <!-- Contact Form Section -->
     <section class="contact-section">

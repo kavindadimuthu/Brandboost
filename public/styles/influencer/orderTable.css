@@ -3,6 +3,15 @@
     margin: 0 300px;
 }
 
+.orders-table tr {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.orders-table tr:hover td {
+    color: #007bff; /* Blue text color on hover */
+}
+
 .header-row {
     display: flex;
     justify-content: space-between;

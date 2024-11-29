@@ -84,7 +84,7 @@
                         <button class="btn btn-edit" onclick="editFaq(this)">Edit</button>
                         <button class="btn btn-save" onclick="saveFaq(this, <?php echo $faq->id; ?>)"
                             style="display:none;">Save</button>
-                        <a href="http://localhost:8000/AdminViewController/deleteFaq/<?php echo $faq->id; ?>"
+                        <a href="http://localhost:8000/adminDataController/deleteFaq/<?php echo $faq->id; ?>"
                             class="btn btn-delete">Delete</a>
                     </td>
                 </tr>
@@ -97,7 +97,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add FAQ</h2>
-            <form action="/AdminViewController/addFaq" method="POST">
+            <form action="/adminDataController/addFaq" method="POST">
                 <div class="form-group">
                     <label for="question">Question:</label>
                     <input type="text" id="question" name="question" required>
@@ -127,7 +127,7 @@
             const question = row.querySelector('.edit-question').value;
             const answer = row.querySelector('.edit-answer').value;
 
-            const response = await fetch(`/AdminViewController/updateFaq/${id}`, {
+            const response = await fetch(`/adminDataController/updateFaq/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -2,7 +2,6 @@
 class DesignerViewController extends Controller {
 
     public function __construct() {
-        // session_start();
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'designer') {
             header('Location: /login');
         }
@@ -22,6 +21,9 @@ class DesignerViewController extends Controller {
     }
     public function createGig() {
         $this->view('pages/designer/CreateGig');
+    }
+    public function updateGig() {
+        $this->view('pages/designer/gigUpdate');
     }
     public function allOrders() {
         $this->view('pages/designer/AllOrders');

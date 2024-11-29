@@ -1,7 +1,7 @@
 <?php
 class HomeController extends Controller {
     public function index() {
-        $this->view('pages/common/landing');
+        $this->view('pages/common/Landing');
     }
 
 
@@ -25,11 +25,14 @@ class HomeController extends Controller {
     }
 
 
-    public function about() {
-        $this->view('pages/common/about');
+    public function About() {
+        $this->view('pages/common/About');
     }
-    public function contact() {
-        $this->view('pages/common/contact');
+    public function Contact() {
+        $this->view('pages/common/Contact');
+    }
+    public function Faq() {
+        $this->view('pages/common/Faq');
     }
 
 
@@ -50,9 +53,6 @@ class HomeController extends Controller {
         $this->view('pages/register/chooseRole');
     }
 
-    public function Faq() {
-        $this->view('pages/common/Faq');
-    }
 
 
 }

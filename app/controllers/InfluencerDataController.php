@@ -1,8 +1,8 @@
 <?php
 
-class DesignerDataController extends Controller {
+class InfluencerDataController extends Controller {
 
-    public function createGig() {
+    public function createPackage() {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
@@ -10,40 +10,46 @@ class DesignerDataController extends Controller {
             $gigData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'delivery_formats' => $_POST['delivery_formats'],
+                'platform' => $_POST['platform'],
                 'tags' => $_POST['tags'],
                 'basic' => [
                     'benefits' => $_POST['basic']['benefits'],
                     'delivery_days' => $_POST['basic']['delivery_days'],
-                    'revisions' => $_POST['basic']['revisions'],
-                    'price' => $_POST['basic']['price']
+                    'price' => $_POST['basic']['price'],
+                    'revisions' => $_POST['basic']['revisions']
+                    
                 ],
                 'premium' => [
                     'benefits' => $_POST['premium']['benefits'],
                     'delivery_days' => $_POST['premium']['delivery_days'],
-                    'revisions' => $_POST['premium']['revisions'],
-                    'price' => $_POST['premium']['price']
+                    'price' => $_POST['premium']['price'],
+                    'revisions' => $_POST['premium']['revisions']
+                    
                 ]
             ];
 
-            $this->model('GigModel');
-            $gigModel = new GigModel();
+            $this->model('PromotionModel');
+            $promotionModel = new PromotionModel();
+            // var_dump($promotionModel);
 
-            $result = $gigModel->createGig($userId, $gigData);
+
+            $result = $promotionModel->createPackage($userId, $gigData);
+            var_dump($result);
 
             if ($result) {
-                echo "Gig created successfully!";
-                header("Location: /designerviewcontroller/designerGigs");
+                echo "Package created successfully!";
+                header("Location: /influencerviewcontroller/influencerPackages");
                 // exit;
             } else {
-                echo "Failed to create gig. Please try again.";
+                echo "Failed to create package. Please try again.";
+                // echo $result;
             }
         } else {
             echo "Invalid request or session expired.";
         }
     }
 
-    public function designerGigs() {
+    public function influencerPromotions() {
 
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
@@ -51,21 +57,21 @@ class DesignerDataController extends Controller {
         }
 
         $userId = $_SESSION['user_id'];
-        $gigModel = $this->model('GigModel');
+        $promotionModel = $this->model('PromotionModel');
 
-        $gigs = $gigModel->getGigsByUserId($userId);
+        $packages = $promotionModel->getPromotionsByUserId($userId);
 
-        if ($gigs) {
-            echo json_encode($gigs);
+        if ($packages) {
+            echo json_encode($packages);
         } else {
             echo json_encode([]);
         }
     }
 
-    public function fetchSingleGig($gigId) {
+    public function fetchSinglePromotion($gigId) {
         $userId = $_SESSION['user_id'];
 
-        $gigModel = $this->model('GigModel');
+        $gigModel = $this->model('PromotionModel');
 
         $gig = $gigModel->getGigByGigId($gigId);
 
@@ -76,28 +82,29 @@ class DesignerDataController extends Controller {
         }
     }
 
-    public function updateGig($gigId) {
+    public function updatePromotion($gigId) {
         $gigData = json_decode(file_get_contents('php://input'), true);
         $userId = $_SESSION['user_id'];
 
-        $gigModel = $this->model('GigModel');
+        $gigModel = $this->model('PromotionModel');
     
         $result = $gigModel->updateGig($gigId, $userId, $gigData);
     
         echo json_encode($result);
     }
-    
 
-    public function deleteGig($id) {
-        $userId = $_SESSION['user_id'];
+public function deletePromotion($id) {
+    $userId = $_SESSION['user_id'];
 
-        $gigModel = $this->model('GigModel');
+    $promotionModel = $this->model('PromotionModel');
 
-        $result = $gigModel->deleteGigByIdAndUserId($id, $userId);
+    $result = $promotionModel->deletePromotionByIdAndUserId($id, $userId);
 
-        echo json_encode($result);
-        exit;
-    }
+    echo json_encode($result);
+    exit;
+}
+
+
 
 }
 

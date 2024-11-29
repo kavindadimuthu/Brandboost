@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ Page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../styles/common/index.css">
+    <link rel="stylesheet" href="../../styles/common/guestHeader.css">
+    <link rel="stylesheet" href="../../styles/common/footer.css">
     <style>
         * {
             margin: 0;
@@ -16,28 +18,6 @@
 
         body {
             background-color: #f5f7ff;
-        }
-
-        
-
-        .navbar {
-            background-color: #5b6bff;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* .logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        } */
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 2rem;
         }
 
         .container {
@@ -171,21 +151,10 @@
         }
 
     </style>
-    <link rel="stylesheet" href="../../styles/common/index.css">
-    <link rel="stylesheet" href="../../styles/common/footer.css">
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="logo">Brandboost</div>
-        <div class="nav-links">
-            <a href="#">Services</a>
-            <a href="#">About us</a>
-            <a href="#">Contact us</a>
-            <a href="#">FAQs</a>
-            <a href="#">Careers</a>
-        </div>
-    </nav>
+    <?php include __DIR__ . '/../../components/common/guestHeader.php'; ?>
 
     <div class="container">
         <div class="search-section">
@@ -194,13 +163,6 @@
                 <span class="search-icon">🔍</span>
                 <input type="text" class="search-input" placeholder="Type your keyword" id="searchInput">
             </div>
-        </div>
-
-        <div class="categories">
-            <button class="category-btn active" data-category="general">General</button>
-            <button class="category-btn" data-category="companies">Companies</button>
-            <button class="category-btn" data-category="pricing">Pricing</button>
-            <button class="category-btn" data-category="product">Product</button>
         </div>
 
         <div class="faq-list">
@@ -219,44 +181,12 @@
     <?php include __DIR__ . '/../../components/common/footer.php'; ?>
 
     <script>
-        // Sample FAQ data - in a real application, this would come from a database
-        const faqData = {
-            general: [
-                {
-                    question: "What is Brandboost?",
-                    answer: "Brandboost is a comprehensive marketing platform that helps businesses grow their online presence."
-                },
-                {
-                    question: "How do I get started?",
-                    answer: "Sign up for an account, complete your profile, and our team will guide you through the setup process."
-                }
-            ],
-            companies: [
-                {
-                    question: "Can I use Brandboost for multiple companies?",
-                    answer: "Yes, our platform supports multiple company profiles under a single account."
-                }
-            ],
-            pricing: [
-                {
-                    question: "What are your pricing plans?",
-                    answer: "We offer flexible pricing plans starting from $29/month. Contact us for custom enterprise solutions."
-                }
-            ],
-            product: [
-                {
-                    question: "What features are included?",
-                    answer: "Our platform includes social media management, analytics, content creation tools, and more."
-                }
-            ]
-        };
-
-        // Function to populate FAQ items
-        function populateFAQs(category) {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/homedatacontroller/fetchAllFaqs');
+            const data = await response.json();
             const faqList = document.querySelector('.faq-list');
             faqList.innerHTML = '';
-
-            faqData[category].forEach(faq => {
+            data.forEach(faq => {
                 const faqItem = document.createElement('div');
                 faqItem.className = 'faq-item';
                 faqItem.innerHTML = `
@@ -270,42 +200,28 @@
                 `;
                 faqList.appendChild(faqItem);
             });
-        }
 
-        // Initialize with general category
-        populateFAQs('general');
-
-        // Category switching
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                populateFAQs(btn.dataset.category);
-            });
-        });
-
-        // FAQ toggle
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.faq-question')) {
-                const answer = e.target.closest('.faq-item').querySelector('.faq-answer');
-                answer.classList.toggle('active');
-            }
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const searchText = e.target.value.toLowerCase();
-            const faqItems = document.querySelectorAll('.faq-item');
-
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question').textContent.toLowerCase();
-                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
-
-                if (question.includes(searchText) || answer.includes(searchText)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+            // FAQ toggle
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.faq-question')) {
+                    const answer = e.target.closest('.faq-item').querySelector('.faq-answer');
+                    answer.classList.toggle('active');
                 }
+            });
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchText = e.target.value.toLowerCase();
+                const faqItems = document.querySelectorAll('.faq-item');
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    if (question.includes(searchText) || answer.includes(searchText)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
         });
     </script>
