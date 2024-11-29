@@ -111,45 +111,60 @@ class DesignerDataController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
     
-            // Check if a file is uploaded
-            if (!isset($_FILES['upload']) || $_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
-                echo json_encode(['status' => 'error', 'message' => 'File upload failed.']);
-                return;
-            }
-    
-            // Process the uploaded file
-            $uploadDir = 'uploads/designer/portfolio'; // Ensure this directory exists and is writable
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-    
-            $fileTmpPath = $_FILES['upload']['tmp_name'];
-            $fileName = uniqid() . '_' . basename($_FILES['upload']['name']);
-            $filePath = $uploadDir . $fileName;
-    
-            if (!move_uploaded_file($fileTmpPath, $filePath)) {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to save uploaded file.']);
-                return;
-            }
-    
-            // Collect portfolio data
             $portfolioData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'skills' => $_POST['skills'],
-                'images' => [$filePath], // Add the file path to the images array
+                'skills' => $_POST['skills']
             ];
     
-            // Call the model
+            $uploadDir = 'uploads/designer/portfolio/'; // Adjust path as needed
+    
+            // Handle cover image
+            if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === 0) {
+                $coverImage = $uploadDir . uniqid() . '_' . basename($_FILES['cover_image']['name']);
+                if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $coverImage)) {
+                    $portfolioData['cover_image'] = $coverImage;
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to upload cover image.']);
+                    return;
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Cover image is required.']);
+                return;
+            }
+    
+            // Handle other images
+            if (isset($_FILES['other_images']) && count($_FILES['other_images']['name']) > 0) {
+                $otherImages = [];
+                for ($i = 0; $i < count($_FILES['other_images']['name']); $i++) {
+                    if (!empty($_FILES['other_images']['name'][$i])) {
+                        $targetFile = $uploadDir . uniqid() . '_' . basename($_FILES['other_images']['name'][$i]);
+                        if (move_uploaded_file($_FILES['other_images']['tmp_name'][$i], $targetFile)) {
+                            $otherImages[] = $targetFile;
+                        }
+                    }
+                }
+    
+                if (count($otherImages) < 1) {
+                    echo json_encode(['status' => 'error', 'message' => 'At least one additional image is required.']);
+                    return;
+                }
+    
+                $portfolioData['other_images'] = implode(',', $otherImages);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'At least one additional image is required.']);
+                return;
+            }
+    
             $this->model('PortfolioModel');
             $portfolioModel = new PortfolioModel();
+    
             $result = $portfolioModel->createPortfolio($userId, $portfolioData);
     
-            // Send response
-            if ($result['status'] === 'success') {
-                echo json_encode(['status' => 'success', 'message' => $result['message']]);
+            if ($result) {
+                echo json_encode(['status' => 'success', 'message' => 'Portfolio submitted successfully!']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => $result['message']]);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to submit portfolio. Please try again.']);
             }
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Invalid request or session expired.']);

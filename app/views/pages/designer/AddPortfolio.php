@@ -21,8 +21,13 @@
             <label for="skills">Skills</label>
             <input type="text" id="skills" name="skills" placeholder="E.g., Graphic Design, Photoshop, etc." required>
 
-            <label for="upload">Upload Portfolio File/Image</label>
-            <input type="file" id="upload" name="upload" accept=".png, .jpg, .jpeg, .pdf" required>
+            <label for="cover_image">Upload Cover Image</label>
+            <input type="file" id="cover_image" name="cover_image" accept=".png, .jpg, .jpeg" required>
+
+            <label for="other_images">Upload Other Portfolio Images (up to 4)</label>
+            <input type="file" id="other_images" name="other_images[]" accept=".png, .jpg, .jpeg" multiple>
+
+            <small>At least 2 images are required (1 cover image and 1 other image).</small>
 
             <button type="submit">Submit Portfolio</button>
             <button type="reset">Reset</button>

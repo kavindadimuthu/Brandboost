@@ -8,29 +8,21 @@ class PortfolioModel {
 
     public function createPortfolio($userId, $portfolioData) {
         try {
-            // Prepare SQL query
             $this->db->query("
-                INSERT INTO designer_portfolio (user_id, title, description, images) 
-                VALUES (:user_id, :title, :description, :images)
+                INSERT INTO designer_portfolio (user_id, title, description, cover_image, other_images) 
+                VALUES (:user_id, :title, :description, :cover_image, :other_images)
             ");
-
-            // Bind values
             $this->db->bind(':user_id', $userId);
             $this->db->bind(':title', $portfolioData['title']);
             $this->db->bind(':description', $portfolioData['description']);
-            $this->db->bind(':images', implode(',', $portfolioData['images'])); // Convert images array to a comma-separated string
-
-            // Execute query
+            $this->db->bind(':cover_image', $portfolioData['cover_image']);
+            $this->db->bind(':other_images', $portfolioData['other_images']);
             $this->db->execute();
-
-            return [
-                'status' => 'success',
-                'message' => 'Portfolio created successfully.',
-                'portfolio_id' => $this->db->lastInsertId()
-            ];
+    
+            return $this->db->lastInsertId();
         } catch (PDOException $e) {
             error_log("Portfolio creation failed: " . $e->getMessage());
-            return ['status' => 'error', 'message' => 'Failed to create portfolio.'];
+            return false;
         }
     }
 
