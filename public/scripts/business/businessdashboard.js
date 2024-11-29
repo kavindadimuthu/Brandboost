@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const orders = [
         { customer: 'Nethuru', price: '$50', status: 'In Progress' },

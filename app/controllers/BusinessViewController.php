@@ -55,15 +55,15 @@ class BusinessViewController extends Controller {
         $this->view('pages/business/DesignerProfile');
     }
     public function chat(){
-        $this->view('pages/business/Chat');
+        $this->view('pages/business/chat2');
     }
 
     public function register(){
         $this->view('pages/register/businessOwner');
     }
 
-    public function search(){
-        $this->view('pages/business/PersonSearch');
+    public function influencerFirst(){
+        $this->view('pages/business/influencerFirst');
     }
 
     public function searchGigs(){

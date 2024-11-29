@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UI Layout with Flexbox</title>
   <link rel="stylesheet" href="../../styles/common/designerPackageView.css">
-  <link rel="stylesheet" href="../../styles/influencer/header.css">
+  <link rel="stylesheet" href="../../styles/common/header.css">
   <script src="../../scripts/common/designerPackageView.js"></script>
   <style>
     * {
@@ -74,7 +74,7 @@
 <body>
   <div class="outer-container">
     <div class="header">
-        <?php include __DIR__ . '/../../components/businessman/header.php'; ?>
+        <?php include __DIR__ . '/../../components/common/header.php'; ?>
     </div>
     <div class="main-content">
       <div class="main">

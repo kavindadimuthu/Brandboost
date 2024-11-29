@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../styles/influencer/header.css">
-    <link rel="stylesheet" href="../../styles/influencer/Profile.css">
+    <link rel="stylesheet" href="../../styles/commons/header.css">
+    <link rel="stylesheet" href="../../styles/business-owner/Profile.css">
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/businessman/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     <div class="profile-container">
     <h2>Profile</h2>

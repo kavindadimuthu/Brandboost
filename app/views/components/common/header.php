@@ -10,11 +10,15 @@
                     if(isset($_SESSION['role']) && $_SESSION['role'] == 'businessman'){
                         echo '
                         <li class="nav-list-item" data-tab="about"><a
-                            href="http://localhost:8000/BusinessViewController/viewInfluencers">Influencers</a></li>
+                            href="http://localhost:8000/BusinessViewController/businessdashboard">Dashboard</a></li>
+                        <li class="nav-list-item" data-tab="about"><a
+                            href="http://localhost:8000/BusinessViewController/influencerFirst">Promotions</a></li>
                         <li class="nav-list-item" data-tab="services"><a
-                            href="http://localhost:8000/BusinessViewController/viewDesigners">Designers</a></li>
+                            href="http://localhost:8000/BusinessViewController/viewDesigners">Designs</a></li>
                         <li class="nav-list-item" data-tab="contact"><a
-                            href="http://localhost:8000/BusinessViewController/myOrders">Orders</a></li>
+                            href="http://localhost:8000/BusinessViewController/MyOrders">Orders</a></li>
+                         <li class="nav-list-item" data-tab="contact"><a
+                            href="http://localhost:8000/BusinessViewController/Payment">Payments</a></li>
                         ';
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'influencer'){
@@ -46,7 +50,7 @@
             </ul>
         </nav>
         <div class="header-icons">
-            <div class="chat-icon" onclick="window.location.href='/InfluencerViewController/chat'">
+            <div class="chat-icon" onclick="window.location.href='/BusinessViewController/Chat'">
                 <img src="../../assets/chat-icon.svg" alt="chat">
             </div>
             <div class="notification-icon">

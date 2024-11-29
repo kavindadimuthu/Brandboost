@@ -4,32 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brand Boost Dashboard</title>
-    <link rel="stylesheet" href="../../styles/business-owner/header.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/business-owner/orderTable.css">
     <link rel="stylesheet" href="../../styles/business-owner/businessDashboard.css">
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/businessman/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
 <div class="all">
   <div class="container">
     <div class="metric-card1">
       <div class="metric-icon1">
-        <img src="../../assets/dollar.png" alt="Current Balance">
-      </div>
-      <div class="metric-value">$25.34</div>
-      <div class="metric-label">Current Balance</div>
-    </div>
-    <div class="metric-card2">
-      <div class="metric-icon2">
         <img src="../../assets/satisfaction.png" alt="Reviews">
       </div>
       <div class="metric-value">4.9</div>
       <div class="metric-label">Reviews</div>
     </div>
-    <div class="metric-card3">
-      <div class="metric-icon3">
+    <div class="metric-card2">
+      <div class="metric-icon2">
         <img src="../../assets/layer.png" alt="Total Orders">
       </div>
       <div class="metric-value">250</div>
