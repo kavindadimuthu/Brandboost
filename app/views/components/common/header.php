@@ -17,8 +17,6 @@
                             href="http://localhost:8000/BusinessViewController/viewDesigners">Designs</a></li>
                         <li class="nav-list-item" data-tab="contact"><a
                             href="http://localhost:8000/BusinessViewController/MyOrders">Orders</a></li>
-                         <li class="nav-list-item" data-tab="contact"><a
-                            href="http://localhost:8000/BusinessViewController/Payment">Payments</a></li>
                         ';
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'influencer'){
