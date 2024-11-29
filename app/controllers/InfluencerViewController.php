@@ -27,6 +27,9 @@ class InfluencerViewController extends Controller {
     public function orderDelivery() {
         $this->view('pages/influencer/OrderDelivery');
     }
+    public function contactUs() {
+        $this->view('pages/influencer/ContactUs');
+    }
     public function earnings(){
         $this->view('pages/influencer/Earnings');
     }

@@ -53,7 +53,7 @@
 
 .chat-box .sent {
     text-align: right;
-    color: blue;
+    color: #2b32f7;
 }
 
 .chat-input {
@@ -72,7 +72,7 @@
 
 .chat-input button {
     padding: 12px 18px; /* Increased padding */
-    background-color: #007bff;
+    background-color: #686de0;
     color: white;
     border: none;
     border-radius: 5px;
@@ -94,7 +94,7 @@
 
 button {
     padding: 12px 18px; /* Increased padding */
-    background-color: #007bff;
+    background-color: #686de0;
     color: white;
     border: none;
     border-radius: 5px;

@@ -44,7 +44,9 @@
             </div>
             <div class="support-section">
                 <h4>Support</h4>
-                <button id="contactSupport">Contact Us</button>
+                <a href="http://localhost:8000/InfluencerViewController/contactus">
+                    <button id="contactSupport">Contact Us</button>
+                 </a>
             </div>
         </div>
         
