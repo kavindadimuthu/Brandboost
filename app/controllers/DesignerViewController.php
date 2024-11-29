@@ -54,4 +54,7 @@ class DesignerViewController extends Controller {
     public function addPortfolio(){
         $this->view('pages/designer/AddPortfolio');
     }
+    public function viewMyPortfolio(){
+        $this->view('pages/designer/ViewMyPortfolio');
+    }
 }

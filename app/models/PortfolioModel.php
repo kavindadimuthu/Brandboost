@@ -9,32 +9,43 @@ class PortfolioModel {
     public function createPortfolio($userId, $portfolioData) {
         try {
             $this->db->query("
-                INSERT INTO designer_portfolio (user_id, title, description, cover_image, other_images) 
-                VALUES (:user_id, :title, :description, :cover_image, :other_images)
+                INSERT INTO designer_portfolio (user_id, title, description, cover_image, first_image, second_image, third_image, fourth_image) 
+                VALUES (:user_id, :title, :description, :cover_image, :first_image, :second_image, :third_image, :fourth_image)
             ");
+    
             $this->db->bind(':user_id', $userId);
             $this->db->bind(':title', $portfolioData['title']);
             $this->db->bind(':description', $portfolioData['description']);
             $this->db->bind(':cover_image', $portfolioData['cover_image']);
-            $this->db->bind(':other_images', $portfolioData['other_images']);
+            $this->db->bind(':first_image', $portfolioData['first_image'] ?? null); // Use null if not set
+            $this->db->bind(':second_image', $portfolioData['second_image'] ?? null); // Use null if not set
+            $this->db->bind(':third_image', $portfolioData['third_image'] ?? null); // Use null if not set
+            $this->db->bind(':fourth_image', $portfolioData['fourth_image'] ?? null); // Use null if not set
+    
             $this->db->execute();
     
-            return $this->db->lastInsertId();
+            return $this->db->lastInsertId(); // Return the ID of the newly inserted portfolio
         } catch (PDOException $e) {
             error_log("Portfolio creation failed: " . $e->getMessage());
             return false;
         }
     }
+    
 
 
-    public function getPortfoliosByUserId($userId) {
-        $this->db->query("
-            SELECT * 
-            FROM designer_portfolio 
-            WHERE user_id = :user_id
-        ");
-        $this->db->bind(':user_id', $userId);
-        return $this->db->resultSet();
+    public function getPortfolioByUserId($userId) {
+        try {
+            $this->db->query("
+                SELECT title, description, cover_image, other_images 
+                FROM designer_portfolio 
+                WHERE user_id = :user_id
+            ");
+            $this->db->bind(':user_id', $userId);
+            return $this->db->single();
+        } catch (PDOException $e) {
+            error_log("Error fetching portfolio: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function getPortfolioById($portfolioId) {

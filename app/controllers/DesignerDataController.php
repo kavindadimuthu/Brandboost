@@ -111,6 +111,7 @@ class DesignerDataController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
     
+            // Collect text input data
             $portfolioData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
@@ -119,7 +120,12 @@ class DesignerDataController extends Controller {
     
             $uploadDir = 'uploads/designer/portfolio/'; // Adjust path as needed
     
-            // Handle cover image
+            // Create the upload directory if it doesn't exist
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+    
+            // Handle cover image upload
             if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === 0) {
                 $coverImage = $uploadDir . uniqid() . '_' . basename($_FILES['cover_image']['name']);
                 if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $coverImage)) {
@@ -133,29 +139,32 @@ class DesignerDataController extends Controller {
                 return;
             }
     
-            // Handle other images
-            if (isset($_FILES['other_images']) && count($_FILES['other_images']['name']) > 0) {
-                $otherImages = [];
-                for ($i = 0; $i < count($_FILES['other_images']['name']); $i++) {
-                    if (!empty($_FILES['other_images']['name'][$i])) {
-                        $targetFile = $uploadDir . uniqid() . '_' . basename($_FILES['other_images']['name'][$i]);
-                        if (move_uploaded_file($_FILES['other_images']['tmp_name'][$i], $targetFile)) {
-                            $otherImages[] = $targetFile;
-                        }
+            // Handle other image uploads
+            $imageFields = ['first_image', 'second_image', 'third_image', 'fourth_image'];
+            $uploadedImages = [];
+    
+            foreach ($imageFields as $field) {
+                if (isset($_FILES[$field]) && $_FILES[$field]['error'] === 0) {
+                    $targetFile = $uploadDir . uniqid() . '_' . basename($_FILES[$field]['name']);
+                    if (move_uploaded_file($_FILES[$field]['tmp_name'], $targetFile)) {
+                        $uploadedImages[] = $targetFile;
                     }
                 }
+            }
     
-                if (count($otherImages) < 1) {
-                    echo json_encode(['status' => 'error', 'message' => 'At least one additional image is required.']);
-                    return;
-                }
-    
-                $portfolioData['other_images'] = implode(',', $otherImages);
-            } else {
+            // Validate that at least one additional image is uploaded
+            if (count($uploadedImages) < 1) {
                 echo json_encode(['status' => 'error', 'message' => 'At least one additional image is required.']);
                 return;
             }
     
+            // Save image paths into the portfolio data
+            $portfolioData['first_image'] = $uploadedImages[0] ?? null;
+            $portfolioData['second_image'] = $uploadedImages[1] ?? null;
+            $portfolioData['third_image'] = $uploadedImages[2] ?? null;
+            $portfolioData['fourth_image'] = $uploadedImages[3] ?? null;
+    
+            // Call the model to save the portfolio data
             $this->model('PortfolioModel');
             $portfolioModel = new PortfolioModel();
     
@@ -170,6 +179,31 @@ class DesignerDataController extends Controller {
             echo json_encode(['status' => 'error', 'message' => 'Invalid request or session expired.']);
         }
     }
+    
+
+    public function viewPortfolio() {
+        // Check if the user is logged in
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+    
+            $this->model('PortfolioModel');
+            $portfolioModel = new PortfolioModel();
+    
+            // Fetch portfolio data by user_id
+            $portfolio = $portfolioModel->getPortfolioByUserId($userId);
+    
+            // Check if a portfolio exists for the user
+            if ($portfolio) {
+                $this->view('DesignerViewController/viewMyPortfolio', ['portfolio' => $portfolio]);
+                var_dump($portfolio);
+            } else {
+                echo "No portfolio found for the current user.";
+            }
+        } else {
+            echo "Unauthorized access.";
+        }
+    }
+    
     
 
 }

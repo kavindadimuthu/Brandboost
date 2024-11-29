@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <h2>Add Designer Portfolio</h2>
-        <form id="portfolioForm" >
+        <form id="portfolioForm">
             <label for="title">Portfolio Title</label>
             <input type="text" id="title" name="title" placeholder="Enter portfolio title" required>
 
@@ -21,13 +21,27 @@
             <label for="skills">Skills</label>
             <input type="text" id="skills" name="skills" placeholder="E.g., Graphic Design, Photoshop, etc." required>
 
+            <!-- Cover Image Upload -->
             <label for="cover_image">Upload Cover Image</label>
             <input type="file" id="cover_image" name="cover_image" accept=".png, .jpg, .jpeg" required>
 
-            <label for="other_images">Upload Other Portfolio Images (up to 4)</label>
-            <input type="file" id="other_images" name="other_images[]" accept=".png, .jpg, .jpeg" multiple>
+            <!-- First Image Upload -->
+            <label for="first_image">Upload First Image</label>
+            <input type="file" id="first_image" name="first_image" accept=".png, .jpg, .jpeg" required>
 
-            <small>At least 2 images are required (1 cover image and 1 other image).</small>
+            <!-- Second Image Upload -->
+            <label for="second_image">Upload Second Image</label>
+            <input type="file" id="second_image" name="second_image" accept=".png, .jpg, .jpeg">
+
+            <!-- Third Image Upload -->
+            <label for="third_image">Upload Third Image</label>
+            <input type="file" id="third_image" name="third_image" accept=".png, .jpg, .jpeg">
+
+            <!-- Fourth Image Upload -->
+            <label for="fourth_image">Upload Fourth Image</label>
+            <input type="file" id="fourth_image" name="fourth_image" accept=".png, .jpg, .jpeg">
+
+            <small>At least 2 images are required (1 cover image and 1 additional image).</small>
 
             <button type="submit">Submit Portfolio</button>
             <button type="reset">Reset</button>
