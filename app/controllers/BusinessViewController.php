@@ -3,6 +3,9 @@ class BusinessViewController extends Controller {
     // public function businessHomepage() {
     //     $this->view('pages/business/businessHomepage');
     // }
+    public function businessDashboard() {
+        $this->view('pages/business/businessdashboard');
+    }
     public function profile() {
         $this->view('pages/business/Profile');
     }
@@ -52,10 +55,18 @@ class BusinessViewController extends Controller {
         $this->view('pages/business/DesignerProfile');
     }
     public function chat(){
-        $this->view('pages/business/Chat');
+        $this->view('pages/business/chat2');
     }
 
     public function register(){
         $this->view('pages/register/businessOwner');
+    }
+
+    public function influencerFirst(){
+        $this->view('pages/business/influencerFirst');
+    }
+
+    public function searchGigs(){
+        $this->view('pages/business/SearchGigs');
     }
 }

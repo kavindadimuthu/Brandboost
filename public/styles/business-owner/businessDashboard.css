@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+  
+  .all{
+    display:block;
+    margin: 0 300px;
+
+  }
+
+  .container {
+    display: flex;
+    right-content: space-between;
+    margin: 50px 0;
+  }
+  
+  .metric-card1 {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    width: 30%;
+  }
+  .metric-card2 {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    width: 30%;
+    margin:0 10px;
+  }
+
+  
+  .metric-icon1 img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .metric-icon2 img {
+    width: 80px;
+    height: 80px;
+  }
+
+  
+  .metric-value {
+    color: #4CAF50;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .metric-label {
+    color: #666;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  
+  .pie-chart{
+    display: block;
+    
+  }
+  
+
+  .order-status-chart {
+    width: 100%; /* Make the chart container stretch to the full width of the parent */
+    height: 500px;
+    margin-top: 20px; /* Add margin to the top and bottom, no auto centering */
+    margin-bottom: 50px;
+    background-color: #fff;
+    border-radius: 8px; /* Round the corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
+    text-align: center; /* Center the content inside */
+    box-sizing: border-box; /* Include padding and border in the element's total width/height */
+    padding: 30px;
+    padding-left: 30%;
+  }
+  
+  .show-all {
+    color: #666;
+    text-decoration: none;
+}
