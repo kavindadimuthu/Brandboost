@@ -6,11 +6,11 @@
   <title>
    Chat Application
   </title>
-  <link rel="stylesheet" href="../../styles/influencer/header.css">
+  <link rel="stylesheet" href="../../styles/common/header.css">
   <link rel="stylesheet" href="../../styles/business-owner/chat2.css">
  </head>
  <body>
- <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
  <div class="container">
  
 
