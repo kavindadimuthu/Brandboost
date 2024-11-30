@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../styles/influencer/header.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/influencer/packagesTable.css">
     <link rel="stylesheet" href="../../styles/influencer/InfluencerPackages.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     
     <div class="container">

@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/influencer/ContactUs.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
 </head>
 <body>
+<?php include __DIR__ . '/../../components/common/header.php'; ?>
     <div class="container">
         <h1>Contact Us</h1>
         <form action="/submit-complaint" method="POST">

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../styles/influencer/header.css">
+    <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/influencer/OrderDelivery.css">
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
   <<div class="container">
     <h2>Proof Documents</h2>

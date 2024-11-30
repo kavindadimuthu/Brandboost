@@ -83,6 +83,7 @@
     </style>
 </head>
 <body>
+<?php include __DIR__ . '/../../components/common/header.php'; ?>
     <div class="edit-form-container">
         <h2>Edit Package</h2>
 

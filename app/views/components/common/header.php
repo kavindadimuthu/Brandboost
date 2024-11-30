@@ -28,7 +28,7 @@
                         <li class="nav-list-item" data-tab="Orders"><a
                             href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a></li>
                         <li class="nav-list-item" data-tab="Promotions"><a
-                            href="http://localhost:8000/InfluencerViewController/influencerPromotions">Promotions</a></li>
+                            href="http://localhost:8000/InfluencerViewController/influencerPackages">Promotions</a></li>
                         <li class="nav-list-item" data-tab="contact"><a
                             href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a></li>
                         ';
