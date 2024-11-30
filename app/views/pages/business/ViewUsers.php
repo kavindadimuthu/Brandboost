@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../../styles/common/header.css">
+
     <style>
         .content{
             margin-top: 70px;
@@ -17,7 +19,7 @@
         <div class="content">
             <div class="main-content">
 
-            <?php include __DIR__ . '/../../components/common/serviceCard.php'; ?>
+            <?php include __DIR__ . '/../../components/common/userCard.php'; ?>
 
 
 

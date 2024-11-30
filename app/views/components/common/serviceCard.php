@@ -12,6 +12,48 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
+        .header-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .search-bar-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
         #service-card-container {
             display: flex;
             flex-wrap: wrap;
@@ -138,11 +180,27 @@
     </style>
 </head>
 <body>
+
+<div class="header-container">
+    <div id="header-title" class="header-title">Loading...</div>
+    <div class="header-subtitle">Explore the profiles of talented individuals ready to collaborate with you.</div>
+    </div>
+
+    <div class="search-bar-container">
+        <input
+            type="text"
+            id="searchBar"
+            class="search-bar"
+            placeholder="Search by name..."
+            oninput="filterProfiles()"
+        />
+    </div>
+
     <div id="service-card-container"></div>
     
     <script>
         // Dynamic data array with 5 service cards
-        const servicesData = [
+        const designerGigs = [
             {
                 imageUrl: "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/178097622/original/a42b2d3b2f93a703a3dea7b3cc329610fd98a2cd/setup-and-manage-facebook-ads-campaign-to-grow-your-business.jpg",
                 userAvatar: "https://via.placeholder.com/40",
@@ -205,7 +263,71 @@
             }
         ];
 
-        // Create service cards
+        const influencerPromotions = [
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/195007458/original/5582d964c74231a918d4dfb47e5e3ab94e7d2d5b/promote-your-business-on-my-social-media.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "PromoExpert",
+            isVerified: true,
+            serviceTitle: "I will promote your brand on my 500K Instagram followers",
+            rating: 4.8,
+            ratingCount: 240,
+            price: "LKR 50,000"
+        },
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/184657492/original/24eabc9876cdef2342bfa456d8b785bc/advertise-your-product-on-my-social-media-accounts.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "InstaBoost",
+            isVerified: false,
+            serviceTitle: "I will feature your product in my Instagram story highlights",
+            rating: 4.7,
+            ratingCount: 360,
+            price: "LKR 30,000"
+        },
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/201724903/original/93b74b034534b5e432ff471fb3c924d7/promote-your-business-to-my-youtube-audience.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "TubePro",
+            isVerified: true,
+            serviceTitle: "I will promote your business on my 1M subscriber YouTube channel",
+            rating: 5.0,
+            ratingCount: 500,
+            price: "LKR 75,000"
+        },
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/202315871/original/c4a8d2f1e65baf9869bd1d987b0ebc3d/social-media-product-placement-and-review.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "SocialStar",
+            isVerified: false,
+            serviceTitle: "I will provide product placement on my TikTok videos",
+            rating: 4.6,
+            ratingCount: 150,
+            price: "LKR 20,000"
+        },
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/185760412/original/a673e5dc875621c7b94bfbf12e5fc556/promote-your-service-on-my-facebook-page.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "AdKing",
+            isVerified: true,
+            serviceTitle: "I will advertise your business on my Facebook page with 200K followers",
+            rating: 4.9,
+            ratingCount: 220,
+            price: "LKR 40,000"
+        },
+        {
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/203467991/original/7b4c8921c5e8641c82f9eb43129f9f23/promote-your-brand-on-my-verified-twitter-account.jpg",
+            userAvatar: "https://via.placeholder.com/40",
+            username: "TrendSetter",
+            isVerified: true,
+            serviceTitle: "I will promote your brand on my verified Twitter account",
+            rating: 5.0,
+            ratingCount: 300,
+            price: "LKR 35,000"
+        }
+    ];
+
+
+        // Create service cards dynamically
         function createServiceCards(services) {
             const cardsHTML = services.map(data => `
                 <div class="service-card">
@@ -240,8 +362,27 @@
             document.getElementById('service-card-container').innerHTML = cardsHTML;
         }
 
-        // Initialize the components
-        createServiceCards(servicesData);
+
+         // Filter profiles
+         function filterProfiles() {
+            const searchQuery = document.getElementById("searchBar").value.toLowerCase();
+            const services = window.location.pathname.includes("viewDesignerGigs") ? designerGigs : influencerPromotions;
+            const filteredServices = services.filter(service => service.name.toLowerCase().includes(searchQuery));
+            createServiceCards(filteredServices);
+        }
+
+        // Determine type based on URL
+        window.onload = function () {
+            const path = window.location.pathname;
+            const headerTitle = document.getElementById("header-title");
+            if (path.includes("viewDesignerGigs")) {
+                headerTitle.textContent = "Designer Gigs";
+                createServiceCards(designerGigs);
+            } else if (path.includes("viewInfluencerPromotions")) {
+                headerTitle.textContent = "Influencer Promotions";
+                createServiceCards(influencerPromotions);
+            }
+        };
     </script>
 </body>
 </html>

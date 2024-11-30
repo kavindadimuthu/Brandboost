@@ -28,23 +28,24 @@ class BusinessViewController extends Controller {
         $this->view('pages/business/Payment');
     }
     public function viewInfluencers(){
-        $this->view('pages/business/ViewInfluencers');
+        $this->view('pages/business/ViewUsers');
     }
     public function viewDesigners(){
-        $this->view('pages/business/ViewDesigners');
+        $this->view('pages/business/ViewUsers');
     }
     public function viewInfluencerPromotions(){
-        $this->view('pages/business/ViewInfluencerPromotions');
+        $this->view('pages/business/ViewServices');
     }
     public function viewDesignerGigs(){
-        $this->view('pages/business/ViewDesignerGigs');
+        $this->view('pages/business/ViewServices');
     }
-    public function influencerPackageInside(){
-        $this->view('pages/business/InfluencerPackageInside');
+    public function influencerPromotionInside(){
+        $this->view('pages/business/InfluencerPromotionInside');
     }
     public function designerGigInside(){
         $this->view('pages/business/DesignerGigInside');
     }
+
     public function influencerProfile(){
         $this->view('pages/business/InfluencerProfile');
     }
