@@ -85,8 +85,8 @@
   </div>
   <h2>Active Orders</h2>
   <div class="header-row">
-            <a href="http://localhost:8000/DesignerViewController/AllOrders" class="show-all">Show All ></a>
-        </div>
+    <a href="http://localhost:8000/DesignerViewController/AllOrders" class="show-all">Show All ></a>
+  </div>
     
 </div>
     

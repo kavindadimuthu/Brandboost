@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/influencer/ContactUs.css">
 </head>
+
 <body>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
     <div class="container">
         <h1>Contact Us</h1>
         <form action="/submit-complaint" method="POST">
@@ -41,4 +44,5 @@
         </div>
     </div>
 </body>
+
 </html>

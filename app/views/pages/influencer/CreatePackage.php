@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
     <link rel="stylesheet" href="../../styles/influencer/CreatePackage.css">
 
 </head>
+
 <body>
-    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     <div class="container">
         <form action="/InfluencerDataController/createPackage" method="POST">
@@ -63,32 +65,33 @@
     </div>
 
     <script>
-          document.addEventListener("DOMContentLoaded", () => {
-          let currentStep = 1;
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentStep = 1;
 
-          const steps = document.querySelectorAll(".step");
-          const showStep = (step) => {
-              steps.forEach((el, index) => {
-                  el.classList.toggle("active", index + 1 === step);
-              });
-          };
+            const steps = document.querySelectorAll(".step");
+            const showStep = (step) => {
+                steps.forEach((el, index) => {
+                    el.classList.toggle("active", index + 1 === step);
+                });
+            };
 
-          document.getElementById("nextStep1").addEventListener("click", () => {
-              currentStep++;
-              showStep(currentStep);
-          });
+            document.getElementById("nextStep1").addEventListener("click", () => {
+                currentStep++;
+                showStep(currentStep);
+            });
 
-          document.getElementById("backStep2").addEventListener("click", () => {
-              currentStep--;
-              showStep(currentStep);
-          });
+            document.getElementById("backStep2").addEventListener("click", () => {
+                currentStep--;
+                showStep(currentStep);
+            });
 
-          showStep(currentStep);
-      });
+            showStep(currentStep);
+        });
 
     </script>
 
-  </script>
+    </script>
 </body>
 </body>
+
 </html>
