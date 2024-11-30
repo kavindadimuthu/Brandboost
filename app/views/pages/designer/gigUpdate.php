@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../styles/designer/index.css">
 
     <style>
-
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -26,6 +25,40 @@
             margin: 8px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+
+        .common-details {
+            max-width: 900px; /* Set a maximum width for the common details section */
+            margin: 0 auto; /* Center the section */
+        }
+
+        .package-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .package-section {
+            width: 48%; /* Each package section takes up 48% of the width */
+            padding: 10px; /* Add some padding */
+            border: 1px solid #ddd; /* Optional: Add a border for clarity */
+            border-radius: 4px; /* Round the corners */
+            background-color: #f9f9f9; /* Optional: Add a background color */
+        }
+
+        .package-fields {
+            display: flex;
+            justify-content: space-between; /* Space between left and right sections */
+            align-items: stretch; /* Make left and right fields full height */
+        }
+
+        .left-fields {
+            width: 28%; /* Adjust width as needed */
+        }
+
+        .right-field {
+            width: 70%; /* Adjust width as needed */
+            height: auto; /* Let it stretch to fill the height */
         }
 
         .section-heading {
@@ -66,64 +99,81 @@
 </head>
 <body>
 <div class="container">
-        <?php include __DIR__ . '/../../components/common/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
-        <div class="content">
-            <div class="main-content">
-                    <h2>Edit Gig</h2>
+    <div class="content">
+        <div class="main-content">
+            <h2>Edit Gig</h2>
 
-                    <!-- Gig Title -->
-                    <label for="editTitle">Title:</label>
-                    <input id="editTitle" type="text" placeholder="Enter gig title" required>
+            <!-- Common Details -->
+            <div class="common-details">
+                <label for="editTitle">Title:</label>
+                <input id="editTitle" type="text" placeholder="Enter gig title" required>
 
-                    <!-- Gig Description -->
-                    <label for="editDescription">Description:</label>
-                    <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
 
-                    <!-- Delivery Formats -->
-                    <label for="editDeliveryFormats">Delivery Formats (comma-separated):</label>
-                    <input id="editDeliveryFormats" type="text" placeholder="e.g. PDF, Image, Video" required>
+                <label for="editDeliveryFormats">Delivery Formats (comma-separated):</label>
+                <input id="editDeliveryFormats" type="text" placeholder="e.g. PDF, Image, Video" required>
 
-                    <!-- Tags -->
-                    <label for="editTags">Tags (comma-separated):</label>
-                    <input id="editTags" type="text" placeholder="e.g. web design, graphics" required>
+                <label for="editTags">Tags (comma-separated):</label>
+                <input id="editTags" type="text" placeholder="e.g. web design, graphics" required>
+            </div>
 
-                    <!-- Basic Package Details -->
+            <!-- Package Details -->
+            <div class="package-details">
+                <!-- Basic Package Details -->
+                <div class="package-section">
                     <p class="section-heading">Basic Package</p>
-                    <label for="editBasicPrice">Price:</label>
-                    <input id="editBasicPrice" type="number" placeholder="Basic price" required>
+                    <div class="package-fields">
+                        <div class="left-fields">
+                            <label for="editBasicPrice">Price:</label>
+                            <input id="editBasicPrice" type="number" placeholder="Basic price" required>
 
-                    <label for="editBasicBenefits">Benefits:</label>
-                    <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" required>
+                            <label for="editBasicDeliveryDays">Delivery Days:</label>
+                            <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" required>
 
-                    <label for="editBasicDeliveryDays">Delivery Days:</label>
-                    <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" required>
-
-                    <label for="editBasicRevisions">Revisions:</label>
-                    <input id="editBasicRevisions" type="number" placeholder="Number of revisions" required>
-
-                    <!-- Premium Package Details -->
-                    <p class="section-heading">Premium Package</p>
-                    <label for="editPremiumPrice">Price:</label>
-                    <input id="editPremiumPrice" type="number" placeholder="Premium price" required>
-
-                    <label for="editPremiumBenefits">Benefits:</label>
-                    <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" required>
-
-                    <label for="editPremiumDeliveryDays">Delivery Days:</label>
-                    <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" required>
-
-                    <label for="editPremiumRevisions">Revisions:</label>
-                    <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" required>
-
-                    <!-- Save and Cancel Buttons -->
-                    <div class="form-buttons">
-                        <button id="saveEditButton">Save Changes</button>
-                        <button class="cancel" onclick="window.history.back()">Cancel</button>
+                            <label for="editBasicRevisions">Revisions:</label>
+                            <input id="editBasicRevisions" type="number" placeholder="Number of revisions" required>
+                        </div>
+                        <div class="right-field">
+                            <label for="editBasicBenefits">Benefits:</label>
+                            <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" required>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Premium Package Details -->
+                <div class="package-section">
+                    <p class="section-heading">Premium Package</p>
+                    <div class="package-fields">
+                        <div class="left-fields">
+                            <label for="editPremiumPrice">Price:</label>
+                            <input id="editPremiumPrice" type="number" placeholder="Premium price" required>
+
+                            <label for="editPremiumDeliveryDays">Delivery Days:</label>
+                            <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" required>
+
+                            <label for="editPremiumRevisions">Revisions:</label>
+                            <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" required>
+                        </div>
+                        <div class="right-field">
+                            <label for="editPremiumBenefits">Benefits:</label>
+                            <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save and Cancel Buttons -->
+            <div class="form-buttons">
+                <button id="saveEditButton">Save Changes</button>
+                <button class="cancel" onclick="window.history.back()">Cancel</button>
             </div>
         </div>
     </div>
+</div>
+
 
     <script>
     // Function to fetch and populate gig details

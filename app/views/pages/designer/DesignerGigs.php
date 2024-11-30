@@ -6,7 +6,6 @@
     <title>My Gigs</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/designer/index.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* myGigs.css */
@@ -41,29 +40,39 @@
             background-color: #218838; /* Darker green on hover */
         }
 
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .orders-container {
+            background: white; /* White background for the table container */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            overflow: hidden; /* Prevent content overflow */
+            padding: 20px; /* Padding inside the container */
         }
 
-        .orders-table th, .orders-table td {
-            padding: 15px;
-            text-align: left;
-            border: 1px solid #ddd; /* Light border for table */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse; /* Collapsed borders for a cleaner look */
         }
 
         .orders-table th {
-            background-color: #9b59b6; /* Blue background for header */
-            color: white;
+            text-align: left; /* Left-align text in headers */
+            padding: 12px 16px; /* Padding for headers */
+            background: #f8f9fa; /* Header background color */
+            color: #666; /* Header text color */
+            font-weight: 500; /* Medium weight for header text */
+            font-size: 14px; /* Font size for header */
+            border-bottom: 1px solid #eee; /* Bottom border for separation */
         }
 
-        .orders-table tr:nth-child(even) {
-            background-color: #f2f2f2; /* Zebra stripe effect */
+        .orders-table td {
+            padding: 16px; /* Padding for table cells */
+            color: #333; /* Dark text color for cells */
+            font-size: 14px; /* Font size for cell text */
+            border-bottom: 1px solid #eee; /* Bottom border for cells */
+            transition: all 0.3s ease; /* Transition for hover effects */
         }
 
-        .orders-table tr:hover {
-            background-color: #f1f1f1; /* Light gray background on hover */
+        .orders-table tr:hover td {
+            color: #007bff; /* Blue text color on row hover */
         }
 
         .action-btn {
@@ -107,7 +116,6 @@
             transform: translate(-50%, -50%); /* Adjust to center perfectly */
         }
 
-
         .modal-content p {
             margin: 0 0 20px; /* Margin for text in modal */
             font-size: 1.1em; /* Slightly larger font for better readability */
@@ -141,7 +149,6 @@
             transform: translateY(-2px); /* Slight lift on hover */
         }
 
-
     </style>
 </head>
 <body>
@@ -149,85 +156,81 @@
         <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
         <div class="content">
-        <div class="main-content">
+            <div class="main-content">
 
-        <div class="title">
-            <h1>My Gigs</h1>
-        </div>
+                <div class="title">
+                    <h1>My Gigs</h1>
+                </div>
 
-        <div class="button">
-            <a href="http://localhost:8000/DesignerViewController/createGig"><button class="packages-button">+ New Gig</button></a>
-        </div>
+                <div class="button">
+                    <a href="http://localhost:8000/DesignerViewController/createGig">
+                        <button class="packages-button">+ New Gig</button>
+                    </a>
+                </div>
 
-    <!-- Gigs Table -->
+                <!-- Gigs Table -->
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Basic Price</th>
+                            <th>Premium Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Gigs will be displayed here -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', async () => {
+                                try {
+                                    const response = await fetch('/designerDataController/designerGigs');
+                                    const gigs = await response.json();
 
-        <table class="orders-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Basic Price</th>
-                    <th>Premium Price</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="ordersTableBody">
-                <!-- Gigs will be displayed here -->
-            <script>
+                                    console.log(gigs);
 
-                document.addEventListener('DOMContentLoaded', async () => {
-                    try {
-                        const response = await fetch('/designerDataController/designerGigs');
-                        const gigs = await response.json();
+                                    const tableBody = document.getElementById('ordersTableBody');
+                                    tableBody.innerHTML = ''; // Clear existing table content
 
-                        console.log(gigs);
+                                    if (gigs.length > 0) {
+                                        gigs.forEach(gig => {
+                                            // Ensure packages are present and handle package data correctly
+                                            const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+                                            const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
 
-                        const tableBody = document.getElementById('ordersTableBody');
-                        tableBody.innerHTML = ''; // Clear existing table content
+                                            const row = document.createElement('tr');
 
-                        if (gigs.length > 0) {
-                            gigs.forEach(gig => {
-                                // Ensure packages are present and handle package data correctly
-                                const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-                                const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
+                                            // Dynamically populate the table row
+                                            row.innerHTML = `
+                                                <td>${gig.title}</td>
+                                                <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
+                                                <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
+                                                <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
+                                                <td>
+                                                    <button onclick="window.location.href='/DesignerViewController/updateGig/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
+                                                    <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            `;
 
-                                const row = document.createElement('tr');
-
-                                // Dynamically populate the table row
-                                row.innerHTML = `
-                                    <td>${gig.title}</td>
-                                    <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
-                                    <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
-                                    <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
-                                    <td>
-                                        <button onclick="window.location.href='/DesignerViewController/updateGig/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
-                                        <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                `;
-
-                                // Append the new row to the table
-                                tableBody.appendChild(row);
+                                            // Append the new row to the table
+                                            tableBody.appendChild(row);
+                                        });
+                                    } else {
+                                        // If no gigs are found, show a message
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = '<td colspan="5">No gigs found.</td>';
+                                        tableBody.appendChild(row);
+                                    }
+                                } catch (error) {
+                                    console.error('Error fetching gigs:', error);
+                                }
                             });
-                        } else {
-                            // If no gigs are found, show a message
-                            const row = document.createElement('tr');
-                            row.innerHTML = '<td colspan="5">No gigs found.</td>';
-                            tableBody.appendChild(row);
-                        }
-                    } catch (error) {
-                        console.error('Error fetching gigs:', error);
-                    }
-                });
-
-            </script>
-            </tbody>
-        </table>
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    </div>
-    </div>
-
-
-    
 
     <!-- Delete Modal -->
     <div id="deleteModal" class="modal" style="display: none;">
@@ -254,41 +257,32 @@
                 
                 try {
                     const response = await fetch(`/DesignerDataController/deleteGig/${selectedGigId}`, { 
-                        method: 'DELETE', 
-                        headers: { 
-                            'Content-Type': 'application/json' 
-                        },
-                        // Pass the user_id in the request if needed for extra validation
-                        body: JSON.stringify({ user_id: '<?php echo $_SESSION['user_id']; ?>' }) 
+                        method: 'DELETE' 
                     });
-                    console.log('Server Response:', response); // Log server response for debugging
-                    
-                    const result = await response.json();
-                    console.log('Server Response:', result); // Log server response for debugging
 
-
-                    if (result.status === 'success') {
-                        alert(result.message);
-                        location.reload(); // Refresh the page
+                    if (response.ok) {
+                        // Remove the gig from the table
+                        const rowToDelete = document.querySelector(`tr[data-gig-id="${selectedGigId}"]`);
+                        if (rowToDelete) rowToDelete.remove();
+                        alert('Gig deleted successfully.');
                     } else {
-                        alert(result.message);
-                        console.error(result.message); // Log the error in console
-
+                        alert('Failed to delete gig.');
                     }
                 } catch (error) {
                     console.error('Error deleting gig:', error);
+                } finally {
+                    selectedGigId = null; // Reset selected gig ID
+                    document.getElementById('deleteModal').style.display = 'none'; // Hide modal
                 }
             }
         }
 
+        // Add event listeners to the confirm and cancel buttons
         document.getElementById('confirmDelete').addEventListener('click', deleteGig);
         document.getElementById('cancelDelete').addEventListener('click', () => {
-        document.getElementById('deleteModal').style.display = 'none';
-        selectedGigId = null;
+            selectedGigId = null;
+            document.getElementById('deleteModal').style.display = 'none'; // Hide modal
         });
     </script>
-
-    <script src="../scripts/common/header.js"></script>
 </body>
 </html>
-
