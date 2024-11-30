@@ -6,8 +6,9 @@
     <title>Brand Boost Dashboard</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/designer/index.css">
+    <link rel="stylesheet" href="../../styles/influencer/orderTable.css">
+
     <style>
-        
         .cards {
             display: flex;
             justify-content: space-between;
@@ -19,7 +20,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f0f0f0;;
+            background: #f0f0f0;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -100,14 +101,14 @@
         }
 
         .orders-container {
-            margin: 20px 0;
-            padding: 0 20px;
+            margin: 0 20px;
         }
 
-        .total-orders {
+        .charts-row {
             display: flex;
             justify-content: space-between;
-            margin: 20px 0;
+            gap: 20px;
+            padding: 20px;
         }
 
         .chart-container {
@@ -118,15 +119,17 @@
             background-color: #f9f9f9;
             border: 1px solid #e0e0e0;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centering the charts */
+            text-align: center;
         }
 
+        .chart-container canvas {
+            max-width: 100%;
+            height: 100%;
+        }
 
-        .charts-row {
-            display: flex;
-            justify-content: space-between;
+        canvas {
+            max-width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -170,112 +173,53 @@
                 <!-- Orders Table -->
                 <h2>Active Orders</h2>
                 <div class="orders-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Buyer</th>
-                                <th>Gig</th>
-                                <th>Due On</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ordersTableBody">
-                            <!-- Data will be loaded dynamically -->
-                        </tbody>
-                    </table>
+                    <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
                 </div>
 
-                <!-- Pagination -->
-                <div class="pagination">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>&gt;</button>
-                </div>
-
-                <!-- Total Orders Section with Three Charts -->
-                <!-- Total Orders Section with Three Charts -->
+                <!-- Charts Section -->
                 <div class="charts-row">
                     <div class="chart-container">
                         <h2>Order Status</h2>
-                        <div class="order-status-chart">
-                            <canvas id="orderStatusChart" width="300" height="300"></canvas> <!-- Reduced size -->
-                        </div>
+                        <canvas id="orderStatusChart"></canvas>
                     </div>
                     <div class="chart-container">
                         <h2>Orders Over Last 6 Months</h2>
-                        <div class="monthly-orders-chart">
-                            <canvas id="monthlyOrdersChart" width="300" height="300"></canvas> <!-- Reduced size -->
-                        </div>
+                        <canvas id="monthlyOrdersChart"></canvas>
                     </div>
                     <div class="chart-container">
                         <h2>Profile Views (Last Month)</h2>
-                        <div class="profile-views-chart">
-                            <canvas id="profileViewsChart" width="300" height="300"></canvas> <!-- Reduced size -->
-                        </div>
+                        <canvas id="profileViewsChart"></canvas>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Populate Orders Table
-        const orders = [
-            { buyer: "Consequat", gig: "Gig 1", dueOn: "3 Days", total: "$20", status: "In Progress" },
-            { buyer: "Reprehende", gig: "Gig 2", dueOn: "5 Days", total: "$35", status: "Completed" },
-            { buyer: "Content", gig: "Gig 3", dueOn: "2 Days", total: "$50", status: "Delivered" },
-        ];
-
-        function loadOrdersData(data) {
-            const tableBody = document.getElementById('ordersTableBody');
-            tableBody.innerHTML = '';
-
-            data.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order.buyer}</td>
-                    <td>${order.gig}</td>
-                    <td>${order.dueOn}</td>
-                    <td>${order.total}</td>
-                    <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => loadOrdersData(orders));
-
-        // Chart.js Setup for Order Status Chart
+        // Order Status Chart
         const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
-        const orderStatusChart = new Chart(orderStatusCtx, {
+        new Chart(orderStatusCtx, {
             type: 'pie',
             data: {
                 labels: ['Delivered', 'In Progress', 'Pending'],
                 datasets: [{
                     data: [12, 19, 8],
-                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
-                    hoverOffset: 4
+                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
                 }]
-            },
+            }
         });
 
-        // Chart.js Setup for Monthly Orders Chart
+        // Monthly Orders Chart
         const monthlyOrdersCtx = document.getElementById('monthlyOrdersChart').getContext('2d');
-        const monthlyOrdersChart = new Chart(monthlyOrdersCtx, {
+        new Chart(monthlyOrdersCtx, {
             type: 'bar',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
                     label: 'Orders',
                     data: [65, 59, 80, 81, 56, 55],
-                    backgroundColor: '#42A5F5',
-                    borderColor: '#1E88E5',
-                    borderWidth: 1
+                    backgroundColor: '#42A5F5'
                 }]
             },
             options: {
@@ -287,9 +231,9 @@
             }
         });
 
-        // Chart.js Setup for Profile Views Chart
+        // Profile Views Chart
         const profileViewsCtx = document.getElementById('profileViewsChart').getContext('2d');
-        const profileViewsChart = new Chart(profileViewsCtx, {
+        new Chart(profileViewsCtx, {
             type: 'line',
             data: {
                 labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
@@ -298,16 +242,8 @@
                     data: [30, 50, 75, 40, 60],
                     borderColor: '#FF6384',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: true,
+                    fill: true
                 }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
             }
         });
     </script>

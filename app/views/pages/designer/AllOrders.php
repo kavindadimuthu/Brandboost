@@ -12,14 +12,19 @@
 </head>
 
 <body>
-    <?php include __DIR__ . '/../../components/common/header.php'; ?>
+<div class="container">
+        <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
-    <div class="container">
-        <h1>Customer Orders</h1>
-        <div class="search-box">
-            <input type="text" placeholder="Search by Order ID or Username">
-        </div>
-    </div>
+        <div class="content">
+            <div class="main-content">
+                <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+                <div class="container">
+                    <h1>Customer Orders</h1>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search by Order ID or Username">
+                    </div>
+                </div>
 
     <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
     <script src="../scripts/common/header.js"></script>

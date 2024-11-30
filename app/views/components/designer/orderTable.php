@@ -7,23 +7,31 @@
 </head>
 
 <body>
-    <div class="orders-container">
-        
-        <table class="orders-table">
-            <thead>
-                <tr>
-                    <th>Buyer</th>
-                    <th>Gig</th>
-                    <th>Due On</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="ordersTableBody">
-                <!-- Data will be loaded here dynamically -->
-            </tbody>
-        </table>
-    </div>
+            <div class="orders-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Buyer</th>
+                                <th>Gig</th>
+                                <th>Due On</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Data will be loaded dynamically -->
+                        </tbody>
+                    </table>
+            </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button>&lt;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>&gt;</button>
+                </div>
 
     <script>
         // Sample data structure - replace this with your actual data source
