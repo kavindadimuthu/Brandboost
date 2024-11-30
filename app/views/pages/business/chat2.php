@@ -41,7 +41,7 @@
        Jevon Raynor
       </div>
       <div class="text">
-       Velit amet enim ad duis deserunt
+       Ok I will
       </div>
      </div>
      <div class="message-time">
@@ -49,12 +49,13 @@
      </div>
     </div>
     <div class="message-item">
+    <img alt="Profile picture of Jevon Raynor" height="40" src="https://storage.googleapis.com/a1aa/image/5cmJ4Pixi26JP1MTcGAXVkCTI3L22FdxJ1dPUwZoQmMkyO9E.jpg" width="40"/>
      <div class="message-info">
       <div class="name">
        Annie Haley
       </div>
       <div class="text">
-       Ullamco exercitation magna
+       How can I help you
       </div>
      </div>
      <div class="message-time">
@@ -68,7 +69,7 @@
        Selina Rutherford
       </div>
       <div class="text">
-       Duis pariatur in nostrud mollit irur
+       good morning
       </div>
      </div>
      <div class="message-time">
@@ -82,7 +83,7 @@
        Frank Sinat
       </div>
       <div class="text">
-       Quis proident deserunt aliqua ess
+       Okay
       </div>
      </div>
      <div class="message-time">
@@ -90,12 +91,13 @@
      </div>
     </div>
     <div class="message-item">
+    <img alt="Profile picture of Jevon Raynor" height="40" src="https://storage.googleapis.com/a1aa/image/5cmJ4Pixi26JP1MTcGAXVkCTI3L22FdxJ1dPUwZoQmMkyO9E.jpg" width="40"/>
      <div class="message-info">
       <div class="name">
-       Emelia Rowe
+       Stephen Emil
       </div>
       <div class="text">
-       Culpa culpa id voluptate ad elit su
+      My packages are in the gig. you can order
       </div>
      </div>
      <div class="message-time">
@@ -109,7 +111,7 @@
        James Smith
       </div>
       <div class="text">
-       Anim labore consectetur officia in
+       How can i help you
       </div>
      </div>
      <div class="message-time">
@@ -117,12 +119,13 @@
      </div>
     </div>
     <div class="message-item">
+    <img alt="Profile picture of Jevon Raynor" height="40" src="https://storage.googleapis.com/a1aa/image/5cmJ4Pixi26JP1MTcGAXVkCTI3L22FdxJ1dPUwZoQmMkyO9E.jpg" width="40"/>
      <div class="message-info">
       <div class="name">
        Fiona Jackson
       </div>
       <div class="text">
-       Sint aute nisi irure exercitation vol
+       bye
       </div>
      </div>
      <div class="message-time">
@@ -136,7 +139,7 @@
        Green William
       </div>
       <div class="text">
-       Sunt sint eu quis fugiat adipisicing
+       good bye
       </div>
      </div>
      <div class="message-time">
@@ -166,7 +169,7 @@
      <img alt="Profile picture of Cynthia Snyder" height="40" src="https://storage.googleapis.com/a1aa/image/0oK2IMcv8d4tHhK1egxqWEc7u5YD8cc1wE1rwj3nN9QHld6JA.jpg" width="40"/>
      <div class="message-content">
       <div class="text">
-       Lorem excepteur magna voluptate exercitation dolore exercitation amet
+       Hi good morning this is the file.
       </div>
       <div class="file">
        <i class="fas fa-paperclip">
@@ -184,7 +187,7 @@
     <div class="message">
      <div class="message-content" style="margin-left: auto;">
       <div class="text" style="background-color: #e6e6ff;">
-       Sit non esse est voluptate elit eiusmod. Ad eu est.
+       It's good but can you design it more colorful?
       </div>
       <div class="time" style="text-align: right;">
        1:15 PM
@@ -215,7 +218,7 @@
     <div class="message">
      <div class="message-content" style="margin-left: auto;">
       <div class="text" style="background-color: #e6e6ff;">
-       Do consectetur ea labore adipisicing
+      😍😴😴
       </div>
       <div class="time" style="text-align: right;">
        1:17 PM
@@ -239,12 +242,12 @@
     Cynthia Snyder
    </div>
    <div class="role">
-    Influencer
+    Designer
    </div>
    <div class="email">
     <i class="fas fa-envelope">
     </i>
-    example@gmail.com
+    cysnyder@gmail.com
    </div>
    <div class="images">
     <div class="header">

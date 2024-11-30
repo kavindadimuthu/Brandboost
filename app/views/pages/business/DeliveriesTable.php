@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+< lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../../../public/styles/business-owner/orderTable.css">
+  <link rel="stylesheet" href="../../../../public/styles/business-owner/DeliveriesTable.css">
 </head>
 
 <body>
@@ -12,11 +12,11 @@
         <table class="orders-table">
             <thead>
                 <tr>
+                    <th>Order</th>
                     <th>Influencer/Designer</th>
-                    <th>Service Type</th>
-                    <th>Service</th>
-                    <th>Due On</th>
-                    <th>Total</th>
+                    <th>RivisionCount</th>
+                    <th>Delivery</th>
+                    <th>File</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -30,39 +30,38 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
             {
+                order: "Promotional Video",
                 provider: "Kavindya Adhikari",
-                service_type: "Promotion",
-                service: "Promotional Post",
-                dueOn: "3 Days",
-                total: "$20",
+                rivisioncount: "2",
+                delivery: "-",
+                file: "video2.mp4",
                 status: "In Progress"
             },
             {
+                order: "Promotional Video",
+                provider: "Kavindya Adhikari",
+                rivisioncount: "1",
+                delivery: "-",
+                file: "video1.mp4",
+                status: "In Progress"
+            },
+            {
+                order: "Promotional Post Design",
                 provider: "Nadun Sandanayake",
-                service_type: "Design",
-                service: "Promotional Post Design",
-                dueOn: "3 Days",
-                total: "$20",
+                rivisioncount: "3",
+                delivery: "done",
+                file: "finalpost.png",
+                status: "Completed"
+            },
+            {
+                order: "Promotional Post Design",
+                provider: "Nadun Sandanayake",
+                rivisioncount: "3",
+                delivery: "-",
+                file: "post3.png",
                 status: "In Progress"
-            },
-            {
-                provider: "Shanudrie Priyasad",
-                service_type: "Promotion",
-                service: "Promotional Video",
-                dueOn: "3 Days",
-                total: "$20",
-                status: "Completed"
-            },
-            {
-                provider: "Safran Zahim",
-                service_type: "Design",
-                service: "Promotional Post Design",
-                dueOn: "3 Days",
-                total: "$20",
-                status: "Completed"
             }
         ];
-
         // Function to load data into the table
         function loadOrdersData() {
             const tableBody = document.getElementById('ordersTableBody');
@@ -71,11 +70,11 @@
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
+                    <td>${order.order}</td>
                     <td>${order.provider}</td>
-                    <td>${order.service_type}</td>
-                    <td>${order.service}</td>
-                    <td>${order.dueOn}</td>
-                    <td>${order.total}</td>
+                    <td>${order.rivisioncount}</td>
+                    <td>${order.delivery}</td>
+                    <td>${order.file}</td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
                 `;
                 
