@@ -5,30 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Gigs</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
-    <link rel="stylesheet" href="../../styles/influencer/packagesTable.css">
-    <link rel="stylesheet" href="../../styles/influencer/InfluencerPackages.css">
-    <!-- <link rel="stylesheet" href="../../../../public/styles/influencer/orderTable.css"> -->
+    <link rel="stylesheet" href="../../styles/designer/index.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* myGigs.css */
+
+        .title {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #333; /* Darker text for better readability */
+        }
+
+        .button {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .packages-button {
+            background-color: #28a745; /* Green background for the button */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .packages-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .orders-table th, .orders-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd; /* Light border for table */
+        }
+
+        .orders-table th {
+            background-color: #9b59b6; /* Blue background for header */
+            color: white;
+        }
+
+        .orders-table tr:nth-child(even) {
+            background-color: #f2f2f2; /* Zebra stripe effect */
+        }
+
+        .orders-table tr:hover {
+            background-color: #f1f1f1; /* Light gray background on hover */
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff; /* Blue color for action buttons */
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            position: fixed;
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+            z-index: 1000; /* On top of other elements */
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); /* Soft gradient background */
+            padding: 30px; /* Increased padding for a spacious feel */
+            border-radius: 10px; /* More rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for more depth */
+            max-width: 500px; /* Restrict maximum width */
+            width: 90%; /* Responsive width */
+            transform: translateY(-50%); /* Adjust vertical position for perfect centering */
+            top: 50%; /* Center vertically */
+            position: absolute; /* Change to absolute for centering */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust to center perfectly */
+        }
+
+
+        .modal-content p {
+            margin: 0 0 20px; /* Margin for text in modal */
+            font-size: 1.1em; /* Slightly larger font for better readability */
+            color: #333; /* Darker text for better contrast */
+        }
+
+        #confirmDelete, #cancelDelete {
+            background-color: #007bff; /* Blue button background */
+            color: white;
+            border: none;
+            padding: 12px 20px; /* Increased padding for larger buttons */
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform transition */
+            font-size: 1em; /* Font size for better readability */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for buttons */
+        }
+
+        #confirmDelete:hover, #cancelDelete:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        #cancelDelete {
+            background-color: #dc3545; /* Red background for cancel button */
+        }
+
+        #cancelDelete:hover {
+            background-color: #c82333; /* Darker red on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <?php include __DIR__ . '/../../components/common/header.php'; ?>
-
     <div class="container">
+        <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+        <div class="content">
+        <div class="main-content">
+
         <div class="title">
-            <h1>Gigs</h1>
+            <h1>My Gigs</h1>
         </div>
 
         <div class="button">
             <a href="http://localhost:8000/DesignerViewController/createGig"><button class="packages-button">+ New Gig</button></a>
         </div>
-    </div>
 
     <!-- Gigs Table -->
-    <div class="orders-container">
-        <div class="header-row">
-            <h1>My Gigs</h1>
-        </div>
 
         <table class="orders-table">
             <thead>
@@ -91,6 +222,8 @@
             </script>
             </tbody>
         </table>
+    </div>
+    </div>
     </div>
 
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brand Boost Dashboard</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
+    <link rel="stylesheet" href="../../styles/designer/index.css">
     <style>
         
         .cards {
