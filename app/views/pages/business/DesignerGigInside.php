@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="bottombar">
-      <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
+      <!-- <?php include __DIR__ . '/../../components/common/carousel.php'; ?> -->
     </div>
   </div>
 </body>

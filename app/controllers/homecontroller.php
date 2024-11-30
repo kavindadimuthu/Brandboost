@@ -50,6 +50,9 @@ class HomeController extends Controller {
     public function cardSlider() {
         $this->view('components/common/cardSlider');
     }
+    public function carousel() {
+        $this->view('components/common/carousel');
+    }
 
 
     public function chooseRole() {
