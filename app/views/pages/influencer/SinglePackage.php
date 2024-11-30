@@ -1,180 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../styles/influencer/header.css">
-  <link rel="stylesheet" href="../../styles/influencer/CreatePackage.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Gig</title>
+    <link rel="stylesheet" href="../../styles/common/header.css">
+    <link rel="stylesheet" href="../../styles/influencer/index.css">
 
-</head>
-
-<body>
-  <?php include __DIR__ . '/../../components/common/header.php'; ?>
-
-  <div class="container">
-    <!-- Step 1: Select Service Type -->
-    <div class="step active" id="step1">
-      <h2>Select Service Type</h2>
-      <label>
-        <input type="radio" name="serviceType" value="promotionOnly" required> Promotion Only
-      </label>
-      <label>
-        <input type="radio" name="serviceType" value="promotionDesign" required> Both Promotion and Design
-      </label>
-      <button id="nextStep1">Next</button>
-    </div>
-
-    <!-- Step 2: Add Packages -->
-    <div class="step" id="step2">
-      <h2>Add Packages</h2>
-      <div class="package">
-        <h3>Basic Package</h3>
-        <label>Description: <input type="text" name="basicDescription" required></label>
-        <label>
-
-          <span id="basicDaysContainer">
-            <input type="number" name="basicDays" required>
-          </span>
-        </label>
-        <label>Price: <input type="number" name="basicPrice" required></label>
-      </div>
-      <div class="package">
-        <h3>Standard Package</h3>
-        <label>Description: <input type="text" name="standardDescription" required></label>
-        <label>
-
-          <span id="standardDaysContainer">
-            <input type="number" name="standardDays" required>
-          </span>
-        </label>
-        <label>Price: <input type="number" name="standardPrice" required></label>
-      </div>
-      <div class="package">
-        <h3>Premium Package</h3>
-        <label>Description: <input type="text" name="premiumDescription" required></label>
-        <label>
-
-          <span id="premiumDaysContainer">
-            <input type="number" name="premiumDays" required>
-          </span>
-        </label>
-        <label>Price: <input type="number" name="premiumPrice" required></label>
-      </div>
-      <button id="backStep2">Back</button>
-      <button id="nextStep2">Next</button>
-    </div>
-
-    <!-- Step 3: Add Details -->
-    <div class="step" id="step3">
-      <h2>Finalize Package</h2>
-      <label>Package Topic: <input type="text" name="packageTopic" required></label>
-      <label>Description: <textarea name="packageDescription" required></textarea></label>
-
-      <div style="padding:30px 0;">
-        <label>Platform:</label>
-        <div>
-          <input type="checkbox" name="platform" value="facebook" id="facebook">
-          <label for="facebook">Facebook</label>
-        </div>
-        <div>
-          <input type="checkbox" name="platform" value="instagram" id="instagram">
-          <label for="instagram">Instagram</label>
-        </div>
-        <div>
-          <input type="checkbox" name="platform" value="tiktok" id="tiktok">
-          <label for="tiktok">TikTok</label>
-        </div>
-        <div>
-          <input type="checkbox" name="platform" value="tiktok" id="tiktok">
-          <label for="tiktok">Youtube</label>
-        </div>
-      </div>
-      <label>Upload Files: <input type="file" name="sampleFiles" multiple accept=".png,.jpg"></label>
-      <button id="backStep3">Back</button>
-      <button type="submit" id="submitPackage">Submit</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      let currentStep = 1;
-
-      const steps = document.querySelectorAll(".step");
-      const showStep = (step) => {
-        steps.forEach((el, index) => {
-          el.classList.toggle("active", index + 1 === step);
-        });
-      };
-
-      const updateDaysFields = (type) => {
-        const basicContainer = document.getElementById("basicDaysContainer");
-        const standardContainer = document.getElementById("standardDaysContainer");
-        const premiumContainer = document.getElementById("premiumDaysContainer");
-
-        if (type === "promotionDesign") {
-          basicContainer.innerHTML = `
-        <label>Design Days: <input type="number" name="basicDesignDays" required></label>
-        <label>Promotion Days: <input type="number" name="basicPromotionDays" required></label>
-      `;
-          standardContainer.innerHTML = `
-        <label>Design Days: <input type="number" name="standardDesignDays"></label>
-        <label>Promotion Days: <input type="number" name="standardPromotionDays"></label>
-      `;
-          premiumContainer.innerHTML = `
-        <label>Design Days: <input type="number" name="premiumDesignDays"></label>
-        <label>Promotion Days: <input type="number" name="premiumPromotionDays"></label>
-      `;
-        } else {
-          basicContainer.innerHTML = `<input type="number" name="basicDays" required>`;
-          standardContainer.innerHTML = `<input type="number" name="standardDays" required>`;
-          premiumContainer.innerHTML = `<input type="number" name="premiumDays" required>`;
+    <style>
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
-      };
 
-      document.querySelectorAll('input[name="serviceType"]').forEach((input) => {
-        input.addEventListener("change", (e) => {
-          updateDaysFields(e.target.value);
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .common-details {
+            max-width: 900px; /* Set a maximum width for the common details section */
+            margin: 0 auto; /* Center the section */
+        }
+
+        .package-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .package-section {
+            width: 48%; /* Each package section takes up 48% of the width */
+            padding: 10px; /* Add some padding */
+            border: 1px solid #ddd; /* Optional: Add a border for clarity */
+            border-radius: 4px; /* Round the corners */
+            background-color: #f9f9f9; /* Optional: Add a background color */
+        }
+
+        .package-fields {
+            display: flex;
+            justify-content: space-between; /* Space between left and right sections */
+            align-items: stretch; /* Make left and right fields full height */
+        }
+
+        .left-fields {
+            width: 28%; /* Adjust width as needed */
+        }
+
+        .right-field {
+            width: 70%; /* Adjust width as needed */
+            height: auto; /* Let it stretch to fill the height */
+        }
+
+        .section-heading {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button.cancel {
+            background-color: #f44336;
+        }
+
+        button.cancel:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+    <div class="content">
+        <div class="main-content">
+            <h2>Edit Gig</h2>
+
+            <div class="common-details">
+    <label for="editTitle">Title:</label>
+    <input id="editTitle" type="text" placeholder="Enter gig title" readonly>
+
+    <label for="editDescription">Description:</label>
+    <textarea id="editDescription" placeholder="Enter gig description" readonly></textarea>
+
+    <label for="editplatform">Delivery Formats (comma-separated):</label>
+    <input id="editplatform" type="text" placeholder="e.g. PDF, Image, Video" readonly>
+
+    <label for="editTags">Tags (comma-separated):</label>
+    <input id="editTags" type="text" placeholder="e.g. web design, graphics" readonly>
+</div>
+
+<!-- Package Details -->
+<div class="package-details">
+    <!-- Basic Package Details -->
+    <div class="package-section">
+        <p class="section-heading">Basic Package</p>
+        <div class="package-fields">
+            <div class="left-fields">
+                <label for="editBasicPrice">Price:</label>
+                <input id="editBasicPrice" type="number" placeholder="Basic price" readonly>
+
+                <label for="editBasicDeliveryDays">Delivery Days:</label>
+                <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" readonly>
+
+                <label for="editBasicRevisions">Revisions:</label>
+                <input id="editBasicRevisions" type="number" placeholder="Number of revisions" readonly>
+            </div>
+            <div class="right-field">
+                <label for="editBasicBenefits">Benefits:</label>
+                <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" readonly>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Package Details -->
+    <div class="package-section">
+        <p class="section-heading">Premium Package</p>
+        <div class="package-fields">
+            <div class="left-fields">
+                <label for="editPremiumPrice">Price:</label>
+                <input id="editPremiumPrice" type="number" placeholder="Premium price" readonly>
+
+                <label for="editPremiumDeliveryDays">Delivery Days:</label>
+                <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" readonly>
+
+                <label for="editPremiumRevisions">Revisions:</label>
+                <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" readonly>
+            </div>
+            <div class="right-field">
+                <label for="editPremiumBenefits">Benefits:</label>
+                <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <!-- Save and Cancel Buttons -->
+            
+        </div>
+    </div>
+</div>
+
+
+    <script>
+    // Function to fetch and populate gig details
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchGigDetails();
         });
-      });
 
-      document.getElementById("nextStep1").addEventListener("click", () => {
-        currentStep++;
-        showStep(currentStep);
-      });
+        async function fetchGigDetails() {
+            const gigId = new URLSearchParams(window.location.search).get('gigId');
+            console.log("Gig ID:", gigId);
 
-      document.getElementById("backStep2").addEventListener("click", () => {
-        currentStep--;
-        showStep(currentStep);
-      });
+            if (!gigId) {
+                alert('Gig ID not provided.');
+                return;
+            }
 
-      document.getElementById("nextStep2").addEventListener("click", () => {
-        currentStep++;
-        showStep(currentStep);
-      });
+            try {
+                // Use the correct endpoint based on your router's route structure
+                const response = await fetch(`/influencerDataController/fetchSinglePromotion/${gigId}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch gig details. Status: ${response.status}`);
+                }
 
-      document.getElementById("backStep3").addEventListener("click", () => {
-        currentStep--;
-        showStep(currentStep);
-      });
+                const gig = await response.json();
+                console.log("Gig details:", gig);
 
-      document.getElementById("submitPackage").addEventListener("click", (e) => {
-        e.preventDefault();
+                // Populate form fields with fetched gig details
+                document.getElementById('editTitle').value = gig.title || '';
+                document.getElementById('editDescription').value = gig.description || '';
+                document.getElementById('editplatform').value = Array.isArray(gig.platform)
+                    ? gig.platform.join(', ')
+                    : (gig.platform || '');
+                document.getElementById('editTags').value = Array.isArray(gig.tags)
+                    ? gig.tags.join(', ')
+                    : (gig.tags || '');
 
-        const formData = new FormData(document.querySelector("form"));
-        const data = Object.fromEntries(formData.entries());
+                // Basic Package
+                document.getElementById('editBasicPrice').value = gig.packages[0].price || '';
+                document.getElementById('editBasicBenefits').value = gig.packages[0].benefits || '';
+                document.getElementById('editBasicDeliveryDays').value = gig.packages[0].delivery_days || '';
+                document.getElementById('editBasicRevisions').value = gig.packages[0].revisions || '';
 
-        console.log(data);
+                // Premium Package
+                document.getElementById('editPremiumPrice').value = gig.packages[1].price || '';
+                document.getElementById('editPremiumBenefits').value = gig.packages[1].benefits || '';
+                document.getElementById('editPremiumDeliveryDays').value = gig.packages[1].delivery_days || '';
+                document.getElementById('editPremiumRevisions').value = gig.packages[1].revisions || '';
+            } catch (error) {
+                console.error("Error fetching gig details:", error);
+                alert("Failed to fetch gig details. Please try again.");
+            }
+        }
 
-        alert("Package submitted successfully!");
-      });
+        async function saveGigDetails() {
+            const gigId = new URLSearchParams(window.location.search).get('gigId');
+            if (!gigId) {
+                alert("No gig ID provided in the URL.");
+                return;
+            }
 
-      showStep(currentStep);
-    });
+            // Construct the updated gig object
+            const updatedGig = {
+                title: document.getElementById('editTitle').value,
+                description: document.getElementById('editDescription').value,
+                platform: document.getElementById('editplatform').value
+                    .split(',')
+                    .map(format => format.trim()), // Trim whitespace from each format
+                tags: document.getElementById('editTags').value.split(',').map(tag => tag.trim()), // Trim whitespace
+                basic: {
+                    price: parseFloat(document.getElementById('editBasicPrice').value) || 0, // Ensure numeric value
+                    benefits: document.getElementById('editBasicBenefits').value || '',
+                    delivery_days: parseInt(document.getElementById('editBasicDeliveryDays').value) || 0, // Ensure integer
+                    revisions: parseInt(document.getElementById('editBasicRevisions').value) || 0 // Ensure integer
+                },
+                premium: {
+                    price: parseFloat(document.getElementById('editPremiumPrice').value) || 0, // Ensure numeric value
+                    benefits: document.getElementById('editPremiumBenefits').value || '',
+                    delivery_days: parseInt(document.getElementById('editPremiumDeliveryDays').value) || 0, // Ensure integer
+                    revisions: parseInt(document.getElementById('editPremiumRevisions').value) || 0 // Ensure integer
+                }
+            };
 
-  </script>
-</body>
-</body>
+            try {
+                const response = await fetch(`/influencerDataController/updatePromotion/${gigId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedGig)
+                });
 
+                if (!response.ok) {
+                    throw new Error(`Failed to save gig details. Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                alert(result.message || "Gig updated successfully.");
+                if (result.status === "success") {
+                    window.location.href = "/influencerViewController/influencerpackages"; // Redirect to the gigs page after successful update
+                }
+            } catch (error) {
+                console.error("Error saving gig details:", error);
+                alert("Failed to save changes. Please try again.");
+            }
+        }
+
+        // Attach event listener to the Save button after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveButton = document.getElementById('saveEditButton');
+            if (saveButton) {
+                saveButton.addEventListener('click', saveGigDetails);
+            } else {
+                console.error("Save button not found in the DOM.");
+            }
+        });
+
+    </script>
 </html>

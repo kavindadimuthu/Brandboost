@@ -284,6 +284,52 @@
             selectedGigId = null;
             document.getElementById('deleteModal').style.display = 'none'; // Hide modal
         });
+        
+
+
+
+        document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('/influencerDataController/influencerpromotions');
+        const gigs = await response.json();
+
+        const tableBody = document.getElementById('ordersTableBody');
+        tableBody.innerHTML = ''; // Clear existing table content
+
+        if (gigs.length > 0) {
+            gigs.forEach(gig => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-gig-id', gig.gig_id);
+
+                // Add click event listener for navigation
+                row.addEventListener('click', () => {
+                    window.location.href = `/InfluencerViewController/singlepackage/?gigId=${gig.gig_id}`;
+                });
+
+                row.innerHTML = `
+                    <td>${gig.title}</td>
+                    <td>${gig.packages.find(pkg => pkg.package_type === 'basic')?.price || 'N/A'}</td>
+                    <td>${gig.packages.find(pkg => pkg.package_type === 'premium')?.price || 'N/A'}</td>
+                    <td>${gig.status || 'N/A'}</td>
+                    <td>
+                        <button onclick="event.stopPropagation(); window.location.href='/InfluencerViewController/updatePromotion/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="event.stopPropagation(); confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = '<td colspan="5">No gigs found.</td>';
+            tableBody.appendChild(row);
+        }
+    } catch (error) {
+        console.error('Error fetching gigs:', error);
+    }
+});
+
+
     </script>
 </body>
 </html>
