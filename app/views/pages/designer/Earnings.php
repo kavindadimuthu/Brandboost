@@ -100,8 +100,8 @@
         }
 
           /* Transaction section */
-          .transaction {
-           
+        .transaction {
+           /* margin: 20px; */
             width: 100%;
         }
 
@@ -165,6 +165,11 @@
                         <p class="value-small" id="expenses-to-date">$0.00</p>
                     </div>
                 </div>
+                
+            </div>
+            <div class="transaction">
+
+                <?php include __DIR__ . '/../../components/designer/transactionTable.php'; ?>
             </div>
         </div>
     </div>
@@ -195,10 +200,7 @@
             document.getElementById('expenses-to-date').textContent = `$${data.earningsAndExpenses.expensesToDate}`;
         });</script>
 
-    <div class="transaction">
-
-        <?php include __DIR__ . '/../../components/designer/transactionTable.php'; ?>
-    </div>
+    
     <script src="../scripts/common/header.js"></script>
 
 </body>

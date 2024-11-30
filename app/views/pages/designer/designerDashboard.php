@@ -170,10 +170,7 @@
                 </div>
 
                 <!-- Orders Table -->
-                <h2>Active Orders</h2>
-                <div class="orders-container">
                     <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
-                </div>
 
                 <!-- Charts Section -->
                 <div class="charts-row">
