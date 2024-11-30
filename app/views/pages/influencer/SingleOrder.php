@@ -199,7 +199,7 @@
                         <div class="time-left">
                             <h4>Time Left To Delivery</h4>
                             <div id="countdown"></div>
-                            <button id="deliverNow" onclick="window.location.href='/designerviewcontroller/orderDelivery'">Deliver
+                            <button id="deliverNow" onclick="window.location.href='/influencerviewcontroller/orderDelivery'">Deliver
                                 Now</button>
                         </div>
                         <div class="order-details">
@@ -210,9 +210,10 @@
                         </div>
                         <div class="support-section">
                             <h4>Support</h4>
-                            <button id="contactSupport">Contact Us</button>
                             <button id="contactSupport"
-                                onclick="window.location.href='/designerviewcontroller/allOrders'">Back</button>
+                            onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
+                            <button id="contactSupport"
+                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
                         </div>
                 </div>
             </div>

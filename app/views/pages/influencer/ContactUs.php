@@ -6,12 +6,78 @@
     <title>Contact Us</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/influencer/ContactUs.css">
     <link rel="stylesheet" href="../../styles/common/header.css">
 </head>
 
-<body>
-    <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+<style>
+    
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 100px auto;
+    background: #fff;
+    padding: 1px 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin: 10px 0 5px;
+    font-weight: 500;
+}
+input, textarea {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+button {
+    padding: 10px 20px;
+    background-color: #0288d1;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.contact-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+.contact-info div {
+    text-align: center;
+}
+.contact-info i {
+    font-size: 24px;
+    color: #007BFF;
+    margin-bottom: 10px;
+}
+
+</style>
+
+
+<div class="container">
+        <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+        <div class="content">
+            <div class="main-content">
     <div class="container">
         <h1>Contact Us</h1>
         <form action="/submit-complaint" method="POST">
