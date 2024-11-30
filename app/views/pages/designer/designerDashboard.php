@@ -6,7 +6,6 @@
     <title>Brand Boost Dashboard</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
     <link rel="stylesheet" href="../../styles/designer/index.css">
-    <link rel="stylesheet" href="../../styles/influencer/orderTable.css">
 
     <style>
         .cards {

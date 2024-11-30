@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
-    <link rel="stylesheet" href="../../styles/influencer/orderTable.css">
-    <link rel="stylesheet" href="../../styles/influencer/AllOrders.css">
+    <link rel="stylesheet" href="../../styles/designer/index.css">
 
 </head>
 
@@ -17,16 +16,20 @@
 
         <div class="content">
             <div class="main-content">
-                <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
-                <div class="container">
+                <div class="order-container">
                     <h1>Customer Orders</h1>
                     <div class="search-box">
                         <input type="text" placeholder="Search by Order ID or Username">
                     </div>
                 </div>
 
-    <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
+                <?php include __DIR__ . '/../../components/designer/orderTable.php'; ?>
+            </div>
+        </div>
+    </div>
+
+    
     <script src="../scripts/common/header.js"></script>
 </body>
 
