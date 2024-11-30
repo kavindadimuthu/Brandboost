@@ -18,9 +18,6 @@
             <label for="description">Description</label>
             <textarea id="description" name="description" placeholder="Write a brief description of your portfolio" rows="5" required></textarea>
 
-            <label for="skills">Skills</label>
-            <input type="text" id="skills" name="skills" placeholder="E.g., Graphic Design, Photoshop, etc." required>
-
             <!-- Cover Image Upload -->
             <label for="cover_image">Upload Cover Image</label>
             <input type="file" id="cover_image" name="cover_image" accept=".png, .jpg, .jpeg" required>

@@ -115,7 +115,6 @@ class DesignerDataController extends Controller {
             $portfolioData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
-                'skills' => $_POST['skills']
             ];
     
             $uploadDir = 'uploads/designer/portfolio/'; // Adjust path as needed
@@ -191,20 +190,108 @@ class DesignerDataController extends Controller {
     
             // Fetch portfolio data by user_id
             $portfolio = $portfolioModel->getPortfolioByUserId($userId);
+            
+            // Set the content type to JSON
+            header('Content-Type: application/json');
     
             // Check if a portfolio exists for the user
-            if ($portfolio) {
-                $this->view('DesignerViewController/viewMyPortfolio', ['portfolio' => $portfolio]);
-                var_dump($portfolio);
+            if ($portfolio !== false) { // Check if fetching was successful
+                echo json_encode($portfolio);
             } else {
-                echo "No portfolio found for the current user.";
+                echo json_encode(['status' => 'error', 'message' => 'No portfolio found.']);
             }
         } else {
-            echo "Unauthorized access.";
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
         }
     }
     
+
+    public function updatePortfolio() {
+        // Check if the user is logged in
+        if (isset($_SESSION['user_id'])) {
+            // Check if the form is submitted
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Get data from the form with default values for missing fields
+                $userId = $_POST['user_id'] ?? null;
+                $title = $_POST['title'] ?? '';
+                $description = $_POST['description'] ?? '';
+                
+                // Handle file uploads with default values for missing files
+                $coverImage = $_FILES['cover_image']['name'] ?? null;
+                $firstImage = $_FILES['first_image']['name'] ?? null;
+                $secondImage = $_FILES['second_image']['name'] ?? null;
+                $thirdImage = $_FILES['third_image']['name'] ?? null;
+                $fourthImage = $_FILES['fourth_image']['name'] ?? null;
     
+                // Upload files if they exist
+                $uploadDir = 'uploads/designer/portfolio/';
+                $uploadedCoverImage = $this->uploadFile($_FILES['cover_image'], $uploadDir);
+                $uploadedFirstImage = $this->uploadFile($_FILES['first_image'], $uploadDir);
+                $uploadedSecondImage = $this->uploadFile($_FILES['second_image'], $uploadDir);
+                $uploadedThirdImage = $this->uploadFile($_FILES['third_image'], $uploadDir);
+                $uploadedFourthImage = $this->uploadFile($_FILES['fourth_image'], $uploadDir);
+    
+                // Load the model
+                $this->model('PortfolioModel');
+                $portfolioModel = new PortfolioModel();
+    
+                // Update the portfolio
+                $result = $portfolioModel->updatePortfolio(
+                    $userId,
+                    $title,
+                    $description,
+                    $uploadedCoverImage,
+                    $uploadedFirstImage,
+                    $uploadedSecondImage,
+                    $uploadedThirdImage,
+                    $uploadedFourthImage
+                );
+
+                var_dump($result);
+    
+                // Check if the update was successful
+                if ($result) {
+                    echo json_encode(['status' => 'success', 'message' => 'Portfolio updated successfully.']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to update portfolio.']);
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+    }
+    
+    /**
+     * Handles file uploads.
+     */
+    private function uploadFile($file, $uploadDir) {
+        if ($file && isset($file['tmp_name']) && $file['error'] === UPLOAD_ERR_OK) {
+            $filePath = $uploadDir . basename($file['name']);
+            if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                return $filePath;
+            }
+        }
+        return null;
+    }
+    
+
+    public function deletePortfolio() {
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+    
+            $portfolioModel = $this->model('PortfolioModel');
+    
+            $result = $portfolioModel->deletePortfolioByUserId( $userId);
+    
+            echo json_encode($result);
+            exit;
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+       
+    }    
 
 }
 
