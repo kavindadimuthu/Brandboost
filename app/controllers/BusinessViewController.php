@@ -33,17 +33,17 @@ class BusinessViewController extends Controller {
     public function viewDesigners(){
         $this->view('pages/business/ViewDesigners');
     }
-    public function viewInfluencerPackages(){
-        $this->view('pages/business/ViewInfluencerPackages');
+    public function viewInfluencerPromotions(){
+        $this->view('pages/business/ViewInfluencerPromotions');
     }
-    public function viewDesignerPackages(){
-        $this->view('pages/business/ViewDesignerPackages');
+    public function viewDesignerGigs(){
+        $this->view('pages/business/ViewDesignerGigs');
     }
     public function influencerPackageInside(){
         $this->view('pages/business/InfluencerPackageInside');
     }
-    public function designerPackageInside(){
-        $this->view('pages/business/DesignerPackageInside');
+    public function designerGigInside(){
+        $this->view('pages/business/DesignerGigInside');
     }
     public function influencerProfile(){
         $this->view('pages/business/InfluencerProfile');
@@ -57,5 +57,12 @@ class BusinessViewController extends Controller {
 
     public function register(){
         $this->view('pages/register/businessOwner');
+    }
+
+
+
+
+    public function serviceCard() {
+        $this->view('components/common/serviceCard');
     }
 }
