@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +12,21 @@
 
 
 </head>
-<body>
-    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
 
-    
+<body>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
+
     <div class="container">
         <div class="title">
             <h1>Promotions</h1>
         </div>
 
         <div class="button">
-            <a href="http://localhost:8000/InfluencerViewController/createpackage"><button class="packages-button">New Promotion</button></a>
+            <a href="http://localhost:8000/InfluencerViewController/createpackage"><button class="packages-button">New
+                    Promotion</button></a>
         </div>
-       
+
     </div>
 
     <div class="orders-container">
@@ -43,53 +46,53 @@
             </thead>
             <tbody id="ordersTableBody">
                 <!-- Gigs will be displayed here -->
-            <script>
+                <script>
 
-                document.addEventListener('DOMContentLoaded', async () => {
-                    try {
-                        const response = await fetch('/influencerDataController/influencerPromotions');
-                        const gigs = await response.json();
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        try {
+                            const response = await fetch('/influencerDataController/influencerPromotions');
+                            const gigs = await response.json();
 
-                        console.log(gigs);
+                            console.log(gigs);
 
-                        const tableBody = document.getElementById('ordersTableBody');
-                        tableBody.innerHTML = ''; // Clear existing table content
+                            const tableBody = document.getElementById('ordersTableBody');
+                            tableBody.innerHTML = ''; // Clear existing table content
 
-                        if (gigs.length > 0) {
-                            gigs.forEach(gig => {
-                                // Ensure packages are present and handle package data correctly
-                                const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-                                const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
+                            if (gigs.length > 0) {
+                                gigs.forEach(gig => {
+                                    // Ensure packages are present and handle package data correctly
+                                    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+                                    const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
 
-                                const row = document.createElement('tr');
+                                    const row = document.createElement('tr');
 
-                                // Dynamically populate the table row
-                                row.innerHTML = `
+                                    // Dynamically populate the table row
+                                    row.innerHTML = `
                                     <td>${gig.title}</td>
                                     <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
                                     <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                                     <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
                                     <td>
-                                        <button onclick="editPromotion(${gig.gig_id})" class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button onclick="window.location.href='/InfluencerViewController/updatePromotion/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
                                         <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
                                     </td>
                                 `;
 
-                                // Append the new row to the table
+                                    // Append the new row to the table
+                                    tableBody.appendChild(row);
+                                });
+                            } else {
+                                // If no gigs are found, show a message
+                                const row = document.createElement('tr');
+                                row.innerHTML = '<td colspan="5">No gigs found.</td>';
                                 tableBody.appendChild(row);
-                            });
-                        } else {
-                            // If no gigs are found, show a message
-                            const row = document.createElement('tr');
-                            row.innerHTML = '<td colspan="5">No gigs found.</td>';
-                            tableBody.appendChild(row);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching gigs:', error);
                         }
-                    } catch (error) {
-                        console.error('Error fetching gigs:', error);
-                    }
-                });
+                    });
 
-            </script>
+                </script>
             </tbody>
         </table>
     </div>
@@ -109,25 +112,25 @@
         function confirmDelete(gigId) {
             selectedGigId = gigId;
             console.log('Selected Gig ID:', selectedGigId);
-            
+
             document.getElementById('deleteModal').style.display = 'block';
         }
 
         async function deletePromotion() {
             if (selectedGigId !== null) {
                 console.log('Deleting Gig ID:', selectedGigId);
-                
+
                 try {
-                    const response = await fetch(`/InfluencerDataController/deletePromotion/${selectedGigId}`, { 
-                        method: 'DELETE', 
-                        headers: { 
-                            'Content-Type': 'application/json' 
+                    const response = await fetch(`/InfluencerDataController/deletePromotion/${selectedGigId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
                         },
                         // Pass the user_id in the request if needed for extra validation
-                        body: JSON.stringify({ user_id: '<?php echo $_SESSION['user_id']; ?>' }) 
+                        body: JSON.stringify({ user_id: '<?php echo $_SESSION['user_id']; ?>' })
                     });
                     console.log('Server Response:', response); // Log server response for debugging
-                    
+
                     const result = await response.json();
                     console.log('Server Response:', result); // Log server response for debugging
 
@@ -148,10 +151,11 @@
 
         document.getElementById('confirmDelete').addEventListener('click', deletePromotion);
         document.getElementById('cancelDelete').addEventListener('click', () => {
-        document.getElementById('deleteModal').style.display = 'none';
-        selectedGigId = null;
+            document.getElementById('deleteModal').style.display = 'none';
+            selectedGigId = null;
         });
     </script>
-          
+
 </body>
+
 </html>
