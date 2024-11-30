@@ -1,6 +1,6 @@
 <?php
 
-class homeDataController extends Controller {
+class HomeDataController extends Controller {
     public function fetchAllFaqs() {
         $faqModel = $this->model('FaqModel');
         $faqs = $faqModel->getAllFaqs();

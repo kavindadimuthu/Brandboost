@@ -8,6 +8,9 @@ class HomeController extends Controller {
     public function login(){
         $this->view('pages/common/login');
     }
+    public function loginAdmin(){
+        $this->view('pages/common/loginAdmin');
+    }
 
     //Registration
     public function register(){

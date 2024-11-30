@@ -226,9 +226,7 @@
       </div>
       <div class="user-info">
        <img alt="User profile picture" height="30" src="https://storage.googleapis.com/a1aa/image/KlcBuWUpSiLmMZqP2TGrGEl8xXb3RAhKMcaJi0gy4XCuie6JA.jpg" width="30"/>
-       <span>
-        John Doe
-       </span>
+       <span><?php echo $_SESSION['user_name']; ?></span>
       </div>
      </div>
      <h2>

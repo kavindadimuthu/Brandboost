@@ -2,10 +2,9 @@
 class AdminViewController extends Controller {
 
     public function __construct() {
-        // session_start();
-        // if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-        //     header('location: /');
-        // }
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+            header('location: /');
+        }
     }
     public function adminDashboard() {
         $this->view('pages/admin/adminDashboard');

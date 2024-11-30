@@ -1,13 +1,15 @@
 <html>
+
 <head>
     <title>Complain Details</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/admin/index.css">
     <link rel="stylesheet" href="../styles/admin/tableViewContainer.css">
     <link rel="stylesheet" href="../styles/admin/singlecomplaint.css">
 
-    
+
 </head>
+
 <body>
     <div class="container">
         <?php include __DIR__ . '/../../components/admin/sideNavbar.php'; ?>
@@ -18,8 +20,10 @@
                         Sisyphus Ventures &gt; Complains &gt; Complain Details
                     </div>
                     <div class="user-info">
-                        <img alt="User profile picture" height="30" src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg" width="30"/>
-                        <span>Florence Shaw</span>
+                        <img alt="User profile picture" height="30"
+                            src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg"
+                            width="30" />
+                        <span><?php echo $_SESSION['user_name']; ?></span>
                     </div>
                 </div>
                 <h2>Complain Details</h2>
@@ -43,13 +47,19 @@
                         <span>Date Submitted:</span> Mar 4, 2024
                     </div>
                     <div>
-                        <span>Details:</span> The user reported that they were unable to access their account due to a password reset issue. The issue was resolved by resetting the password manually and providing the user with the new credentials.
+                        <span>Details:</span> The user reported that they were unable to access their account due to a
+                        password reset issue. The issue was resolved by resetting the password manually and providing
+                        the user with the new credentials.
                     </div>
                 </div>
                 <div class="attachments">
                     <h3>Attachments</h3>
-                    <img alt="Screenshot of error message encountered by the user" height="100" src="https://storage.googleapis.com/a1aa/image/9KrQWb039zb2PF5fAZBDBYErnZ4GjCI2XdL6VkIaBxeDpn1TA.jpg" width="100"/>
-                    <img alt="Screenshot of account settings page" height="100" src="https://storage.googleapis.com/a1aa/image/fsj0POoE9nQ7G6dtaCEzKUG2QNeE8crCBzfWfRlLKQALkeseE.jpg" width="100"/>
+                    <img alt="Screenshot of error message encountered by the user" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/9KrQWb039zb2PF5fAZBDBYErnZ4GjCI2XdL6VkIaBxeDpn1TA.jpg"
+                        width="100" />
+                    <img alt="Screenshot of account settings page" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/fsj0POoE9nQ7G6dtaCEzKUG2QNeE8crCBzfWfRlLKQALkeseE.jpg"
+                        width="100" />
                 </div>
                 <div class="response">
                     <h3>Response</h3>
@@ -77,4 +87,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -20,9 +20,7 @@
                         <img alt="User profile picture" height="30"
                             src="https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
                             width="30" />
-                        <span>
-                            Florence Shaw
-                        </span>
+                        <span><?php echo $_SESSION['user_name']; ?></span>
                     </div>
                 </div>
                 <h2>User management</h2>

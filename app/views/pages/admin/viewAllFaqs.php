@@ -97,7 +97,7 @@
                         <img alt="User profile picture" height="30"
                             src="https://storage.googleapis.com/a1aa/image/accd3Q73BfxYLyedAXnbEeUBI1YcvUCb3YA9Sd4Dqq46AqrnA.jpg"
                             width="30" />
-                        <span>Florence Shaw</span>
+                        <span><?php echo $_SESSION['user_name']; ?></span>
                     </div>
                 </div>
                 <h2>FAQs Management</h2>

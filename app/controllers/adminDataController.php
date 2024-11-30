@@ -1,7 +1,13 @@
 <?php
 
-class adminDataController extends Controller
+class AdminDataController extends Controller
 {
+    public function __construct() {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+            header('location: /');
+        }
+    }
+
     public function addFaq()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
