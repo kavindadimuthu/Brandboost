@@ -3,7 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../../../public/styles/influencer/orderTable.css">
+  <style>
+    /* General container styles */
+  
+
+        .orders-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1000px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        /* Table styles */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        /* Table header styles */
+        .orders-table thead {
+            /* background-color: #007bff; */
+            /* color: #fff; */
+        }
+
+        .orders-table th {
+            padding: 12px 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        /* Table body styles */
+        .orders-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+
+        /* Zebra striping */
+        .orders-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect */
+        .orders-table tbody tr:hover {
+            background-color: #e9f5ff;
+            cursor: pointer;
+        }
+
+        /* Specific column styling */
+        .orders-table td:nth-child(6) {
+            font-weight: bold;
+            color: #28a745; /* Green for positive amounts */
+        }
+
+        .orders-table td:nth-child(6):contains("-") {
+            color: #dc3545; /* Red for negative amounts */
+        }
+
+        /* Responsive table */
+        @media (max-width: 768px) {
+            .orders-table {
+                font-size: 12px;
+            }
+
+            .orders-container {
+                padding: 15px;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
@@ -20,9 +95,11 @@
             <th>Amount</th>
         </tr>
     </thead>
+            <h2>Transaction History</h2>
             <tbody id="ordersTableBody">
-                <!-- Data will be loaded here dynamically -->
-            </tbody>
+                    <!-- Data will be loaded here dynamically -->
+                </tbody>
+            
         </table>
     </div>
 
