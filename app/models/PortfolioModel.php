@@ -48,15 +48,7 @@ class PortfolioModel {
         }
     }
 
-    public function getPortfolioById($portfolioId) {
-        $this->db->query("
-            SELECT * 
-            FROM designer_portfolio 
-            WHERE portfolio_id = :portfolio_id
-        ");
-        $this->db->bind(':portfolio_id', $portfolioId);
-        return $this->db->single();
-    }
+    
 
     public function updatePortfolio($userId, $title, $description, $coverImage, $firstImage, $secondImage, $thirdImage, $fourthImage) {
         try {
@@ -75,11 +67,11 @@ class PortfolioModel {
             // Bind parameters with validation to prevent SQL injection
             $this->db->bind(':title', $title);
             $this->db->bind(':description', $description);
-            $this->db->bind(':cover_image', $coverImage ?? null);
-            $this->db->bind(':first_image', $firstImage ?? null);
-            $this->db->bind(':second_image', $secondImage ?? null);
-            $this->db->bind(':third_image', $thirdImage ?? null);
-            $this->db->bind(':fourth_image', $fourthImage ?? null);
+            $this->db->bind(':cover_image', $coverImage !== null ? $coverImage : $existingPortfolio['cover_image']);
+            $this->db->bind(':first_image', $firstImage !== null ? $firstImage : $existingPortfolio['first_image']);
+            $this->db->bind(':second_image', $secondImage !== null ? $secondImage : $existingPortfolio['second_image']);
+            $this->db->bind(':third_image', $thirdImage !== null ? $thirdImage : $existingPortfolio['third_image']);
+            $this->db->bind(':fourth_image', $fourthImage !== null ? $fourthImage : $existingPortfolio['fourth_image']);
             $this->db->bind(':user_id', $userId);
     
             // Execute the query

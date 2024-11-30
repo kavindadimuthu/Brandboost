@@ -43,7 +43,6 @@
                 const imagesHTML = `
                     <h3>${escapeHtml(portfolio.title)}</h3>
                     <p class="description">${escapeHtml(portfolio.description)}</p>
-                    <p><strong>Skills:</strong> ${escapeHtml(portfolio.skills)}</p>
                     <div class="images">
                         <h4>Portfolio Images</h4>
                         <div class="image-gallery">

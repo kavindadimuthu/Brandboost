@@ -234,17 +234,27 @@ class DesignerDataController extends Controller {
                 // Load the model
                 $this->model('PortfolioModel');
                 $portfolioModel = new PortfolioModel();
-    
+
+                // Fetch the existing portfolio data
+                $existingPortfolio = $portfolioModel->getPortfolioByUserId($userId);
+
+                // Determine the final paths for images
+                $coverImagePath = $uploadedCoverImage ?? $existingPortfolio['cover_image'];
+                $firstImagePath = $uploadedFirstImage ?? $existingPortfolio['first_image'];
+                $secondImagePath = $uploadedSecondImage ?? $existingPortfolio['second_image'];
+                $thirdImagePath = $uploadedThirdImage ?? $existingPortfolio['third_image'];
+                $fourthImagePath = $uploadedFourthImage ?? $existingPortfolio['fourth_image'];
+                    
                 // Update the portfolio
                 $result = $portfolioModel->updatePortfolio(
                     $userId,
                     $title,
                     $description,
-                    $uploadedCoverImage,
-                    $uploadedFirstImage,
-                    $uploadedSecondImage,
-                    $uploadedThirdImage,
-                    $uploadedFourthImage
+                    $coverImagePath,
+                    $firstImagePath,
+                    $secondImagePath,
+                    $thirdImagePath,
+                    $fourthImagePath
                 );
 
                 var_dump($result);
@@ -267,6 +277,10 @@ class DesignerDataController extends Controller {
      * Handles file uploads.
      */
     private function uploadFile($file, $uploadDir) {
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true); // Create directory if not exists
+        }
+    
         if ($file && isset($file['tmp_name']) && $file['error'] === UPLOAD_ERR_OK) {
             $filePath = $uploadDir . basename($file['name']);
             if (move_uploaded_file($file['tmp_name'], $filePath)) {
@@ -275,6 +289,7 @@ class DesignerDataController extends Controller {
         }
         return null;
     }
+    
     
 
     public function deletePortfolio() {
