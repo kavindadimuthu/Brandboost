@@ -24,17 +24,17 @@ class AdminViewController extends Controller {
         $this->view('pages/admin/singleUserPackage');
     }
 
-    public function allCustomerComplaints() {
-        $this->view('pages/admin/allCustomerComplaints');
+    public function allComplaints() {
+        $this->view('pages/admin/allComplaints');
     }
-    public function singleCustomerComplaint() {
-        $this->view('pages/admin/singleCustomerComplaint');
+    public function singleComplaint() {
+        $this->view('pages/admin/singlecomplaint');
     }
-    public function allRegistrationRequests() {
-        $this->view('pages/admin/allRegistrationRequests');
+    public function allVerifications() {
+        $this->view('pages/admin/allVerifications');
     }
-    public function singleRegistrationRequest() {
-        $this->view('pages/admin/singleRegistrationRequest');
+    public function singleVerification() {
+        $this->view('pages/admin/singleVerification');
     }
 
 

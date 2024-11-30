@@ -60,7 +60,7 @@
                                 echo $_SESSION['user_name'];
                             ?>
                         </span></li>
-                        <li><a href="http://localhost:8000/InfluencerViewController/profile">Profile</a></li>
+                        <li><a href="http://localhost:8000/<?php echo $_SESSION['role']?>ViewController/profile">Profile</a></li>
                         <li><a href="http://localhost:8000/LoginController/logout">Logout</a></li>
                     </ul>
                 </div>
