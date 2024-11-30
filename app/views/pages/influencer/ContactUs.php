@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
     <link rel="stylesheet" href="../../styles/influencer/ContactUs.css">
     <link rel="stylesheet" href="../../styles/common/header.css">
 </head>
+
 <body>
-<?php include __DIR__ . '/../../components/common/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
     <div class="container">
         <h1>Contact Us</h1>
         <form action="/submit-complaint" method="POST">
@@ -43,4 +45,5 @@
         </div>
     </div>
 </body>
+
 </html>

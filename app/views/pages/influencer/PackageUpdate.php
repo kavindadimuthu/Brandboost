@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,8 @@
             display: block;
         }
 
-        input, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 8px;
             margin: 8px 0;
@@ -82,8 +84,9 @@
         }
     </style>
 </head>
+
 <body>
-<?php include __DIR__ . '/../../components/common/header.php'; ?>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
     <div class="edit-form-container">
         <h2>Edit Package</h2>
 
@@ -139,7 +142,7 @@
     </div>
 
     <script>
-    // Function to fetch and populate gig details
+        // Function to fetch and populate gig details
         document.addEventListener('DOMContentLoaded', () => {
             fetchGigDetails();
         });
@@ -252,4 +255,5 @@
         });
 
     </script>
+
 </html>

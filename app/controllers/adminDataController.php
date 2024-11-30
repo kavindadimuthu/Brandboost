@@ -1,7 +1,13 @@
 <?php
 
-class adminDataController extends Controller
+class AdminDataController extends Controller
 {
+    public function __construct() {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+            header('location: /');
+        }
+    }
+
     public function addFaq()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,7 +28,7 @@ class adminDataController extends Controller
 
     public function updateFaq($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             $data = json_decode(file_get_contents('php://input'), true);
             $faqModel = $this->model('FaqModel');
             $result = $faqModel->updateFaq([
@@ -30,12 +36,14 @@ class adminDataController extends Controller
                 'question' => $data['question'],
                 'answer' => $data['answer']
             ]);
+            header('Content-Type: application/json');
             if ($result) {
                 echo json_encode(['success' => true]);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Error updating faq']);
+                echo json_encode(['success' => false, 'message' => 'Error updating FAQ']);
             }
         } else {
+            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'message' => 'Invalid request method']);
         }
     }
@@ -44,10 +52,11 @@ class adminDataController extends Controller
     {
         $faqModel = $this->model('FaqModel');
         $result = $faqModel->deleteFaq($id);
+        header('Content-Type: application/json');
         if ($result) {
-            header('location: /AdminViewController/viewAllFaqs');
+            echo json_encode(['success' => true, 'message' => 'FAQ deleted successfully']);
         } else {
-            echo 'Error deleting faq';
+            echo json_encode(['success' => false, 'message' => 'Error deleting FAQ']);
         }
     }
 }

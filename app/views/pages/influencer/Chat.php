@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
     <link rel="stylesheet" href="../../styles/influencer/chat.css">
 
 </head>
+
 <body>
-    <link rel="stylesheet" href="../../styles/common/header.css">
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
     <div class="container">
  
@@ -267,4 +269,5 @@
   </div>
      </div>
 </body>
+
 </html>

@@ -47,7 +47,7 @@ class LoginController extends Controller
                     default:
                         echo "Unknown role. Unable to navigate.";
                         break;
-                    }
+                }
                 exit();
             } else {
                 echo "Invalid email or password.";
@@ -57,11 +57,51 @@ class LoginController extends Controller
         }
     }
 
+    public function loginAdmin()
+    {
+        // Check if the request method is POST
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Get the email and password from the request body
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+
+            // Validate input data
+            if (empty($email) || empty($password)) {
+                echo "Email and password are required.";
+                exit();
+            }
+
+            // Query the database to find the user with the given email
+            $this->model('UserModel');
+            $userModel = new UserModel();
+            $user = $userModel->getAdminByEmail($email);
+            
+
+            // Check if the user exists and the password is correct
+            if ($user && ($password === $user->password)) {
+                // Set session variables
+                $_SESSION['logged_in'] = true;
+                $_SESSION['user_id'] = $user->admin_id;
+                $_SESSION['user_name'] = $user->first_name;
+                $_SESSION['user_email'] = $user->email;
+                $_SESSION['role'] = 'admin';
+                // Redirect to the admin dashboard
+                header('Location: /adminviewcontroller/admindashboard');
+                exit();
+            } else
+                {
+                    echo "<script>alert('Invalid email or password.');</script>";
+                    echo "<script>window.location.href = '/homecontroller/loginAdmin';</script>";
+                }
+        }
+
+    }
+
     public function logout()
     {
         // session_start();
         session_destroy();
-        header('Location: /');
+        header('Location: /homecontroller/login');
         exit();
     }
 }
