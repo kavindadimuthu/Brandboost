@@ -22,6 +22,8 @@
             background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
             color: #fff;
             padding: 14px 30px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -146,7 +148,7 @@
                         echo '
                         <a href="http://localhost:8000/InfluencerViewController/influencerDashboard">Dashboard</a>
                         <a href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a>
-                        <a href="http://localhost:8000/InfluencerViewController/influencerPromotions">Promotions</a>
+                        <a href="http://localhost:8000/InfluencerViewController/influencerPackages">Promotions</a>
                         <a href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a>
                         <a href="http://localhost:8000/InfluencerViewController/viewAllFaqs">FAQ</a>
                         ';

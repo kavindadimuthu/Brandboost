@@ -73,6 +73,7 @@
 
         .orders-table tr:hover td {
             color: #007bff; /* Blue text color on row hover */
+            cursor: pointer;
         }
 
         .action-btn {
