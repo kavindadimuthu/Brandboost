@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="main-image">
-                <img src="https://via.placeholder.com/800x400" alt="Social Media Icons">
+                <img src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/400367980/original/794c2acd1eb2284c79ae57461604e57792270619/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png" alt="Social Media Icons">
             </div>
             <div class="thumbnail-grid" id="thumbnailGrid">
                 <!-- Thumbnails will be rendered here -->

@@ -1,9 +1,9 @@
 const thumbnails = [
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150'
+    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/400367980/original/794c2acd1eb2284c79ae57461604e57792270619/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
+    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs3/400367980/original/4c66d4320573d0f5f51b7c9b2300c6808e78d16d/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
+    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs2/400367980/original/6769585035395452a495f7dadfec0ed778def274/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
+    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/274737734/original/638aeb871506eb6b722c6aaaa3dd39ff12ea5dec/design-stunning-professional-flyer-for-your-business.png',
+    'https://fiverr-res.cloudinary.com/images/t_smartwm/t_gig_pdf_gallery_view_ver4,q_auto,f_auto/v1/attachments/delivery/asset/7df0a8dd5c370b5ac5281904d778b8f7-1622151870/flyer%20page%201%20view%20only/create-a-stunning-poster-or-flyer.pdf'
 ];
 
 const categories = [
