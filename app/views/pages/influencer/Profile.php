@@ -1,385 +1,452 @@
-<html>
- <head>
-  <title>
-   Profile Page
-  </title>
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/> -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/> -->
-  <link rel="stylesheet" href="../../styles/designer/index.css">
-    <link rel="stylesheet" href="../../styles/common/header.css">
-  <style>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Amara Perera - Travel &amp; Lifestyle
+    </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f7fafc;
+            font-family: 'Inter', sans-serif;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            margin-top: 3rem;
+            padding: 1.5rem;
+        }
 
-        .profile-header {
-            position: relative;
-            background-color: white;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .bg-white {
+            background-color: #ffffff;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .overflow-hidden {
             overflow: hidden;
         }
-        .cover-photo {
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .w-full {
             width: 100%;
-            height: 200px;
+        }
+
+        .h-52 {
+            height: 13rem;
+        }
+
+        .object-cover {
             object-fit: cover;
         }
-        .profile-header-content {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            position: relative;
+
+        .w-24 {
+            width: 6rem;
         }
-        .profile-picture{
-            position: relative;
-            top: -50px;
+
+        .h-24 {
+            height: 6rem;
         }
-        .profile-header-content img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            margin-right: 20px;
-            border: 5px solid white;
+
+        .rounded-full {
+            border-radius: 9999px;
         }
-        .profile-header-content .info {
-            flex-grow: 1;
-            /* margin-top: -30px; */
+
+        .border-4 {
+            border-width: 4px;
         }
-        .profile-header-content .info h1 {
-            margin: 0;
-            font-size: 20px;
+
+        .border-white {
+            border-color: #ffffff;
         }
-        .profile-header-content .info p {
-            margin: 5px 0;
-            color: #666;
-            font-size: 14px;
+
+        .-mt-12 {
+            margin-top: -3rem;
         }
-        .profile-header-content .info .location {
-            display: flex;
-            align-items: center;
-            color: #666;
-            font-size: 14px;
+
+        .ml-6 {
+            margin-left: 1.5rem;
         }
-        .profile-header-content .info .location i {
-            margin-right: 5px;
+
+        .text-2xl {
+            font-size: 1.5rem;
         }
-        .profile-header-content .actions {
-            display: flex;
-            align-items: center;
+
+        .font-bold {
+            font-weight: 700;
         }
-        .profile-header-content .actions i {
-            margin: 0 10px;
-            cursor: pointer;
+
+        .text-gray-600 {
+            color: #718096;
         }
-        .platform-icons {
-            display: flex;
-            margin-top: 10px;
+
+        .text-lg {
+            font-size: 1.125rem;
         }
-        .platform-icons img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
+
+        .font-semibold {
+            font-weight: 600;
         }
-    
-        .content {
-            display: flex;
-            justify-content: space-between;
+
+        .text-indigo-700 {
+            color: #4c51bf;
         }
-        .content .main {
-            width: 68%;
-            /* background-color: white; */
-            border-radius: 10px;
-            /* padding: 20px; */
+
+        .mt-4 {
+            margin-top: 1rem;
         }
-        .content .sidebar {
-            width: 30%;
+
+        .mr-2 {
+            margin-right: 0.5rem;
         }
-        .content .sidebar .card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+
+        .mt-2 {
+            margin-top: 0.5rem;
         }
-        .content .sidebar .card h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #4b0082;
+
+        .text-indigo-600 {
+            color: #5a67d8;
         }
-        .content .sidebar .card .details p {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            color: #4b0082;
+
+        .space-x-4 {
+            margin-right: -1rem;
         }
-        .content .sidebar .card .details p i {
-            margin-right: 10px;
-            color: #666;
+
+        .space-x-4>* {
+            margin-right: 1rem;
         }
-        .content .sidebar .card .details p span {
-            color: #4b0082;
+
+        .text-gray-700 {
+            color: #4a5568;
         }
-        .content .main .section {
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-        .content .main .section h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #4b0082;
-        }
-        .content .main .section p {
-            font-size: 14px;
-            color: #333;
-        }
-        .content .main .ask-me-about {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .content .main .ask-me-about .tag {
-            background-color: #f5f7fb;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 5px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-        .content .main .ask-me-about .tag i {
-            margin-right: 10px;
-            color: #00c853;
-        }
-        .portfolio {
+
+        .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
         }
-        .portfolio .project {
-            background-color: white;
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .portfolio .project img {
-            width: 100%;
-            border-radius: 10px;
-        }
-        .portfolio .project h4 {
-            margin: 10px 0 5px;
-            font-size: 14px;
-            color: #4b0082;
-        }
-        .portfolio .project p {
-            font-size: 12px;
-            color: #666;
-        }
-  </style>
- </head>
- <body>
- <div class="container">
-        <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
-        <div class="content">
-            <div class="main-content">
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
 
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
 
-   <div class="profile-header">
-    <img alt="Cover Photo" class="cover-photo" src="../../assets/aboutBanner.jpg"/>
-    <div class="profile-header-content">
-     <img class="profile-picture" alt="Profile Picture" height="100" src="../../assets/images/success-stories-users/Avatar 108.png" width="100"/>
-     <div class="info">
-      <h1>
-       Assaf Rappaport
-      </h1>
-      <p>
-       VP of Customer Operations
-      </p>
-      <div class="location">
-       <i class="fas fa-map-marker-alt">
-       </i>
-       <span>
-        San Francisco, CA USA
-       </span>
-      </div>
-      <div class="platform-icons">
-       <img alt="Platform Icon 1" height="30" src="../../assets/fblogo.png" width="30"/>
-       <img alt="Platform Icon 2" height="30" src="../../assets/instalogo.png" width="30"/>
-       <img alt="Platform Icon 3" height="30" src="../../assets/images/youtubelogo.png" width="30"/>
-       <img alt="Platform Icon 4" height="30" src="../../assets/images/xlogo.png" width="30"/>
-      </div>
-     </div>
-     <div class="actions">
-      <i class="fas fa-edit">
-      </i>
-      <i class="fas fa-share-alt">
-      </i>
-      <i class="fas fa-ellipsis-h">
-      </i>
-     </div>
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .h-40 {
+            height: 10rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
+        }
+
+        .text-white {
+            color: #ffffff;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <img alt="Cover Photo of a beautiful beach in Sri Lanka" class="w-full h-52 object-cover" height="200"
+                src="https://storage.googleapis.com/a1aa/image/p4dDfhD4HegC40LZe1deD55cULPG2D6Cf24IdlogEEfcmZn9E.jpg"
+                width="1200" />
+            <div class="p-6 flex items-center">
+                <img alt="Profile Picture of Amara Perera" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
+                    height="100"
+                    src="https://storage.googleapis.com/a1aa/image/KXahWb7RSMKYJ5JSmXnFFGdjMPeX3fD1mOIW3AKOWgMamd2TA.jpg"
+                    width="100" />
+                <div class="ml-6">
+                    <h1 class="text-2xl font-bold">
+                        Amara Perera
+                    </h1>
+                    <p class="text-gray-600">
+                        Travel &amp; Lifestyle
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Bio Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Bio
+            </h3>
+            <p class="text-gray-700 mt-4">
+                Amara Perera is a renowned travel and lifestyle influencer from Sri Lanka. With over 5 years of
+                experience in the industry, she has a unique ability to capture the beauty of destinations and share her
+                experiences with her audience. Her content is a blend of stunning visuals and insightful travel tips.
+            </p>
+            <p class="text-gray-700 mt-2">
+                Location: Colombo, Sri Lanka
+            </p>
+        </div>
+        <!-- Contact Information -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Contact Information
+            </h3>
+            <div class="mt-4">
+                <p class="flex items-center text-gray-600">
+                    <i class="fas fa-envelope mr-2">
+                    </i>
+                    amara.perera@example.com
+                </p>
+                <p class="flex items-center text-gray-600 mt-2">
+                    <i class="fas fa-phone-alt mr-2">
+                    </i>
+                    +94123456789
+                </p>
+                <p class="flex items-center text-gray-600 mt-2">
+                    <i class="fas fa-globe mr-2">
+                    </i>
+                    <a class="text-indigo-600" href="https://amaraperera.com">
+                        https://amaraperera.com
+                    </a>
+                </p>
+                <div class="flex mt-4 space-x-4">
+                    <a class="text-gray-600" href="https://instagram.com/amara_perera">
+                        <i class="fab fa-instagram">
+                        </i>
+                    </a>
+                    <a class="text-gray-600" href="https://youtube.com/amaraperera">
+                        <i class="fab fa-youtube">
+                        </i>
+                    </a>
+                    <a class="text-gray-600" href="https://twitter.com/amara_perera">
+                        <i class="fab fa-twitter">
+                        </i>
+                    </a>
+                    <a class="text-gray-600" href="https://tiktok.com/@amara_perera">
+                        <i class="fab fa-tiktok">
+                        </i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Audience Insights -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Audience Insights
+            </h3>
+            <div class="mt-4">
+                <p class="text-gray-700">
+                    <strong>
+                        Followers:
+                    </strong>
+                    150,000
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Engagement Rate:
+                    </strong>
+                    7.5%
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Demographics:
+                    </strong>
+                    18-35 years, 60% Female, 40% Male, Majorly from Sri Lanka, India, and the Maldives
+                </p>
+            </div>
+        </div>
+        <!-- Content Highlights -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Content Highlights
+            </h3>
+            <div class="mt-4">
+                <h4 class="text-md font-semibold text-indigo-700">
+                    Recent Posts:
+                </h4>
+                <div class="mt-4">
+                    <h5 class="text-sm font-semibold text-gray-700">
+                        Post Title: Exploring the Hidden Gems of Sri Lanka
+                    </h5>
+                    <img alt="Post Image of a hidden gem in Sri Lanka" class="w-full h-40 object-cover rounded-lg mt-2"
+                        height="200"
+                        src="https://storage.googleapis.com/a1aa/image/WrClWMl8pJYzItS9jgentrAZ447XVfrUVmY7OxrDqAudmd2TA.jpg"
+                        width="300" />
+                    <p class="text-gray-600 text-sm mt-2">
+                        A detailed guide to some of the lesser-known but breathtaking locations in Sri Lanka.
+                    </p>
+                </div>
+                <div class="mt-4">
+                    <h5 class="text-sm font-semibold text-gray-700">
+                        Post Title: A Day in Colombo
+                    </h5>
+                    <img alt="Post Image of a day in Colombo" class="w-full h-40 object-cover rounded-lg mt-2"
+                        height="200"
+                        src="https://storage.googleapis.com/a1aa/image/62bX6M4faHR8GCL8c8WaLsFE9VBDM4ONWpEJ94SZrcMOzO7JA.jpg"
+                        width="300" />
+                    <p class="text-gray-600 text-sm mt-2">
+                        Experience the vibrant culture and bustling streets of Colombo through my lens.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Collaborations -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Collaborations
+            </h3>
+            <div class="mt-4">
+                <h4 class="text-md font-semibold text-indigo-700">
+                    Brands Worked With:
+                </h4>
+                <p class="text-gray-700 mt-2">
+                    Cinnamon Hotels &amp; Resorts
+                </p>
+                <p class="text-gray-700 mt-2">
+                    SriLankan Airlines
+                </p>
+                <p class="text-gray-700 mt-2">
+                    Spa Ceylon
+                </p>
+            </div>
+        </div>
+        <!-- Services Offered -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Services Offered
+            </h3>
+            <div class="mt-4">
+                <p class="text-gray-700">
+                    <strong>
+                        Service Name:
+                    </strong>
+                    Sponsored Posts
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Price:
+                    </strong>
+                    $200 - $500
+                </p>
+                <p class="text-gray-700 mt-4">
+                    <strong>
+                        Service Name:
+                    </strong>
+                    Brand Ambassadorship
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Price:
+                    </strong>
+                    $1000 - $3000
+                </p>
+                <p class="text-gray-700 mt-4">
+                    <strong>
+                        Service Name:
+                    </strong>
+                    Content Creation
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Price:
+                    </strong>
+                    $500 - $1500
+                </p>
+            </div>
+        </div>
+        <!-- Call to Action -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Call to Action
+            </h3>
+            <div class="mt-4 flex space-x-4">
+                <button class="gradient-bg text-white px-4 py-2 rounded-lg">
+                    Collaborate with Amara Perera
+                </button>
+                <button class="gradient-bg text-white px-4 py-2 rounded-lg">
+                    View Media Kit
+                </button>
+            </div>
+        </div>
+        <!-- Analytics -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-indigo-700">
+                Analytics
+            </h3>
+            <div class="mt-4">
+                <p class="text-gray-700">
+                    <strong>
+                        Total Collaborations:
+                    </strong>
+                    75
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Average Engagement per Post:
+                    </strong>
+                    10,000
+                </p>
+                <p class="text-gray-700 mt-2">
+                    <strong>
+                        Feedback Rating:
+                    </strong>
+                    4.8 out of 5
+                </p>
+            </div>
+        </div>
     </div>
-   </div>
-   
-   <div class="content">
-    <div class="main">
-     <div class="section" id="overview">
-      <h3>
-       Summary
-      </h3>
-      <p>
-       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-      <p>
-       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-      <p>
-       Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
-     </div>
-
-     <div class="section" id="posts">
-      <h3>
-       Posts
-      </h3>
-      <p>
-       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-      <p>
-       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-      <p>
-       Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
-     </div>
-
-
-     <div class="section" id="more">
-      <h3>
-       More
-      </h3>
-      <p>
-       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </p>
-      <p>
-       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-      <p>
-       Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
-     </div>
-     <div class="section" id="portfolio">
-      <h3>
-       Portfolio
-      </h3>
-      <div class="portfolio">
-       <div class="project">
-        <img alt="Project 1" height="100" src="" width="100"/>
-        <h4>
-         Project Title 1
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-       <div class="project">
-        <img alt="Project 2" height="100" src="" width="100"/>
-        <h4>
-         Project Title 2
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-       <div class="project">
-        <img alt="Project 3" height="100" src="" width="100"/>
-        <h4>
-         Project Title 3
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-       <div class="project">
-        <img alt="Project 4" height="100" src="" width="100"/>
-        <h4>
-         Project Title 4
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-       <div class="project">
-        <img alt="Project 5" height="100" src="" width="100"/>
-        <h4>
-         Project Title 5
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-       <div class="project">
-        <img alt="Project 6" height="100" src="" width="100"/>
-        <h4>
-         Project Title 6
-        </h4>
-        <p>
-         Description of the project goes here. It can be a brief summary of what the project is about.
-        </p>
-       </div>
-      </div>
-     </div>
-    </div>
-    <div class="sidebar">
-     <div class="card">
-      <h3>
-       Personal Details
-      </h3>
-      <div class="details">
-       <p>
-        <i class="fas fa-envelope">
-        </i>
-        <span>
-         influencer@example.com
-        </span>
-       </p>
-       <p>
-       <i class="fas fa-phone-alt"></i>
-        <span>
-         +1 (123) 456-7890
-        </span>
-       </p>
-       <p>
-        <i class="fas fa-birthday-cake"></i>
-        <span>
-         January 1, 1990
-        </span>
-       </p>
-      </div>
-     </div>
-     <div class="card">
-      <h3>
-       Skills
-      </h3>
-      <div class="details">
-       <p>
-        <i class="fas fa-check"></i>
-        <span>Graphic Design</span>
-       </p>
-       <p>
-        <i class="fas fa-check"></i>
-        <span>Social Media Marketing</span>
-       </p>
-       <p>
-        <i class="fas fa-check"></i>
-        <span>Content Creation</span>
-       </p>
-      </div>
-     </div>
-    </div>
-   </div>
-  </div>
- </div>
-
-</div>
 </body>
+
 </html>

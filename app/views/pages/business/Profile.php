@@ -1,103 +1,295 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../styles/commons/header.css">
-    <link rel="stylesheet" href="../../styles/business-owner/Profile.css">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Business Profile View</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f7fafc;
+      font-family: 'Inter', sans-serif;
+    }
 
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      margin-top: 3rem;
+      padding: 1.5rem;
+    }
+
+    .bg-white {
+      background-color: #ffffff;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .shadow-lg {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-52 {
+      height: 13rem;
+    }
+
+    .object-cover {
+      object-fit: cover;
+    }
+
+    .w-24 {
+      width: 6rem;
+    }
+
+    .h-24 {
+      height: 6rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .border-4 {
+      border-width: 4px;
+    }
+
+    .border-white {
+      border-color: #ffffff;
+    }
+
+    .-mt-12 {
+      margin-top: -3rem;
+    }
+
+    .ml-6 {
+      margin-left: 1.5rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .text-gray-600 {
+      color: #718096;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .text-indigo-700 {
+      color: #4c51bf;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .mr-2 {
+      margin-right: 0.5rem;
+    }
+
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    .text-indigo-600 {
+      color: #5a67d8;
+    }
+
+    .space-x-4 {
+      margin-right: -1rem;
+    }
+
+    .space-x-4>* {
+      margin-right: 1rem;
+    }
+
+    .text-gray-700 {
+      color: #4a5568;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .lg\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .h-40 {
+      height: 10rem;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
+    }
+
+    .text-white {
+      color: #ffffff;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .py-2 {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+  </style>
 </head>
+
 <body>
-    <?php include __DIR__ . '/../../components/common/header.php'; ?>
-
-    <div class="profile-container">
-    <h2>Profile</h2>
-    <div class="profile-card">
-      <div class="profile-header">
-        <img src="../../assets/user_logo.png" alt="Profile Picture" class="profile-picture">
-        <div class="profile-details">
-          <h3>ABC Solutions</h3>
-          <p>@abcsolutions2011</p>
+  <?php include __DIR__ . '/../../components/common/header.php'; ?>
+  <div class="container">
+    <!-- Profile Header -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+      <img alt="Cover Photo" class="w-full h-52 object-cover"
+        src="https://storage.googleapis.com/a1aa/image/28EeM6YK3QTeSEYHMLCCHdjPfJfE6i7HFbbhDcKSh3yiEwZPB.jpg" />
+      <div class="p-6 flex items-center">
+        <img alt="Business Logo" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
+          src="https://storage.googleapis.com/a1aa/image/nlshiA8AmxaAGtXzi0iEoo1NG7fkf4vtS5fSTkeblFSJ8wZPB.jpg" />
+        <div class="ml-6">
+          <h1 class="text-2xl font-bold">Business Name</h1>
+          <p class="text-gray-600">Brief Description</p>
         </div>
-        <button id="editButton" class="edit-icon">
-          <i>&#9998;</i>
-        </button>
       </div>
-      <form id="profileForm">
-  <div class="form-row">
-    <label for="businessname">Business Name</label>
-    <input type="text" id="businessname" value="Ariana Grande">
-  </div>
-  <div class="form-row">
-    <label for="email">Business Email</label>
-    <input type="email" id="email" value="ariana38@gmail.com">
-  </div>
-  <div class="form-row">
-    <label for="phoneNumber">Phone Number</label>
-    <input type="tel" id="phoneNumber" value="0770009999">
-  </div>
-  <div class="form-row">
-    <label for="facebookLink">Facebook Link</label>
-    <input type="url" id="facebookLink" value="facebook.com/ariana38">
-  </div>
-  <div class="form-row">
-    <label for="youtubeLink">YouTube Link</label>
-    <input type="url" id="youtubeLink" value="youtube.com/ariana38">
-  </div>
-  <div class="buttons">
-  <button type="submit" id="saveButton">Save</button>
-  <button id="previewButton" class="preview-button">
-          Preveiw BrandBoost Profile
-        </button>
-  </div>
-</form>
-
+    </div>
+    <!-- Contact Information -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h3 class="text-lg font-semibold text-indigo-700">Contact Information</h3>
+      <div class="mt-4">
+        <p class="flex items-center text-gray-600">
+          <i class="fas fa-envelope mr-2"></i>
+          business@example.com
+        </p>
+        <p class="flex items-center text-gray-600 mt-2">
+          <i class="fas fa-phone-alt mr-2"></i>
+          +1234567890
+        </p>
+        <p class="flex items-center text-gray-600 mt-2">
+          <i class="fas fa-globe mr-2"></i>
+          <a class="text-indigo-600" href="https://businesswebsite.com">https://businesswebsite.com</a>
+        </p>
+        <div class="flex mt-4 space-x-4">
+          <a class="text-gray-600" href="https://linkedin.com/in/business">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a class="text-gray-600" href="https://facebook.com/business">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a class="text-gray-600" href="https://instagram.com/business">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Business Overview -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h3 class="text-lg font-semibold text-indigo-700">Business Overview</h3>
+      <p class="text-gray-700 mt-4">Detailed Description of Services Offered</p>
+      <p class="text-gray-700 mt-2">Industry Type</p>
+      <p class="text-gray-700 mt-2">City, State, Country</p>
+    </div>
+    <!-- Portfolio Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h3 class="text-lg font-semibold text-indigo-700">Portfolio</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div class="bg-white rounded-lg shadow-lg p-4">
+          <img alt="Work Sample 1" class="w-full h-40 object-cover rounded-lg"
+            src="https://storage.googleapis.com/a1aa/image/Wwpy5K437JalANMpYCnJW6fgR15RfLBuAQagUCgFSTufd4snA.jpg" />
+          <p class="text-gray-600 text-sm mt-2">Description of Work</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-4">
+          <img alt="Work Sample 2" class="w-full h-40 object-cover rounded-lg"
+            src="https://storage.googleapis.com/a1aa/image/r4p4WRK0k5qEGFbk2C3AgMC313tjPKLHsj0uGBy5QFnvDn9E.jpg" />
+          <p class="text-gray-600 text-sm mt-2">Description of Work</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-4">
+          <img alt="Work Sample 3" class="w-full h-40 object-cover rounded-lg"
+            src="https://storage.googleapis.com/a1aa/image/Qxtlbz1H2VIzBhfyJCMMyRCLYtsyJElAMzQPO7mkVgYgHO7JA.jpg" />
+          <p class="text-gray-600 text-sm mt-2">Description of Work</p>
+        </div>
+      </div>
+    </div>
+    <!-- Call to Action -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h3 class="text-lg font-semibold text-indigo-700">Get in Touch</h3>
+      <div class="mt-4 flex space-x-4">
+        <button class="gradient-bg text-white px-4 py-2 rounded-lg">Contact for Collaboration</button>
+        <button class="gradient-bg text-white px-4 py-2 rounded-lg">Request a Quote</button>
+      </div>
+    </div>
+    <!-- Analytics Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h3 class="text-lg font-semibold text-indigo-700">Analytics</h3>
+      <div class="mt-4">
+        <p class="text-gray-700"><strong>Number of Collaborations:</strong> 50</p>
+        <p class="text-gray-700 mt-2"><strong>Average Rating:</strong> 4.5</p>
+        <p class="text-gray-700 mt-2"><strong>Number of Reviews:</strong> 30</p>
+      </div>
     </div>
   </div>
-
-  <script>
-
-document.getElementById("previewButton").addEventListener("click", () => {
-  window.location.href = "http://localhost:8000/BusinessViewController/businesspreviewprofile";
-});
-
-
-// Handle form submission
-document.getElementById("profileForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  // Gather form data
-  const profileData = {
-    fullName: document.getElementById("businessname").value,
-    email: document.getElementById("email").value,
-    // phoneNumber: document.getElementById("phoneNumber").value,
-    facebookLink: document.getElementById("facebookLink").value,
-    youtubeLink: document.getElementById("youtubeLink").value,
-  };
-
-  try {
-    // Simulate a database call (replace this with your backend API endpoint)
-    const response = await fetch("http://localhost:8000/api/updateProfile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profileData),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      alert("Profile updated successfully!");
-    } else {
-      alert("Failed to update profile.");
-    }
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    alert("An error occurred while updating the profile.");
-  }
-});
-
-  </script>
 </body>
+
 </html>

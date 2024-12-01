@@ -138,8 +138,9 @@
                     if(isset($_SESSION['role']) && $_SESSION['role'] == 'businessman'){
                         echo '
                         <a href="http://localhost:8000/BusinessViewController/viewInfluencerPromotions">Promotions</a>
-                        <a href="http://localhost:8000/BusinessViewController/viewDesignerGigs">Desigs</a>
+                        <a href="http://localhost:8000/BusinessViewController/viewDesignerGigs">Designs</a>
                         <a href="http://localhost:8000/BusinessViewController/myOrders">Orders</a>
+                        <a href="http://localhost:8000/HomeViewController/Faq">FAQs</a>
                         ';
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'influencer'){
@@ -148,7 +149,6 @@
                         <a href="http://localhost:8000/InfluencerViewController/AllOrders">Orders</a>
                         <a href="http://localhost:8000/InfluencerViewController/influencerPackages">Promotions</a>
                         <a href="http://localhost:8000/InfluencerViewController/earnings">Earnings</a>
-                        <a href="http://localhost:8000/InfluencerViewController/viewAllFaqs">FAQ</a>
                         ';
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'designer'){
@@ -157,7 +157,6 @@
                         <a href="http://localhost:8000/DesignerViewController/designerGigs">Gigs</a>
                         <a href="http://localhost:8000/DesignerViewController/allOrders">Orders</a>
                         <a href="http://localhost:8000/DesignerViewController/earnings">Earnings</a>
-                        <a href="http://localhost:8000/DesignerViewController/viewAllFaqs">FAQ</a>
                         ';
                     }
                 ?>
@@ -179,7 +178,19 @@
                 </div>
             </div>
             <div class="profile-menu" id="profile-menu">
-                <a href="http://localhost:8000/<?php echo $_SESSION['role']?>ViewController/profile">Profile</a>
+                <?php 
+                    $role = null;
+                    if($_SESSION['role'] === 'businessman'){
+                        $role =  'BusinessViewController';
+                    }
+                    else if($_SESSION['role'] === 'influencer'){
+                        $role = 'InfluencerViewController';
+                    }
+                    else if($_SESSION['role'] === 'designer'){
+                        $role = 'DesignerViewController';
+                    }
+                ?>
+                <a href="http://localhost:8000/<?php echo $role ?>/profile">Profile</a>
                 <a href="http://localhost:8000/logincontroller/logout">Logout</a>
             </div>
         </div>
