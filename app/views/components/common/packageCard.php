@@ -139,9 +139,9 @@
                 revisions: "2 revisions",
                 features: [
                     "Files Ready for Print",
-                    "Aliquip labore dolor",
-                    "Commodo excepteu",
-                    "Ullamco minim anim"
+                    "Custom Designs",
+                    "Quality Graphics",
+                    "Modern and Trendy Styles"
                 ],
                 price: "$ 10"
             },

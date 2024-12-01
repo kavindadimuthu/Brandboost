@@ -41,13 +41,26 @@
         .pagination button.active {
         background: #a29bfe;;
         }
+
+        .download-button {
+            background-color: #6a11cb; /* Blue color for the button */
+            color: white; /* White text color */
+            border: none; /* No border */
+            padding: 5px 10px; /* Padding */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-left: 10px; /* Space between file name and button */
+        }
+
+        .download-button:hover {
+            background-color: darkblue; /* Darker blue on hover */
+        }
    </style>
 </head>
 
 <body>
     <div class="orders-container">
     <div class="header-row">
-            <h2>Customer Orders</h2> <!-- Header for the orders section -->
+            <h2>My Orders</h2> <!-- Header for the orders section -->
         </div>
         
         <table class="orders-table">
@@ -94,23 +107,8 @@
                 delivery: "-",
                 file: "video1.mp4",
                 status: "In Progress"
-            },
-            {
-                order: "Promotional Post Design",
-                provider: "Nadun Sandanayake",
-                rivisioncount: "3",
-                delivery: "done",
-                file: "finalpost.png",
-                status: "Completed"
-            },
-            {
-                order: "Promotional Post Design",
-                provider: "Nadun Sandanayake",
-                rivisioncount: "3",
-                delivery: "-",
-                file: "post3.png",
-                status: "In Progress"
             }
+            
         ];
         // Function to load data into the table
         function loadOrdersData() {
@@ -124,7 +122,7 @@
                     <td>${order.provider}</td>
                     <td>${order.rivisioncount}</td>
                     <td>${order.delivery}</td>
-                    <td>${order.file}</td>
+                    <td>${order.file}<button class="download-button" onclick="downloadFile('${order.file}')">Download</button></td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
                 `;
                 
@@ -134,6 +132,12 @@
                 
                 tableBody.appendChild(row);
             });
+        }
+
+        // Function to handle file download
+        function downloadFile(fileName) {
+            // Replace with your actual download logic
+            alert(`Downloading ${fileName}...`);
         }
 
         // Load data when page loads

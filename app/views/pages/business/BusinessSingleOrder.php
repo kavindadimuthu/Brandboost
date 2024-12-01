@@ -103,7 +103,7 @@
     }
 
     .chat-input button {
-        background-color: #00796b;
+        background-color: #6a11cb;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -156,7 +156,7 @@
     .order-section button {
         display: block;
         margin-top: 10px;
-        background-color: #0288d1;
+        background-color: #6a11cb;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -235,7 +235,7 @@ h2 {
 
 /* Submit Button */
 #submitRevision {
-    background-color: #4CAF50; /* Green background */
+    background-color: #6a11cb; /* Green background */
     color: white; /* White text */
     padding: 10px 15px; /* Padding */
     border: none; /* No border */
@@ -245,7 +245,7 @@ h2 {
 }
 
 #submitRevision:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #6a11cb; /* Darker green on hover */
 }
 
 /* Responsive Design */
@@ -317,7 +317,7 @@ h2 {
                         <div class="support-section">
                             <h4>Support</h4>
                             <button id="contactSupport"
-                            onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
+                            onclick="window.location.href='/BusinessViewController/makeComplaint'">Complaint</button>
                             <button id="contactSupport"
                             <button id="reviewButton" onclick="openReviewPopup()">Review</button>
                         </div>
@@ -355,17 +355,17 @@ h2 {
 
         // Mock data
         const orderDetails = {
-            orderedBy: "Nethsilu",
+            orderedBy: "Me",
             orderDate: "Nov 27, 2024, 8:50 AM",
             orderDue: "Dec 8, 2024, 8:50 AM",
         };
 
         const messages = [
-            { sender: "Nethsilu", text: "Hello" },
-            { sender: "Me", text: "Hi" },
-            { sender: "Nethsilu", text: "I need to do a promotion" },
-            { sender: "Me", text: "Tell me more details" },
-            { sender: "Nethsilu", text: "ok" },
+            { sender: "Me", text: "Hello" },
+            { sender: "Kavindya", text: "Hi" },
+            { sender: "Me", text: "I need to do a promotion" },
+            { sender: "Kavindya", text: "Tell me more details" },
+            { sender: "Me", text: "ok" },
         ];
 
         // Populate order details
