@@ -3,11 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../../../public/styles/business-owner/DeliveriesTable.css">
+  <!-- <link rel="stylesheet" href="../../../../public/styles/business-owner/DeliveriesTable.css"> -->
+   <style>
+            .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; /* Margin below header */
+        }
+
+        .header-row h2 {
+            color: #333; /* Color for header text */
+            font-size: 24px; /* Font size for header */
+            margin: 0; /* No margin */
+        }
+
+        .pagination {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+        }
+
+        .pagination button {
+        margin: 0 5px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        
+        cursor: pointer;
+        transition: background 0.3s;
+        }
+
+        .pagination button:hover {
+        background: #0056b3;
+        }
+
+        .pagination button.active {
+        background: #a29bfe;;
+        }
+   </style>
 </head>
 
 <body>
     <div class="orders-container">
+    <div class="header-row">
+            <h2>Customer Orders</h2> <!-- Header for the orders section -->
+        </div>
         
         <table class="orders-table">
             <thead>
@@ -24,6 +65,15 @@
                 <!-- Data will be loaded here dynamically -->
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button>&lt;</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>&gt;</button>
     </div>
 
     <script>
