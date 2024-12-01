@@ -254,6 +254,28 @@ h2 {
         width: 90%; /* Adjust width for smaller screens */
     }
 }
+
+.star-rating {
+    direction: rtl; /* Allows for right-to-left star selection */
+    display: flex; /* Align stars in a row */
+    justify-content: center; /* Center the stars */
+    margin-bottom: 15px; /* Space below the stars */
+}
+
+.star {
+    font-size: 30px; /* Size of the stars */
+    color: #ccc; /* Default color */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.star:hover,
+.star:hover ~ .star {
+    color: #f39c12; /* Color when hovering */
+}
+
+.star.selected {
+    color: #f39c12; /* Color for selected stars */
+}
     </style>
 
 </head>
@@ -297,9 +319,28 @@ h2 {
                             <button id="contactSupport"
                             onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
                             <button id="contactSupport"
-                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
+                            <button id="reviewButton" onclick="openReviewPopup()">Review</button>
                         </div>
-                </div>
+                        <div id="reviewPopup" class="popup" style="display:none;">
+                            <div class="popup-content">
+                                <span class="close-button" onclick="closeReviewPopup()">&times;</span>
+                                <h2>Review</h2>
+        
+                                <!-- Star Rating -->
+                                <div class="star-rating">
+                                    <span class="star" data-value="1">&#9733;</span>
+                                    <span class="star" data-value="2">&#9733;</span>
+                                    <span class="star" data-value="3">&#9733;</span>
+                                    <span class="star" data-value="4">&#9733;</span>
+                                    <span class="star" data-value="5">&#9733;</span>
+                                </div>
+                                <input type="hidden" id="starRating" value="0">
+        
+                                <textarea id="reviewDescription" placeholder="Enter your review here..." rows="4"></textarea>
+                                <button id="submitReview" onclick="submitReview()">Submit Review</button>
+                            </div>
+                        </div>
+                    </div>
             </div>
             <?php include __DIR__ . '/../../pages/business/DeliveriesTable.php'; ?>
 
@@ -425,6 +466,61 @@ h2 {
 
     // Attach the openPopup function to the Request Revision button
     document.getElementById('deliverNow').onclick = openPopup;
+    function openReviewPopup() {
+    document.getElementById('reviewPopup').style.display = 'block';
+}
+
+// Function to close the review popup
+function closeReviewPopup() {
+    document.getElementById('reviewPopup').style.display = 'none';
+    resetReviewForm(); // Reset the form when closing
+}
+
+// Function to submit the review
+function submitReview() {
+    const reviewText = document.getElementById('reviewDescription').value;
+    const starRating = document.getElementById('starRating').value;
+
+    if (reviewText.trim() === "" || starRating === "0") {
+        alert("Please enter a review and select a star rating before submitting.");
+        return;
+    }
+
+    // Here you can add code to send the review to your server
+    console.log("Review submitted:", reviewText, "Rating:", starRating);
+    
+    // Close the popup after submission
+    closeReviewPopup();
+}
+
+// Function to reset the review form
+function resetReviewForm() {
+    document.getElementById('reviewDescription').value = '';
+    document.getElementById('starRating').value = '0';
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+        star.classList.remove('selected'); // Remove selected class
+    });
+}
+
+// Add event listeners to the stars
+const stars = document.querySelectorAll('.star');
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        const rating = this.getAttribute('data-value');
+        document.getElementById('starRating').value = rating;
+
+        // Remove selected class from all stars
+        stars.forEach(s => s.classList.remove('selected'));
+
+        // Add selected class to the clicked star and all previous stars
+        this.classList.add('selected');
+        let prevStar = this;
+        while (prevStar = prevStar.previousElementSibling) {
+            prevStar.classList.add('selected');
+        }
+    });
+});
 </script>
 
 
