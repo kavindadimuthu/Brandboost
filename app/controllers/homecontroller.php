@@ -80,6 +80,13 @@ class HomeController extends Controller
     {
         $this->view('pages/common/Faq');
     }
+    public function Chat()
+    {
+        if(!isset($_SESSION['role'])){
+            header('Location: /homecontroller/login');
+        }
+        $this->view('pages/common/chat');
+    }
 
 
 

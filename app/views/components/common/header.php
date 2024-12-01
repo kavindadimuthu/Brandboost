@@ -167,7 +167,7 @@
         <div class="profile-group">
             <div class="icons">
                 <i class="fas fa-bell"></i>
-                <i class="fas fa-comments"></i>
+                <i onclick="window.location.href='/homecontroller/chat'" class="fas fa-comments"></i>
             </div>
             <div class="profile" onclick="toggleProfileMenu()">
                 <img alt="User profile picture" height="35" src="https://storage.googleapis.com/a1aa/image/f4Xi8aW22b1PRSBffeuGrxtSCAKTfzHz8ph7lhKJeGeL2bB7JA.jpg" width="35"/>

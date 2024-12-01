@@ -82,12 +82,6 @@ class BusinessViewController extends Controller {
     }
 
 
-
-
-    public function serviceCard() {
-        $this->view('components/common/serviceCard');
-    }
-
     public function influencerFirst(){
         $this->view('pages/business/influencerFirst');
     }
