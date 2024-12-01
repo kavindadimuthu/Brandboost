@@ -89,4 +89,10 @@ class BusinessViewController extends Controller {
     public function searchGigs(){
         $this->view('pages/business/SearchGigs');
     }
+
+    public function orderRequirements(){
+        $this->view('pages/business/OrderRequirements');
+    }
+ 
+    
 }
