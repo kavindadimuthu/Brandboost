@@ -10,6 +10,7 @@
 </head>
 <body>
     <div class="container">
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
         <h2>Add Designer Portfolio</h2>
         <form id="portfolioForm">
             <label for="title">Portfolio Title</label>
