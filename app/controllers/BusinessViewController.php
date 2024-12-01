@@ -1,8 +1,12 @@
 <?php
 class BusinessViewController extends Controller {
-    // public function businessHomepage() {
-    //     $this->view('pages/business/businessHomepage');
-    // }
+
+    public function __construct() {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'businessman') {
+            header('location: /');
+        }
+    }
+
     public function profile() {
         $this->view('pages/business/Profile');
     }

@@ -34,7 +34,7 @@
             <div class="popup">
               <ul>
                 <li><a href="http://localhost:8000/DesignerViewController/profile">Profile</a></li>
-                <li><a href="http://localhost:8000/homecontroller/login">Logout</a></li>
+                <li><a href="http://localhost:8000/logincontroller/logout">Logout</a></li>
               </ul>
             </div>
           </div>

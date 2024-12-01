@@ -1,5 +1,12 @@
 <?php
 class InfluencerViewController extends Controller {
+
+    public function __construct() {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'influencer') {
+            header('location: /');
+        }
+    }
+
     public function influencerDashboard() {
         $this->view('pages/influencer/InfluencerDashboard');
     }

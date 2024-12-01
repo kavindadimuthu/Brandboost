@@ -6,6 +6,7 @@ class AdminViewController extends Controller {
             header('location: /');
         }
     }
+    
     public function adminDashboard() {
         $this->view('pages/admin/adminDashboard');
     }

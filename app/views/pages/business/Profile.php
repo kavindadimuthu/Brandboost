@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <?php include __DIR__ . '/../../components/influencer/header.php'; ?>
+    <?php include __DIR__ . '/../../components/businessman/header.php'; ?>
 
     <div class="profile-container">
     <h2>Profile</h2>

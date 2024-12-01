@@ -2,8 +2,8 @@
 class DesignerViewController extends Controller {
 
     public function __construct() {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'designer') {
-            header('Location: /login');
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'designer') {
+            header('location: /');
         }
     }
 

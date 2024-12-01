@@ -2,6 +2,12 @@
 
 class DesignerDataController extends Controller {
 
+    public function __construct() {
+        if (!isset($_SESSION['role']) || $_SESSION['role'] != 'designer') {
+            header('location: /');
+        }
+    }
+    
     public function createGig() {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
