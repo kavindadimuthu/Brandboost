@@ -23,8 +23,14 @@ class BusinessViewController extends Controller {
     public function myOrders() {
         $this->view('pages/business/MyOrders');
     }
-    public function mySingleOrder() {
-        $this->view('pages/business/MySingleOrder');
+    public function deliveries() {
+        $this->view('pages/business/Deliveries');
+    }
+    public function BusinessSingleOrder() {
+        $this->view('pages/business/BusinessSingleOrder');
+    }
+    public function BusinessDSingleOrder() {
+        $this->view('pages/business/BusinessDSingleOrder');
     }
     public function makeRequest(){
         $this->view('pages/business/MakeRequest');
@@ -66,6 +72,13 @@ class BusinessViewController extends Controller {
 
     public function register(){
         $this->view('pages/register/businessOwner');
+    }
+
+
+
+
+    public function serviceCard() {
+        $this->view('components/common/serviceCard');
     }
 
 
