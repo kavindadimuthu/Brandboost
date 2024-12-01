@@ -2,11 +2,11 @@
 class AdminViewController extends Controller {
 
     public function __construct() {
-        // session_start();
-        // if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-        //     header('location: /');
-        // }
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+            header('location: /');
+        }
     }
+    
     public function adminDashboard() {
         $this->view('pages/admin/adminDashboard');
     }
@@ -24,17 +24,17 @@ class AdminViewController extends Controller {
         $this->view('pages/admin/singleUserPackage');
     }
 
-    public function allCustomerComplaints() {
-        $this->view('pages/admin/allCustomerComplaints');
+    public function allComplaints() {
+        $this->view('pages/admin/allComplaints');
     }
-    public function singleCustomerComplaint() {
-        $this->view('pages/admin/singleCustomerComplaint');
+    public function singleComplaint() {
+        $this->view('pages/admin/singlecomplaint');
     }
-    public function allRegistrationRequests() {
-        $this->view('pages/admin/allRegistrationRequests');
+    public function allVerifications() {
+        $this->view('pages/admin/allVerifications');
     }
-    public function singleRegistrationRequest() {
-        $this->view('pages/admin/singleRegistrationRequest');
+    public function singleVerification() {
+        $this->view('pages/admin/singleVerification');
     }
 
 

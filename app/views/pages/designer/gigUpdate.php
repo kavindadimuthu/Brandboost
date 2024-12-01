@@ -5,28 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Gig</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
+    <link rel="stylesheet" href="../../styles/designer/index.css">
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            /* display: flex;
-            justify-content: center;
-            align-items: center; */
-            height: 100vh;
-        }
-
-        .edit-form-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 1200px;
-            margin: 20px auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -44,6 +25,40 @@
             margin: 8px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+
+        .common-details {
+            max-width: 900px; /* Set a maximum width for the common details section */
+            margin: 0 auto; /* Center the section */
+        }
+
+        .package-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .package-section {
+            width: 48%; /* Each package section takes up 48% of the width */
+            padding: 10px; /* Add some padding */
+            border: 1px solid #ddd; /* Optional: Add a border for clarity */
+            border-radius: 4px; /* Round the corners */
+            background-color: #f9f9f9; /* Optional: Add a background color */
+        }
+
+        .package-fields {
+            display: flex;
+            justify-content: space-between; /* Space between left and right sections */
+            align-items: stretch; /* Make left and right fields full height */
+        }
+
+        .left-fields {
+            width: 28%; /* Adjust width as needed */
+        }
+
+        .right-field {
+            width: 70%; /* Adjust width as needed */
+            height: auto; /* Let it stretch to fill the height */
         }
 
         .section-heading {
@@ -83,59 +98,82 @@
     </style>
 </head>
 <body>
-    <div class="edit-form-container">
-        <h2>Edit Gig</h2>
+<div class="container">
+    <?php include __DIR__ . '/../../components/common/header.php'; ?>
 
-        <!-- Gig Title -->
-        <label for="editTitle">Title:</label>
-        <input id="editTitle" type="text" placeholder="Enter gig title" required>
+    <div class="content">
+        <div class="main-content">
+            <h2>Edit Gig</h2>
 
-        <!-- Gig Description -->
-        <label for="editDescription">Description:</label>
-        <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
+            <!-- Common Details -->
+            <div class="common-details">
+                <label for="editTitle">Title:</label>
+                <input id="editTitle" type="text" placeholder="Enter gig title" required>
 
-        <!-- Delivery Formats -->
-        <label for="editDeliveryFormats">Delivery Formats (comma-separated):</label>
-        <input id="editDeliveryFormats" type="text" placeholder="e.g. PDF, Image, Video" required>
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
 
-        <!-- Tags -->
-        <label for="editTags">Tags (comma-separated):</label>
-        <input id="editTags" type="text" placeholder="e.g. web design, graphics" required>
+                <label for="editDeliveryFormats">Delivery Formats (comma-separated):</label>
+                <input id="editDeliveryFormats" type="text" placeholder="e.g. PDF, Image, Video" required>
 
-        <!-- Basic Package Details -->
-        <p class="section-heading">Basic Package</p>
-        <label for="editBasicPrice">Price:</label>
-        <input id="editBasicPrice" type="number" placeholder="Basic price" required>
+                <label for="editTags">Tags (comma-separated):</label>
+                <input id="editTags" type="text" placeholder="e.g. web design, graphics" required>
+            </div>
 
-        <label for="editBasicBenefits">Benefits:</label>
-        <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" required>
+            <!-- Package Details -->
+            <div class="package-details">
+                <!-- Basic Package Details -->
+                <div class="package-section">
+                    <p class="section-heading">Basic Package</p>
+                    <div class="package-fields">
+                        <div class="left-fields">
+                            <label for="editBasicPrice">Price:</label>
+                            <input id="editBasicPrice" type="number" placeholder="Basic price" required>
 
-        <label for="editBasicDeliveryDays">Delivery Days:</label>
-        <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" required>
+                            <label for="editBasicDeliveryDays">Delivery Days:</label>
+                            <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" required>
 
-        <label for="editBasicRevisions">Revisions:</label>
-        <input id="editBasicRevisions" type="number" placeholder="Number of revisions" required>
+                            <label for="editBasicRevisions">Revisions:</label>
+                            <input id="editBasicRevisions" type="number" placeholder="Number of revisions" required>
+                        </div>
+                        <div class="right-field">
+                            <label for="editBasicBenefits">Benefits:</label>
+                            <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" required>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Premium Package Details -->
-        <p class="section-heading">Premium Package</p>
-        <label for="editPremiumPrice">Price:</label>
-        <input id="editPremiumPrice" type="number" placeholder="Premium price" required>
+                <!-- Premium Package Details -->
+                <div class="package-section">
+                    <p class="section-heading">Premium Package</p>
+                    <div class="package-fields">
+                        <div class="left-fields">
+                            <label for="editPremiumPrice">Price:</label>
+                            <input id="editPremiumPrice" type="number" placeholder="Premium price" required>
 
-        <label for="editPremiumBenefits">Benefits:</label>
-        <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" required>
+                            <label for="editPremiumDeliveryDays">Delivery Days:</label>
+                            <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" required>
 
-        <label for="editPremiumDeliveryDays">Delivery Days:</label>
-        <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" required>
+                            <label for="editPremiumRevisions">Revisions:</label>
+                            <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" required>
+                        </div>
+                        <div class="right-field">
+                            <label for="editPremiumBenefits">Benefits:</label>
+                            <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <label for="editPremiumRevisions">Revisions:</label>
-        <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" required>
-
-        <!-- Save and Cancel Buttons -->
-        <div class="form-buttons">
-            <button id="saveEditButton">Save Changes</button>
-            <button class="cancel" onclick="window.history.back()">Cancel</button>
+            <!-- Save and Cancel Buttons -->
+            <div class="form-buttons">
+                <button id="saveEditButton">Save Changes</button>
+                <button class="cancel" onclick="window.history.back()">Cancel</button>
+            </div>
         </div>
     </div>
+</div>
+
 
     <script>
     // Function to fetch and populate gig details

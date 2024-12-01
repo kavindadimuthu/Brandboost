@@ -2,8 +2,8 @@
 class DesignerViewController extends Controller {
 
     public function __construct() {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'designer') {
-            header('Location: /login');
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'designer') {
+            header('location: /');
         }
     }
 
@@ -50,5 +50,14 @@ class DesignerViewController extends Controller {
 
     public function designerpreviewprofile(){
         $this->view('pages/designer/DesignerPreviewProfile');
+    }
+    public function addPortfolio(){
+        $this->view('pages/designer/AddPortfolio');
+    }
+    public function viewMyPortfolio(){
+        $this->view('pages/designer/ViewMyPortfolio');
+    }
+    public function updatePortfolio(){
+        $this->view('pages/designer/UpdatePortfolio');
     }
 }

@@ -2,6 +2,12 @@
 
 class InfluencerDataController extends Controller {
 
+    public function __construct() {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 'influencer') {
+            header('location: /');
+        }
+    }
+
     public function createPackage() {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {

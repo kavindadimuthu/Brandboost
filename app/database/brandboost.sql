@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2024 at 08:30 AM
+-- Generation Time: Nov 30, 2024 at 08:02 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,6 +35,13 @@ CREATE TABLE `admins` (
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`admin_id`, `first_name`, `last_name`, `email`, `password`) VALUES
+(1, 'admin', 'admin', 'admin@gmail.com', '123');
+
 -- --------------------------------------------------------
 
 --
@@ -60,8 +67,17 @@ CREATE TABLE `designer_gig` (
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `delivery_formats` varchar(255) NOT NULL,
-  `tags` varchar(255) NOT NULL
+  `tags` varchar(255) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `designer_gig`
+--
+
+INSERT INTO `designer_gig` (`gig_id`, `user_id`, `title`, `description`, `delivery_formats`, `tags`, `status`) VALUES
+(4, 23, 'fb and insta post design', 'fb, insta post design for business promotions', 'jpg,png', 'fb,post,promotion', 'active'),
+(5, 23, 'insta reel creating', 'insta reel creating description', 'mp4', 'new, insta, reel', 'active');
 
 -- --------------------------------------------------------
 
@@ -77,6 +93,43 @@ CREATE TABLE `designer_gig_package_details` (
   `revisions` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `designer_gig_package_details`
+--
+
+INSERT INTO `designer_gig_package_details` (`gig_id`, `package_type`, `benefits`, `delivery_days`, `revisions`, `price`) VALUES
+(4, 'basic', 'benefits basic', 5, 2, 35.00),
+(4, 'premium', 'benefits premium ', 3, 4, 46.00),
+(5, 'basic', 'basic reels', 5, 2, 15.00),
+(5, 'premium', 'premium reels', 3, 4, 25.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `designer_portfolio`
+--
+
+CREATE TABLE `designer_portfolio` (
+  `portfolio_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `cover_image` varchar(255) NOT NULL,
+  `first_image` varchar(255) DEFAULT NULL,
+  `second_image` varchar(255) DEFAULT NULL,
+  `third_image` varchar(255) DEFAULT NULL,
+  `fourth_image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `designer_portfolio`
+--
+
+INSERT INTO `designer_portfolio` (`portfolio_id`, `user_id`, `title`, `description`, `cover_image`, `first_image`, `second_image`, `third_image`, `fourth_image`, `created_at`, `updated_at`) VALUES
+(3, 23, 'new portfolio', 'new new nwe', 'uploads/designer/portfolio/674a846f0efc0_fblogo.png', 'uploads/designer/portfolio/674a846f0f3ef_tiktoklogo.png', 'uploads/designer/portfolio/674a846f0f60d_youtubelogo.png', 'uploads/designer/portfolio/674a846f0f81b_instalogo.png', 'uploads/designer/portfolio/674a846f0fd4e_xlogo.png', '2024-11-30 03:20:15', '2024-11-30 03:20:15');
 
 -- --------------------------------------------------------
 
@@ -190,7 +243,10 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `phone`, `pa
 (17, 'qe', 'qwe', 'tnewq@gmail.com', '121536621', '$2y$10$kz5d0RiV5YFYFEDSb8OdDu35z4QOUN/tcogP2qhKYtmEbpoT8Oyyi', 'designer', 'female'),
 (18, 'isuru', 'son', 'isurunaveen27@gmail.com', '5179293424', '$2y$10$n4c/T0BaTQl2c4vFHFeYKOxvmaGeVDJGoYInyNYgjiN.jrvSdDCZS', 'businessman', 'male'),
 (20, 'Kavinda', 'son', 'kawa@gm', '51792932', '$2y$10$qU44XA1Bk93T0vb.QiKFH.FeycWt7YwnCYHAvuCXCXH8azUUsmdnC', 'designer', 'male'),
-(21, 'deemath', 'jaye', 'deema@gmail', '0710718989', '$2y$10$HL0DgTbPs94f7JHlCrXJLOCDttQHuB0M2LrhXSfO6GB7LkmBWFkIW', 'influencer', 'male');
+(21, 'deemath', 'jaye', 'deema@gmail', '0710718989', '$2y$10$HL0DgTbPs94f7JHlCrXJLOCDttQHuB0M2LrhXSfO6GB7LkmBWFkIW', 'influencer', 'male'),
+(23, 'thiwanga', 'jayasinghe', 'thiwa@gmail.com', '077898989', '$2y$10$SnYSJ5A63FZzXYCqAmQlZeIE05ZwCYqJ4PoPTJhWZKpLwwTETDnau', 'designer', 'male'),
+(24, 'rashmika', 'mihashi', 'rashmika@gmail', '07777898', '$2y$10$e8tmnjCO3R6MT3FKLif1xumz/Q4XPAQwDReGjDrwXcqRyirHk9qpa', 'influencer', 'male'),
+(25, 'nethsilu', 'marasignhe', 'nethsilu@gmail.com', '07777343434', '$2y$10$7wbzUrmJ26Stsu9q7Xsqu.1f2AcvhTC49.u0pWzarGvKYit8pVzd2', 'businessman', 'male');
 
 --
 -- Indexes for dumped tables
@@ -222,6 +278,13 @@ ALTER TABLE `designer_gig`
 --
 ALTER TABLE `designer_gig_package_details`
   ADD PRIMARY KEY (`gig_id`,`package_type`);
+
+--
+-- Indexes for table `designer_portfolio`
+--
+ALTER TABLE `designer_portfolio`
+  ADD PRIMARY KEY (`portfolio_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `designer_qualifications`
@@ -270,13 +333,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `designer_gig`
 --
 ALTER TABLE `designer_gig`
-  MODIFY `gig_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `gig_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `designer_portfolio`
+--
+ALTER TABLE `designer_portfolio`
+  MODIFY `portfolio_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `faq`
@@ -294,7 +363,7 @@ ALTER TABLE `influencer_gig`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
@@ -317,6 +386,12 @@ ALTER TABLE `designer_gig`
 --
 ALTER TABLE `designer_gig_package_details`
   ADD CONSTRAINT `designer_gig_package_details_ibfk_1` FOREIGN KEY (`gig_id`) REFERENCES `designer_gig` (`gig_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `designer_portfolio`
+--
+ALTER TABLE `designer_portfolio`
+  ADD CONSTRAINT `designer_portfolio_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
 -- Constraints for table `designer_qualifications`
