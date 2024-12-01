@@ -1,155 +1,127 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-.container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100vh;
-}
-
-#sidebar-container {
-    width: 250px;
-}
-
-.main-content {
-    flex: 1; /* Takes up remaining space */
-    padding: 20px;
-    background-color: #fff;
-    overflow-y: auto;
-}
-
-.right-sidebar {
-    width: 300px;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-left: 1px solid #ddd;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.heading{
+.header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.back-button{
-    display: flex;
-    justify-content: end;
-    height: 40px;
-}
-
-.back-btn{
-    background-color: #5865f2;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.back-btn:hover {
-    background-color: #4854d6;
-}
-
-.back-link {
-    color: #666;
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 20px;
-}
-
-
-.section {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.section h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
+.header .breadcrumb {
+    font-size: 14px;
     color: #333;
 }
 
-.complainer-detail {
-    margin-bottom: 10px;
-    display: flex;
-}
-
-.complainer-detail label {
-    color: #666;
-    min-width: 120px;
-}
-
-.description {
-    color: #666;
-    line-height: 1.6;
-}
-
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 15px;
-}
-
-.proof-image {
-    width: 100%;
-    height: 150px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.header .user-info {
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
-.proof-image svg {
-    width: 40px;
-    height: 40px;
-    color: #ccc;
-}
-
-.document-link {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    color: #6366f1;
-    text-decoration: none;
-}
-
-.document-link svg {
-    width: 20px;
-    height: 20px;
+.header .user-info img {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
 }
 
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
+.header .user-info span {
+    font-size: 14px;
 }
 
-.resolve-btn, .reject-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.main-content {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    color: #666;
+}
+
+.main-content h2,
+.main-content p,
+.main-content th,
+.main-content td {
+    color: #666;
+    font-size: 12px;
+    /* Smaller font size for more elegant look */
+}
+
+.main-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    /* Slightly smaller font size for header */
+    margin-bottom: 30px;
+}
+
+.main-content .complain-details {
+    margin-bottom: 30px;
+}
+
+.main-content .complain-details div {
+    margin-bottom: 20px;
+}
+
+.main-content .complain-details div span {
     font-weight: bold;
 }
 
-.resolve-btn {
-    background-color: #22c55e;
-    color: white;
+.main-content .attachments {
+    margin-bottom: 20px;
 }
 
-.reject-btn {
-    background-color: #ef4444;
-    color: white;
+.main-content .attachments h3 {
+    font-size: 16px;
+    /* Slightly smaller font size for subheader */
+    margin-bottom: 10px;
+}
+
+.main-content .attachments img {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.main-content .response {
+    margin-bottom: 20px;
+}
+
+.main-content .response h3 {
+    font-size: 16px;
+    /* Slightly smaller font size for subheader */
+    margin-bottom: 10px;
+}
+
+.main-content .response textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    resize: none;
+}
+
+.main-content .actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.main-content .actions button {
+    padding: 8px 16px;
+    background-color: #6a11cb;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.toggle-sidebar {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    height: 40px;
+    width: 40px;
 }

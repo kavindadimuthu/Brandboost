@@ -27,4 +27,12 @@ class UserModel {
         $this->db->bind(':email', $email);
         return $this->db->single(); // Fetch a single user record
     }
+
+    public function getAdminByEmail($email)
+    {
+        $query = "SELECT * FROM admins WHERE email = :email";
+        $this->db->query($query);
+        $this->db->bind(':email', $email);
+        return $this->db->single(); // Fetch a single admin record
+    }
 }
