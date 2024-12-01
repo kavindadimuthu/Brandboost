@@ -30,13 +30,34 @@
             margin-bottom: 20px;
         }
 
-        .search-bar-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        .filter-container {
             display: flex;
             justify-content: center;
-            position: relative;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dropdown select {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            outline: none;
+            background-color: white;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .dropdown select:focus {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar-container {
+            flex: 1;
+            max-width: 600px;
         }
 
         .search-bar {
@@ -48,6 +69,10 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             outline: none;
             transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .search-bar:focus {
@@ -186,14 +211,19 @@
     <div class="header-subtitle">Explore the profiles of talented individuals ready to collaborate with you.</div>
     </div>
 
-    <div class="search-bar-container">
-        <input
-            type="text"
-            id="searchBar"
-            class="search-bar"
-            placeholder="Search by name..."
-            oninput="filterProfiles()"
-        />
+    <!-- <div class="dropdown"></div> -->
+
+    <div class="filter-container">
+        <div class="dropdown"></div>
+        <div class="search-bar-container">
+            <input
+                type="text"
+                id="searchBar"
+                class="search-bar"
+                placeholder="Search here..."
+                oninput="filterProfiles()"
+            />
+        </div>
     </div>
 
     <div id="service-card-container"></div>
@@ -265,7 +295,7 @@
 
         const influencerPromotions = [
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/195007458/original/5582d964c74231a918d4dfb47e5e3ab94e7d2d5b/promote-your-business-on-my-social-media.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/126784228/original/d6398878193c5dbb88b9ef92278e250192d62780/be-your-social-media-manager.jpg",
             userAvatar: "https://via.placeholder.com/40",
             username: "PromoExpert",
             isVerified: true,
@@ -275,7 +305,7 @@
             price: "LKR 50,000"
         },
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/184657492/original/24eabc9876cdef2342bfa456d8b785bc/advertise-your-product-on-my-social-media-accounts.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_0.104812,t_main1,q_auto,f_auto/yazvfbtb0a9qqowqc14h/be-your-social-media-marketing-manager-and-content-creator.png",
             userAvatar: "https://via.placeholder.com/40",
             username: "InstaBoost",
             isVerified: false,
@@ -285,7 +315,7 @@
             price: "LKR 30,000"
         },
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/201724903/original/93b74b034534b5e432ff471fb3c924d7/promote-your-business-to-my-youtube-audience.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/370540065/original/c8ebc6ffa846e17c4496f7e86c03bf4f6cbac3f4/do-organic-youtube-video-promotion-and-marketing-by-social-media.png",
             userAvatar: "https://via.placeholder.com/40",
             username: "TubePro",
             isVerified: true,
@@ -295,7 +325,7 @@
             price: "LKR 75,000"
         },
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/202315871/original/c4a8d2f1e65baf9869bd1d987b0ebc3d/social-media-product-placement-and-review.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_58.345428,t_main1,q_auto,f_auto/lokyruezin7kdrtxkxx1/create-business-commercial-video-or-social-media-video-ad.png",
             userAvatar: "https://via.placeholder.com/40",
             username: "SocialStar",
             isVerified: false,
@@ -305,7 +335,7 @@
             price: "LKR 20,000"
         },
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/185760412/original/a673e5dc875621c7b94bfbf12e5fc556/promote-your-service-on-my-facebook-page.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/155959096/original/84e9c92839c7c7fb53b1b9a67ed04c9c6ebf26fa/be-your-professional-social-media-manager.png",
             userAvatar: "https://via.placeholder.com/40",
             username: "AdKing",
             isVerified: true,
@@ -315,7 +345,7 @@
             price: "LKR 40,000"
         },
         {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/203467991/original/7b4c8921c5e8641c82f9eb43129f9f23/promote-your-brand-on-my-verified-twitter-account.jpg",
+            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_1.436549,t_main1,q_auto,f_auto/sbvse6ifboxearybu1fy/be-your-social-media-manager-for-your-business.png",
             userAvatar: "https://via.placeholder.com/40",
             username: "TrendSetter",
             isVerified: true,
@@ -362,14 +392,39 @@
             document.getElementById('service-card-container').innerHTML = cardsHTML;
         }
 
+        function renderDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const select = document.createElement('select');
+
+            // Add options to the dropdown
+            select.innerHTML = `
+                <option value="default">Search by Promotions</option>
+                <option value="option2">Search by Influencer names</option>
+            `;
+
+            // Add event listener for URL redirection
+            select.addEventListener('change', function () {
+                if (this.value === 'option2') {
+                    window.location.href = "http://localhost:8000/BusinessViewController/viewInfluencers";
+                }
+            });
+
+            dropdown.appendChild(select);
+        }
+
 
          // Filter profiles
          function filterProfiles() {
             const searchQuery = document.getElementById("searchBar").value.toLowerCase();
             const services = window.location.pathname.includes("viewDesignerGigs") ? designerGigs : influencerPromotions;
-            const filteredServices = services.filter(service => service.name.toLowerCase().includes(searchQuery));
+
+            // Use the correct property `username` instead of `name`
+            const filteredServices = services.filter(service => service.serviceTitle.toLowerCase().includes(searchQuery));
+
+            // Update the displayed service cards with the filtered results
             createServiceCards(filteredServices);
         }
+
 
         // Determine type based on URL
         window.onload = function () {
@@ -381,6 +436,7 @@
             } else if (path.includes("viewInfluencerPromotions")) {
                 headerTitle.textContent = "Influencer Promotions";
                 createServiceCards(influencerPromotions);
+                renderDropdown();
             }
         };
     </script>

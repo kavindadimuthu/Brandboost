@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Profiles</title>
     <style>
-        /* Styles remain the same as the previous example */
         * {
             margin: 0;
             padding: 0;
@@ -36,13 +35,34 @@
             margin-bottom: 20px;
         }
 
-        .search-bar-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        .filter-container {
             display: flex;
             justify-content: center;
-            position: relative;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dropdown select {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            outline: none;
+            background-color: white;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .dropdown select:focus {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar-container {
+            flex: 1;
+            max-width: 600px;
         }
 
         .search-bar {
@@ -144,20 +164,22 @@
         <div class="header-subtitle">Explore the profiles of talented individuals ready to collaborate with you.</div>
     </div>
 
-    <div class="search-bar-container">
-        <input
-            type="text"
-            id="searchBar"
-            class="search-bar"
-            placeholder="Search by name..."
-            oninput="filterProfiles()"
-        />
+    <div class="filter-container">
+        <div class="dropdown"></div>
+        <div class="search-bar-container">
+            <input
+                type="text"
+                id="searchBar"
+                class="search-bar"
+                placeholder="Search here..."
+                oninput="filterProfiles()"
+            />
+        </div>
     </div>
 
     <div id="card-container"></div>
     
     <script>
-        // Designer and Influencer data
         const designersData = [
             { avatarUrl: "https://via.placeholder.com/80", name: "Sarah Adams", specialization: "Graphic Designer", rating: 4.9, isVerified: true },
             { avatarUrl: "https://via.placeholder.com/80", name: "John Miller", specialization: "UI/UX Designer", rating: 4.8, isVerified: true },
@@ -168,7 +190,6 @@
             { avatarUrl: "https://via.placeholder.com/80", name: "Chris Johnson", specialization: "YouTube Content Creator", rating: 4.6, isVerified: false },
         ];
 
-        // Render profiles based on the type
         function renderProfiles(profiles) {
             const container = document.getElementById("card-container");
             container.innerHTML = profiles.map(profile => `
@@ -185,7 +206,23 @@
             `).join('');
         }
 
-        // Filter profiles
+        function renderDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const select = document.createElement('select');
+            select.innerHTML = `
+                <option value="default">Search by Influencer names</option>
+                <option value="option1">Search by Promotions</option>
+            `;
+
+            select.addEventListener('change', function () {
+                if (this.value === 'option1') {
+                    window.location.href = "http://localhost:8000/BusinessViewController/viewInfluencerPromotions";
+                }
+            });
+
+            dropdown.appendChild(select);
+        }
+
         function filterProfiles() {
             const searchQuery = document.getElementById("searchBar").value.toLowerCase();
             const profiles = window.location.pathname.includes("viewDesigners") ? designersData : influencersData;
@@ -193,7 +230,6 @@
             renderProfiles(filteredProfiles);
         }
 
-        // Determine type based on URL
         window.onload = function () {
             const path = window.location.pathname;
             const headerTitle = document.getElementById("header-title");
@@ -203,6 +239,7 @@
             } else if (path.includes("viewInfluencers")) {
                 headerTitle.textContent = "Meet Our Influencers";
                 renderProfiles(influencersData);
+                renderDropdown();
             }
         };
     </script>
