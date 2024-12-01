@@ -316,9 +316,8 @@ h2 {
                         </div>
                         <div class="support-section">
                             <h4>Support</h4>
-                            <button id="contactSupport"
-                            onclick="window.location.href='BusinessViewController/makeComplaint">Contact Us</button>
-                            <button id="contactSupport"
+                       <a href='/BusinessViewController/makeComplaint'> <button id="contactSupport">Complaint</button></a>
+                            
                             <button id="reviewButton" onclick="openReviewPopup()">Review</button>
                         </div>
                         <div id="reviewPopup" class="popup" style="display:none;">

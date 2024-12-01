@@ -47,7 +47,7 @@
 <body>
     <div class="orders-container">
     <div class="header-row">
-            <h2>Customer Orders</h2> <!-- Header for the orders section -->
+            <h2>Deliveries</h2> <!-- Header for the orders section -->
         </div>
         
         <table class="orders-table">
@@ -56,7 +56,6 @@
                     <th>Order</th>
                     <th>Influencer/Designer</th>
                     <th>RivisionCount</th>
-                    <th>Delivery</th>
                     <th>File</th>
                     <th>Status</th>
                 </tr>
@@ -83,33 +82,15 @@
                 order: "Promotional Video",
                 provider: "Kavindya Adhikari",
                 rivisioncount: "2",
-                delivery: "-",
                 file: "video2.mp4",
-                status: "In Progress"
+                status: "Accepted"
             },
             {
                 order: "Promotional Video",
                 provider: "Kavindya Adhikari",
                 rivisioncount: "1",
-                delivery: "-",
                 file: "video1.mp4",
-                status: "In Progress"
-            },
-            {
-                order: "Promotional Post Design",
-                provider: "Nadun Sandanayake",
-                rivisioncount: "3",
-                delivery: "done",
-                file: "finalpost.png",
-                status: "Completed"
-            },
-            {
-                order: "Promotional Post Design",
-                provider: "Nadun Sandanayake",
-                rivisioncount: "3",
-                delivery: "-",
-                file: "post3.png",
-                status: "In Progress"
+                status: "Rejected"
             }
         ];
         // Function to load data into the table
@@ -123,7 +104,6 @@
                     <td>${order.order}</td>
                     <td>${order.provider}</td>
                     <td>${order.rivisioncount}</td>
-                    <td>${order.delivery}</td>
                     <td>${order.file}</td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
                 `;
