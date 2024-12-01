@@ -211,7 +211,7 @@
                         <div class="support-section">
                             <h4>Support</h4>
                             <button id="contactSupport"
-                            onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
+                            onclick="window.location.href='/influencerviewcontroller/contactus'">Complain</button>
                             <button id="contactSupport"
                                 onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
                         </div>
