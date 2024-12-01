@@ -213,10 +213,11 @@
                             <button id="contactSupport"
                             onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
                             <button id="contactSupport"
-                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
+                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Review</button>
                         </div>
                 </div>
             </div>
+            <?php include __DIR__ . '/../../pages/influencer/DeliveriesTable.php'; ?>
         </div>
     </div>
 
