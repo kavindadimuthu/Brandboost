@@ -202,7 +202,7 @@
                         <h2>Common Promotion Details</h2>
                         <label>Promotion Title: <input type="text" name="title" required></label>
                         <label>Description: <textarea name="description" required></textarea></label>
-                        <label>Delivery Formats:</label>
+                        <label>Platforms:</label>
                         <div class="delivery-formats">
                             <div>
                                 <input type="checkbox" name="platform" value="facebook" id="facebook">
