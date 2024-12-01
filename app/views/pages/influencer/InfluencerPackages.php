@@ -174,8 +174,8 @@
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Basic Price</th>
-                            <th>Premium Price</th>
+                            <th>Basic Price($)</th>
+                            <th>Premium Price($)</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -206,7 +206,7 @@
                                                 <td>${gig.title}</td>
                                                 <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
                                                 <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
-                                                <td>${gig.status || 'N/A'}</td> <!-- Handle if gig status is missing -->
+                                                <td>${gig.status || 'N/A'}</td> 
                                                 <td>
                                                     <button onclick="window.location.href='/InfluencerViewController/updatePromotion/?gigId=${gig.gig_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
                                                     <button onclick="confirmDelete(${gig.gig_id})" class="action-btn"><i class="fas fa-trash"></i></button>
