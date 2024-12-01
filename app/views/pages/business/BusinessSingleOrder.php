@@ -295,7 +295,7 @@ h2 {
                         <div class="support-section">
                             <h4>Support</h4>
                             <button id="contactSupport"
-                            onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
+                            onclick="window.location.href='BusinessViewController/makeComplaint">Contact Us</button>
                             <button id="contactSupport"
                                 onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
                         </div>
