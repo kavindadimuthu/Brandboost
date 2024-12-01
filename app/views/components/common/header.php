@@ -22,6 +22,8 @@
             background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
             color: #fff;
             padding: 14px 30px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;

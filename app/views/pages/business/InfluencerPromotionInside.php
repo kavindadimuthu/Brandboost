@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UI Layout with Flexbox</title>
-  <link rel="stylesheet" href="../../styles/common/designerPackageView.css">
   <link rel="stylesheet" href="../../styles/common/header.css">
+  <!-- <link rel="stylesheet" href="../../styles/influencer/header.css"> -->
   <script src="../../scripts/common/designerPackageView.js"></script>
   <style>
     * {
@@ -75,6 +75,7 @@
   <div class="outer-container">
     <div class="header">
         <?php include __DIR__ . '/../../components/common/header.php'; ?>
+
     </div>
     <div class="main-content">
       <div class="main">
@@ -85,7 +86,7 @@
       </div>
     </div>
     <div class="bottombar">
-      <?php include __DIR__ . '/../../components/common/carousel.php'; ?>
+      <!-- <?php include __DIR__ . '/../../components/common/carousel.php'; ?> -->
     </div>
   </div>
 </body>

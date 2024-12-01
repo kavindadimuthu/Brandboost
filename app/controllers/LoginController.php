@@ -50,7 +50,8 @@ class LoginController extends Controller
                 }
                 exit();
             } else {
-                echo "Invalid email or password.";
+                echo "<script>alert('Invalid email or password.');</script>";
+                echo "<script>window.location.href = '/homecontroller/login';</script>";
             }
         } else {
             echo "Invalid request method.";
@@ -75,7 +76,7 @@ class LoginController extends Controller
             $this->model('UserModel');
             $userModel = new UserModel();
             $user = $userModel->getAdminByEmail($email);
-            
+
 
             // Check if the user exists and the password is correct
             if ($user && ($password === $user->password)) {
@@ -88,21 +89,29 @@ class LoginController extends Controller
                 // Redirect to the admin dashboard
                 header('Location: /adminviewcontroller/admindashboard');
                 exit();
-            } else
-                {
-                    echo "<script>alert('Invalid email or password.');</script>";
-                    echo "<script>window.location.href = '/homecontroller/loginAdmin';</script>";
-                }
+            } else {
+                echo "<script>alert('Invalid email or password.');</script>";
+                echo "<script>window.location.href = '/homecontroller/loginAdmin';</script>";
+            }
         }
 
     }
 
     public function logout()
     {
+        $role = $_SESSION['role'];
+
         // session_start();
         session_destroy();
-        header('Location: /homecontroller/login');
-        exit();
+
+        if ($role == 'admin') {
+            header('Location: /homecontroller/loginAdmin');
+            exit();
+        } else {
+            header('Location: /homecontroller/login');
+            exit();
+        }
+
     }
 }
 ?>
