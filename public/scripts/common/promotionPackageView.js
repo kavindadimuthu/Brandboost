@@ -1,51 +1,52 @@
 const thumbnails = [
     'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/400367980/original/794c2acd1eb2284c79ae57461604e57792270619/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
-    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs3/400367980/original/4c66d4320573d0f5f51b7c9b2300c6808e78d16d/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
+    'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/125726886/original/4c112ebb7727638c9fdaa9368ce1a48239ddb5d7/create-and-setup-social-media-pages-for-any-business-or-blog-6a53.png',
     'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs2/400367980/original/6769585035395452a495f7dadfec0ed778def274/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png',
     'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/274737734/original/638aeb871506eb6b722c6aaaa3dd39ff12ea5dec/design-stunning-professional-flyer-for-your-business.png',
     'https://fiverr-res.cloudinary.com/images/t_smartwm/t_gig_pdf_gallery_view_ver4,q_auto,f_auto/v1/attachments/delivery/asset/7df0a8dd5c370b5ac5281904d778b8f7-1622151870/flyer%20page%201%20view%20only/create-a-stunning-poster-or-flyer.pdf'
 ];
 
 const categories = [
-    'Flyer Design',
-    'Brochure Design',
-    'Social Media',
-    'Marketing Material',
-    'Print Design'
+    'Instagram Promotions',
+    'YouTube Promotions',
+    'Facebook Ads',
+    'TikTok Campaigns',
+    'Twitter Promotions'
 ];
 
 const aboutContent = {
-    description: "Create a attractive, selling and strategical design. Here for reduce downtime and more profit of your business.",
+    description: "Maximize your brand's reach with targeted influencer promotions. Connect with audiences through engaging and impactful campaigns.",
     highlights: [
-        "High Quality: Supreme Design",
-        "Unlimited Revisions: Unlimited times",
-        "Fast Project Design: Typically under 24 hours",
-        "Service Guarantee: 100% money back"
+        "Wide Reach: Gain visibility with millions of followers",
+        "Platform Diversity: Promote across multiple platforms",
+        "Creative Strategies: Tailored campaigns for your audience",
+        "Service Guarantee: 100% satisfaction or money back"
     ]
 };
 
-const deliveryFormats = [
-    'PDF',
-    'JPEG',
-    'PNG',
-    'AI',
-    'PSD'
+const platforms = [
+    'Instagram',
+    'YouTube',
+    'Facebook',
+    'TikTok',
+    'Twitter'
 ];
 
 const reviews = [
     {
-        name: "John Brown",
+        name: "Emma L.",
         avatar: "https://via.placeholder.com/40",
         rating: 5,
-        comment: "Excellent work! Very professional and quick delivery."
+        comment: "Amazing experience! The campaign brought in so much traffic to my site."
     },
     {
-        name: "Sarah K.",
+        name: "David R.",
         avatar: "https://via.placeholder.com/40",
-        rating: 4.5,
-        comment: "Great communication and quality design."
+        rating: 4.8,
+        comment: "Highly professional service and great ROI. Will work again."
     }
 ];
+
 
 // const recommendedServices = [
 //     {
@@ -104,7 +105,7 @@ function renderAboutContent() {
 
 function renderDeliveryFormats() {
     const container = document.getElementById('deliveryFormats');
-    deliveryFormats.forEach(format => {
+    platforms.forEach(format => {
         const div = document.createElement('div');
         div.className = 'format-card';
         div.textContent = format;

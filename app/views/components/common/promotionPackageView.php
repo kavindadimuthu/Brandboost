@@ -11,7 +11,7 @@
         <!-- Main Service Image -->
         <div class="main-service">
             <div class="service-header">
-                <h1>Our agency will design stunning flyer and brochure for your business</h1>
+                <h1>Our Agency Will Boost Your Brand's Visibility with Targeted Influencer Campaignss</h1>
                 <div class="rating">
                     <span class="stars">
                         <i class="fas fa-star"></i>
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="main-image">
-                <img src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/400367980/original/794c2acd1eb2284c79ae57461604e57792270619/create-stunning-modern-flyer-design-business-card-brochures-or-booklets.png" alt="Social Media Icons">
+                <img src="https://fiverr-res.cloudinary.com/videos/so_58.345428,t_main1,q_auto,f_auto/lokyruezin7kdrtxkxx1/create-business-commercial-video-or-social-media-video-ad.png">
             </div>
             <div class="thumbnail-grid" id="thumbnailGrid">
                 <!-- Thumbnails will be rendered here -->
@@ -49,7 +49,7 @@
 
         <!-- Delivering Formats -->
         <div class="delivery-section">
-            <h2>Delivering formats</h2>
+            <h2>Platforms</h2>
             <div class="delivery-formats" id="deliveryFormats">
                 <!-- Delivery formats will be rendered here -->
             </div>

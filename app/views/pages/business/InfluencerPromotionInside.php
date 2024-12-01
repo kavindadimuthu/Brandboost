@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UI Layout with Flexbox</title>
   <link rel="stylesheet" href="../../styles/common/header.css">
+  <link rel="stylesheet" href="../../styles/common/designerPackageView.css">
   <!-- <link rel="stylesheet" href="../../styles/influencer/header.css"> -->
-  <script src="../../scripts/common/designerPackageView.js"></script>
+  <script src="../../scripts/common/promotionPackageView.js"></script>
   <style>
     * {
       margin: 0;
@@ -32,6 +33,7 @@
       flex-direction: column;
       height: 100%;
       width: 100%;
+      margin-top: 50px;
     }
 
     .header {
@@ -79,15 +81,14 @@
     </div>
     <div class="main-content">
       <div class="main">
-        <?php include __DIR__ . '/../../components/common/designerPackageView.php'; ?>
+        <?php include __DIR__ . '/../../components/common/promotionPackageView.php'; ?>
       </div>
       <div class="sidebar">
         <?php include __DIR__ . '/../../components/common/packageCard.php'; ?>
       </div>
     </div>
-    <div class="bottombar">
-      <!-- <?php include __DIR__ . '/../../components/common/carousel.php'; ?> -->
-    </div>
+    <!-- <div class="bottombar">
+    </div> -->
   </div>
 </body>
 </html>

@@ -54,4 +54,8 @@ class InfluencerViewController extends Controller {
     public function influencerpreviewprofile(){
         $this->view('pages/influencer/InfluencerPreviewProfile');
     }
+
+    public function orderRequestView(){
+        $this->view('pages/influencer/OrderRequestView');
+    }
 }

@@ -361,6 +361,7 @@
         function createServiceCards(services) {
             const cardsHTML = services.map(data => `
                 <div class="service-card">
+                <a href="http://localhost:8000/BusinessViewController/influencerPromotionInside">
                     <div class="main-image">
                         <img src="${data.imageUrl}" alt="${data.serviceTitle}">
                     </div>
@@ -386,6 +387,7 @@
                         </div>
                         <div class="price">${data.price}</div>
                     </div>
+                </a>
                 </div>
             `).join('');
 
