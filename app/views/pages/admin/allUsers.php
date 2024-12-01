@@ -183,6 +183,22 @@
         }
 
         renderUsers(users);
+
+
+        const tableBody = document.querySelector('#usersTable tbody');
+
+        tableBody.addEventListener('click', function (event) {
+            const row = event.target.closest('tr');
+            if (row) {
+                const userId = row.cells[0].textContent; // Assuming complainId is in the first cell
+                handleRowClick(userId);
+            }
+        });
+
+        function handleRowClick(userId) {
+            console.log('Row clicked, complaint ID:', userId);
+            window.location.href = '/AdminViewController/singleuserview';
+        }
     </script>
 </body>
 
