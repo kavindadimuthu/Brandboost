@@ -188,8 +188,11 @@
                     `).join('')}
                 </div>
                 <div class="price">${data.price}</div>
-                <button class="order-button">Order Now</button>
+                <a href= "http://localhost:8000/BusinessViewController/orderRequirements">
+                    <button class="order-button">Order Now</button>
+                </a>
                 <button class="contact-button">Contact</button>
+                
             `;
 
             document.getElementById('pricing-content').innerHTML = content;

@@ -16,6 +16,8 @@
             background: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 100px;
+            border-radius: 10px;
         }
         .gig-details, .order-form {
             margin-bottom: 20px;
@@ -57,6 +59,8 @@
     </style>
 </head>
 <body>
+<?php include __DIR__ . '/../../components/common/header.php'; ?>
+
     <div class="container">
         <div class="gig-details">
             <h2>Gig Details</h2>

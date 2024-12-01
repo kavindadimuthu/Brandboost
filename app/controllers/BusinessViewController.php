@@ -93,6 +93,8 @@ class BusinessViewController extends Controller {
     public function orderRequirements(){
         $this->view('pages/business/OrderRequirements');
     }
- 
+
+
+
     
 }
