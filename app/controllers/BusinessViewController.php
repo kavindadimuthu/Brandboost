@@ -29,6 +29,9 @@ class BusinessViewController extends Controller {
     public function BusinessSingleOrder() {
         $this->view('pages/business/BusinessSingleOrder');
     }
+    public function RequestRivision() {
+        $this->view('pages/business/RequestRivision');
+    }
     public function BusinessDSingleOrder() {
         $this->view('pages/business/BusinessDSingleOrder');
     }
@@ -73,14 +76,9 @@ class BusinessViewController extends Controller {
     public function register(){
         $this->view('pages/register/businessOwner');
     }
-
-
-
-
     public function serviceCard() {
         $this->view('components/common/serviceCard');
     }
-
 
     public function influencerFirst(){
         $this->view('pages/business/influencerFirst');
