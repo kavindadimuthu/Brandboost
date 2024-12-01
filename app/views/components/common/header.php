@@ -137,11 +137,9 @@
             <?php
                     if(isset($_SESSION['role']) && $_SESSION['role'] == 'businessman'){
                         echo '
-                        <a href="http://localhost:8000/BusinessViewController/viewInfluencers">Influencers</a>
-                        <a href="http://localhost:8000/BusinessViewController/AllOrders">Designers</a>
+                        <a href="http://localhost:8000/BusinessViewController/viewInfluencerPromotions">Promotions</a>
+                        <a href="http://localhost:8000/BusinessViewController/viewDesignerGigs">Desigs</a>
                         <a href="http://localhost:8000/BusinessViewController/myOrders">Orders</a>
-                        <a href="http://localhost:8000/BusinessViewController/viewInfluencers">Verifications</a>
-                        <a href="http://localhost:8000/BusinessViewController/viewInfluencers">FAQ</a>
                         ';
                     }
                     else if(isset($_SESSION['role']) && $_SESSION['role'] == 'influencer'){
