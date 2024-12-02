@@ -324,7 +324,7 @@
                     <div class="chat-header">
                         <div class="user">
                             <div class="avatar"></div>
-                            <span class="username">Spa Ceylon</span>
+                            <span class="username">Sweet Oven Bakery</span>
                         </div>
                     </div>
                     <div class="chat-box" id="chatBox">
@@ -343,11 +343,11 @@
                         <h4>Time Left To Delivery</h4>
                         <div id="countdown"></div>
                         <button id="deliverNow" onclick="window.location.href='/designerviewcontroller/orderDelivery'">Deliver Now</button>
-                        <button class="cancel-button" id="cancelOrder">Cancel Order</button>
+                        <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
                     </div>
                     <div class="order-details">
                         <h4>Order Details</h4>
-                        <p><strong>Ordered By:</strong> <span id="orderedBy">Spa Ceylon</span></p>
+                        <p><strong>Ordered By:</strong> <span id="orderedBy">Sweet Oven Bakery</span></p>
                         <p><strong>Date:</strong> <span id="orderDate">Nov 27, 2024, 8:50 AM</span></p>
                         <p><strong>Due:</strong> <span id="orderDue">Dec 8, 2024, 8:50 AM</span></p>
                     </div>
@@ -379,10 +379,10 @@
 
     <div class="cancel-popup" id="cancelPopup">
         <button class="close-btn" id="closeCancelPopup">&times;</button>
-        <h4>Cancel Order</h4>
+        <h4>Request order cancellation</h4>
         <p>Please provide a reason for cancellation:</p>
         <textarea id="cancelReason" placeholder="Type your reason..."></textarea>
-        <button id="requestCancel">Request Cancel</button>
+        <button id="requestCancel">Send Cancellation Request</button>
     </div>
 
     <?php include __DIR__ . '/../../pages/designer/DeliveriesTable.php'; ?>
@@ -394,13 +394,13 @@
 
         // Mock data
         const orderDetails = {
-            orderedBy: "Spa Ceylon",
-            orderDate: "Nov 27, 2024, 8:50 AM",
-            orderDue: "Dec 8, 2024, 8:50 AM",
+            orderedBy: "Sweet Oven Bakery",
+            orderDate: "Dec 1, 2024, 8:50 AM",
+            orderDue: "Dec 5, 2024, 8:50 AM",
         };
 
         const messages = [
-            { sender: "Spa Ceylon", text: "Hello" },
+            { sender: "Sweet Oven Bakery", text: "Hello" },
             { sender: "Me", text: "Hi" },     
         ];
 
@@ -511,7 +511,7 @@
             }
         });
     </script>
-    <script src="../scripts/common/header.js"></script>
+    <!-- <script src="../scripts/common/header.js"></script> -->
 </body>
 
 </html>

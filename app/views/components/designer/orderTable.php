@@ -137,19 +137,27 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
             {
-                buyer: "Spa Ceylon",
-                gig: "Do business Promotion Video",
-                dueOn: "3 Days",
-                total: "$200",
+                buyer: "Sweet Oven Bakery",
+                gig: "Make promoting posts and reels for fb and insta ",
+                dueOn: "4 Days",
+                total: "$120",
                 status: "In Progress"
-            },
+            },            ,
             {
-                buyer: "WSO2",
+                buyer: "Tech Pro Solutions PVT LTD",
                 gig: "Create Tech company promotional Facebook Post",
                 dueOn: "4 Days",
                 total: "$100",
                 status: "Completed"
+            },
+            {
+                buyer: "Healthguard Pharmacy",
+                gig: "Do business Promotion Video",
+                dueOn: "3 Days",
+                total: "$200",
+                status: "Completed"
             }
+            
         ];
 
         // Function to load data into the table

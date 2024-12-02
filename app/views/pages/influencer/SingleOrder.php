@@ -324,7 +324,7 @@
                     <div class="chat-header">
                         <div class="user">
                             <div class="avatar"></div>
-                            <span class="username">Spa Ceylon</span>
+                            <span class="username">Kaikos Cafe</span>
                         </div>
                     </div>
                     <div class="chat-box" id="chatBox">
@@ -394,13 +394,13 @@
 
         // Mock data
         const orderDetails = {
-            orderedBy: "Spa Ceylon",
+            orderedBy: "Kaikos Cafe",
             orderDate: "Nov 27, 2024, 8:50 AM",
             orderDue: "Dec 8, 2024, 8:50 AM",
         };
 
         const messages = [
-            { sender: "Spa Ceylon", text: "Hello" },
+            { sender: "Kaikos", text: "Hello" },
             { sender: "Me", text: "Hi" },     
         ];
 
