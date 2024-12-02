@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Gig</title>
     <link rel="stylesheet" href="../../styles/common/header.css">
-    <link rel="stylesheet" href="../../styles/influencer/index.css">
+    <!-- <link rel="stylesheet" href="../../styles/influencer/index.css"> -->
 
     <style>
+        .container{
+            width: 60%;
+            margin: 0 auto;
+        }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
