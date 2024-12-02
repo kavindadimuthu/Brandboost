@@ -303,14 +303,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Cynthia Snyder
+                     Sachini Ariyarathne
                   </div>
                   <div class="text">
-                     You: 😍😴😴
+                     You: ha ha
                   </div>
-               </div>
-               <div class="message-time">
-                  1:17 PM
                </div>
             </div>
             <div class="message-item">
@@ -319,15 +316,12 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Jevon Raynor
+                     Safran Zahim
                   </div>
                   <div class="text">
                      Ok I will
                   </div>
                </div>
-               <div class="message-time">
-                  Sun
-               </div>
             </div>
             <div class="message-item">
                <img alt="Profile picture of Jevon Raynor" height="40"
@@ -335,14 +329,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Annie Haley
+                     Isuru Naveen
                   </div>
                   <div class="text">
                      How can I help you
                   </div>
-               </div>
-               <div class="message-time">
-                  Mon
                </div>
             </div>
             <div class="message-item">
@@ -351,14 +342,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Selina Rutherford
+                     Hansika Kularathne
                   </div>
                   <div class="text">
                      good morning
                   </div>
-               </div>
-               <div class="message-time">
-                  Fri
                </div>
             </div>
             <div class="message-item">
@@ -367,14 +355,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Frank Sinat
+                     Charitha Sudewa
                   </div>
                   <div class="text">
                      Okay
                   </div>
-               </div>
-               <div class="message-time">
-                  Nov 3
                </div>
             </div>
             <div class="message-item">
@@ -383,14 +368,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Stephen Emil
+                     Manilka Rajapaksha
                   </div>
                   <div class="text">
                      My packages are in the gig. you can order
                   </div>
-               </div>
-               <div class="message-time">
-                  Nov 4
                </div>
             </div>
             <div class="message-item">
@@ -399,14 +381,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     James Smith
+                     T.M. Dilshan
                   </div>
                   <div class="text">
                      How can i help you
                   </div>
-               </div>
-               <div class="message-time">
-                  Nov 1
                </div>
             </div>
             <div class="message-item">
@@ -415,14 +394,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Fiona Jackson
+                     Kavinda Dewmith
                   </div>
                   <div class="text">
                      bye
                   </div>
-               </div>
-               <div class="message-time">
-                  Sep 28
                </div>
             </div>
             <div class="message-item">
@@ -431,14 +407,11 @@
                   width="40" />
                <div class="message-info">
                   <div class="name">
-                     Green William
+                     Anura Kumara
                   </div>
                   <div class="text">
                      good bye
                   </div>
-               </div>
-               <div class="message-time">
-                  Sep 16
                </div>
             </div>
          </div>
@@ -450,7 +423,7 @@
                width="50" />
             <div class="chat-info">
                <div class="name">
-                  Cynthia Snyder
+                  Sachini Ariyarathne
                </div>
                <div class="status">
                   Active now
@@ -468,28 +441,14 @@
                   width="40" />
                <div class="message-content">
                   <div class="text">
-                     Hi good morning this is the file.
-                  </div>
-                  <div class="file">
-                     <i class="fas fa-paperclip">
-                     </i>
-                     File-name-11 Oct 2021
-                     <span style="margin-left: auto;">
-                        120 kB
-                     </span>
-                  </div>
-                  <div class="time">
-                     1:12 PM
+                     Hi good morning.
                   </div>
                </div>
             </div>
             <div class="message">
                <div class="message-content" style="margin-left: auto;">
                   <div class="text" style="background-color: #e6e6ff;">
-                     It's good but can you design it more colorful?
-                  </div>
-                  <div class="time" style="text-align: right;">
-                     1:15 PM
+                     good morning
                   </div>
                </div>
                <img alt="Profile picture of Cynthia Snyder" height="40"
@@ -502,10 +461,7 @@
                   width="40" />
                <div class="message-content">
                   <div class="text">
-                     😍😴😴
-                  </div>
-                  <div class="time">
-                     1:17 PM
+                     lol
                   </div>
                </div>
             </div>
@@ -517,18 +473,12 @@
                   <img alt="Image of a yellow flower in a vase" height="200"
                      src="https://storage.googleapis.com/a1aa/image/wk9Uly7YXbIhFFfOmOgGwp0yaAw3L80PXXErgNIiEcFLld6JA.jpg"
                      width="200" />
-                  <div class="time">
-                     1:17 PM
-                  </div>
                </div>
             </div>
             <div class="message">
                <div class="message-content" style="margin-left: auto;">
                   <div class="text" style="background-color: #e6e6ff;">
-                     😍😴😴
-                  </div>
-                  <div class="time" style="text-align: right;">
-                     1:17 PM
+                     lol
                   </div>
                </div>
                <img alt="Profile picture of Cynthia Snyder" height="40"
@@ -562,32 +512,6 @@
          </div>
          <div class="images">
             <div class="header">
-               <div class="title">
-                  Image (50)
-               </div>
-               <div class="view-all">
-                  View all
-               </div>
-            </div>
-            <div class="image-list">
-               <img alt="Image of a yellow flower in a vase" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/wk9Uly7YXbIhFFfOmOgGwp0yaAw3L80PXXErgNIiEcFLld6JA.jpg"
-                  width="60" />
-               <img alt="Image of an avocado" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/os1Aqoei3W2HKadtNQ0Uez4DJLb2NANEyeaKUjEjQoyqU2pnA.jpg"
-                  width="60" />
-               <img alt="Image of a chair" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/zVkYVNO1kQoeLSsHOeIq41yhMUZv27krVv0HDbbWetFxU2pnA.jpg"
-                  width="60" />
-               <img alt="Image of a desk" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/YNJLF91idSqGGxb5sY3XxlEhCAYfiBParVEc8SGgPPyIld6JA.jpg"
-                  width="60" />
-               <img alt="Image of cherries" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/j1fqEi88RPVDO6lcCCnA8yTVBKIgxKfPfw34a10fOdjxosTPB.jpg"
-                  width="60" />
-               <img alt="Image of a cactus" height="60"
-                  src="https://storage.googleapis.com/a1aa/image/MB8ijppJuWIWIdfHf8dXU9csujVqBuLc8heQ7ueh8aOOpsTPB.jpg"
-                  width="60" />
             </div>
          </div>
       </div>

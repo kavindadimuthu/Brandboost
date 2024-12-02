@@ -15,7 +15,7 @@ class HomeController extends Controller
                     header('Location: /adminviewcontroller/admindashboard');
                     break;
                 case 'businessman':
-                    header('Location: /BusinessViewController/profile');
+                    header('Location: /BusinessViewController/viewInfluencerPromotions');
                     break;
                 case 'influencer':
                     header('Location: /InfluencerViewController/influencerDashboard');
