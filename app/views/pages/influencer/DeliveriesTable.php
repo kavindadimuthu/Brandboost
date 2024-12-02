@@ -177,9 +177,8 @@
         <table class="orders-table">
             <thead>
                 <tr>
-                    <th>Order</th>
-                    <th>Influencer/Designer</th>
-                    <th>RivisionCount</th>
+                    <th>Date & Time</th>
+                    <th>Revision Count</th>
                     <th>File</th>
                     <th>Status</th>
                 </tr>
@@ -203,15 +202,13 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
             {
-                order: "Promotional Video",
-                provider: "Kavindya Adhikari",
+                time: "Dec 1, 2024, 10:43 PM",
                 rivisioncount: "2",
                 file: "video2.mp4",
                 status: "Accepted"
             },
             {
-                order: "Promotional Video",
-                provider: "Kavindya Adhikari",
+                time: "Nov 26, 2024, 1:38 PM",
                 rivisioncount: "1",
                 file: "video1.mp4",
                 status: "Rejected"
@@ -225,8 +222,7 @@
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
-                    <td>${order.order}</td>
-                    <td>${order.provider}</td>
+                    <td>${order.time}</td>
                     <td>${order.rivisioncount}</td>
                     <td>${order.file}</td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>

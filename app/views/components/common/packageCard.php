@@ -139,11 +139,11 @@
                 revisions: "2 revisions",
                 features: [
                     "Files Ready for Print",
-                    "Aliquip labore dolor",
-                    "Commodo excepteu",
-                    "Ullamco minim anim"
+                    "Custom Designs",
+                    "Quality Graphics",
+                    "Modern and Trendy Styles"
                 ],
-                price: "$ 10"
+                price: "LKR 5 000"
             },
             premium: {
                 duration: "3 months",
@@ -155,7 +155,7 @@
                     "Advanced Features",
                     "Custom Branding"
                 ],
-                price: "$ 25"
+                price: "LKR 10 000"
             }
         };
 
@@ -191,8 +191,9 @@
                 <a href= "http://localhost:8000/BusinessViewController/orderRequirements">
                     <button class="order-button">Order Now</button>
                 </a>
+                <a href= "http://localhost:8000/homecontroller/chat">
                 <button class="contact-button">Contact</button>
-                
+                </a>
             `;
 
             document.getElementById('pricing-content').innerHTML = content;

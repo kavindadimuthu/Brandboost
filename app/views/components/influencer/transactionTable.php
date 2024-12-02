@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* General container styles */
-  
     .transaction-container {
       margin: 20px;
     }
@@ -57,28 +56,27 @@
     }
 
     .pagination {
-        display: flex;
-        justify-content: center;
-        margin: 20px 0;
-        }
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
 
-        .pagination button {
-        margin: 0 5px;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        
-        cursor: pointer;
-        transition: background 0.3s;
-        }
+    .pagination button {
+      margin: 0 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        .pagination button:hover {
-        background: #0056b3;
-        }
+    .pagination button:hover {
+      background: #0056b3;
+    }
 
-        .pagination button.active {
-        background: #a29bfe;;
-        }
+    .pagination button.active {
+      background: #a29bfe;
+    }
   </style>
 </head>
 
@@ -93,7 +91,6 @@
         <tr>
           <th>Date</th>
           <th>Activity</th>
-          <th>Description</th>
           <th>From</th>
           <th>Order</th>
           <th>Amount</th>
@@ -105,62 +102,56 @@
     </table>
   </div>
   <div class="pagination">
-        <button>&lt;</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>&gt;</button>
-    </div>
+    <button>&lt;</button>
+    <button class="active">1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>&gt;</button>
+  </div>
 
   <script>
     const transactions = [
       {
-        date: "11/25/2024",
+        date: "12/01/2024",
         activity: "Clearing",
-        description: "Order will clear in 7 days",
-        from: "daisymaas",
+        from: "Global Marketplace",
         order: "FO60A75801",
-        amount: "$12.00"
+        amount: "LKR 4,000.00"
+      },
+      {
+        date: "11/29/2024",
+        activity: "Clearing",
+        from: "E-commerce Platform",
+        order: "FO1660A701",
+        amount: "LKR 12,000.00"
       },
       {
         date: "11/25/2024",
         activity: "Clearing",
-        description: "Order extra will clear in 7 days",
-        from: "daisymaas",
-        order: "FO1660A701",
-        amount: "$8.00"
-      },
-      {
-        date: "11/24/2024",
-        activity: "Clearing",
-        description: "Order will clear in 7 days",
-        from: "oluebube30",
+        from: "Online Seller Network",
         order: "FO3235A0E41",
-        amount: "$12.00"
+        amount: "LKR 19,000.00"
       },
       {
-        date: "11/17/2024",
+        date: "11/20/2024",
         activity: "Withdrawal",
-        description: "Transferred successfully",
-        from: "Payoneer",
+        from: "Payment Gateway",
         order: "-",
-        amount: "-$63.42"
+        amount: "-LKR 14,000.00"
       },
       {
-        date: "11/17/2024",
+        date: "11/18/2024",
         activity: "Earning",
-        description: "Order extra",
-        from: "guessoka",
+        from: "Freelance Platform",
         order: "FO82C8C9196",
-        amount: "$12.00"
+        amount: "$LKR 2,000.00"
       },
       {
-        date: "11/17/2024",
+        date: "11/15/2024",
         activity: "Earning",
-        description: "Order",
-        from: "guessoka",
+        from: "Digital Marketplace",
         order: "FO88C9193C6",
-        amount: "$8.00"
+        amount: "LKR 9,000.00"
       }
     ];
 
@@ -168,13 +159,18 @@
       const tableBody = document.getElementById('transactionTableBody');
       tableBody.innerHTML = ''; // Clear existing content
 
-      data.forEach(transaction => {
+      // Sort transactions by date (most recent first)
+      const sortedTransactions = data.sort((a, b) => {
+        return new Date(b.date.split('/').reverse().join('/')) - 
+               new Date(a.date.split('/').reverse().join('/'));
+      });
+
+      sortedTransactions.forEach(transaction => {
         const row = document.createElement('tr');
         
         row.innerHTML = `
           <td>${transaction.date}</td>
           <td>${transaction.activity}</td>
-          <td>${transaction.description}</td>
           <td>${transaction.from}</td>
           <td>${transaction.order}</td>
           <td>${transaction.amount}</td>

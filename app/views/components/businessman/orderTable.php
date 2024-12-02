@@ -34,7 +34,7 @@
                 service_type: "Promotion",
                 service: "Promotional Post",
                 dueOn: "3 Days",
-                total: "$20",
+                total: "LKR 10 000",
                 status: "In Progress"
             },
             {
@@ -42,15 +42,15 @@
                 service_type: "Design",
                 service: "Promotional Post Design",
                 dueOn: "3 Days",
-                total: "$20",
+                total: "LKR 20 000",
                 status: "In Progress"
             },
             {
-                provider: "Shanudrie Priyasad",
+                provider: "Nethsilu Marasinghe",
                 service_type: "Promotion",
                 service: "Promotional Video",
                 dueOn: "3 Days",
-                total: "$20",
+                total: "LKR 15 000",
                 status: "Completed"
             },
             {
@@ -58,7 +58,7 @@
                 service_type: "Design",
                 service: "Promotional Post Design",
                 dueOn: "3 Days",
-                total: "$20",
+                total: "LKR 7 500",
                 status: "Completed"
             }
         ];

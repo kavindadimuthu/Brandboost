@@ -46,7 +46,7 @@ input, textarea {
 }
 button {
     padding: 10px 20px;
-    background-color: #6a11cb;
+    background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -54,7 +54,7 @@ button {
     cursor: pointer;
 }
 button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #4e0184 0%, #560ea3 100%);
 }
 .contact-info {
     display: flex;
@@ -79,7 +79,7 @@ button:hover {
         <div class="content">
             <div class="main-content">
     <div class="container">
-        <h1>Make complaint</h1>
+        <h1>Contact Us</h1>
         <form action="/submit-complaint" method="POST">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>

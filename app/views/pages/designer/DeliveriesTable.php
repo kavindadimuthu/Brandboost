@@ -1,74 +1,117 @@
 <!DOCTYPE html>
-< lang="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="../../../../public/styles/business-owner/DeliveriesTable.css"> -->
-   <style>
-            .header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px; /* Margin below header */
-        }
+  <style>
+    .orders-container {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;    
+        margin: 0 300px;
+    }
 
-        .header-row h2 {
-            color: #333; /* Color for header text */
-            font-size: 24px; /* Font size for header */
-            margin: 0; /* No margin */
-        }
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
-        .pagination {
+    .header-row h2 {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .orders-table th {
+        text-align: left;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        color: #666;
+        font-weight: 500;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .orders-table td {
+        padding: 16px;
+        color: #333;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .status {
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status.in-progress {
+        color: #b86e00;
+        background: #fff3e5;
+    }
+
+    .status.completed {
+        color: #0a7c42;
+        background: #e6f4ed;
+    }
+
+    .status.accepted {
+        color: #0a7c42;
+        background: #e6f4ed;
+    }
+
+    .status.rejected {
+        color: #d9534f;
+        background: #fbe6e6;
+    }
+
+    .pagination {
         display: flex;
         justify-content: center;
         margin: 20px 0;
-        }
+    }
 
-        .pagination button {
+    .pagination button {
         margin: 0 5px;
         padding: 8px 12px;
         border: none;
         border-radius: 5px;
-        
         cursor: pointer;
         transition: background 0.3s;
-        }
+    }
 
-        .pagination button:hover {
+    .pagination button:hover {
         background: #0056b3;
-        }
+        color: white;
+    }
 
-        .pagination button.active {
-        background: #a29bfe;;
-        }
-
-        .download-button {
-            background-color: #6a11cb; /* Blue color for the button */
-            color: white; /* White text color */
-            border: none; /* No border */
-            padding: 5px 10px; /* Padding */
-            cursor: pointer; /* Pointer cursor on hover */
-            margin-left: 10px; /* Space between file name and button */
-        }
-
-        .download-button:hover {
-            background-color: darkblue; /* Darker blue on hover */
-        }
-   </style>
+    .pagination button.active {
+        background: #a29bfe;
+        color: white;
+    }
+  </style>
 </head>
 
 <body>
     <div class="orders-container">
-    <div class="header-row">
-            <h2>Deliveries</h2> <!-- Header for the orders section -->
+        <div class="header-row">
+            <h2>Deliveries</h2>
         </div>
         
         <table class="orders-table">
             <thead>
                 <tr>
-                    <th>Order</th>
-                    <th>Influencer/Designer</th>
-                    <th>RivisionCount</th>
+                    <th>Date</th>
+                    <th>Revision Count</th>
                     <th>File</th>
                     <th>Status</th>
                 </tr>
@@ -92,21 +135,19 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
             {
-                order: "Promotional Video",
-                provider: "Kavindya Adhikari",
+                order: "Dec 2, 2024, 8:10 AM",
                 rivisioncount: "2",
                 file: "video2.mp4",
                 status: "Accepted"
             },
             {
-                order: "Promotional Video",
-                provider: "Kavindya Adhikari",
+                order: "Dec 1, 2024, 10:30 PM",
                 rivisioncount: "1",
                 file: "video1.mp4",
                 status: "Rejected"
             }
-            
         ];
+
         // Function to load data into the table
         function loadOrdersData() {
             const tableBody = document.getElementById('ordersTableBody');
@@ -116,26 +157,17 @@
                 
                 row.innerHTML = `
                     <td>${order.order}</td>
-                    <td>${order.provider}</td>
                     <td>${order.rivisioncount}</td>
-                    <td>${order.delivery}</td>
-                    <td>${order.file}<button class="download-button" onclick="downloadFile('${order.file}')">Download</button></td>
-
+                    <td>${order.file}</td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
                 `;
-                
+
                 row.addEventListener('click', () => {
                     window.location.href = 'http://localhost:8000/BusinessViewController/BusinessSingleOrder';
                 });
-                
+
                 tableBody.appendChild(row);
             });
-        }
-
-        // Function to handle file download
-        function downloadFile(fileName) {
-            // Replace with your actual download logic
-            alert(`Downloading ${fileName}...`);
         }
 
         // Load data when page loads

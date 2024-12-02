@@ -136,32 +136,25 @@
     <script>
         // Sample data structure - replace this with your actual data source
         const orders = [
-                                {
-                        buyer: "John Smith",
-                        gig: "Logo Design for Startup",
-                        dueOn: "2 Days",
-                        total: "$150",
+                    {
+                        buyer: "Kaikos Cafe",
+                        gig: "Do Business Promotion through Tiktok and Instagram",
+                        dueOn: "7 Days",
+                        total: "LKR 25,000",
                         status: "In Progress"
                     },
                     {
-                        buyer: "Emily Carter",
-                        gig: "Social Media Content Creation",
-                        dueOn: "5 Days",
-                        total: "$200",
-                        status: "In Progress"
-                    },
-                    {
-                        buyer: "Mike Johnson",
-                        gig: "Custom WordPress Website",
+                        buyer: "Wasana Dress Point",
+                        gig: "Do Business Promotion through Facebook and Instagram",
                         dueOn: "Delivered",
-                        total: "$750",
+                        total: "LKR 30,000",
                         status: "Completed"
                     },
                     {
-                        buyer: "Sarah Lee",
-                        gig: "SEO Optimization for Blog",
+                        buyer: "Ceylon Home Decor",
+                        gig: "Do Business Promotion through my 1M Youtube channel",
                         dueOn: "Delivered",
-                        total: "$300",
+                        total: "LKR 40,000",
                         status: "Completed"
                     }
 

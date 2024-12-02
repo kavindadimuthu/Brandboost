@@ -202,7 +202,7 @@
                         <h2>Common Promotion Details</h2>
                         <label>Promotion Title: <input type="text" name="title" required></label>
                         <label>Description: <textarea name="description" required></textarea></label>
-                        <label>Delivery Formats:</label>
+                        <label>Platforms:</label>
                         <div class="delivery-formats">
                             <div>
                                 <input type="checkbox" name="platform" value="facebook" id="facebook">
@@ -234,14 +234,14 @@
                             <label>Benefits: <textarea name="basic[benefits]" required></textarea></label>
                             <label>Delivery Days: <input type="number" name="basic[delivery_days]" required></label>
                             <label>Revisions: <input type="number" name="basic[revisions]" required></label>
-                            <label>Price: <input type="number" name="basic[price]" step="0.01" required></label>
+                            <label>Price($): <input type="number" name="basic[price]" step="0.01" required></label>
                         </div>
                         <div class="package">
                             <h3>Premium Package</h3>
                             <label>Benefits: <textarea name="premium[benefits]" required></textarea></label>
                             <label>Delivery Days: <input type="number" name="premium[delivery_days]" required></label>
                             <label>Revisions: <input type="number" name="premium[revisions]" required></label>
-                            <label>Price: <input type="number" name="premium[price]" step="0.01" required></label>
+                            <label>Price($): <input type="number" name="premium[price]" step="0.01" required></label>
                         </div>
                         <button type="button" id="backStep2">Back</button>
                         <button type="submit" id="submitPromotion">Submit</button>
