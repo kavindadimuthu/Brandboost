@@ -179,25 +179,25 @@
             const data = {
                 availableFunds: {
                     balanceAvailable: "0.00",
-                    withdrawnToDate: "2707.70"
+                    withdrawnToDate: "2,707.70"
                 },
                 futurePayments: {
-                    paymentsBeingCleared: "32.00",
-                    paymentsForActiveOrders: "56.00"
+                    paymentsBeingCleared: "26, 000.00",
+                    paymentsForActiveOrders: "13, 500.00"
                 },
                 earningsAndExpenses: {
-                    earningsToDate: "2896.80",
-                    expensesToDate: "189.10"
+                    earningsToDate: " 100,000.80",
+                    expensesToDate: " 19,000.00"
                 }
             };
 
             // Update HTML with data
-            document.getElementById('balance-available').textContent = `$${data.availableFunds.balanceAvailable}`;
-            document.getElementById('withdrawn-to-date').textContent = `$${data.availableFunds.withdrawnToDate}`;
-            document.getElementById('payments-clearing').textContent = `$${data.futurePayments.paymentsBeingCleared}`;
-            document.getElementById('active-orders').textContent = `$${data.futurePayments.paymentsForActiveOrders}`;
-            document.getElementById('earnings-to-date').textContent = `$${data.earningsAndExpenses.earningsToDate}`;
-            document.getElementById('expenses-to-date').textContent = `$${data.earningsAndExpenses.expensesToDate}`;
+            document.getElementById('balance-available').textContent = `LKR ${data.availableFunds.balanceAvailable}`;
+            document.getElementById('withdrawn-to-date').textContent = `LKR ${data.availableFunds.withdrawnToDate}`;
+            document.getElementById('payments-clearing').textContent = `LKR ${data.futurePayments.paymentsBeingCleared}`;
+            document.getElementById('active-orders').textContent = `LKR ${data.futurePayments.paymentsForActiveOrders}`;
+            document.getElementById('earnings-to-date').textContent = `LKR ${data.earningsAndExpenses.earningsToDate}`;
+            document.getElementById('expenses-to-date').textContent = `LKR ${data.earningsAndExpenses.expensesToDate}`;
         });</script>
 
     

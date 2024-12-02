@@ -116,42 +116,42 @@
         activity: "Clearing",
         from: "Global Marketplace",
         order: "FO60A75801",
-        amount: "$12.00"
+        amount: "LKR 12,000.00"
       },
       {
         date: "11/29/2024",
         activity: "Clearing",
         from: "E-commerce Platform",
         order: "FO1660A701",
-        amount: "$8.00"
+        amount: "LKR 9,000.00"
       },
       {
         date: "11/25/2024",
         activity: "Clearing",
         from: "Online Seller Network",
         order: "FO3235A0E41",
-        amount: "$12.00"
+        amount: "LKR 7,000.00"
       },
       {
         date: "11/20/2024",
         activity: "Withdrawal",
         from: "Payment Gateway",
         order: "-",
-        amount: "-$63.42"
+        amount: "-LKR 10,000.00"
       },
       {
         date: "11/18/2024",
         activity: "Earning",
         from: "Freelance Platform",
         order: "FO82C8C9196",
-        amount: "$12.00"
+        amount: "LKR 17,500.00"
       },
       {
         date: "11/15/2024",
         activity: "Earning",
         from: "Digital Marketplace",
         order: "FO88C9193C6",
-        amount: "$8.00"
+        amount: "LKR 12,900.00"
       }
     ];
 

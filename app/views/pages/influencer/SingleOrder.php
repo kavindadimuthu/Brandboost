@@ -342,7 +342,7 @@
                     <div class="time-left">
                         <h4>Time Left To Delivery</h4>
                         <div id="countdown"></div>
-                        <button id="deliverNow" onclick="window.location.href='/designerviewcontroller/orderDelivery'">Deliver Now</button>
+                        <button id="deliverNow" onclick="window.location.href='/influencerviewcontroller/orderDelivery'">Deliver Now</button>
                         <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
                     </div>
                     <div class="order-details">

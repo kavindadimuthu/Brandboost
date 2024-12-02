@@ -140,21 +140,21 @@
                         buyer: "Kaikos Cafe",
                         gig: "Do Business Promotion through Tiktok and Instagram",
                         dueOn: "7 Days",
-                        total: "$300",
+                        total: "LKR 25,000",
                         status: "In Progress"
                     },
                     {
                         buyer: "Wasana Dress Point",
                         gig: "Do Business Promotion through Facebook and Instagram",
                         dueOn: "Delivered",
-                        total: "$500",
+                        total: "LKR 30,000",
                         status: "Completed"
                     },
                     {
                         buyer: "Ceylon Home Decor",
                         gig: "Do Business Promotion through my 1M Youtube channel",
                         dueOn: "Delivered",
-                        total: "$500",
+                        total: "LKR 40,000",
                         status: "Completed"
                     }
 
