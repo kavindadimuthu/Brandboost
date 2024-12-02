@@ -60,4 +60,7 @@ class DesignerViewController extends Controller {
     public function updatePortfolio(){
         $this->view('pages/designer/UpdatePortfolio');
     }
+    public function contactUs(){
+        $this->view('pages/designer/ContactUs');
+    }
 }

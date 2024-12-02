@@ -137,31 +137,17 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
             {
-                buyer: "Consequat",
-                gig: "Deserunt minim indidunt cillum no",
+                buyer: "Spa Ceylon",
+                gig: "Do business Promotion Video",
                 dueOn: "3 Days",
-                total: "$20",
+                total: "$200",
                 status: "In Progress"
             },
             {
-                buyer: "Reprehende",
-                gig: "Deserunt minim indidunt cillum no",
-                dueOn: "3 Days",
-                total: "$20",
-                status: "In Progress"
-            },
-            {
-                buyer: "Content",
-                gig: "Deserunt minim indidunt cillum no",
-                dueOn: "3 Days",
-                total: "$20",
-                status: "Completed"
-            },
-            {
-                buyer: "Content",
-                gig: "Deserunt minim indidunt cillum no",
-                dueOn: "3 Days",
-                total: "$20",
+                buyer: "WSO2",
+                gig: "Create Tech company promotional Facebook Post",
+                dueOn: "4 Days",
+                total: "$100",
                 status: "Completed"
             }
         ];
