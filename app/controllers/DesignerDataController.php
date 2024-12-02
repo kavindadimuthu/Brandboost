@@ -296,6 +296,21 @@ class DesignerDataController extends Controller {
         return null;
     }
     
+    public function deleteSinglePortfolio($portfolioId) {
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+
+            $portfolioModel = $this->model('PortfolioModel');
+
+            $result = $portfolioModel->deleteSinglePortfolio($portfolioId);
+
+            header('Location: /DesignerViewController/ViewMyPortfolio');
+            echo json_encode($result);
+            exit;
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+    }
     
 
     public function deletePortfolio() {

@@ -36,12 +36,12 @@ class PortfolioModel {
     public function getPortfolioByUserId($userId) {
         try {
             $this->db->query("
-                SELECT title, description, cover_image, first_image, second_image, third_image, fourth_image
+                SELECT portfolio_id, title, description, cover_image, first_image, second_image, third_image, fourth_image
                 FROM designer_portfolio 
                 WHERE user_id = :user_id
             ");
             $this->db->bind(':user_id', $userId);
-            return $this->db->single();
+            return $this->db->resultSet();
         } catch (PDOException $e) {
             error_log("Error fetching portfolio: " . $e->getMessage());
             return false; // Return false on error
@@ -50,39 +50,59 @@ class PortfolioModel {
 
     
 
-    public function updatePortfolio($userId, $title, $description, $coverImage, $firstImage, $secondImage, $thirdImage, $fourthImage) {
+    // public function updatePortfolio($userId, $title, $description, $coverImage, $firstImage, $secondImage, $thirdImage, $fourthImage) {
+    //     try {
+    //         $this->db->query("
+    //             UPDATE designer_portfolio SET
+    //             title = :title,
+    //             description = :description,
+    //             cover_image = :cover_image,
+    //             first_image = :first_image,
+    //             second_image = :second_image,
+    //             third_image = :third_image,
+    //             fourth_image = :fourth_image
+    //             WHERE user_id = :user_id
+    //         ");
+    
+    //         // Bind parameters with validation to prevent SQL injection
+    //         $this->db->bind(':title', $title);
+    //         $this->db->bind(':description', $description);
+    //         $this->db->bind(':cover_image', $coverImage !== null ? $coverImage : $existingPortfolio['cover_image']);
+    //         $this->db->bind(':first_image', $firstImage !== null ? $firstImage : $existingPortfolio['first_image']);
+    //         $this->db->bind(':second_image', $secondImage !== null ? $secondImage : $existingPortfolio['second_image']);
+    //         $this->db->bind(':third_image', $thirdImage !== null ? $thirdImage : $existingPortfolio['third_image']);
+    //         $this->db->bind(':fourth_image', $fourthImage !== null ? $fourthImage : $existingPortfolio['fourth_image']);
+    //         $this->db->bind(':user_id', $userId);
+    
+    //         // Execute the query
+    //         return $this->db->execute();
+    //     } catch (PDOException $e) {
+    //         error_log("Error updating portfolio: " . $e->getMessage());
+    //         return false;
+    //     }
+    // }
+    
+    
+    public function deleteSinglePortfolio($portfolioId) {
         try {
             $this->db->query("
-                UPDATE designer_portfolio SET
-                title = :title,
-                description = :description,
-                cover_image = :cover_image,
-                first_image = :first_image,
-                second_image = :second_image,
-                third_image = :third_image,
-                fourth_image = :fourth_image
-                WHERE user_id = :user_id
+                DELETE FROM designer_portfolio 
+                WHERE portfolio_id = :portfolio_id
             ");
-    
-            // Bind parameters with validation to prevent SQL injection
-            $this->db->bind(':title', $title);
-            $this->db->bind(':description', $description);
-            $this->db->bind(':cover_image', $coverImage !== null ? $coverImage : $existingPortfolio['cover_image']);
-            $this->db->bind(':first_image', $firstImage !== null ? $firstImage : $existingPortfolio['first_image']);
-            $this->db->bind(':second_image', $secondImage !== null ? $secondImage : $existingPortfolio['second_image']);
-            $this->db->bind(':third_image', $thirdImage !== null ? $thirdImage : $existingPortfolio['third_image']);
-            $this->db->bind(':fourth_image', $fourthImage !== null ? $fourthImage : $existingPortfolio['fourth_image']);
-            $this->db->bind(':user_id', $userId);
-    
-            // Execute the query
-            return $this->db->execute();
+
+            $this->db->bind(':portfolio_id', $portfolioId);
+            $action = $this->db->execute();
+
+            if ($action) {
+                return ['status' => 'success', 'message' => 'Portfolio deleted successfully.'];
+            } else {
+                return ['status' => 'error', 'message' => 'Failed to delete portfolio.'];
+            }
         } catch (PDOException $e) {
-            error_log("Error updating portfolio: " . $e->getMessage());
-            return false;
+            error_log("Portfolio deletion failed: " . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Failed to delete portfolio.'];
         }
-    }
-    
-    
+    } 
 
     public function deletePortfolioByUserId( $userId) {
         try {

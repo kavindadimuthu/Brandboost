@@ -191,6 +191,12 @@
                     }
                 ?>
                 <a href="http://localhost:8000/<?php echo $role ?>/profile">Profile</a>
+                <?php
+                if(isset($_SESSION['role']) && $_SESSION['role'] == 'designer'){
+                    echo '
+                        <a href="http://localhost:8000/designerviewcontroller/viewMyPortfolio">My Portfolio</a>
+                    ';}
+                ?>
                 <a href="http://localhost:8000/logincontroller/logout">Logout</a>
             </div>
         </div>
