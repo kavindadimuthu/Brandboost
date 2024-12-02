@@ -191,8 +191,9 @@
                 <a href= "http://localhost:8000/BusinessViewController/orderRequirements">
                     <button class="order-button">Order Now</button>
                 </a>
+                <a href= "http://localhost:8000/homecontroller/chat">
                 <button class="contact-button">Contact</button>
-                
+                </a>
             `;
 
             document.getElementById('pricing-content').innerHTML = content;
