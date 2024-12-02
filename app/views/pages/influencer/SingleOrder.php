@@ -338,28 +338,29 @@
                     </div>
                 </div>
 
-                <div class="order-section">
-                    <div class="time-left">
-                        <h4>Time Left To Delivery</h4>
-                        <div id="countdown"></div>
-                        <button id="deliverNow" onclick="window.location.href='/designerviewcontroller/orderDelivery'">Deliver Now</button>
-                        <button class="cancel-button" id="cancelOrder">Cancel Order</button>
-                    </div>
-                    <div class="order-details">
-                        <h4>Order Details</h4>
-                        <p><strong>Ordered By:</strong> <span id="orderedBy">Spa Ceylon</span></p>
-                        <p><strong>Date:</strong> <span id="orderDate">Nov 27, 2024, 8:50 AM</span></p>
-                        <p><strong>Due:</strong> <span id="orderDue">Dec 8, 2024, 8:50 AM</span></p>
-                    </div>
-                    <div class="support-section">
-                        <h4>Support</h4>
-                        <a href="http://localhost:8000/DesignerViewController/contactUs">
-                            <button id="contactSupport">Contact Us</button>
-                        </a>
-                        <button id="reviewOrder">Review</button>
-                    </div>
+                    <div class="order-section">
+                        <div class="time-left">
+                            <h4>Time Left To Delivery</h4>
+                            <div id="countdown"></div>
+                            <button id="deliverNow" onclick="window.location.href='/influencerviewcontroller/orderDelivery'">Deliver
+                                Now</button>
+                        </div>
+                        <div class="order-details">
+                            <h4>Order Details</h4>
+                            <p><strong>Ordered By:</strong> <span id="orderedBy"></span></p>
+                            <p><strong>Date:</strong> <span id="orderDate"></span></p>
+                            <p><strong>Due:</strong> <span id="orderDue"></span></p>
+                        </div>
+                        <div class="support-section">
+                            <h4>Support</h4>
+                            <button id="contactSupport"
+                            onclick="window.location.href='/influencerviewcontroller/contactus'">Complain</button>
+                            <button id="contactSupport"
+                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Review</button>
+                        </div>
                 </div>
             </div>
+            <?php include __DIR__ . '/../../pages/influencer/DeliveriesTable.php'; ?>
         </div>
     </div>
 

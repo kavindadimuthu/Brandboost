@@ -6,15 +6,15 @@
     <title>View Portfolio</title>
     <link rel="stylesheet" href="../../styles/designer/viewPortfolio.css">
 </head>
-<body>
+<body><?php include __DIR__ . '/../../components/common/header.php'; ?>
 <div class="container">
+
+
         <h2>Portfolio Details</h2>
         <div id="portfolioDetails" class="portfolio-details">
             <!-- Portfolio details will be dynamically injected here -->
         </div>
 
-        <!-- Back to Portfolio List Button -->
-        <a href="/DesignerDataController/portfolioList" class="back-button">Back to Portfolios</a>
         <!-- Update Button -->
         <a href="/DesignerViewController/updatePortfolio" class="update-button">Update Portfolio</a>
         <!-- Delete Button -->

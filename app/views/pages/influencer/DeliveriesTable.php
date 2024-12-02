@@ -5,6 +5,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <link rel="stylesheet" href="../../../../public/styles/business-owner/DeliveriesTable.css"> -->
    <style>
+    .orders-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;    
+    margin: 0 300px;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-row h2 {
+    color: #333;
+    font-size: 24px;
+    margin: 0;
+}
+
+
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    color: #666;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table td {
+    padding: 16px;
+    color: #333;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.in-progress {
+    color: #b86e00;
+    background: #fff3e5;
+}
+
+.status.completed {
+    color: #0a7c42;
+    background: #e6f4ed;
+}
+
+
+.orders-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;    
+    margin: 0 300px;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-row h2 {
+    color: #333;
+    font-size: 24px;
+    margin: 0;
+}
+
+
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    color: #666;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table td {
+    padding: 16px;
+    color: #333;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.in-progress {
+    color: #b86e00;
+    background: #fff3e5;
+}
+
+.status.completed {
+    color: #0a7c42;
+    background: #e6f4ed;
+}
             .header-row {
             display: flex;
             justify-content: space-between;
@@ -40,19 +164,6 @@
 
         .pagination button.active {
         background: #a29bfe;;
-        }
-
-        .download-button {
-            background-color: #6a11cb; /* Blue color for the button */
-            color: white; /* White text color */
-            border: none; /* No border */
-            padding: 5px 10px; /* Padding */
-            cursor: pointer; /* Pointer cursor on hover */
-            margin-left: 10px; /* Space between file name and button */
-        }
-
-        .download-button:hover {
-            background-color: darkblue; /* Darker blue on hover */
         }
    </style>
 </head>
@@ -105,7 +216,6 @@
                 file: "video1.mp4",
                 status: "Rejected"
             }
-            
         ];
         // Function to load data into the table
         function loadOrdersData() {
@@ -118,9 +228,7 @@
                     <td>${order.order}</td>
                     <td>${order.provider}</td>
                     <td>${order.rivisioncount}</td>
-                    <td>${order.delivery}</td>
-                    <td>${order.file}<button class="download-button" onclick="downloadFile('${order.file}')">Download</button></td>
-
+                    <td>${order.file}</td>
                     <td><span class="status ${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
                 `;
                 
@@ -130,12 +238,6 @@
                 
                 tableBody.appendChild(row);
             });
-        }
-
-        // Function to handle file download
-        function downloadFile(fileName) {
-            // Replace with your actual download logic
-            alert(`Downloading ${fileName}...`);
         }
 
         // Load data when page loads
