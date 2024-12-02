@@ -143,7 +143,7 @@
                     "Quality Graphics",
                     "Modern and Trendy Styles"
                 ],
-                price: "$ 10"
+                price: "LKR 5 000"
             },
             premium: {
                 duration: "3 months",
@@ -155,7 +155,7 @@
                     "Advanced Features",
                     "Custom Branding"
                 ],
-                price: "$ 25"
+                price: "LKR 10 000"
             }
         };
 

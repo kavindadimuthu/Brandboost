@@ -193,9 +193,9 @@
                     <h2>Available Funds</h2>
                     <div class="card">
                         <p class="label">Balance available for use</p>
-                        <p class="value" id="balance-available">$0.00</p>
+                        <p class="value" id="balance-available"></p>
                         <p class="small-text">Withdrawn to date:</p>
-                        <p class="value-small" id="withdrawn-to-date">$0.00</p>
+                        <p class="value-small" id="withdrawn-to-date"></p>
                         <button id="withdraw-btn" disabled>Withdraw balance</button>
                         <a href="#" id="manage-payout">Manage payout methods</a>
                     </div>
@@ -204,16 +204,16 @@
                     <h2>Future Payments</h2>
                     <div class="card">
                         <p class="label">Payments being cleared</p>
-                        <p class="value" id="payments-clearing">$0.00</p>
+                        <p class="value" id="payments-clearing"></p>
                         <p class="small-text">Payments for active orders</p>
-                        <p class="value-small" id="active-orders">$0.00</p>
+                        <p class="value-small" id="active-orders"></p>
                     </div>
                 </div>
                 <div class="section">
                     <h2>Earnings</h2>
                     <div class="card">
                         <p class="label">Earnings to date</p>
-                        <p class="value" id="earnings-to-date">$0.00</p>
+                        <p class="value" id="earnings-to-date"></p>
                         <p class="small-text">Your earnings since joining.</p>
                         <p class="small-text">Expenses to date</p>
                         <p class="value-small" id="expenses-to-date"></p>
@@ -258,25 +258,25 @@
        document.addEventListener('DOMContentLoaded', function () {
     const data = {
         availableFunds: {
-            balanceAvailable: "100.00",
-            withdrawnToDate: "2707.70"
+            balanceAvailable: "26,455.00",
+            withdrawnToDate: " 2707.70"
         },
         futurePayments: {
-            paymentsBeingCleared: "32.00",
-            paymentsForActiveOrders: "56.00"
+            paymentsBeingCleared: " 32, 000.00",
+            paymentsForActiveOrders: " 56, 000.00"
         },
         earningsAndExpenses: {
-            earningsToDate: "2896.80",
-            expensesToDate: "189.10"
+            earningsToDate: " 98, 096.80",
+            expensesToDate: " 18, 899.10"
         }
     };
 
-    document.getElementById('balance-available').textContent = `$${data.availableFunds.balanceAvailable}`;
-    document.getElementById('withdrawn-to-date').textContent = `$${data.availableFunds.withdrawnToDate}`;
-    document.getElementById('payments-clearing').textContent = `$${data.futurePayments.paymentsBeingCleared}`;
-    document.getElementById('active-orders').textContent = `$${data.futurePayments.paymentsForActiveOrders}`;
-    document.getElementById('earnings-to-date').textContent = `$${data.earningsAndExpenses.earningsToDate}`;
-    document.getElementById('expenses-to-date').textContent = `$${data.earningsAndExpenses.expensesToDate}`;
+    document.getElementById('balance-available').textContent = `LKR ${data.availableFunds.balanceAvailable}`;
+    document.getElementById('withdrawn-to-date').textContent = `LKR${data.availableFunds.withdrawnToDate}`;
+    document.getElementById('payments-clearing').textContent = `LKR${data.futurePayments.paymentsBeingCleared}`;
+    document.getElementById('active-orders').textContent = `LKR${data.futurePayments.paymentsForActiveOrders}`;
+    document.getElementById('earnings-to-date').textContent = `LKR${data.earningsAndExpenses.earningsToDate}`;
+    document.getElementById('expenses-to-date').textContent = `LKR${data.earningsAndExpenses.expensesToDate}`;
 
     const withdrawBtn = document.getElementById('withdraw-btn');
     const managePayoutLink = document.getElementById('manage-payout');
@@ -363,7 +363,7 @@
 });
     </script>
 
-    <script src="../scripts/common/header.js"></script>
+    <!-- <script src="../scripts/common/header.js"></script> -->
 </body>
 
 </html>

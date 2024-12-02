@@ -143,7 +143,7 @@
                     <div class="card">
                         <div>
                             <h2>Gross Revenue</h2>
-                            <div class="value">$2,480.32</div>
+                            <div class="value">LKR 42,480.32</div>
                             
                             <p>From Jan 01, 2024 - March 30, 2024</p>
                         </div>
@@ -152,7 +152,7 @@
                     <div class="card">
                         <div>
                             <h2>Avg. Order Value</h2>
-                            <div class="value">$56.12</div>
+                            <div class="value">LKR 5,556.12</div>
                             
                             <p>From Jan 01, 2024 - March 30, 2024</p>
                         </div>
