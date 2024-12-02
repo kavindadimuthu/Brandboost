@@ -84,9 +84,8 @@
         <?php include __DIR__ . '/../../components/common/packageCard.php'; ?>
       </div>
     </div>
-    <div class="bottombar">
-      <!-- <?php include __DIR__ . '/../../components/common/carousel.php'; ?> -->
-    </div>
+    <!-- <div class="bottombar">
+    </div> -->
   </div>
 </body>
 </html>

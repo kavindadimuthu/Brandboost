@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2024 at 08:02 PM
+-- Generation Time: Dec 01, 2024 at 11:58 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,8 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`admin_id`, `first_name`, `last_name`, `email`, `password`) VALUES
-(1, 'admin', 'admin', 'admin@gmail.com', '123');
+(1, 'admin', 'admin', 'admin@gmail.com', '123'),
+(2, 'Kavinda', 'Dewmith', 'kavinda@gmail.com', '123');
 
 -- --------------------------------------------------------
 
@@ -162,10 +163,7 @@ CREATE TABLE `faq` (
 INSERT INTO `faq` (`id`, `question`, `answer`) VALUES
 (1, 'What is the return policy?', 'Our return policy lasts 30 days. If 30 days have gone by since your purchase, we can’t offer you a refund or exchange.'),
 (4, 'How can I contact customer support?', 'You can contact our customer support via email at support@example.com or call us at 123-456-7890.'),
-(12, 'sachith', 'mu kari pakaya'),
-(13, 'kava', 'i am real kava from embiliptiya'),
-(14, 'tharusha', 'medawachchiye kariya\n'),
-(15, 'gaiya', 'mu real kolukarayek');
+(16, 'what is greens?', 'greens is in uoc');
 
 -- --------------------------------------------------------
 
@@ -182,6 +180,13 @@ CREATE TABLE `influencer_gig` (
   `tags` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `influencer_gig`
+--
+
+INSERT INTO `influencer_gig` (`gig_id`, `user_id`, `title`, `description`, `platform`, `tags`) VALUES
+(3, 28, 'Dancing promotion', 'test', 'instagram', 'nadunge joka, gaiya');
+
 -- --------------------------------------------------------
 
 --
@@ -192,10 +197,18 @@ CREATE TABLE `influencer_gig_package_details` (
   `gig_id` int(11) NOT NULL,
   `package_type` enum('basic','standard','premium') NOT NULL,
   `benefits` text NOT NULL,
-  `designing_days` int(11) NOT NULL,
-  `promotional_days` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL
+  `delivery_days` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `revisions` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `influencer_gig_package_details`
+--
+
+INSERT INTO `influencer_gig_package_details` (`gig_id`, `package_type`, `benefits`, `delivery_days`, `price`, `revisions`) VALUES
+(3, 'basic', 'wrg', 3, 3.00, 3),
+(3, 'premium', 'fsd', 2, 3.00, 3);
 
 -- --------------------------------------------------------
 
@@ -246,7 +259,10 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `phone`, `pa
 (21, 'deemath', 'jaye', 'deema@gmail', '0710718989', '$2y$10$HL0DgTbPs94f7JHlCrXJLOCDttQHuB0M2LrhXSfO6GB7LkmBWFkIW', 'influencer', 'male'),
 (23, 'thiwanga', 'jayasinghe', 'thiwa@gmail.com', '077898989', '$2y$10$SnYSJ5A63FZzXYCqAmQlZeIE05ZwCYqJ4PoPTJhWZKpLwwTETDnau', 'designer', 'male'),
 (24, 'rashmika', 'mihashi', 'rashmika@gmail', '07777898', '$2y$10$e8tmnjCO3R6MT3FKLif1xumz/Q4XPAQwDReGjDrwXcqRyirHk9qpa', 'influencer', 'male'),
-(25, 'nethsilu', 'marasignhe', 'nethsilu@gmail.com', '07777343434', '$2y$10$7wbzUrmJ26Stsu9q7Xsqu.1f2AcvhTC49.u0pWzarGvKYit8pVzd2', 'businessman', 'male');
+(25, 'nethsilu', 'marasignhe', 'nethsilu@gmail.com', '07777343434', '$2y$10$7wbzUrmJ26Stsu9q7Xsqu.1f2AcvhTC49.u0pWzarGvKYit8pVzd2', 'businessman', 'male'),
+(26, 'isuru', 'naveen', 'isuru@gmail.com', '078956294', '$2y$10$SKEgJTm.nz30Mj2VborgQOEE5cn5lUGXRKtm59yxMU047xXGwYjNe', 'businessman', 'male'),
+(27, 'deemath', 'akalanka', 'deemath@gmail.com', '065899423', '$2y$10$SKEgJTm.nz30Mj2VborgQOEE5cn5lUGXRKtm59yxMU047xXGwYjNe', 'designer', 'male'),
+(28, 'nadun', 'dinisuru', 'nadun@gmail.com', '04826256562', '$2y$10$SKEgJTm.nz30Mj2VborgQOEE5cn5lUGXRKtm59yxMU047xXGwYjNe', 'influencer', 'male');
 
 --
 -- Indexes for dumped tables
@@ -333,7 +349,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `designer_gig`
@@ -351,19 +367,19 @@ ALTER TABLE `designer_portfolio`
 -- AUTO_INCREMENT for table `faq`
 --
 ALTER TABLE `faq`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `influencer_gig`
 --
 ALTER TABLE `influencer_gig`
-  MODIFY `gig_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `gig_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables

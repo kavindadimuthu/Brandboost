@@ -56,6 +56,6 @@ class InfluencerViewController extends Controller {
     }
 
     public function orderRequestView(){
-        $this->view('pages/business/OrderRequestView');
+        $this->view('pages/influencer/OrderRequestView');
     }
 }

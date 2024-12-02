@@ -155,7 +155,7 @@
     .order-section button {
         display: block;
         margin-top: 10px;
-        background-color: #0288d1;
+        background: linear-gradient(135deg, #6201A9 0%, #6a11cb 100%);
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -166,7 +166,7 @@
     }
 
     .order-section button:hover {
-        background-color: #01579b;
+        background: linear-gradient(135deg, #4e0184 0%, #560ea3 100%);
     }
     </style>
 
@@ -213,10 +213,11 @@
                             <button id="contactSupport"
                             onclick="window.location.href='/influencerviewcontroller/contactus'">Contact Us</button>
                             <button id="contactSupport"
-                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Back</button>
+                                onclick="window.location.href='/influencerviewcontroller/allOrders'">Review</button>
                         </div>
                 </div>
             </div>
+            <?php include __DIR__ . '/../../pages/influencer/DeliveriesTable.php'; ?>
         </div>
     </div>
 

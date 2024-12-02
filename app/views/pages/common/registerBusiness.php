@@ -69,7 +69,7 @@
             <div class="form-group">
                 <button type="submit" class="btn">Register</button>
             </div>
-            <p>Already registered? <a href="#">Login here</a></p>
+            <p>Already registered? <a href="http://localhost:8000/homecontroller/login">Login here</a></p>
 
         </form>
 
