@@ -42,6 +42,7 @@
                             <th>Account Status</th>
                             <th>Last active</th>
                             <th>Date added</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -175,6 +176,9 @@
                             </td>
                             <td>
                                 ${user.dateAdded}
+                            </td>
+                            <td>
+                                <center>...</center>
                             </td>
                         </tr>
                 `;

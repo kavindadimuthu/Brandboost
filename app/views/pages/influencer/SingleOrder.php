@@ -360,7 +360,6 @@
                     </div>
                 </div>
             </div>
-            <?php include __DIR__ . '/../../pages/influencer/DeliveriesTable.php'; ?>
         </div>
     </div>
 

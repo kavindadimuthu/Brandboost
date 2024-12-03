@@ -79,7 +79,7 @@ button:hover {
         <div class="content">
             <div class="main-content">
     <div class="container">
-        <h1>Contact Us</h1>
+        <h1>Complaint</h1>
         <form action="/submit-complaint" method="POST">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>

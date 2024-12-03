@@ -38,6 +38,7 @@
                             <th>User Role</th>
                             <th>Date Requested</th>
                             <th>Verification Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,6 +158,10 @@
                     ${request.verificationStatus}
                 </span>
             </td>
+            
+                            <td>
+                                <center>...</center>
+                            </td>
             </tr>
         `;
                 tableBody.appendChild(row);

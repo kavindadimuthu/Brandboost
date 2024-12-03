@@ -1,11 +1,13 @@
 <?php
 // This Database class will handle the database connection and query execution
 
+//import config variables
+
 class Database {
-    private $host = 'localhost';
-    private $user = 'root';
-    private $pass = '';
-    private $dbname = 'brandboost'; // Change this to your database name
+    private $host = DB_HOST;
+    private $user = DB_USER;
+    private $pass = DB_PASS;
+    private $dbname = DB_NAME; // Change this to your database name
 
     private $dbh;
     private $stmt;

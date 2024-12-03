@@ -113,7 +113,6 @@
                     <thead>
                         <tr>
                             <th>FAQ ID</th>
-                            <th>Category</th>
                             <th>Question</th>
                             <th>Answer</th>
                             <th>Actions</th>
@@ -139,8 +138,8 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Add New FAQ</h2>
             <form id="addFaqForm" action="/adminDataController/addFaq" method="POST">
-                <label for="faqCategory">Category:</label>
-                <input type="text" id="faqCategory" name="category" required>
+                <!-- <label for="faqCategory">Category:</label>
+                <input type="text" id="faqCategory" name="category" required> -->
                 <label for="faqQuestion">Question:</label>
                 <input type="text" id="faqQuestion" name="question" required>
                 <label for="faqAnswer">Answer:</label>
@@ -178,7 +177,6 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
             <td>${faq.id}</td>
-            <td>${faq.category}</td>
             <td class="faq-question">${faq.question}</td>
             <td class="faq-answer">${faq.answer}</td>
             <td>

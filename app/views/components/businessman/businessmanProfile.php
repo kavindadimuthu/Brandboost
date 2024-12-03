@@ -251,7 +251,7 @@
         </div>
         <!-- Portfolio Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">Portfolio</h3>
+            <h3 class="text-lg font-semibold text-indigo-700">Photos</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 <div class="bg-white rounded-lg shadow-lg p-4">
                     <img alt="Work Sample 1" class="w-full h-40 object-cover rounded-lg"

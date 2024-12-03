@@ -213,14 +213,14 @@
             <div class="p-6 flex items-center">
                 <img alt="Profile Picture of Amara Perera" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
                     height="100"
-                    src="https://storage.googleapis.com/a1aa/image/KXahWb7RSMKYJ5JSmXnFFGdjMPeX3fD1mOIW3AKOWgMamd2TA.jpg"
+                    src="../assets/images/1525090787974.jpg"
                     width="100" />
                 <div class="ml-6">
                     <h1 class="text-2xl font-bold">
-                        Amara Perera
+                        Chanux Bro
                     </h1>
                     <p class="text-gray-600">
-                        Travel &amp; Lifestyle
+                        Tech &amp; Developer
                     </p>
                 </div>
             </div>
@@ -379,7 +379,7 @@
                     <strong>
                         Price:
                     </strong>
-                    $200 - $500
+                    LKR200 - LKR500
                 </p>
                 <p class="text-gray-700 mt-4">
                     <strong>
@@ -391,7 +391,7 @@
                     <strong>
                         Price:
                     </strong>
-                    $1000 - $3000
+                    LKR1000 - LKR3000
                 </p>
                 <p class="text-gray-700 mt-4">
                     <strong>
@@ -403,7 +403,7 @@
                     <strong>
                         Price:
                     </strong>
-                    $500 - $1500
+                    LKR500 - LKR1500
                 </p>
             </div>
         </div>

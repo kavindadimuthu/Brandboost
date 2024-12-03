@@ -84,15 +84,15 @@
     <div class="container">
         <div class="business-owner">
             <h2>Business Owner Details</h2>
-            <p><strong>Name:</strong> John Doe</p>
-            <p><strong>Email:</strong> johndoe@example.com</p>
+            <p><strong>Name:</strong>Apple Asia</p>
+            <p><strong>Email:</strong> appleasia@mail.com</p>
         </div>
         <div class="gig-details">
             <h2>Gig Details</h2>
-            <p><strong>Gig Name:</strong> Professional Business Plan Writing</p>
-            <p><strong>Benefits:</strong> Comprehensive market analysis, financial projections, and strategic planning.</p>
+            <p><strong>Gig Name:</strong>Do Business Promotion through my 1M Youtube channel</p>
+            <p><strong>Benefits:</strong>Comprehensive market analysis, financial projections, and strategic planning.</p>
             <p><strong>Time Duration:</strong> 7 days</p>
-            <p><strong>Price:</strong> $500</p>
+            <p><strong>Price:</strong> LKR 75,000</p>
         </div>
         <div class="order-review">
             <h2>Review Order</h2>

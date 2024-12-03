@@ -40,6 +40,7 @@
                             <th>Status</th>
                             <th>Assigned Admin</th>
                             <th>Date Submitted</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -165,6 +166,10 @@
                 </td>
                 <td>${complaint.assignedAdmin}</td>
                 <td>${complaint.dateSubmitted}</td>
+                
+                            <td>
+                                <center>...</center>
+                            </td>
             </tr>
         `;
 

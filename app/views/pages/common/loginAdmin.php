@@ -5,7 +5,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, rgba(75, 0, 130, 0.8), rgba(106, 17, 203, 0.8)), url('https://placehold.co/1920x1080') no-repeat center center fixed;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.8), rgba(106, 17, 203, 0.8)),  no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;

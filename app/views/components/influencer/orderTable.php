@@ -137,21 +137,21 @@
         // Sample data structure - replace this with your actual data source
         const orders = [
                     {
-                        buyer: "Kaikos Cafe",
-                        gig: "Do Business Promotion through Tiktok and Instagram",
+                        buyer: "Apple Asia",
+                        gig: "Do Business Promotion through Tiktok and Youtube",
                         dueOn: "7 Days",
                         total: "LKR 25,000",
-                        status: "In Progress"
+                        status: "Pending"
                     },
                     {
-                        buyer: "Wasana Dress Point",
+                        buyer: "Spa Ceylon",
                         gig: "Do Business Promotion through Facebook and Instagram",
                         dueOn: "Delivered",
                         total: "LKR 30,000",
-                        status: "Completed"
+                        status: "In Progress"
                     },
                     {
-                        buyer: "Ceylon Home Decor",
+                        buyer: "CAMERA.LK",
                         gig: "Do Business Promotion through my 1M Youtube channel",
                         dueOn: "Delivered",
                         total: "LKR 40,000",
@@ -170,11 +170,11 @@
                 const statusClass = order.status.toLowerCase().replace(' ', '-');
                 
                 row.innerHTML = `
-                    <td onclick="window.location.href='/influencerviewcontroller/singleOrder'">${order.buyer}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/singleOrder'">${order.gig}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/singleOrder'">${order.dueOn}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/singleOrder'">${order.total}</td>
-                    <td><span class="status ${statusClass}">${order.status}</span></td>
+                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.buyer}</td>
+                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.gig}</td>
+                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.dueOn}</td>
+                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.total}</td>
+                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'"><span class="status ${statusClass}">${order.status}</span></td>
                 `;
                 
                 tableBody.appendChild(row);
