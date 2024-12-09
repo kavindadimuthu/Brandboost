@@ -6,6 +6,18 @@ use app\core\BaseController;
 
 class BusinessmanController extends BaseController
 {
+    public function __construct(){
+//        \app\core\Helpers\AuthHelper::CheckPermission('businessman');
+    }
+
+    public function ordersList($req, $res){
+        $this->renderLayout('main', 'pages/businessman/orders_list');
+    }
+
+    public function orderDetails($req, $res){
+        $this->renderLayout('main', 'pages/businessman/order_details');
+    }
+
     public function requestOrder($req, $res){
         $this->renderLayout('main', 'pages/businessman/request_order');
     }
@@ -18,11 +30,16 @@ class BusinessmanController extends BaseController
         $this->renderLayout('main', 'pages/businessman/request_package');
     }
 
-    public function ordersList($req, $res){
-        $this->renderLayout('main', 'pages/businessman/orders_list');
+    public function customPackages($req, $res){
+        $this->renderLayout('main', 'pages/common/custom_packages');
     }
 
-    public function orderDetails($req, $res){
-        $this->renderLayout('main', 'pages/businessman/order_details');
+    public function editProfile($req, $res){
+        $this->renderLayout('main', 'pages/common/edit_profile');
     }
+
+    public function changePassword($req, $res){
+        $this->renderLayout('main', 'pages/common/change_password');
+    }
+
 }

@@ -40,19 +40,19 @@ class GuestController extends BaseController
     }
 
     public function register($req, $res){
-        $this->renderLayout('main', 'pages/guest/register');
+        $this->renderPage('pages/guest/register');
     }
 
     public function login($req, $res){
-        $this->renderLayout('main', 'pages/guest/login');
+        $this->renderPage('pages/guest/login');
     }
 
     public function forgotPassword($req, $res){
-        $this->renderLayout('main', 'pages/guest/forgot_password');
+        $this->renderPage('pages/guest/forgot_password');
     }
 
     public function resetPassword($req, $res){
-        $this->renderLayout('main', 'pages/guest/reset_password');
+        $this->renderPage('pages/guest/reset_password');
     }
 
 

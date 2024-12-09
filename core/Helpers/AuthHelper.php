@@ -1,5 +1,7 @@
 <?php
 
+namespace app\core\Helpers;
+
 class AuthHelper {
     public static function isLoggedIn() {
         return SessionHelper::has('user');
