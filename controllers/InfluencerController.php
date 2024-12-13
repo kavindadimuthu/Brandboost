@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 
-class InfuencerController extends BaseController
+class InfluencerController extends BaseController
 {
     public function __construct(){
 //        \app\core\Helpers\AuthHelper::CheckPermission('influencer');
