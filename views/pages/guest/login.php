@@ -120,13 +120,21 @@
 <div class="login-container">
     <h1>Log In</h1>
     <form class="register-form" method="post" action="/auth/login" enctype="multipart/form-data">
+<!--        <div class="form-group">-->
+<!--            <label for="email">Email</label>-->
+<!--            <input type="email" name="email" id="email" placeholder="johnsena@gmail.com" required>-->
+<!--        </div>-->
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="johnsena@gmail.com" required>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Johnsena" required>
         </div>
+<!--        <div class="form-group">-->
+<!--            <label for="password">Password</label>-->
+<!--            <input type="password" name="password" id="password" placeholder="Enter at least 8 characters" required>-->
+<!--        </div>-->
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Enter at least 8 characters" required>
+            <label for="role">Password</label>
+            <input type="text" name="role" id="role" placeholder="Enter role" required>
         </div>
         <button type="submit" class="btn">Sign In</button>
     </form>

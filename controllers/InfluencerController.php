@@ -7,7 +7,7 @@ use app\core\BaseController;
 class InfluencerController extends BaseController
 {
     public function __construct(){
-//        \app\core\Helpers\AuthHelper::CheckPermission('influencer');
+        \app\core\Helpers\AuthHelper::CheckPermission('influencer');
     }
 
     public function dashboard($req, $res){

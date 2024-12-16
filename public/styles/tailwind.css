@@ -21950,6 +21950,9 @@ video {
 .font-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
 }
+.font-arial {
+    font-family: 'Arial', sans-serif;
+}
 
 .text-xs {
     font-size: .75rem;

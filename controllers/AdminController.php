@@ -7,7 +7,7 @@ use app\core\BaseController;
 class AdminController extends BaseController
 {
     public function __construct(){
-//        \app\core\Helpers\AuthHelper::CheckPermission('admin');
+        \app\core\Helpers\AuthHelper::CheckPermission('admin');
     }
 
     public function dashboard($req, $res){

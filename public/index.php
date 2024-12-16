@@ -96,6 +96,16 @@ $app->router->get('/admin/actions-list', 'AdminController@actionsList');
 $app->router->get('/admin/action-details/{id}', 'AdminController@actionDetails');
 
 
+// Common routes
+$app->router->get('/chat', 'CommonController@chat');
+
+
+// Auth routes
+$app->router->post('/auth/register', 'AuthController@register');
+$app->router->post('/auth/login', 'AuthController@login');
+$app->router->get('/auth/logout', 'AuthController@logout');
+
+
 
 // Run the application
 $app->run();
