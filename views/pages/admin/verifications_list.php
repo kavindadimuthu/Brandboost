@@ -1,7 +1,177 @@
+<html>
 
-        <?php
- 
-            echo "<center><h1>Verifications list</h1></center>";
+<head>
+    <title>
+        Verifications
+    </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/admin/tableViewContainer.css">
+</head>
 
-            echo "<center><p>This is a sample verifications list page.<p></center>";
-        ?>
+<body>
+                <h2>Verifications</h2>
+                <p>Manage your team members and their account permissions here.</p>
+                <div class="search-bar">
+                    <input placeholder="Search" type="text" />
+                    <div>
+                        <button>Filters</button>
+                        <button>Search</button>
+                    </div>
+                </div>
+                <table id="verificationTable">
+                    <thead>
+                        <tr>
+                            <th>Verification Type</th>
+                            <th>User Name</th>
+                            <th>User Role</th>
+                            <th>Date Requested</th>
+                            <th>Verification Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <button>5</button>
+                    <button>6</button>
+                </div>
+            
+
+    <script>
+        const verificationRequests = [
+            {
+                verificationType: "Businessman",
+                userName: "Ammar Foley",
+                userRole: "Businessman",
+                dateRequested: "Mar 2, 2024",
+                verificationStatus: "Pending",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Influencer",
+                userName: "Florence Shaw",
+                userRole: "Influencer",
+                dateRequested: "Mar 4, 2024",
+                verificationStatus: "Verified",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Designer",
+                userName: "Amélie Laurent",
+                userRole: "Designer",
+                dateRequested: "Mar 4, 2024",
+                verificationStatus: "Rejected",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Influencer",
+                userName: "Caitlyn King",
+                userRole: "Influencer",
+                dateRequested: "Mar 2, 2024",
+                verificationStatus: "Verified",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Designer",
+                userName: "Sienna Hewitt",
+                userRole: "Designer",
+                dateRequested: "Mar 2, 2024",
+                verificationStatus: "Pending",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Businessman",
+                userName: "Olly Shroeder",
+                userRole: "Businessman",
+                dateRequested: "Mar 6, 2024",
+                verificationStatus: "Rejected",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Influencer",
+                userName: "Mathilde Lewis",
+                userRole: "Influencer",
+                dateRequested: "Mar 6, 2024",
+                verificationStatus: "Verified",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            },
+            {
+                verificationType: "Designer",
+                userName: "Jaya Willis",
+                userRole: "Designer",
+                dateRequested: "Mar 6, 2024",
+                verificationStatus: "Pending",
+                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+            }
+        ];
+
+        function renderVerificationRequests(requests) {
+            var tableBody = document.querySelector('#verificationTable tbody');
+            tableBody.innerHTML = '';
+
+            requests.forEach(function (request) {
+                var row = document.createElement('tr');
+
+                var badgeStatus = null;
+                if (request.verificationStatus === "Verified") {
+                    badgeStatus = "Verified";
+                } else if (request.verificationStatus === "Pending") {
+                    badgeStatus = "Banned";
+                } else if (request.verificationStatus === "Rejected") {
+                    badgeStatus = "Blocked";
+                } else {
+                    badgeStatus = "Pending"; // Default case if none match
+                }
+
+                row.innerHTML = `
+                <tr>
+            <td>${request.verificationType}</td>
+            <td>
+                <div class="user-info">
+                    <img alt="User  profile picture" height="30" src="${request.imagePath}" width="30" />
+                    <span>${request.userName}</span>
+                </div>
+            </td>
+            <td>${request.userRole}</td>
+            <td>${request.dateRequested}</td>
+            <td>
+                <span class="badge ${badgeStatus.toLowerCase()}">
+                    ${request.verificationStatus}
+                </span>
+            </td>
+            
+                            <td>
+                                <center>...</center>
+                            </td>
+            </tr>
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+        renderVerificationRequests(verificationRequests);
+
+
+        const tableBody = document.querySelector('#verificationTable tbody');
+
+        tableBody.addEventListener('click', function (event) {
+            const row = event.target.closest('tr');
+            if (row) {
+                // const verificationId = row.cells[0].textContent; // Assuming complainId is in the first cell
+                handleRowClick();
+            }
+        });
+
+        function handleRowClick() {
+            console.log('Row clicked, Verification ID:');
+            window.location.href = '/AdminViewController/singleVerification';
+        }
+    </script>
+</body>
+
+</html>
