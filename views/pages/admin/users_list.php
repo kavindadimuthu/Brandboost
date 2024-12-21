@@ -191,7 +191,7 @@
 
         function handleRowClick(userId) {
             console.log('Row clicked, complaint ID:', userId);
-            window.location.href = '/AdminViewController/singleuserview';
+            window.location.href = '/admin/user-profile/{id}';
         }
     </script>
 </body>

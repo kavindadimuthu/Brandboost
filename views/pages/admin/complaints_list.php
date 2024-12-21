@@ -182,7 +182,7 @@
 
         function handleRowClick(complainId) {
             console.log('Row clicked, complaint ID:', complainId);
-            window.location.href = '/AdminViewController/singleComplaint';
+            window.location.href = '/admin/complaint-details/{id}';
         }
     </script>
 </body>

@@ -172,7 +172,7 @@
 
         function handleRowClick() {
             console.log('Row clicked, Verification ID:');
-            window.location.href = '/AdminViewController/singleVerification';
+            window.location.href = '/admin/verification-details/{id}';
         }
     </script>
 </body>

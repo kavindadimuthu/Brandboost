@@ -116,25 +116,25 @@
         </div>
         <ul>
             <li>
-                <a href="http://localhost:8000/adminviewcontroller/adminDashboard">
+                <a href="../../admin/dashboard">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:8000/adminviewcontroller/allusers">
+                <a href="../../admin/users-list">
                     <i class="fas fa-users"></i>
                     <span class="link-text">User management</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:8000/adminviewcontroller/allComplaints">
+                <a href="../../admin/complaints-list">
                     <i class="fas fa-exclamation-circle"></i>
                     <span class="link-text">Complains</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:8000/adminviewcontroller/allVerifications">
+                <a href="../../admin/verifications-list">
                     <i class="fa-brands fa-cloudversify"></i>
                     <span class="link-text">Verifications</span>
                 </a>

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../styles/admin/tableViewContainer.css">
 
     <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
+
         .complain-details {
             margin-bottom: 30px;
         }
