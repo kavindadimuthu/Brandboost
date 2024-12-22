@@ -23,7 +23,7 @@ class AuthController extends BaseController{
         elseif ($role === 'influencer') {
             header("Location: /influencer/dashboard"); exit;}
         elseif ($role === 'designer') {
-            header("Location: /influencer/dashboard"); exit;}
+            header("Location: /designer/dashboard"); exit;}
         else {
             echo "Invalid role.";}
         // end of temporary login logic
