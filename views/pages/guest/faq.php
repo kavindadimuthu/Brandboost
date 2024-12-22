@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ Page</title>
-    <link rel="stylesheet" href="../../styles/common/index.css">
-    <link rel="stylesheet" href="../../styles/common/guestHeader.css">
-    <link rel="stylesheet" href="../../styles/common/footer.css">
     <style>
-        * {
+        /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -18,12 +15,12 @@
 
         body {
             background-color: #f5f7ff;
-        }
+        } */
 
-        .container {
+        .container-inner {
             max-width: 1200px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 20px 1rem;
         }
 
         .search-section {
@@ -155,7 +152,7 @@
 
 <body>
 
-<div class="container">
+<div class="container-inner">
     <div class="search-section">
         <h1>How can we help?</h1>
         <div class="search-box">
