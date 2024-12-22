@@ -30,6 +30,10 @@ class BusinessmanController extends BaseController
         $this->renderLayout('main', 'pages/businessman/place_order');
     }
 
+    public function myPayments($req, $res){
+        $this->renderLayout('main', 'pages/businessman/my_payments');
+    }
+
     public function requestPackage($req, $res){
         $this->renderLayout('main', 'pages/businessman/request_package');
     }
