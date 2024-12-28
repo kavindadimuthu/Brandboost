@@ -10,6 +10,10 @@ class BusinessmanController extends BaseController
         \app\core\Helpers\AuthHelper::CheckPermission('businessman');
     }
 
+    public function viewServices($req, $res){
+        $this->renderLayout('main', 'pages/businessman/view_services');
+    }
+
     public function ordersList($req, $res){
         $this->renderLayout('main', 'pages/businessman/orders_list');
     }
@@ -24,6 +28,10 @@ class BusinessmanController extends BaseController
 
     public function placeOrder($req, $res){
         $this->renderLayout('main', 'pages/businessman/place_order');
+    }
+
+    public function myPayments($req, $res){
+        $this->renderLayout('main', 'pages/businessman/my_payments');
     }
 
     public function requestPackage($req, $res){

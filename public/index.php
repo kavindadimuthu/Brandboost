@@ -36,6 +36,8 @@ $app->router->get('/businessman/order-details/{id}', 'BusinessmanController@orde
 $app->router->get('/businessman/request-order', 'BusinessmanController@requestOrder');
 $app->router->get('/businessman/place-order', 'BusinessmanController@placeOrder');
 $app->router->get('/businessman/request-package', 'BusinessmanController@requestPackage');
+$app->router->get('/businessman/view-services', 'BusinessmanController@viewServices');
+$app->router->get('/businessman/my-payments', 'BusinessmanController@myPayments');
 // Common shared routes for businessman
 $app->router->get('/businessman/custom-packages', 'BusinessmanController@customPackages');
 $app->router->get('/businessman/edit-profile', 'BusinessmanController@editProfile');

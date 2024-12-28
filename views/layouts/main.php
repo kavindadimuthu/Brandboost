@@ -23,19 +23,36 @@
             text-align: center;
             padding: 10px;
         }
-        main {
-            background-color: #f4f4f4;
-            /*padding: 20px;*/
-            padding-top: 50px;
-            min-height: 80vh;
+       
+        .container {
+            display: flex;
         }
+
+        .content {
+            flex-grow: 1;
+            padding: 10px 20px;
+            min-height: 80vh;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .main-content {
+            margin-top: 60px;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
         footer {
-            /*background-color: #333;*/
-            /*color: white;*/
-            /*text-align: center;*/
-            /*padding: 10px 0;*/
-            /*position: absolute;*/
-            /*bottom: 0;*/
+            /* background-color: #333; */
+            /* color: white; */
+            /* text-align: center; */
+            /* padding: 10px 0; */
+            /* position: absolute; */
+            /* bottom: 0; */
             width: 100%;
         }
     </style>
@@ -45,10 +62,14 @@
         <?php include APP_ROOT.'/views/components/header.php' ?>
     </header>
 
-    <main>
-        <!-- Inject dynamic content -->
-        <?php echo $content ?>
-    </main>
+    <div class="container">
+        <div class="content">
+            <div class="main-content">
+                <!-- Inject dynamic content -->
+                <?php echo $content ?>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <?php include APP_ROOT.'/views/components/footer.php' ?>

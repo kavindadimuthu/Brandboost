@@ -7,15 +7,15 @@ use app\core\BaseController;
 class GuestController extends BaseController
 {
     public function home($req, $res){
-        $this->renderLayout('main', 'pages/guest/landing');
+        $this->renderLayout('home_layout', 'pages/guest/landing');
     }
 
     public function servicesList($req, $res){
-        $this->renderLayout('main', 'pages/guest/services_list');
+        $this->renderLayout('home_layout', 'pages/guest/services_list');
     }
 
     public function serviceDetails($req, $res){
-        $this->renderLayout('main', 'pages/guest/service_details');
+        $this->renderLayout('home_layout', 'pages/guest/service_details');
     }
 
     public function userProfile($req, $res){
@@ -28,15 +28,15 @@ class GuestController extends BaseController
     }
     
     public function about($req, $res){
-        $this->renderLayout('main', 'pages/guest/about_us');
+        $this->renderLayout('home_layout', 'pages/guest/about_us');
     }
 
     public function contact($req, $res){
-        $this->renderLayout('main', 'pages/guest/contact_us');
+        $this->renderLayout('home_layout', 'pages/guest/contact_us');
     }
 
     public function faq($req, $res){
-        $this->renderLayout('main', 'pages/guest/faq');
+        $this->renderLayout('home_layout', 'pages/guest/faq');
     }
 
     public function register($req, $res){
