@@ -7,7 +7,7 @@ use app\core\BaseController;
 class DesignerController extends BaseController
 {
     public function __construct(){
-        \app\core\Helpers\AuthHelper::CheckPermission('designer');
+        // \app\core\Helpers\AuthHelper::CheckPermission('designer');
     }
 
     public function dashboard($req, $res){

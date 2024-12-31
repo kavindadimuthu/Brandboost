@@ -29,6 +29,7 @@
           <a class="hover:text-gray-300" href="/businessman/custom-packages">Custom Packages</a>';
         } else if ($_SESSION['user']['role'] === 'influencer') {
             echo '<a class="hover:text-gray-300" href="/influencer/dashboard">Dashboard</a>
+          <a class="hover:text-gray-300" href="/influencer/my-promotions">My Promotions</a>
           <a class="hover:text-gray-300" href="/influencer/orders-list">Orders</a>
           <a class="hover:text-gray-300" href="/influencer/custom-packages">Custom Packages</a>
           <a class="hover:text-gray-300" href="/influencer/earnings">Earnings</a>';

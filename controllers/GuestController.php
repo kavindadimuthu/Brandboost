@@ -19,7 +19,7 @@ class GuestController extends BaseController
     }
 
     public function userProfile($req, $res){
-        $userId = $req->getParam('id') ?? null;
+        $userId = $req->getParam('') ?? null;
         $this->renderLayout('main', 'pages/guest/user_profile');
     }
 
@@ -41,6 +41,11 @@ class GuestController extends BaseController
 
     public function register($req, $res){
         $this->renderPage('pages/guest/register');
+    }
+    public function registerForm($req, $res){
+        $param = $req->getParam('role');
+
+        $this->renderPage('pages/guest/registerForm', $data = [$param]);
     }
 
     public function login($req, $res){

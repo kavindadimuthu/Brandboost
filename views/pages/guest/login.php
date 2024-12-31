@@ -138,6 +138,7 @@
         </div>
         <button type="submit" class="btn">Sign In</button>
     </form>
+    <p><a href="/forgot-password">Forgot Password</a></p>
     <p>Don't you have an account? <a href="/register">Register</a></p>
 </div>
 

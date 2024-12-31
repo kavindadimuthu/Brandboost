@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Website</title>
-    <link rel="stylesheet" href="/styles/tailwind.css">
+    <!-- <link rel="stylesheet" href="/styles/tailwind.css"> -->
     <style>
         *,
         *::after,
@@ -25,17 +25,11 @@
         }
         main {
             background-color: #f4f4f4;
-            /*padding: 20px;*/
+            margin: auto;
             padding-top: 50px;
-            min-height: 80vh;
+            /* min-height: 80vh; */
         }
         footer {
-            /*background-color: #333;*/
-            /*color: white;*/
-            /*text-align: center;*/
-            /*padding: 10px 0;*/
-            /*position: absolute;*/
-            /*bottom: 0;*/
             width: 100%;
         }
     </style>

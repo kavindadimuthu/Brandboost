@@ -9,17 +9,12 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-        }
-        nav {
-            width: 20%;
-            height: 100vh;
-            background-color: #333;
-            color: white;
-            float: left;
+            width: 100%;
         }
 
         main {
-            width: 80%;
+            padding-left: 250px;
+            width: 100%;
             height: 100vh;
             background-color: #f4f4f4;
             float: left;
@@ -28,7 +23,7 @@
 </head>
 <body>
     <nav>
-        <h1 style="text-align: center;">Sidebar Section</h1>
+        <?php include APP_ROOT.'/views/components/sideNavbar.php' ?>
     </nav>
 
     <main>

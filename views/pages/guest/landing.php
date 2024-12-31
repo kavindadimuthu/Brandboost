@@ -1,167 +1,470 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>
-        Brandboost
-    </title>
-    <!--    <script src="https://cdn.tailwindcss.com">-->
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandboost</title>
     <style>
         :root {
             --purple-color: #636ae8;
         }
+
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            /* font-family: 'Roboto', sans-serif; */
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7ff;
+        }
+
+        /* Headings */
+        .heading {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        /* Common containers & wrappers */
+        header,
+        section,
+        footer {
+            width: 100%;
+        }
+
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ------------------------- */
+
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 24px;
+            color: #fff;
+            display: inline-block;
+            font-family: Inter;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            background-color: transparent;
+            color: var(--purple-color);
+            color: #333;
+            font-weight: 600;
+        }
+
+        .register-btn {
+            background-color: var(--purple-color);
+            color: #fff;
+            /* background-color: #4a6cf7; */
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .scroll-btn {
+            background-color: #fff;
+            color: #6358FF;
+        }
+
+        .learn-more-btn {
+            font-family: Inter;
+            color: #636AE8FF;
+            background: #FFFFFFFF;
+            opacity: 1;
+            border-radius: 26px;
+            border-width: 1px;
+            border-color: #636AE8FF;
+            border-style: solid;
+        }
+
+        .cta-btn {
+            color: #FFFFFFFF;
+            background: #E8618CFF;
+            padding: 10px 40px;
+        }
+
+        /* ------------------------------ */
+
+        /* Hero Section Styles */
+        .hero {
+            background-image: url('../../assets/images/hero-bg.png');
+            background-size: cover;
+            background-position: center;
+            padding: 80px 0;
+            min-height: 90vh;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #fff;
+        }
+
+        .heading-upper-text {
+            font-size: 1.5rem;
+        }
+
+        .heading-text {
+            font-size: 3.8rem;
+        }
+
+        /* commeted part */
+        .hero-images {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 2rem;
+        }
+
+        .image-circle {
+            width: 80px;
+            height: 80px;
+            background-color: #baf3eb;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .image-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* -------------------- */
+
+
+
+
+
+        /* About Us Section Styles */
+        .about-us {
+            padding: 80px 0;
+        }
+
+        .about-us>.wrapper {
+            display: flex;
+        }
+
+        .about-us-content {
+            max-width: 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: left;
+            text-align: left;
+            font-size: 20px;
+            line-height: 30px;
+            font-weight: 400;
+            color: #323842FF;
+        }
+
+        .about-us-content>img {
+            max-width: 400px;
+        }
+
+        .image-box>img {
+            max-width: 700px;
+        }
+
+        /* -------------------- */
+
+
+
+
+        /* Why Choose Us Section Styles */
+        .why-choose-us {
+            padding: 80px 0;
+        }
+
+        .why-choose-us .box-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .box-item {
+            padding: 20px 20px 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box-item .box-item-heading {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .box-item p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .box-container>div:nth-child(1) {
+            background-color: #BAF3EBFF;
+            /* Light Red */
+        }
+
+        .box-container>div:nth-child(2) {
+            background-color: #CED0F8FF;
+            /* Light Green */
+        }
+
+        .box-container>div:nth-child(3) {
+            background-color: #F8DBD0FF;
+            /* Light Blue */
+        }
+
+        .box-container>div:nth-child(4) {
+            background-color: #FDF1F5FF;
+            /* Light Yellow */
+        }
+
+        .box-item::before {
+            content: '';
+            position: absolute;
+            background-size: cover;
+            width: 120px;
+            aspect-ratio: 1/1;
+        }
+
+        .box-container>div:nth-child(1)::before {
+            background-image: url('../../assets/images/why-choose-us-images/Image 50.png');
+            bottom: 10%;
+            right: 10%;
+        }
+
+        .box-container>div:nth-child(2)::before {
+            background-image: url('../../assets/images/why-choose-us-images/Image 51.png');
+            bottom: 10%;
+            right: 10%;
+        }
+
+        .box-container>div:nth-child(3)::before {
+            background-image: url('../../assets/images/why-choose-us-images/Image 52.png');
+            bottom: 10%;
+            right: 10%;
+        }
+
+        .box-container>div:nth-child(4)::before {
+            background-image: url('../../assets/images/why-choose-us-images/Image 53.png');
+            bottom: 10%;
+            right: 10%;
+        }
+
+
+
+
+        /* Success Stories Section Styles */
+        .success-stories {
+            padding: 80px 0;
+        }
+
+        .story-boxes-container {
+            padding: 40px 30px 70px 30px;
+            border-radius: 20px;
+            display: flex;
+            gap: 20px;
+            background-color: var(--purple-color);
+        }
+
+        .story-box {
+            background-color: #F5F5F5;
+            border-radius: 10px;
+            padding: 20px 20px 50px 20px;
+        }
+
+        .story-box-upper-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .yellow-stars {
+            color: rgb(195, 179, 2);
+        }
+
+        /* ------------------------ */
+
+
+
+
+        /* Call to Action Section Styles */
+        .call-to-action {
+            padding: 80px 0;
+            text-align: center;
+            font-size: 2rem;
+            line-height: 56px;
+            font-weight: 600;
+            color: #FFFFFFFF;
+        }
+
+        .call-to-action>.wrapper {
+            padding: 40px;
+            border-radius: 20px;
+            background-color: #2C35E0FF;
+            position: relative;
+        }
+
+        .arrow-icon {
+            position: absolute;
+            width: 100px;
+            bottom: 15%;
+            right: 32%;
+        }
+
+        /* -------------------------- */
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-<section class="hero bg-cover bg-center min-h-screen flex items-center" style="background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGJ1c2luZXNzJTIwcHJvbW90aW5nfGVufDB8fHx8MTYzMjY2NjYwNQ&ixlib=rb-1.2.1&q=80&w=1080');">
-    <div class="container mx-auto px-4 text-center text-white">
-    <span class="text-xl">
-     Official business promoting web platform
-    </span>
-        <h1 class="text-4xl md:text-6xl font-bold mt-4">
-            Promote Your
-            <br/>
-            Business
-        </h1>
-        <button class="mt-8 px-6 py-3 bg-white text-purple-600 font-bold rounded-full">
-            Scroll down
-        </button>
-    </div>
-</section>
-<section class="about-us py-20">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-        <div class="md:w-1/2">
-            <h2 class="text-3xl font-bold text-center md:text-left">
-                About Us
-            </h2>
-            <img alt="Decorative line image" class="my-4 mx-auto md:mx-0" height="50" src="https://storage.googleapis.com/a1aa/image/8DZfQk7xTGX8Z6HvoeIKRfrJaLu7Yd003oVgPe9LMSCt95oPB.jpg" width="400"/>
-            <p class="text-lg leading-relaxed text-center md:text-left">
-                Brandboost is where influencers, designers, and businesses connect to create magic! We bring together talented creators offering promotional and design services with businesses looking to elevate their brand. Whether you’re an influencer, a designer, or a business, we make collaboration easy, secure, and impactful.
-            </p>
-            <button class="mt-8 px-6 py-3 border border-purple-600 text-purple-600 font-bold rounded-full">
-                Learn More
-            </button>
+
+<body>
+    <section class="hero">
+        <div class="wrapper">
+            <div class="hero-content">
+                <span class="heading-upper-text">Official business promoting web platform</span>
+                <h1 class="heading-text">Promote Your <br>Business</h1>
+                <button class="btn scroll-btn">Scroll down</button>
+            </div>
+            <!-- <div class="hero-images">
+                <div class="image-circle"><img src="../../assets/images/Image40.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image47.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image48.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image 41.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image 42.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image 43.png" alt=""></div>
+                <div class="image-circle"><img src="../../assets/images/Image 44.png" alt=""></div>
+            </div> -->
         </div>
-        <div class="md:w-1/2 mt-8 md:mt-0">
-            <img alt="About us section image" height="500" src="https://storage.googleapis.com/a1aa/image/jPfBvFavKzSKLqhK7SYfw5VYWRse6WXfr6dGSDzol3hp95oPB.jpg" width="700"/>
-        </div>
-    </div>
-</section>
-<section class="why-choose-us py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center">
-            Why choose us
-        </h2>
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="box-item p-6 bg-green-100 rounded-lg shadow-md relative">
-                <div class="box-item-heading text-xl font-bold mb-2">
-                    Secure transactions
-                </div>
-                <p class="text-gray-700">
-                    Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat
-                </p>
-                <img alt="Decorative image for secure transactions" class="absolute bottom-4 right-4 w-20 h-20" height="100" src="https://storage.googleapis.com/a1aa/image/M1Su6TDA74ISMBCmc7RUBzuse9kWsEeuZ9fMHNryHcU4e5oPB.jpg" width="100"/>
+    </section>
+    <section class="about-us">
+        <div class="wrapper">
+            <div class="about-us-content">
+                <span class="heading">About Us</span>
+                <img src="../../assets/images/topic-line.png" alt="">
+                <p class="about-us-text">Brandboost is where influencers, designers, and businesses connect to create magic! We bring together talented creators offering promotional and design services with businesses looking to elevate their brand. Whether you’re an influencer, a designer, or a business , we make collaboration easy, secure, and impactful.</p>
+                <button class="btn learn-more-btn">Learn More</button>
             </div>
-            <div class="box-item p-6 bg-indigo-100 rounded-lg shadow-md relative">
-                <div class="box-item-heading text-xl font-bold mb-2">
-                    Diverse talent pool
-                </div>
-                <p class="text-gray-700">
-                    Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat
-                </p>
-                <img alt="Decorative image for diverse talent pool" class="absolute bottom-4 right-4 w-20 h-20" height="100" src="https://storage.googleapis.com/a1aa/image/yfiP35jojb3lekeP2Sc5Z4K7BYcUe1HyAS9BEpOvr4jCezRfE.jpg" width="100"/>
-            </div>
-            <div class="box-item p-6 bg-pink-100 rounded-lg shadow-md relative">
-                <div class="box-item-heading text-xl font-bold mb-2">
-                    Customizable solutions
-                </div>
-                <p class="text-gray-700">
-                    Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat
-                </p>
-                <img alt="Decorative image for customizable solutions" class="absolute bottom-4 right-4 w-20 h-20" height="100" src="https://storage.googleapis.com/a1aa/image/zLsJOBMSxBZiLJ8bkOxZfD4FOs2DnQ0AxEuNuIVCJqVvPH9JA.jpg" width="100"/>
-            </div>
-            <div class="box-item p-6 bg-red-100 rounded-lg shadow-md relative">
-                <div class="box-item-heading text-xl font-bold mb-2">
-                    Transparent pricing
-                </div>
-                <p class="text-gray-700">
-                    Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat
-                </p>
-                <img alt="Decorative image for transparent pricing" class="absolute bottom-4 right-4 w-20 h-20" height="100" src="https://storage.googleapis.com/a1aa/image/rILn8kTKLFpjNx1bHWPSVfDdSJIQaSkFV5xpXWYAKwwsPH9JA.jpg" width="100"/>
+            <div class="image-box">
+                <img src="../../assets/images/about-us-section-image.png" alt="">
             </div>
         </div>
-    </div>
-</section>
-<section class="success-stories py-20">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center">
-            Success stories
-        </h2>
-        <div class="mt-10 bg-purple-600 p-10 rounded-lg flex flex-col md:flex-row gap-6">
-            <div class="story-box bg-gray-100 p-6 rounded-lg flex-1">
-                <div class="flex items-center mb-4">
-                    <img alt="Avatar of Ashley Robinson" class="w-16 h-16 rounded-full" height="100" src="https://storage.googleapis.com/a1aa/image/9xf1kUKgVwzbQ6Q7adLr8XiNk0LNcFJu0jk88X3TvS4wPH9JA.jpg" width="100"/>
-                    <div class="ml-4">
-                        <div class="font-bold">
-                            Ashley Robinson
+    </section>
+    <section class="why-choose-us">
+        <div class="wrapper">
+            <h1 class="heading">Why choose us</h1>
+            <div class="box-container">
+                <div class="box-item">
+                    <div class="box-item-content">
+                        <div class="box-item-heading">Secure transactions</div>
+                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
+                    </div>
+                    <div class="box-item-image">
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="box-item-content">
+                        <div class="box-item-heading">Diverse talent pool</div>
+                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
+                    </div>
+                    <div class="box-item-image">
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="box-item-content">
+                        <div class="box-item-heading">Customizable solutions</div>
+                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
+                    </div>
+                    <div class="box-item-image">
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="box-item-content">
+                        <div class="box-item-heading">Transparent pricing</div>
+                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
+                    </div>
+                    <div class="box-item-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="success-stories">
+        <div class="wrapper">
+            <h1 class="heading">Success stories</h1>
+            <div class="story-boxes-container">
+                <div class="story-box">
+                    <div class="story-box-content">
+                        <div class="story-box-upper-content">
+                            <img src="../../assets/images/success-stories-users/Avatar 106.png" alt="">
+                            <div class="name-star-box">
+                                <div class="name">Ashley Robinson</div>
+                                <div class="star-wrapper yellow-stars">★★★★★</div>
+                            </div>
                         </div>
-                        <div class="text-yellow-500">
-                            ★★★★★
+                        <div class="story-box-lower-content">
+                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
                         </div>
                     </div>
                 </div>
-                <p>
-                    I recently hired a business coach and was highly impressed with their support and expertise.
-                </p>
-            </div>
-            <div class="story-box bg-gray-100 p-6 rounded-lg flex-1">
-                <div class="flex items-center mb-4">
-                    <img alt="Avatar of Ashley Robinson" class="w-16 h-16 rounded-full" height="100" src="https://storage.googleapis.com/a1aa/image/9xf1kUKgVwzbQ6Q7adLr8XiNk0LNcFJu0jk88X3TvS4wPH9JA.jpg" width="100"/>
-                    <div class="ml-4">
-                        <div class="font-bold">
-                            Ashley Robinson
+                <div class="story-box">
+                    <div class="story-box-content">
+                        <div class="story-box-upper-content">
+                            <img src="../../assets/images/success-stories-users/Avatar 107.png" alt="">
+                            <div class="name-star-box">
+                                <div class="name">Ashley Robinson</div>
+                                <div class="star-wrapper yellow-stars">★★★★★</div>
+                            </div>
                         </div>
-                        <div class="text-yellow-500">
-                            ★★★★★
+                        <div class="story-box-lower-content">
+                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
                         </div>
                     </div>
                 </div>
-                <p>
-                    I recently hired a business coach and was highly impressed with their support and expertise.
-                </p>
-            </div>
-            <div class="story-box bg-gray-100 p-6 rounded-lg flex-1">
-                <div class="flex items-center mb-4">
-                    <img alt="Avatar of Ashley Robinson" class="w-16 h-16 rounded-full" height="100" src="https://storage.googleapis.com/a1aa/image/9xf1kUKgVwzbQ6Q7adLr8XiNk0LNcFJu0jk88X3TvS4wPH9JA.jpg" width="100"/>
-                    <div class="ml-4">
-                        <div class="font-bold">
-                            Ashley Robinson
+                <div class="story-box">
+                    <div class="story-box-content">
+                        <div class="story-box-upper-content">
+                            <img src="../../assets/images/success-stories-users/Avatar 108.png" alt="">
+                            <div class="name-star-box">
+                                <div class="name">Ashley Robinson</div>
+                                <div class="star-wrapper yellow-stars">★★★★★</div>
+                            </div>
                         </div>
-                        <div class="text-yellow-500">
-                            ★★★★★
+                        <div class="story-box-lower-content">
+                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
                         </div>
                     </div>
                 </div>
-                <p>
-                    I recently hired a business coach and was highly impressed with their support and expertise.
-                </p>
             </div>
         </div>
-    </div>
-</section>
-<section class="call-to-action py-20 bg-blue-800 text-white text-center">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold">
-            Ready to create something amazing?
-            <br/>
-            Join us today!
-        </h2>
-        <button class="mt-8 px-8 py-4 bg-pink-600 text-white font-bold rounded-full">
-            Get Started
-        </button>
-    </div>
-</section>
+    </section>
+    <section class="call-to-action">
+        <div class="wrapper">
+            <div class="heading">Ready to create something amazing?
+                <br>Join us today!
+            </div>
+            <button class="btn cta-btn">Get Started</button>
+            <img class="arrow-icon" src="../../assets/images/curved-arrow.png" alt="">
+        </div>
+    </section>
+
 </body>
+
 </html>

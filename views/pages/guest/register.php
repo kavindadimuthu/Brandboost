@@ -107,17 +107,17 @@
 </a>
 
 <div class="button-container">
-    <div class="button-wrapper" onclick="window.location.href='/homecontroller/registerBusiness'">
+    <div class="button-wrapper" onclick="window.location.href='/register/businessman'">
         <button class="custom-button">Register as Business</button>
         <img src="../../assets/businessman_logo.jpg" alt="Business Owner">
     </div>
 
-    <div class="button-wrapper" onclick="window.location.href='/homecontroller/registerInfluencer'">
+    <div class="button-wrapper" onclick="window.location.href='/register/influencer'">
         <button class="custom-button">Register as Influencer</button>
         <img src="../../assets/influencer_logo.jpg" alt="Influencer">
     </div>
 
-    <div class="button-wrapper" onclick="window.location.href='/homecontroller/registerDesigner'">
+    <div class="button-wrapper" onclick="window.location.href='/register/designer'">
         <button class="custom-button">Register as Designer</button>
         <img src="../../assets/designer_logo.jpg" alt="Designer">
     </div>

@@ -26,6 +26,7 @@ $app->router->get('/about', 'GuestController@about'); // About Us
 $app->router->get('/contact', 'GuestController@contact'); // Contact Us
 $app->router->get('/faq', 'GuestController@faq'); // FAQ
 $app->router->get('/register', 'GuestController@register'); // Register
+$app->router->get('/register/{role}', 'GuestController@registerForm'); // Register
 $app->router->get('/login', 'GuestController@login'); // Login
 $app->router->get('/forgot-password', 'GuestController@forgotPassword'); // Forgot Password
 $app->router->get('/reset-password', 'GuestController@resetPassword'); // Reset Password
