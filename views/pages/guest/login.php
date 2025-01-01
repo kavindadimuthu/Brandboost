@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,13 +168,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="min-h-screen">
         <div class="card">
             <div class="card-header">
                 <button class="back-button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
                     </svg>
                     <span>Back to Home</span>
                 </button>
@@ -182,15 +184,15 @@
             </div>
 
             <div class="card-content">
-                <form id="loginForm" class="form-grid">
+                <form id="loginForm" class="form-grid" action="/auth/login" method="POST">
                     <div class="input-group">
                         <label class="label" for="email">Email</label>
                         <div class="input-wrapper">
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <path d="M22 6l-10 7L2 6"/>
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <path d="M22 6l-10 7L2 6" />
                             </svg>
-                            <input type="email" id="email" class="input" placeholder="you@example.com" required>
+                            <input type="email" id="email" name="email" class="input" placeholder="you@example.com" required>
                         </div>
                     </div>
 
@@ -198,10 +200,10 @@
                         <label class="label" for="password">Password</label>
                         <div class="input-wrapper">
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
-                            <input type="password" id="password" class="input" required>
+                            <input type="password" id="password" name="password" class="input" required>
                         </div>
                         <a href="/forgot-password" class="forgot-password">Forgot password?</a>
                     </div>
@@ -217,7 +219,7 @@
 
             <div class="card-footer">
                 <p>
-                    Don't have an account? 
+                    Don't have an account?
                     <a href="/register" class="link">Create account</a>
                 </p>
             </div>
@@ -225,31 +227,23 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
+        // document.getElementById('loginForm').addEventListener('submit', function(e) {
+        //     // e.preventDefault();
 
-            // Here you would typically send the data to your server
-            console.log('Login attempted:', {
-                email,
-                password,
-                remember
-            });
+        //     // Get form values
+        //     const email = document.getElementById('email').value;
+        //     const password = document.getElementById('password').value;
+        //     const remember = document.getElementById('remember').checked;
 
-            // For demo purposes, show success message
-            alert('Login successful!');
-        });
+        // });
 
-        // Add back button functionality
-        document.querySelector('.back-button').addEventListener('click', function() {
-            // For demo purposes, just log the action
-            console.log('Back button clicked');
-            // In a real application, you would use: window.location.href = '/';
-        });
+        // // Add back button functionality
+        // document.querySelector('.back-button').addEventListener('click', function() {
+        //     // For demo purposes, just log the action
+        //     console.log('Back button clicked');
+        //     // In a real application, you would use: window.location.href = '/';
+        // });
     </script>
 </body>
+
 </html>

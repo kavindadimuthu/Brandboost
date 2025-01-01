@@ -178,7 +178,7 @@ body {
     <div class="bottom-links">
         <ul>
             <li>
-                <a href="/logincontroller/logout">
+                <a href="/auth/logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span class="link-text">Log out</span>
                 </a>

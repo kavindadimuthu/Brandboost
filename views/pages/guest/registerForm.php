@@ -183,8 +183,8 @@
             </div>
 
             <div class="card-content">
-                <form id="registrationForm" class="form-grid">
-                    <input type="hidden" id="role" value="<?php echo $data[0] ?>" required>
+                <form id="registrationForm" class="form-grid" method="POST" action="/auth/register">
+                    <input type="hidden" id="role" name="role" value="<?php echo $data[0] ?>" required>
                     <div class="two-columns">
                         <div class="input-group">
                             <label class="label" for="firstName">First Name</label>
@@ -192,7 +192,7 @@
                                 <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
                                 </svg>
-                                <input type="text" id="firstName" class="input" placeholder="John" required>
+                                <input type="text" id="firstName" name="firstName" class="input" placeholder="John" required>
                             </div>
                         </div>
 
@@ -202,7 +202,7 @@
                                 <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
                                 </svg>
-                                <input type="text" id="lastName" class="input" placeholder="Doe" required>
+                                <input type="text" id="lastName" name="lastName" class="input" placeholder="Doe" required>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                 <path d="M22 6l-10 7L2 6"/>
                             </svg>
-                            <input type="email" id="email" class="input" placeholder="you@example.com" required>
+                            <input type="email" id="email" name="email" class="input" placeholder="you@example.com" required>
                         </div>
                     </div>
 
@@ -224,18 +224,8 @@
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                             </svg>
-                            <input type="tel" id="phone" class="input" placeholder="+1 (555) 000-0000" required>
+                            <input type="tel" id="phone" name="phone" class="input" placeholder="+1 (555) 000-0000" required>
                         </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="label" for="gender">Gender</label>
-                        <select id="gender" class="input" required>
-                            <option value="">Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Prefer not to say</option>
-                        </select>
                     </div>
 
                     <div class="input-group">
@@ -245,7 +235,7 @@
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
-                            <input type="password" id="password" class="input" required>
+                            <input type="password" id="password" name="password" class="input" required>
                         </div>
                     </div>
 
@@ -256,7 +246,7 @@
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
-                            <input type="password" id="confirmPassword" class="input" required>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="input" required>
                         </div>
                     </div>
 
@@ -281,43 +271,43 @@
     </div>
 
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
             
-            // Get form values
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const gender = document.getElementById('gender').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const privacy = document.getElementById('privacy').checked;
+        //     // Get form values
+        //     const firstName = document.getElementById('firstName').value;
+        //     const lastName = document.getElementById('lastName').value;
+        //     const email = document.getElementById('email').value;
+        //     const phone = document.getElementById('phone').value;
+        //     const gender = document.getElementById('gender').value;
+        //     const password = document.getElementById('password').value;
+        //     const confirmPassword = document.getElementById('confirmPassword').value;
+        //     const privacy = document.getElementById('privacy').checked;
 
-            // Basic validation
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
+        //     // Basic validation
+        //     if (password !== confirmPassword) {
+        //         alert('Passwords do not match!');
+        //         return;
+        //     }
 
-            if (!privacy) {
-                alert('Please agree to the Privacy Policy');
-                return;
-            }
+        //     if (!privacy) {
+        //         alert('Please agree to the Privacy Policy');
+        //         return;
+        //     }
 
-            // Here you would typically send the data to your server
-            console.log('Form submitted:', {
-                firstName,
-                lastName,
-                email,
-                phone,
-                gender,
-                password
-            });
+        //     // Here you would typically send the data to your server
+        //     console.log('Form submitted:', {
+        //         firstName,
+        //         lastName,
+        //         email,
+        //         phone,
+        //         gender,
+        //         password
+        //     });
 
-            // For demo purposes, show success message
-            alert('Registration successful!');
-        });
+        //     // For demo purposes, show success message
+        //     alert('Registration successful!');
+        // });
 
         // Add back button functionality
         document.querySelector('.back-button').addEventListener('click', function() {
