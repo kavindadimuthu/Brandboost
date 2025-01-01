@@ -4,467 +4,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brandboost</title>
+    <title>Home - Brandboost</title>
     <style>
-        :root {
-            --purple-color: #636ae8;
-        }
-
-        *,
-        *::after,
-        *::before {
-            box-sizing: border-box;
-        }
-
-        body {
-
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            /* font-family: 'Roboto', sans-serif; */
-            margin: 0;
-            padding: 0;
-            background-color: #f5f7ff;
-        }
-
-        /* Headings */
-        .heading {
-            text-align: center;
-            font-size: 3rem;
-            font-weight: 600;
-        }
-
-        /* Common containers & wrappers */
-        header,
-        section,
-        footer {
-            width: 100%;
-        }
-
-        .wrapper {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
             padding: 0 20px;
         }
 
-        /* ------------------------- */
 
-
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
+        /* Button Styles */
+        .cta-button,
+        .cta-button-mini {
+            background: white;
+            color: #4169E1;
             border: none;
-            border-radius: 24px;
-            color: #fff;
-            display: inline-block;
-            font-family: Inter;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .login-btn {
-            background-color: transparent;
-            color: var(--purple-color);
-            color: #333;
+            border-radius: 12px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .register-btn {
-            background-color: var(--purple-color);
-            color: #fff;
-            /* background-color: #4a6cf7; */
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 5px;
+        .cta-button {
+            padding: 15px 35px;
+            font-size: 18px;
         }
 
-        .scroll-btn {
-            background-color: #fff;
-            color: #6358FF;
+        .cta-button-mini {
+            padding: 10px 20px;
+            font-size: 16px;
         }
 
-        .learn-more-btn {
-            font-family: Inter;
-            color: #636AE8FF;
-            background: #FFFFFFFF;
-            opacity: 1;
-            border-radius: 26px;
-            border-width: 1px;
-            border-color: #636AE8FF;
-            border-style: solid;
+        .cta-button:hover,
+        .cta-button-mini:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .cta-btn {
-            color: #FFFFFFFF;
-            background: #E8618CFF;
-            padding: 10px 40px;
+        .secondary-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        /* ------------------------------ */
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-        /* Hero Section Styles */
+        /* Hero Section */
         .hero {
-            background-image: url('../../assets/images/hero-bg.png');
-            background-size: cover;
-            background-position: center;
-            padding: 80px 0;
-            min-height: 90vh;
-        }
-
-        .hero-content {
+            background: linear-gradient(135deg, #4169E1, #8A2BE2);
+            color: white;
+            padding: 160px 20px 80px;
             text-align: center;
-            color: #fff;
-        }
-
-        .heading-upper-text {
-            font-size: 1.5rem;
-        }
-
-        .heading-text {
-            font-size: 3.8rem;
-        }
-
-        /* commeted part */
-        .hero-images {
-            display: flex;
-            justify-content: center;
-            margin-top: 40px;
-            gap: 2rem;
-        }
-
-        .image-circle {
-            width: 80px;
-            height: 80px;
-            background-color: #baf3eb;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .image-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* -------------------- */
-
-
-
-
-
-        /* About Us Section Styles */
-        .about-us {
-            padding: 80px 0;
-        }
-
-        .about-us>.wrapper {
-            display: flex;
-        }
-
-        .about-us-content {
-            max-width: 40%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: left;
-            text-align: left;
-            font-size: 20px;
-            line-height: 30px;
-            font-weight: 400;
-            color: #323842FF;
-        }
-
-        .about-us-content>img {
-            max-width: 400px;
-        }
-
-        .image-box>img {
-            max-width: 700px;
-        }
-
-        /* -------------------- */
-
-
-
-
-        /* Why Choose Us Section Styles */
-        .why-choose-us {
-            padding: 80px 0;
-        }
-
-        .why-choose-us .box-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .box-item {
-            padding: 20px 20px 30px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
 
-        .box-item .box-item-heading {
-            font-size: 1.2rem;
-            font-weight: bold;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Card Sections */
+        .stats,
+        .testimonials {
+            background: #f8f9fa;
+            padding: 60px 20px;
+        }
+
+        .stats-grid,
+        .features-grid,
+        .testimonials-grid {
+            display: grid;
+            gap: 30px;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .features-grid,
+        .testimonials-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .stat-card,
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card h3 {
+            font-size: 36px;
+            color: #4169E1;
             margin-bottom: 10px;
         }
 
-        .box-item p {
-            font-size: 1rem;
-            color: #555;
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
         }
 
-        .box-container>div:nth-child(1) {
-            background-color: #BAF3EBFF;
-            /* Light Red */
+        .features h2,
+        .testimonials h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 60px;
         }
 
-        .box-container>div:nth-child(2) {
-            background-color: #CED0F8FF;
-            /* Light Green */
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
         }
 
-        .box-container>div:nth-child(3) {
-            background-color: #F8DBD0FF;
-            /* Light Blue */
-        }
-
-        .box-container>div:nth-child(4) {
-            background-color: #FDF1F5FF;
-            /* Light Yellow */
-        }
-
-        .box-item::before {
-            content: '';
-            position: absolute;
-            background-size: cover;
-            width: 120px;
-            aspect-ratio: 1/1;
-        }
-
-        .box-container>div:nth-child(1)::before {
-            background-image: url('../../assets/images/why-choose-us-images/Image 50.png');
-            bottom: 10%;
-            right: 10%;
-        }
-
-        .box-container>div:nth-child(2)::before {
-            background-image: url('../../assets/images/why-choose-us-images/Image 51.png');
-            bottom: 10%;
-            right: 10%;
-        }
-
-        .box-container>div:nth-child(3)::before {
-            background-image: url('../../assets/images/why-choose-us-images/Image 52.png');
-            bottom: 10%;
-            right: 10%;
-        }
-
-        .box-container>div:nth-child(4)::before {
-            background-image: url('../../assets/images/why-choose-us-images/Image 53.png');
-            bottom: 10%;
-            right: 10%;
-        }
-
-
-
-
-        /* Success Stories Section Styles */
-        .success-stories {
-            padding: 80px 0;
-        }
-
-        .story-boxes-container {
-            padding: 40px 30px 70px 30px;
-            border-radius: 20px;
-            display: flex;
-            gap: 20px;
-            background-color: var(--purple-color);
-        }
-
-        .story-box {
-            background-color: #F5F5F5;
-            border-radius: 10px;
-            padding: 20px 20px 50px 20px;
-        }
-
-        .story-box-upper-content {
+        .feature-icon {
+            background: #e6f0ff;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: #4169E1;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #4169E1, #8A2BE2);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
             margin-bottom: 20px;
         }
 
-        .yellow-stars {
-            color: rgb(195, 179, 2);
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* ------------------------ */
-
-
-
-
-        /* Call to Action Section Styles */
-        .call-to-action {
-            padding: 80px 0;
-            text-align: center;
-            font-size: 2rem;
-            line-height: 56px;
-            font-weight: 600;
-            color: #FFFFFFFF;
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
 
-        .call-to-action>.wrapper {
-            padding: 40px;
-            border-radius: 20px;
-            background-color: #2C35E0FF;
-            position: relative;
+        /* Testimonials */
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
         }
 
-        .arrow-icon {
-            position: absolute;
-            width: 100px;
-            bottom: 15%;
-            right: 32%;
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        /* -------------------------- */
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #4169E1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .author-details h4 {
+            margin: 0;
+            color: #333;
+        }
+
+        .author-details p {
+            margin: 5px 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .header-content {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-card h3 {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 
 <body>
+
     <section class="hero">
-        <div class="wrapper">
-            <div class="hero-content">
-                <span class="heading-upper-text">Official business promoting web platform</span>
-                <h1 class="heading-text">Promote Your <br>Business</h1>
-                <button class="btn scroll-btn">Scroll down</button>
-            </div>
-            <!-- <div class="hero-images">
-                <div class="image-circle"><img src="../../assets/images/Image40.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image47.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image48.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image 41.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image 42.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image 43.png" alt=""></div>
-                <div class="image-circle"><img src="../../assets/images/Image 44.png" alt=""></div>
-            </div> -->
-        </div>
-    </section>
-    <section class="about-us">
-        <div class="wrapper">
-            <div class="about-us-content">
-                <span class="heading">About Us</span>
-                <img src="../../assets/images/topic-line.png" alt="">
-                <p class="about-us-text">Brandboost is where influencers, designers, and businesses connect to create magic! We bring together talented creators offering promotional and design services with businesses looking to elevate their brand. Whether you’re an influencer, a designer, or a business , we make collaboration easy, secure, and impactful.</p>
-                <button class="btn learn-more-btn">Learn More</button>
-            </div>
-            <div class="image-box">
-                <img src="../../assets/images/about-us-section-image.png" alt="">
-            </div>
-        </div>
-    </section>
-    <section class="why-choose-us">
-        <div class="wrapper">
-            <h1 class="heading">Why choose us</h1>
-            <div class="box-container">
-                <div class="box-item">
-                    <div class="box-item-content">
-                        <div class="box-item-heading">Secure transactions</div>
-                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
-                    </div>
-                    <div class="box-item-image">
-                    </div>
-                </div>
-                <div class="box-item">
-                    <div class="box-item-content">
-                        <div class="box-item-heading">Diverse talent pool</div>
-                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
-                    </div>
-                    <div class="box-item-image">
-                    </div>
-                </div>
-                <div class="box-item">
-                    <div class="box-item-content">
-                        <div class="box-item-heading">Customizable solutions</div>
-                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
-                    </div>
-                    <div class="box-item-image">
-                    </div>
-                </div>
-                <div class="box-item">
-                    <div class="box-item-content">
-                        <div class="box-item-heading">Transparent pricing</div>
-                        <p>Labore proident nisi fugiat nostrud sint mollit aliqua ipsum ad veniam cupidatat</p>
-                    </div>
-                    <div class="box-item-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="success-stories">
-        <div class="wrapper">
-            <h1 class="heading">Success stories</h1>
-            <div class="story-boxes-container">
-                <div class="story-box">
-                    <div class="story-box-content">
-                        <div class="story-box-upper-content">
-                            <img src="../../assets/images/success-stories-users/Avatar 106.png" alt="">
-                            <div class="name-star-box">
-                                <div class="name">Ashley Robinson</div>
-                                <div class="star-wrapper yellow-stars">★★★★★</div>
-                            </div>
-                        </div>
-                        <div class="story-box-lower-content">
-                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="story-box">
-                    <div class="story-box-content">
-                        <div class="story-box-upper-content">
-                            <img src="../../assets/images/success-stories-users/Avatar 107.png" alt="">
-                            <div class="name-star-box">
-                                <div class="name">Ashley Robinson</div>
-                                <div class="star-wrapper yellow-stars">★★★★★</div>
-                            </div>
-                        </div>
-                        <div class="story-box-lower-content">
-                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="story-box">
-                    <div class="story-box-content">
-                        <div class="story-box-upper-content">
-                            <img src="../../assets/images/success-stories-users/Avatar 108.png" alt="">
-                            <div class="name-star-box">
-                                <div class="name">Ashley Robinson</div>
-                                <div class="star-wrapper yellow-stars">★★★★★</div>
-                            </div>
-                        </div>
-                        <div class="story-box-lower-content">
-                            <span>I recently hired a business coach and was highly impressed with their support and expertise.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="call-to-action">
-        <div class="wrapper">
-            <div class="heading">Ready to create something amazing?
-                <br>Join us today!
-            </div>
-            <button class="btn cta-btn">Get Started</button>
-            <img class="arrow-icon" src="../../assets/images/curved-arrow.png" alt="">
+        <div class="container">
+            <h1>Where Influencers, Designers & Businesses Unite</h1>
+            <p>The ultimate marketplace connecting influencers, designers, and business owners. Transform your brand
+                with world-class talent.</p>
+            <button class="cta-button">Get Started →</button>
         </div>
     </section>
 
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-up">
+                    <h3>50K+</h3>
+                    <p>Active Professionals</p>
+                </div>
+                <div class="stat-card fade-up">
+                    <h3>100K+</h3>
+                    <p>Projects Completed</p>
+                </div>
+                <div class="stat-card fade-up">
+                    <h3>98%</h3>
+                    <p>Client Satisfaction</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="fade-up">Why Choose Our Platform</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">★</div>
+                    <h3>Verified Professionals</h3>
+                    <p>Every influencer and designer is thoroughly vetted to ensure top-quality service</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Quick Matching</h3>
+                    <p>Find the perfect professional for your project in minutes</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">👥</div>
+                    <h3>Secure Collaboration</h3>
+                    <p>Built-in tools for seamless communication and project management</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="fade-up">Ready to Transform Your Business?</h2>
+            <p class="fade-up">Join thousands of successful businesses who have found their perfect creative partners
+            </p>
+            <div class="cta-buttons fade-up">
+                <button class="cta-button">Sign Up Now</button>
+                <button class="secondary-button">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="fade-up">What Our Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-content">
+                        "Found an amazing designer within hours. The collaboration tools made the entire process
+                        seamless."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-details">
+                            <h4>John Doe</h4>
+                            <p>Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-content">
+                        "As an influencer, this platform has connected me with great brands that align with my values."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SS</div>
+                        <div class="author-details">
+                            <h4>Sarah Smith</h4>
+                            <p>Social Media Influencer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-content">
+                        "The platform's rating system helps me showcase my work and build trust with clients."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-details">
+                            <h4>Mike Johnson</h4>
+                            <p>Graphic Designer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <script>
+        // Intersection Observer for fade-up animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with fade-up class
+        document.querySelectorAll('.fade-up').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Button click handlers
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Add your navigation logic here
+                console.log('Button clicked:', button.textContent.trim());
+            });
+        });
+
+        // Logo click handler
+        document.querySelector('.logo').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 
 </html>
