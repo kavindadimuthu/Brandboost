@@ -9,7 +9,7 @@
         .header {
             background: linear-gradient(135deg, #8A2BE2, #4169E1);
             backdrop-filter: blur(10px);
-            padding: 20px;
+            /* padding: 20px; */
             position: fixed;
             width: 100%;
             top: 0;
@@ -88,6 +88,7 @@
                     <a href="/faq">Faq</a>
                     <a href="/contact">Contact</a>
                     <button class="cta-button-mini" onclick="window.location.href=`/register`">Sign Up</button>
+                    <button class="cta-button-mini" onclick="window.location.href=`/login`">Login</button>
                 ';
                 } else if ($_SESSION['user']['role'] === 'businessman') {
                     echo '

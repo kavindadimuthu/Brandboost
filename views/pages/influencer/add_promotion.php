@@ -238,7 +238,7 @@
 
         <div class="content">
             <div class="main-content">
-                <form action="/InfluencerDataController/createPackage" method="POST">
+                <form action="/influencer/add-promotion" method="POST">
                     <!-- Common Promotion Details -->
                     <div class="step active" id="step1">
                         <h2>Common Promotion Details</h2>
