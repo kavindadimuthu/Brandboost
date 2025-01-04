@@ -47,6 +47,7 @@ $app->router->get('/businessman/change-password', 'BusinessmanController@changeP
 $app->router->get('/influencer/dashboard', 'InfluencerController@dashboard');
 $app->router->get('/influencer/my-promotions', 'InfluencerController@myPromotions');
 $app->router->get('/influencer/add-promotion', 'InfluencerController@addPromotion');
+$app->router->get('/influencer/create-promotion', 'InfluencerController@createPromotion');
 $app->router->get('/influencer/edit-promotion/{id}', 'InfluencerController@editPromotion');
 $app->router->get('/influencer/orders-list', 'InfluencerController@ordersList');
 $app->router->get('/influencer/order-details/{id}', 'InfluencerController@orderDetails');

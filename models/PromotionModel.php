@@ -1,65 +1,64 @@
 <?php
 use app\core\BaseModel;
 
-class UserModel extends BaseModel {
+class PromotionModel extends BaseModel {
     public function __construct() {
         parent::__construct(); // Initialize the database connection from BaseModel
     }
 
-    public function createPromotion($userId, $gigData) {
-
-    
+    public function createPromotion($userId, $promotionData) {
         try {
+            // Convert platforms to array if string
+            $platforms = is_array($promotionData['platforms']) ? $promotionData['platforms'] : explode(',', $promotionData['platforms']);
             
-            // echo "Creating package for user $userId";
-            // Ensure platform and tags are arrays
-            $platform = is_array($gigData['platform']) ? $gigData['platform'] : explode(',', $gigData['platform']);
-            $tags = is_array($gigData['tags']) ? $gigData['tags'] : explode(',', $gigData['tags']);
-    
-            // var_dump($platform);
-            // var_dump($tags);
-            // Insert common gig details
+            // Convert tags to array if string
+            $tags = is_array($promotionData['tags']) ? $promotionData['tags'] : explode(',', $promotionData['tags']);
+     
+            // Insert promotion
             $this->db->query("
-                INSERT INTO service (user_id, title, description, platform, tags) 
-                VALUES (:user_id, :title, :description, :platform, :tags)
+                INSERT INTO service (
+                    user_id, title, description, cover_image, media, service_type, platforms, tags
+                ) 
+                VALUES (
+                    :user_id, :title, :description, :cover_image, :media, :service_type, :platforms, :tags
+                )
             ");
+     
             $this->db->bind(':user_id', $userId);
-            $this->db->bind(':title', $gigData['title']);
-            $this->db->bind(':description', $gigData['description']);
-            $this->db->bind(':platform', implode(',', $platform));
+            $this->db->bind(':title', $promotionData['title']);
+            $this->db->bind(':description', $promotionData['description']);
+            $this->db->bind(':cover_image', $promotionData['cover_image']);
+            $this->db->bind(':media', $promotionData['media']);
+            $this->db->bind(':service_type', 'promotion');
+            $this->db->bind(':platforms', implode(',', $platforms));
             $this->db->bind(':tags', implode(',', $tags));
+     
             $this->db->execute();
-    
-            $gigId = $this->db->lastInsertId();
-
-            echo "Package created for user $userId with gig ID $gigId";
-
-            var_dump($gigId);
-
-    
+            $promotionId = $this->db->lastInsertId();
+     
             // Insert basic and premium packages
-            $this->insertGigPackage($gigId, 'basic', $gigData['basic']);
-            $this->insertGigPackage($gigId, 'premium', $gigData['premium']);
-    
+            $this->insertPackage($promotionId, 'basic', $promotionData['basic']);
+            $this->insertPackage($promotionId, 'premium', $promotionData['premium']);
+     
             return true;
+     
         } catch (PDOException $e) {
-            error_log("Gig creation failed: " . $e->getMessage());
+            error_log("Promotion creation failed: " . $e->getMessage());
             return false;
         }
-    }
-    
+     }
 
-    private function insertGigPackage($gigId, $packageType, $packageDetails) {
+    private function insertPackage($promotionId, $packageType, $packageDetails) {
         $this->db->query("
-            INSERT INTO influencer_gig_package_details (gig_id, package_type, benefits, delivery_days, price, revisions) 
-            VALUES (:gig_id, :package_type, :benefits, :delivery_days, :price, :revisions)
+            INSERT INTO service_package (service_id, package_type, benefits, delivery_days, revisions, price) 
+            VALUES (:promotion_id, :package_type, :benefits, :delivery_days, :revisions, :price)
         ");
-        $this->db->bind(':gig_id', $gigId);
+        $this->db->bind(':promotion_id', $promotionId);
         $this->db->bind(':package_type', $packageType);
         $this->db->bind(':benefits', $packageDetails['benefits']);
         $this->db->bind(':delivery_days', $packageDetails['delivery_days']);
-        $this->db->bind(':price', $packageDetails['price']);
         $this->db->bind(':revisions', $packageDetails['revisions']);
+        $this->db->bind(':price', $packageDetails['price']);
         
         $this->db->execute();
     }

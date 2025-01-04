@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Gig</title>
+    <title>Create Promotion</title>
     <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
 
@@ -214,6 +214,63 @@
         }
 
 
+        .media-upload-container {
+            margin: 1.5rem 0;
+            padding: 1rem 0;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .upload-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #3182ce;
+            background-color: #ebf8ff;
+        }
+
+        .upload-area i {
+            font-size: 2rem;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-sublabel {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -238,7 +295,7 @@
 
         <div class="content">
             <div class="main-content">
-                <form action="/influencer/add-promotion" method="POST">
+                <form action="/influencer/create-promotion" method="POST">
                     <!-- Common Promotion Details -->
                     <div class="step active" id="step1">
                         <h2>Common Promotion Details</h2>
@@ -265,6 +322,73 @@
                         </div>
 
                         <label>Tags: <input type="text" name="tags" placeholder="Comma-separated tags" required></label>
+
+                           <!-- Media Upload Section -->
+                           <div class="media-upload-container">
+                            <h3>Media Files</h3>
+                            
+                            <!-- Cover Image Upload -->
+                            <div class="upload-section">
+                                <span class="upload-label">Cover Image (Required)</span>
+                                <div class="upload-area" onclick="document.getElementById('coverImage').click()">
+                                    <i class="fas fa-image"></i>
+                                    <p>Click to upload cover image</p>
+                                    <span class="upload-sublabel">Recommended size: 1200x630px (Max: 5MB)</span>
+                                    <input type="file" id="coverImage" name="coverImage" class="file-input" accept="image/*" required>
+                                    <img id="coverPreview" class="preview-image" alt="Cover preview">
+                                </div>
+                            </div>
+
+                            <!-- Additional Media Uploads -->
+                            <div class="upload-section">
+                                <span class="upload-label">Additional Media 1</span>
+                                <div class="upload-area" onclick="document.getElementById('media1').click()">
+                                    <i class="fas fa-file-upload"></i>
+                                    <p>Click to upload media</p>
+                                    <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
+                                    <input type="file" id="media1" name="media1" class="file-input" accept="image/*,video/*,.svg">
+                                    <img id="preview1" class="preview-image" alt="Media preview">
+                                </div>
+                            </div>
+
+                            <!-- Repeat for media 2-4 -->
+                            <!-- Media 2 -->
+                            <div class="upload-section">
+                                <span class="upload-label">Additional Media 2</span>
+                                <div class="upload-area" onclick="document.getElementById('media2').click()">
+                                    <i class="fas fa-file-upload"></i>
+                                    <p>Click to upload media</p>
+                                    <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
+                                    <input type="file" id="media2" name="media2" class="file-input" accept="image/*,video/*,.svg">
+                                    <img id="preview2" class="preview-image" alt="Media preview">
+                                </div>
+                            </div>
+
+                            <!-- Media 3 -->
+                            <div class="upload-section">
+                                <span class="upload-label">Additional Media 3</span>
+                                <div class="upload-area" onclick="document.getElementById('media3').click()">
+                                    <i class="fas fa-file-upload"></i>
+                                    <p>Click to upload media</p>
+                                    <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
+                                    <input type="file" id="media3" name="media3" class="file-input" accept="image/*,video/*,.svg">
+                                    <img id="preview3" class="preview-image" alt="Media preview">
+                                </div>
+                            </div>
+
+                            <!-- Media 4 -->
+                            <div class="upload-section">
+                                <span class="upload-label">Additional Media 4</span>
+                                <div class="upload-area" onclick="document.getElementById('media4').click()">
+                                    <i class="fas fa-file-upload"></i>
+                                    <p>Click to upload media</p>
+                                    <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
+                                    <input type="file" id="media4" name="media4" class="file-input" accept="image/*,video/*,.svg">
+                                    <img id="preview4" class="preview-image" alt="Media preview">
+                                </div>
+                            </div>
+                        </div>
+
                         <button type="button" id="nextStep1">Next</button>
                     </div>
 
