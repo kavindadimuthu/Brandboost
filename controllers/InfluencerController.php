@@ -62,8 +62,10 @@ class InfluencerController extends BaseController
     // --------------------------------------------------------------------------
 
     public function createPromotion() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
-            $userId = $_SESSION['user_id'];
+
+        // echo 'createPromotion';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user']['user_id'])) {
+            $userId = $_SESSION['user']['user_id'];
             
             // Handle cover image upload
             $coverImage = '';
@@ -121,11 +123,8 @@ class InfluencerController extends BaseController
                     'revisions' => $_POST['premium']['revisions']
                 ]
             ];
-    
             
-            $promotionModel = $this->model('PromotionModel');
-    
-            $result = $promotionModel->createPromotion($userId, $promotionData);
+            $result = $this->model('PromotionModel')->createPromotion($userId, $promotionData);
     
             if ($result) {
                 $_SESSION['success_message'] = "Promotion created successfully!";
