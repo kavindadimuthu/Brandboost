@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -184,6 +184,9 @@
             <nav class="nav-links">
             <?php
 
+            use app\core\BaseController;
+            use app\core\Helpers\AuthHelper;
+
             if (!isset($_SESSION['user']['role'])) {
                 echo '
                     <a href="/services">Services</a>
@@ -199,6 +202,7 @@
                     <a href="/influencers">Influencers</a>
                     <a href="/businessman/orders-list">Orders</a>
                     <a href="/businessman/custom-packages">Custom Packages</a>
+                    <button class="cta-button-mini" onclick="window.location.href=`/auth/logout`">Logout</button>
                 ';
             } else if ($_SESSION['user']['role'] === 'influencer') {
                 echo '
@@ -207,6 +211,7 @@
                     <a href="/influencer/orders-list">Orders</a>
                     <a href="/influencer/custom-packages">Custom Packages</a>
                     <a href="/influencer/earnings">Earnings</a>
+                    <button class="cta-button-mini" onclick="window.location.href=`/auth/logout`">Logout</button>
                 ';
             } else if ($_SESSION['user']['role'] === 'designer') {
                 echo '
@@ -215,6 +220,7 @@
                     <a href="/designer/orders-list">Orders</a>
                     <a href="/designer/custom-packages">Custom Packages</a>
                     <a href="/designer/earnings">Earnings</a>
+                    <button class="cta-button-mini" onclick="window.location.href=`/auth/logout`">Logout</button>
                 ';
             }
             ?>
@@ -265,4 +271,4 @@
     </footer>
 </body>
 
-</html>
+</html> -->

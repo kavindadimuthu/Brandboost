@@ -123,6 +123,6 @@ class AuthController extends BaseController{
 
     public function logout($req, $res){
         AuthHelper::logOut();
-        header("Location: /login"); exit;
+        header("Location: /"); exit;
     }
 }

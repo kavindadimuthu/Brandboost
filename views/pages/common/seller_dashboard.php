@@ -15,7 +15,6 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             color: #333;
-            padding: 20px;
         }
 
         .container {
@@ -25,6 +24,7 @@
 
         .content {
             flex-grow: 1;
+            padding: 20px 0px;
         }
 
         .main-content {
