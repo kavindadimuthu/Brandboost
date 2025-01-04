@@ -122,10 +122,10 @@ class InfluencerController extends BaseController
                 ]
             ];
     
-            $this->model('PromotionModel');
-            $promotionModel = new PromotionModel();
+            
+            $promotionModel = $this->model('PromotionModel');
     
-            $result = $promotionModel->createPackage($userId, $promotionData);
+            $result = $promotionModel->createPromotion($userId, $promotionData);
     
             if ($result) {
                 $_SESSION['success_message'] = "Promotion created successfully!";
