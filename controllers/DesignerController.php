@@ -52,6 +52,7 @@ class DesignerController extends BaseController
 
     public function changePassword($req, $res){
         $this->renderLayout('main', 'pages/common/change_password');
+        // $this->renderLayout('guest_layout', 'pages/common/change_password');
     }
 
     public function payoutMethods($req, $res){

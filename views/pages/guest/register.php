@@ -15,10 +15,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-image: url('../../assets/images/login-bg.png');
-            background-size: 130%;
-            background-position: center;
-            background-color: #878CEDFF;
+            background: linear-gradient(to bottom right, #2563eb, #9333ea);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -76,6 +73,24 @@
             box-shadow: 0px 8px 15px rgba(0, 123, 255, 0.2);
             position: relative;
         }
+        .nav-button {
+            width: 12rem;
+            padding: 12px;
+            margin: auto;
+            font-size: 15px;
+            font-weight: 600;
+            background: #fff;
+            color:  #4b0082;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 8px 15px rgba(0, 123, 255, 0.2);
+            position: relative;
+        }
+        .nav-button:hover {
+            background:rgb(222, 222, 222);
+        }
 
         .custom-button:focus {
             outline: none;
@@ -99,13 +114,6 @@
 
 <body>
 
-<a href="/">
-    <div class="logo">
-        <img src="../assets/images/sample-logo.png" alt="">
-        <span>Brandboost</span>
-    </div>
-</a>
-
 <div class="button-container">
     <div class="button-wrapper" onclick="window.location.href='/register/businessman'">
         <button class="custom-button">Register as Business</button>
@@ -124,7 +132,8 @@
 </div>
 
 <div>
-    <button class="custom-button" onclick="window.location.href='/login'">Go to Login</button>
+    <button class="nav-button" onclick="window.location.href='/'">Back to home</button>
+    <button class="nav-button" onclick="window.location.href='/login'">Go to Login</button>
 </div>
 
 </body>

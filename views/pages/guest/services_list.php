@@ -5,136 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service Cards</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .header-container {
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            /* position: sticky; */
+            top: 0;
+            z-index: 10;
+            background: var(--bg-primary);
+            padding: 1rem;
+            /* margin-bottom: 2rem; */
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .page-header-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
             text-align: center;
-            margin-bottom: 20px;
         }
 
         .header-title {
-            font-size: 28px;
+            font-size: 2.25rem;
             font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
         .header-subtitle {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
         }
 
-        .filter-container {
+        .search-controls {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .dropdown select,
+        .search-bar {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #e5e7eb;
+            background-color: var(--bg-primary);
+            transition: all 0.2s ease;
         }
 
         .dropdown select {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            outline: none;
-            background-color: white;
-            transition: box-shadow 0.2s ease-in-out;
-        }
-
-        .dropdown select:focus {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            appearance: none;
         }
 
         .search-bar-container {
+            max-width: 800px;
+            width: 100%;
             flex: 1;
-            max-width: 600px;
+            position: relative;
         }
 
         .search-bar {
             width: 100%;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 800px;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .dropdown select:hover,
+        .search-bar:hover {
+            border-color: var(--primary-color);
+        }
+
+        .dropdown select:focus,
+        .search-bar:focus {
             outline: none;
-            transition: box-shadow 0.2s ease-in-out;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .search-bar:focus {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .search-bar:focus {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        #service-card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            justify-content: center;
+        /* Rest of the styles remain the same */
+        .service-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
         }
 
         .service-card {
-            width: 320px;
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .service-card:hover {
-            cursor: pointer;
-            transform: scale(1.025);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .service-card:hover .main-image {
-            transform: scale(1.08);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        .service-card a {
+            text-decoration: none;
+            color: inherit;
         }
 
         .main-image {
-            width: 100%;
-            height: 180px;
-            border-radius: 8px;
+            position: relative;
+            padding-top: 56.25%;
             overflow: hidden;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
         .main-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
         }
 
+        .service-card:hover .main-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
 
         .user-info {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 0.5rem;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
-            margin-right: 10px;
             overflow: hidden;
+            margin-right: 0.75rem;
+            border: 2px solid #e5e7eb;
         }
 
         .user-avatar img {
@@ -143,92 +202,109 @@
             object-fit: cover;
         }
 
-        .user-details {
-            flex-grow: 1;
-        }
-
         .username {
+            font-size: 0.9rem;
             font-weight: 600;
-            font-size: 16px;
-            color: #333;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
         .verified-badge {
-            background: #27ae60;
+            background: var(--primary-color);
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 10px;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .service-title {
-            font-size: 15px;
-            color: #333;
-            margin-bottom: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.5;
         }
 
         .service-stats {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
         }
 
         .rating {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.25rem;
         }
 
-        .rating-number {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .rating-count {
-            color: #666;
-            font-size: 14px;
+        .star-icon {
+            color: #eab308;
         }
 
         .price {
             font-weight: 600;
-            color: #333;
-            font-size: 16px;
+            color: var(--primary-color);
         }
 
-        .star-icon {
-            color: #333;
-            font-size: 16px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .search-controls {
+                flex-direction: column;
+            }
+
+            .dropdown select {
+                width: 100%;
+            }
+        }
+
+        .results-summary {
+            text-align: left;
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            font-size: 0.875rem;
         }
     </style>
 </head>
 <body>
-
-<div class="header-container">
-    <div id="header-title" class="header-title">Loading...</div>
-    <div class="header-subtitle">Explore the profiles of talented individuals ready to collaborate with you.</div>
-    </div>
-
-    <!-- <div class="dropdown"></div> -->
-
-    <div class="filter-container">
-        <div class="dropdown"></div>
-        <div class="search-bar-container">
-            <input
-                type="text"
-                id="searchBar"
-                class="search-bar"
-                placeholder="Search here..."
-                oninput="filterProfiles()"
-            />
+    <div class="container">
+        <div class="page-header">
+            <div class="page-header-content">
+                <h1 id="header-title" class="header-title">Services</h1>
+                <p class="header-subtitle">Discover and connect with talented professionals for your next project</p>
+                
+                <div class="search-controls">
+                    <div class="dropdown"></div>
+                    <div class="search-bar-container">
+                        <input
+                            type="text"
+                            id="searchBar"
+                            class="search-bar"
+                            placeholder="Search by service title..."
+                            oninput="filterProfiles()"
+                        />
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="results-summary" id="results-summary"></div>
+        <div id="service-card-container" class="service-card-grid"></div>
     </div>
 
-    <div id="service-card-container"></div>
-    
     <script>
+        // Your existing data arrays remain the same
         // Dynamic data array with 5 service cards
         const designerGigs = [
             {
@@ -354,93 +430,101 @@
             ratingCount: 300,
             price: "LKR 35,000"
         }
-    ];
+    ]; 
 
+        function updateResultsSummary(count) {
+            const summary = document.getElementById('results-summary');
+            summary.textContent = `Showing ${count} services`;
+        }
 
-        // Create service cards dynamically
         function createServiceCards(services) {
             const cardsHTML = services.map(data => `
                 <div class="service-card">
-                <a href="/services/1">
-                    <div class="main-image">
-                        <img src="${data.imageUrl}" alt="${data.serviceTitle}">
-                    </div>
-                    <div class="user-info">
-                        <div class="user-avatar">
-                            <img src="${data.userAvatar}" alt="${data.username}">
+                    <a href="/services/1">
+                        <div class="main-image">
+                            <img src="${data.imageUrl}" alt="${data.serviceTitle}">
                         </div>
-                        <div class="user-details">
-                            <div class="username">
-                                ${data.username}
-                                ${data.isVerified ? '<span class="verified-badge">Verified</span>' : ''}
+                        <div class="card-content">
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    <img src="${data.userAvatar}" alt="${data.username}">
+                                </div>
+                                <div class="user-details">
+                                    <div class="username">
+                                        ${data.username}
+                                        ${data.isVerified ? '<span class="verified-badge">Verified</span>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="service-title">
+                                ${data.serviceTitle}
+                            </div>
+                            <div class="service-stats">
+                                <div class="rating">
+                                    <span class="star-icon">★</span>
+                                    <span class="rating-number">${data.rating}</span>
+                                    <span class="rating-count">(${data.ratingCount})</span>
+                                </div>
+                                <div class="price">${data.price}</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="service-title">
-                        ${data.serviceTitle}
-                    </div>
-                    <div class="service-stats">
-                        <div class="rating">
-                            <span class="star-icon">★</span>
-                            <span class="rating-number">${data.rating}</span>
-                            <span class="rating-count">(${data.ratingCount})</span>
-                        </div>
-                        <div class="price">${data.price}</div>
-                    </div>
-                </a>
+                    </a>
                 </div>
             `).join('');
 
             document.getElementById('service-card-container').innerHTML = cardsHTML;
+            updateResultsSummary(services.length);
         }
 
         function renderDropdown() {
             const dropdown = document.querySelector('.dropdown');
             const select = document.createElement('select');
-
-            // Add options to the dropdown
+            
             select.innerHTML = `
-                <option value="default">Search by Promotions</option>
+                <option value="default">Filter by category</option>
                 <option value="option2">Search by Influencer names</option>
             `;
-
-            // Add event listener for URL redirection
-            select.addEventListener('change', function () {
+            
+            select.addEventListener('change', function() {
                 if (this.value === 'option2') {
                     window.location.href = "http://localhost:8000/BusinessViewController/viewInfluencers";
                 }
             });
-
+            
             dropdown.appendChild(select);
         }
 
-
-         // Filter profiles
-         function filterProfiles() {
+        function filterProfiles() {
             const searchQuery = document.getElementById("searchBar").value.toLowerCase();
-            const services = window.location.pathname.includes("viewDesignerGigs") ? designerGigs : influencerPromotions;
+            const services = window.location.pathname.includes("viewDesignerGigs") 
+                ? designerGigs 
+                : influencerPromotions;
 
-            // Use the correct property `username` instead of `name`
-            const filteredServices = services.filter(service => service.serviceTitle.toLowerCase().includes(searchQuery));
+            const filteredServices = services.filter(service => 
+                service.serviceTitle.toLowerCase().includes(searchQuery)
+            );
 
-            // Update the displayed service cards with the filtered results
             createServiceCards(filteredServices);
         }
 
-
-        // Determine type based on URL
-        window.onload = function () {
+        function initializePage() {
             const path = window.location.pathname;
             const headerTitle = document.getElementById("header-title");
+            const services = path.includes("viewDesignerGigs") ? designerGigs : influencerPromotions;
+            
             if (path.includes("viewDesignerGigs")) {
                 headerTitle.textContent = "Designer Gigs";
-                createServiceCards(designerGigs);
             } else if (path.includes("viewInfluencerPromotions")) {
                 headerTitle.textContent = "Influencer Promotions";
-                createServiceCards(influencerPromotions);
                 renderDropdown();
             }
-        };
+            
+            // Initialize with all services
+            createServiceCards(services);
+        }
+
+        // Call initialization function when page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
 </html>

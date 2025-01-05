@@ -23,7 +23,7 @@
 
         .container {
             display: flex;
-            margin: auto;
+            /* margin: auto; */
         }
 
         .content {

@@ -1,357 +1,529 @@
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <style>
-   .relative .edit-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 5px;
-            border-radius: 50%;
-            cursor: pointer;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - BrandBoost</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-  </style>
-  <script>
-   document.addEventListener('DOMContentLoaded', function () {
-            const addPortfolioButton = document.getElementById('add-portfolio-button');
-            const portfolioContainer = document.getElementById('portfolio-container');
-            const addSocialMediaButton = document.getElementById('add-social-media-button');
-            const socialMediaContainer = document.getElementById('social-media-container');
 
-            addPortfolioButton.addEventListener('click', function () {
-                const portfolioGroup = document.createElement('div');
-                portfolioGroup.classList.add('portfolio-group', 'mb-8', 'p-4', 'border', 'border-gray-300', 'rounded-lg');
+        body {
+            background-color: #f5f7fb;
+            min-height: 100vh;
+        }
 
-                portfolioGroup.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-lg font-semibold">Portfolio</h4>
-                        <button type="button" class="text-red-500 remove-portfolio"><i class="fas fa-times"></i></button>
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar Styles */
+        .settings-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover {
+            background: #f5f7fb;
+            color: #4169E1;
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
+            color: white;
+        }
+
+        /* Profile Header Styles */
+        .profile-header {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .cover-photo-container {
+            position: relative;
+            height: 200px;
+            background-color: #f0f2f5;
+        }
+
+        .cover-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info-section {
+            padding: 20px;
+            position: relative;
+        }
+
+        .profile-photo-wrapper {
+            position: absolute;
+            top: -50px;
+            left: 20px;
+        }
+
+        .profile-photo-container {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            background-color: #f0f2f5;
+        }
+
+        .edit-icon {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .edit-icon:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .cover-photo-container .edit-icon {
+            top: 20px;
+            right: 20px;
+        }
+
+        .profile-photo-container .edit-icon {
+            bottom: 0;
+            right: 0;
+        }
+
+        .profile-title {
+            margin-left: 120px;
+        }
+
+        .profile-title h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .profile-title p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Form Section Styles */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #1a1a1a;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a4a4a;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4169E1;
+            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+        }
+
+        /* Portfolio & Social Media Styles */
+        .portfolio-item,
+        .social-media-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .add-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(65, 105, 225, 0.2);
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .save-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(65, 105, 225, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .settings-container {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-sidebar {
+                position: static;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-title {
+                margin-left: 0;
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <!-- Sidebar Navigation -->
+        <div class="settings-sidebar">
+            <a href="/<?php echo $_SESSION['user']['role']; ?>/edit-profile" class="sidebar-link active">
+                <i class="fas fa-user"></i>
+                Edit Profile
+            </a>
+            <a href="/<?php echo $_SESSION['user']['role']; ?>/change-password" class="sidebar-link">
+                <i class="fas fa-lock"></i>
+                Change Password
+            </a>
+            <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" class="sidebar-link">
+                <i class="fas fa-credit-card"></i>
+                Payout Methods
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="settings-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="cover-photo-container">
+                    <img id="cover-photo" src="/api/placeholder/1200/200" alt="Cover Photo" class="cover-photo">
+                    <i class="fas fa-camera edit-icon" id="cover-photo-edit"></i>
+                    <input type="file" id="cover-photo-input" hidden accept="image/*">
+                </div>
+                <div class="profile-info-section">
+                    <div class="profile-photo-wrapper">
+                        <div class="profile-photo-container">
+                            <img id="profile-photo" src="/api/placeholder/100/100" alt="Profile Photo" class="profile-photo">
+                            <i class="fas fa-camera edit-icon" id="profile-photo-edit"></i>
+                            <input type="file" id="profile-photo-input" hidden accept="image/*">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-title">
-                                Portfolio Title
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-title" type="text" placeholder="Project Title"/>
+                    <div class="profile-title">
+                        <h1>Edit Profile</h1>
+                        <p>Update your personal information and profile settings</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic Information -->
+            <form id="profile-form">
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Basic Information</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" value="Ravi Fernando">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Professional Title</label>
+                        <input type="text" id="title" value="Graphic & UX/UI Design">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" rows="4">Ravi Fernando is a seasoned designer specializing in graphic and UX/UI design...</textarea>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Contact Information</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="ravi.fernando@example.com">
                         </div>
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-cover-image">
-                                Cover Image URL
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-cover-image" type="url" placeholder="https://placehold.co/300x200"/>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" value="+94123456789">
                         </div>
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-first-image">
-                                First Image URL
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-first-image" type="url" placeholder="https://placehold.co/300x200"/>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" value="https://ravifernando.com">
                         </div>
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-second-image">
-                                Second Image URL
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-second-image" type="url" placeholder="https://placehold.co/300x200"/>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-third-image">
-                                Third Image URL
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-third-image" type="url" placeholder="https://placehold.co/300x200"/>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label class="block font-semibold mb-2" for="portfolio-fourth-image">
-                                Fourth Image URL
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-fourth-image" type="url" placeholder="https://placehold.co/300x200"/>
-                        </div>
-                        <div class="form-group mb-4 col-span-1 md:col-span-2">
-                            <label class="block font-semibold mb-2" for="portfolio-description">
-                                Portfolio Description
-                            </label>
-                            <textarea class="w-full p-2 border border-gray-300 rounded" name="portfolio-description" rows="4" placeholder="Project Description"></textarea>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" value="Colombo, Sri Lanka">
                         </div>
                     </div>
-                `;
+                </div>
 
-                portfolioContainer.appendChild(portfolioGroup);
+                <!-- Professional Skills -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Professional Skills</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialties">Specialties</label>
+                        <input type="text" id="specialties" value="Graphic Design, UX/UI Design, Branding">
+                    </div>
+                    <div class="form-group">
+                        <label for="tools">Tools Used</label>
+                        <input type="text" id="tools" value="Adobe Photoshop, Sketch, Figma">
+                    </div>
+                </div>
 
-                portfolioGroup.querySelector('.remove-portfolio').addEventListener('click', function () {
-                    portfolioGroup.remove();
+                <!-- Social Media Links -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Social Media Links</h2>
+                    </div>
+                    <div id="social-media-container"></div>
+                    <button type="button" id="add-social-media" class="add-button">
+                        <i class="fas fa-plus"></i>
+                        Add Social Media Link
+                    </button>
+                </div>
+
+                <!-- Portfolio -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Portfolio Projects</h2>
+                    </div>
+                    <div id="portfolio-container"></div>
+                    <button type="button" id="add-portfolio" class="add-button">
+                        <i class="fas fa-plus"></i>
+                        Add Portfolio Project
+                    </button>
+                </div>
+
+                <!-- Save Button -->
+                <div class="form-section">
+                    <button type="submit" class="save-button">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image upload functionality
+            function setupImageUpload(inputId, imgId, editId) {
+                const input = document.getElementById(inputId);
+                const img = document.getElementById(imgId);
+                const edit = document.getElementById(editId);
+
+                edit.addEventListener('click', () => input.click());
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = e => img.src = e.target.result;
+                        reader.readAsDataURL(file);
+                    }
                 });
-            });
+            }
 
-            addSocialMediaButton.addEventListener('click', function () {
+            setupImageUpload('cover-photo-input', 'cover-photo', 'cover-photo-edit');
+            setupImageUpload('profile-photo-input', 'profile-photo', 'profile-photo-edit');
+
+            // Social Media functionality
+            let socialMediaCounter = 0;
+            document.getElementById('add-social-media').addEventListener('click', function() {
+                const container = document.getElementById('social-media-container');
                 const socialMediaGroup = document.createElement('div');
-                socialMediaGroup.classList.add('social-media-group', 'mb-4', 'p-4', 'border', 'border-gray-300', 'rounded-lg');
+                socialMediaGroup.classList.add('social-media-item');
 
                 socialMediaGroup.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-lg font-semibold">Social Media</h4>
-                        <button type="button" class="text-red-500 remove-social-media"><i class="fas fa-times"></i></button>
+                    <div class="item-header">
+                        <h3>Social Media Link ${++socialMediaCounter}</h3>
+                        <button type="button" class="remove-btn">Remove</button>
                     </div>
-                    <div class="form-group mb-4 flex space-x-4">
-                        <div class="w-1/2">
-                            <label class="block font-semibold mb-2" for="social-media-platform">
-                                Platform Name
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="social-media-platform" type="text" placeholder="Platform Name"/>
-                        </div>
-                        <div class="w-1/2">
-                            <label class="block font-semibold mb-2" for="social-media-link">
-                                Profile Link
-                            </label>
-                            <input class="w-full p-2 border border-gray-300 rounded" name="social-media-link" type="url" placeholder="https://example.com"/>
-                        </div>
+                    <div class="form-group">
+                        <label for="social-media-${socialMediaCounter}-name">Social Media Name</label>
+                        <input type="text" id="social-media-${socialMediaCounter}-name">
+                    </div>
+                    <div class="form-group
+                        <label for="social-media-${socialMediaCounter}-url">Social Media URL</label>
+                        <input type="url" id="social-media-${socialMediaCounter}-url">
                     </div>
                 `;
-
-                socialMediaContainer.appendChild(socialMediaGroup);
-
-                socialMediaGroup.querySelector('.remove-social-media').addEventListener('click', function () {
+                container.appendChild(socialMediaGroup);
+                
+                socialMediaGroup.querySelector('.remove-btn').addEventListener('click', function() {
                     socialMediaGroup.remove();
+                    socialMediaCounter--;
                 });
             });
 
-            // Handle cover photo upload
-            const coverPhotoInput = document.getElementById('cover-photo-input');
-            const coverPhoto = document.getElementById('cover-photo');
-            const coverPhotoEditIcon = document.getElementById('cover-photo-edit-icon');
+            // Portfolio functionality
+            let portfolioCounter = 0;
+            document.getElementById('add-portfolio').addEventListener('click', function() {
+                const container = document.getElementById('portfolio-container');
+                const portfolioGroup = document.createElement('div');
+                portfolioGroup.classList.add('portfolio-item');
 
-            coverPhotoEditIcon.addEventListener('click', function () {
-                coverPhotoInput.click();
+                portfolioGroup.innerHTML = `
+                    <div class="item-header">
+                        <h3>Portfolio Project ${++portfolioCounter}</h3>
+                        <button type="button" class="remove-btn">Remove</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="portfolio-${portfolioCounter}-title">Project Title</label>
+                        <input type="text" id="portfolio-${portfolioCounter}-title">
+                    </div>
+                    <div class="form-group
+                        <label for="portfolio-${portfolioCounter}-description">Project Description</label>
+                        <textarea id="portfolio-${portfolioCounter}-description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group
+                        <label for="portfolio-${portfolioCounter}-url">Project URL</label>
+                        <input type="url" id="portfolio-${portfolioCounter}-url">
+                    </div>
+                `;
+                container.appendChild(portfolioGroup);
+
+                portfolioGroup.querySelector('.remove-btn').addEventListener('click', function() {
+                    portfolioGroup.remove();
+                    portfolioCounter--;
+                });
             });
 
-            coverPhotoInput.addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        coverPhoto.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Handle profile photo upload
-            const profilePhotoInput = document.getElementById('profile-photo-input');
-            const profilePhoto = document.getElementById('profile-photo');
-            const profilePhotoEditIcon = document.getElementById('profile-photo-edit-icon');
-
-            profilePhotoEditIcon.addEventListener('click', function () {
-                profilePhotoInput.click();
-            });
-
-            profilePhotoInput.addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        profilePhoto.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
+            // Form submission
+            document.getElementById('profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                console.log(Object.fromEntries(formData));
             });
         });
-  </script>
- </head>
- <body class="bg-gray-100 font-sans">
-  <div class="container mx-auto mt-10 p-6">
-   <!-- Profile Header -->
-   <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8 relative">
-    <img alt="Cover Photo of a creative workspace with design tools" class="w-full h-52 object-cover" height="200" id="cover-photo" src="https://storage.googleapis.com/a1aa/image/GOWeaYbBRzTWCq4Z7q3E4s7v6SL5LHa2gNCJAE6NG275UMAKA.jpg" width="1200"/>
-    <input accept="image/*" class="hidden" id="cover-photo-input" type="file"/>
-    <i class="fas fa-edit edit-icon" id="cover-photo-edit-icon">
-    </i>
-    <div class="p-6 flex items-center relative">
-     <img alt="Profile Picture of Ravi Fernando" class="w-24 h-24 rounded-full border-4 border-white -mt-12" height="100" id="profile-photo" src="https://storage.googleapis.com/a1aa/image/FRkKO5xHkyJAIFID04eyhjzxjpS3mA3vXFYkEcSf8xs1pYAUA.jpg" width="100"/>
-     <input accept="image/*" class="hidden" id="profile-photo-input" type="file"/>
-     <i class="fas fa-edit edit-icon" id="profile-photo-edit-icon" style="top: 0; right: 0;">
-     </i>
-     <div class="ml-6">
-      <h1 class="text-2xl font-bold">
-       Ravi Fernando
-      </h1>
-      <p class="text-gray-600">
-       Graphic &amp; UX/UI Design
-      </p>
-     </div>
-    </div>
-   </div>
-   <!-- Update Profile Form -->
-   <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-    <h3 class="text-lg font-semibold text-indigo-700">
-     Update Profile
-    </h3>
-    <form>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="name">
-       Name
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="name" name="name" type="text" value="Ravi Fernando"/>
-     </div>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="title">
-       Title
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="title" name="title" type="text" value="Graphic &amp; UX/UI Design"/>
-     </div>
-     <!-- Bio Section Update -->
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="bio">
-       Bio
-      </label>
-      <textarea class="w-full p-2 border border-gray-300 rounded" id="bio" name="bio" rows="4">Ravi Fernando is a seasoned designer specializing in graphic and UX/UI design. With over 10 years of experience, Ravi has a unique style that blends creativity with functionality. His work is known for its clean aesthetics and user-centric approach.</textarea>
-     </div>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="location">
-       Location
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="location" name="location" type="text" value="Colombo, Sri Lanka"/>
-     </div>
-     <!-- Contact Information Update -->
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="email">
-       Email
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="email" name="email" type="email" value="ravi.fernando@example.com"/>
-     </div>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="phone">
-       Phone
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="phone" name="phone" type="tel" value="+94123456789"/>
-     </div>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="website">
-       Website
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="website" name="website" type="url" value="https://ravifernando.com"/>
-     </div>
-     <!-- Social Media Links Update -->
-     <div id="social-media-container">
-      <div class="social-media-group mb-4 p-4 border border-gray-300 rounded-lg">
-       <div class="flex justify-between items-center mb-4">
-        <h4 class="text-lg font-semibold">
-         Social Media
-        </h4>
-        <button class="text-red-500 remove-social-media" type="button">
-         <i class="fas fa-times">
-         </i>
-        </button>
-       </div>
-       <div class="form-group mb-4 flex space-x-4">
-        <div class="w-1/2">
-         <label class="block font-semibold mb-2" for="social-media-platform">
-          Platform Name
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="social-media-platform" type="text" placeholder="Platform Name"/>
-        </div>
-        <div class="w-1/2">
-         <label class="block font-semibold mb-2" for="social-media-link">
-          Profile Link
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="social-media-link" type="url" placeholder="https://example.com"/>
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="form-group mb-4">
-      <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center" id="add-social-media-button" type="button">
-       <i class="fas fa-plus mr-2">
-       </i>
-       Add Another Social Media Link
-      </button>
-     </div>
-     <!-- Design Expertise Update -->
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="specialties">
-       Specialties
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="specialties" name="specialties" type="text" value="Graphic Design, UX/UI Design, Branding"/>
-     </div>
-     <div class="form-group mb-4">
-      <label class="block font-semibold mb-2" for="tools">
-       Tools Used
-      </label>
-      <input class="w-full p-2 border border-gray-300 rounded" id="tools" name="tools" type="text" value="Adobe Photoshop, Sketch, Figma"/>
-     </div>
-     <!-- Add Portfolio Section -->
-     <div id="portfolio-container">
-      <div class="portfolio-group mb-8 p-4 border border-gray-300 rounded-lg">
-       <div class="flex justify-between items-center mb-4">
-        <h4 class="text-lg font-semibold">
-         Portfolio
-        </h4>
-        <button class="text-red-500 remove-portfolio" type="button">
-         <i class="fas fa-times">
-         </i>
-        </button>
-       </div>
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-title">
-          Portfolio Title
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-title" type="text" placeholder="Project Title"/>
-        </div>
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-cover-image">
-          Cover Image URL
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-cover-image" type="url" placeholder="https://placehold.co/300x200"/>
-        </div>
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-first-image">
-          First Image URL
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-first-image" type="url" placeholder="https://placehold.co/300x200"/>
-        </div>
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-second-image">
-          Second Image URL
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-second-image" type="url" placeholder="https://placehold.co/300x200"/>
-        </div>
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-third-image">
-          Third Image URL
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-third-image" type="url" placeholder="https://placehold.co/300x200"/>
-        </div>
-        <div class="form-group mb-4">
-         <label class="block font-semibold mb-2" for="portfolio-fourth-image">
-          Fourth Image URL
-         </label>
-         <input class="w-full p-2 border border-gray-300 rounded" name="portfolio-fourth-image" type="url" placeholder="https://placehold.co/300x200"/>
-        </div>
-        <div class="form-group mb-4 col-span-1 md:col-span-2">
-         <label class="block font-semibold mb-2" for="portfolio-description">
-          Portfolio Description
-         </label>
-         <textarea class="w-full p-2 border border-gray-300 rounded" name="portfolio-description" rows="4" placeholder="Project Description"></textarea>
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="form-group mb-4">
-      <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center" id="add-portfolio-button" type="button">
-       <i class="fas fa-plus mr-2">
-       </i>
-       Add Another Portfolio
-      </button>
-     </div>
-     <div class="form-group">
-      <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg" type="submit">
-       Update Profile
-      </button>
-     </div>
-    </form>
-   </div>
-  </div>
- </body>
+    </script>
+
+
+</body>
 </html>

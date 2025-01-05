@@ -1,0 +1,119 @@
+{
+    "requests": [
+      {
+        "id": 1001,
+        "title": "E-commerce Brand Identity Package",
+        "description": "Looking for a complete brand identity package for our new e-commerce fashion store. Need logo design, color palette, typography, social media templates, and packaging design. We want a modern, minimalist aesthetic that appeals to young professionals.",
+        "delivery_days": 30,
+        "price": 25000,
+        "revisions": 3,
+        "created_at": "2025-01-03T14:30:00Z",
+        "status": "pending",
+        "category": "branding",
+        "requirements": [
+          "Modern minimal design",
+          "Social media kit",
+          "Packaging templates",
+          "Brand guidelines document"
+        ]
+      },
+      {
+        "id": 1002,
+        "title": "Tech Startup Marketing Campaign",
+        "description": "Seeking comprehensive marketing campaign for our SaaS startup launch. Need social media strategy, content creation, and paid advertising management. Target audience is small business owners and entrepreneurs.",
+        "delivery_days": 45,
+        "price": 50000,
+        "revisions": 4,
+        "created_at": "2025-01-04T09:15:00Z",
+        "status": "open",
+        "category": "marketing",
+        "requirements": [
+          "Social media strategy",
+          "Content calendar",
+          "Ad campaign setup",
+          "Performance tracking"
+        ]
+      },
+      {
+        "id": 1003,
+        "title": "Restaurant Website Redesign",
+        "description": "Need a modern website redesign for our family restaurant. Should include online ordering system, menu management, and reservation feature. Mobile-first design is crucial as 70% of our customers use phones.",
+        "delivery_days": 21,
+        "price": 35000,
+        "revisions": 2,
+        "created_at": "2025-01-04T16:45:00Z",
+        "status": "pending",
+        "category": "web-design",
+        "requirements": [
+          "Mobile-first design",
+          "Online ordering system",
+          "Menu management",
+          "Reservation system"
+        ]
+      },
+      {
+        "id": 1004,
+        "title": "Product Launch Video Campaign",
+        "description": "Looking for a video marketing campaign for our new fitness product launch. Need 1 main promotional video (2-3 minutes) and 5 short social media cuts. Style should be energetic and motivational.",
+        "delivery_days": 25,
+        "price": 45000,
+        "revisions": 2,
+        "created_at": "2025-01-05T11:20:00Z",
+        "status": "open",
+        "category": "video-production",
+        "requirements": [
+          "Main promo video",
+          "Social media cuts",
+          "Motion graphics",
+          "Original music"
+        ]
+      },
+      {
+        "id": 1005,
+        "title": "Business Consultant Portfolio",
+        "description": "Need a professional portfolio website that showcases my consulting services, client testimonials, and case studies. Looking for a clean, corporate design that instills trust and professionalism.",
+        "delivery_days": 15,
+        "price": 20000,
+        "revisions": 3,
+        "created_at": "2025-01-05T13:10:00Z",
+        "status": "pending",
+        "category": "web-design",
+        "requirements": [
+          "Portfolio showcase",
+          "Case studies section",
+          "Testimonials feature",
+          "Contact form"
+        ]
+      },
+      {
+        "id": 1006,
+        "title": "Instagram Content Creation",
+        "description": "Seeking a content creator for our wellness brand's Instagram. Need 30 posts per month including photos, carousels, and Reels. Content should focus on healthy lifestyle tips, product showcases, and user testimonials.",
+        "delivery_days": 30,
+        "price": 18000,
+        "revisions": 2,
+        "created_at": "2025-01-05T15:30:00Z",
+        "status": "open",
+        "category": "social-media",
+        "requirements": [
+          "Photo content",
+          "Instagram Reels",
+          "Carousel posts",
+          "Content calendar"
+        ]
+      }
+    ],
+    "metadata": {
+      "total_count": 6,
+      "page": 1,
+      "per_page": 10,
+      "total_pages": 1,
+      "categories": [
+        "branding",
+        "marketing",
+        "web-design",
+        "video-production",
+        "social-media"
+      ]
+    }
+  }

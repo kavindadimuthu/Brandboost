@@ -13,7 +13,6 @@
         }
 
         body {
-            padding: 20px;
             background-color: #f9f9f9;
         }
 
@@ -160,7 +159,7 @@
 </head>
 <body>
     <div class="header-container">
-        <div id="header-title" class="header-title">Loading...</div>
+        <div id="header-title" class="header-title">Influencers</div>
         <div class="header-subtitle">Explore the profiles of talented individuals ready to collaborate with you.</div>
     </div>
 

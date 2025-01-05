@@ -19,7 +19,7 @@
 
         .container {
             display: flex;
-            margin: auto;
+            /* margin: auto; */
         }
 
         .content {
@@ -84,7 +84,9 @@
         }
 
         #withdraw-btn {
-            background-color: #007bff;
+            /* background-color: #007bff; */
+            
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -105,7 +107,8 @@
             display: block;
             margin-top: 10px;
             font-size: 0.9em;
-            color: #007bff;
+            /* color: #007bff; */
+            color: #4169E1;
             text-decoration: none;
         }
 
@@ -152,7 +155,8 @@
         }
 
         .transaction-table tr:hover td {
-            color: #007bff;
+            /* color: #007bff; */
+            color: #4169E1;
         }
 
         .pagination {
@@ -165,17 +169,21 @@
             margin: 0 5px;
             padding: 8px 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50%;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         .pagination button:hover {
-            background: #0056b3;
+            /* background: #0056b3; */
+            background: linear-gradient(135deg,rgba(137, 43, 226, 1),rgba(65, 105, 225, 1));
+            color: white;
         }
 
         .pagination button.active {
-            background: #a29bfe;
+            /* background: #a29bfe; */
+            background: linear-gradient(135deg,rgba(137, 43, 226, 0.8),rgba(65, 105, 225, 0.8));
+            color: white;
         }
 
         @media (max-width: 768px) {
@@ -202,7 +210,7 @@
                         <p class="small-text">Withdrawn to date:</p>
                         <p class="value-small" id="withdrawn-to-date">$0.00</p>
                         <button id="withdraw-btn" disabled>Withdraw balance</button>
-                        <a href="#" id="manage-payout">Manage payout methods</a>
+                        <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" id="manage-payout">Manage payout methods</a>
                     </div>
                 </div>
                 <div class="section">

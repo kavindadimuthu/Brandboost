@@ -276,6 +276,7 @@
  <body>
   <div class="container">
    <div class="sidebar">
+    <a href="/">Brandboost</a>
     <input placeholder="Search..." type="text"/>
     <div class="all-messages">
      All messages

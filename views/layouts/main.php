@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- Previous head content remains the same until body styling -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +16,10 @@
             scroll-behavior: smooth;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
-            overflow-x: hidden;
+            /* overflow-x: hidden; */
         }
 
         body {
@@ -28,20 +30,29 @@
 
         main {
             flex: 1;
-            margin-top: 80px; /* Add spacing below fixed header */
+            margin-top: 70px;
+            /* Add spacing below fixed header */
         }
 
         /* Rest of the existing button styles remain the same */
-        .cta-button,
-        .cta-button-mini {
+
+        .header-btn {
             background: white;
             color: #4169E1;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 6px 18px;
+            font-size: 15px;
+        }
+
+        .header-btn:hover,
+        .header-btn-mini:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
         .cta-button {
@@ -50,8 +61,9 @@
         }
 
         .cta-button-mini {
-            padding: 10px 20px;
+            padding: 5px 20px;
             font-size: 16px;
+            /* background-color: red; */
         }
 
         .cta-button:hover,
@@ -80,12 +92,23 @@
         .header {
             background: linear-gradient(135deg, #8A2BE2, #4169E1);
             backdrop-filter: blur(10px);
-            padding: 20px;
+            padding: 15px;
             position: fixed;
             width: 100%;
+            height: 70px;
+            display: flex;
+            align-items: center;
             top: 0;
-            z-index: 1000;
+            z-index: 10;
             transition: all 0.3s ease;
+        }
+        .header-content{
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
         }
 
         .container {
@@ -100,7 +123,10 @@
             padding: 15px;
         }
 
-        .header-content, .navigations, .nav-icons{
+        .header-content,
+        .navigations,
+        .nav-icons {
+            /* width: 100%; */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -116,13 +142,14 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 25px;
         }
 
         .nav-links a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             position: relative;
         }
@@ -187,13 +214,13 @@
         .header-icons {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin: 0 33px;
+            gap: 15px;
+            margin: 0 10px 0 30px;
         }
 
         .header-icon {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -209,10 +236,13 @@
             top: 100%;
             right: 0;
             margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
+            min-width: 150px;
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
@@ -229,10 +259,11 @@
         .profile-dropdown-link {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
+            text-align: center;
+            padding: 8px 10px;
             color: #333;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 12px;
             transition: all 0.3s ease;
         }
 
@@ -246,11 +277,11 @@
             .header-icons {
                 margin-right: 16px;
             }
-            
+
             .profile-username {
                 display: none;
             }
-            
+
             .profile-role {
                 display: none;
             }
@@ -261,7 +292,8 @@
             background: #1a1a1a;
             color: white;
             padding: 80px 20px 30px;
-            margin-top: auto; /* This pushes the footer to the bottom */
+            margin-top: auto;
+            /* This pushes the footer to the bottom */
         }
 
         .footer-content {
@@ -338,44 +370,44 @@
             <div class="logo" onclick="window.location.href='/'">BrandBoost</div>
             <div class="navigations">
                 <nav class="nav-links">
-                <?php
-                use app\core\BaseController;
-                use app\core\Helpers\AuthHelper;
+                    <?php
 
-                if (!isset($_SESSION['user']['role'])) {
-                    echo '
+                    if (!isset($_SESSION['user']['role'])) {
+                        echo '
                         <a href="/services">Services</a>
                         <a href="/about">About</a>
                         <a href="/faq">Faq</a>
                         <a href="/contact">Contact</a>
-                        <button class="cta-button-mini" onclick="window.location.href=`/register`">Sign Up</button>
-                        <button class="cta-button-mini" onclick="window.location.href=`/login`">Login</button>
+                        <div>
+                        <button class="header-btn log-btn" onclick="window.location.href=`/register`">Sign Up</button>
+                        <button class="header-btn signup-btn" onclick="window.location.href=`/login`">Login</button>
+                        </div>
                     ';
-                } else if ($_SESSION['user']['role'] === 'businessman') {
-                    echo '
+                    } else if ($_SESSION['user']['role'] === 'businessman') {
+                        echo '
                         <a href="/services">Services</a>
                         <a href="/influencers">Influencers</a>
                         <a href="/businessman/orders-list">Orders</a>
                         <a href="/businessman/custom-packages">Custom Packages</a>
                     ';
-                } else if ($_SESSION['user']['role'] === 'influencer') {
-                    echo '
+                    } else if ($_SESSION['user']['role'] === 'influencer') {
+                        echo '
                         <a href="/influencer/dashboard">Dashboard</a>
                         <a href="/influencer/my-promotions">My Promotions</a>
                         <a href="/influencer/orders-list">Orders</a>
                         <a href="/influencer/custom-packages">Custom Packages</a>
                         <a href="/influencer/earnings">Earnings</a>
                     ';
-                } else if ($_SESSION['user']['role'] === 'designer') {
-                    echo '
+                    } else if ($_SESSION['user']['role'] === 'designer') {
+                        echo '
                         <a href="/designer/dashboard">Dashboard</a>
                         <a href="/designer/my-gigs">My Gigs</a>
                         <a href="/designer/orders-list">Orders</a>
                         <a href="/designer/custom-packages">Custom Packages</a>
                         <a href="/designer/earnings">Earnings</a>
                     ';
-                }
-                ?>
+                    }
+                    ?>
                 </nav>
                 <div class="nav-icons">
                     <?php if (isset($_SESSION['user']['role']) && isset($_SESSION['user']['username'])): ?>
@@ -384,10 +416,16 @@
                             <i class="fas fa-comments header-icon" onclick="window.location.href='/chat'"></i>
                         </div>
                         <div class="profile" onclick="toggleProfileMenu()">
-                            <img src="<?php echo $_SESSION['user']['profile_picture'] ?? 'https://storage.googleapis.com/a1aa/image/BVZIkfG5F3XHY60sFbAWhIslKzm9KR8eUunlaCcIJfA5e6oPB.jpg'; ?>" 
+                            <img src="<?php echo $_SESSION['user']['profile_picture'] ?? 'https://storage.googleapis.com/a1aa/image/BVZIkfG5F3XHY60sFbAWhIslKzm9KR8eUunlaCcIJfA5e6oPB.jpg'; ?>"
                                 alt="User profile picture">
                             <div class="profile-info">
-                                <span class="profile-username"><?php echo $_SESSION['user']['username']; ?></span>
+                                <span class="profile-username">
+                                    <?php
+                                    $username = $_SESSION['user']['username'];
+                                    $firstname = explode(' ', $username)[0];
+                                    echo $firstname;
+                                    ?>
+                                </span>
                                 <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span>
                             </div>
                         </div>
@@ -413,23 +451,23 @@
             </div>
 
             <script>
-            function toggleProfileMenu() {
-                const profileMenu = document.getElementById('profile-menu');
-                profileMenu.classList.toggle('show');
-            }
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                const profile = document.querySelector('.profile');
-                const profileMenu = document.getElementById('profile-menu');
-                
-                if (!profile?.contains(event.target)) {
-                    profileMenu?.classList.remove('show');
+                function toggleProfileMenu() {
+                    const profileMenu = document.getElementById('profile-menu');
+                    profileMenu.classList.toggle('show');
                 }
-            });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    const profile = document.querySelector('.profile');
+                    const profileMenu = document.getElementById('profile-menu');
+
+                    if (!profile?.contains(event.target)) {
+                        profileMenu?.classList.remove('show');
+                    }
+                });
             </script>
         </div>
-        
+
     </header>
 
     <main>
@@ -472,4 +510,5 @@
         </div>
     </footer>
 </body>
+
 </html>

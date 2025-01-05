@@ -10,8 +10,9 @@
             margin: 0;
             padding: 0;
         }
-        .container {
-            width: 80%;
+        .order-container {
+            /* width: 80%; */
+            max-width: 1200px;
             margin: 20px auto;
             background: #fff;
             padding: 20px;
@@ -59,7 +60,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="order-container">
         <div class="gig-details">
             <h2>Gig Details</h2>
             <p><strong>Gig Name:</strong> Professional Business Plan Writing</p>
