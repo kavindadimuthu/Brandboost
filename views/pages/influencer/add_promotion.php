@@ -291,12 +291,12 @@
 </head>
 
 <body>
-    <div class="container">
-
+<div class="container">
         <div class="content">
             <div class="main-content">
-                <form action="/influencer/create-promotion" method="POST">
-                    <!-- Common Promotion Details -->
+                <!-- Added enctype for file uploads -->
+                <form action="/influencer/create-promotion" method="POST" enctype="multipart/form-data" id="promotionForm">
+                    <!-- Step 1 content remains the same until media upload section -->
                     <div class="step active" id="step1">
                         <h2>Common Promotion Details</h2>
                         <label>Promotion Title: <input type="text" name="title" required></label>
@@ -304,33 +304,33 @@
                         <label>Platforms:</label>
                         <div class="delivery-formats">
                             <div>
-                                <input type="checkbox" name="platform" value="facebook" id="facebook">
+                                <input type="checkbox" name="platforms[]" value="facebook" id="facebook">
                                 <label for="facebook">Facebook</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="platform" value="youtube" id="youtube">
+                                <input type="checkbox" name="platforms[]" value="youtube" id="youtube">
                                 <label for="youtube">Youtube</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="platform" value="tiktok" id="tiktok">
+                                <input type="checkbox" name="platforms[]" value="tiktok" id="tiktok">
                                 <label for="tiktok">Tiktok</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="platform" value="instagram" id="instagram">
+                                <input type="checkbox" name="platforms[]" value="instagram" id="instagram">
                                 <label for="instagram">Instagram</label>
                             </div>
                         </div>
 
                         <label>Tags: <input type="text" name="tags" placeholder="Comma-separated tags" required></label>
 
-                           <!-- Media Upload Section -->
-                           <div class="media-upload-container">
+                        <!-- Updated Media Upload Section -->
+                        <div class="media-upload-container">
                             <h3>Media Files</h3>
                             
                             <!-- Cover Image Upload -->
                             <div class="upload-section">
                                 <span class="upload-label">Cover Image (Required)</span>
-                                <div class="upload-area" onclick="document.getElementById('coverImage').click()">
+                                <div class="upload-area" id="coverImageArea">
                                     <i class="fas fa-image"></i>
                                     <p>Click to upload cover image</p>
                                     <span class="upload-sublabel">Recommended size: 1200x630px (Max: 5MB)</span>
@@ -342,24 +342,23 @@
                             <!-- Additional Media Uploads -->
                             <div class="upload-section">
                                 <span class="upload-label">Additional Media 1</span>
-                                <div class="upload-area" onclick="document.getElementById('media1').click()">
+                                <div class="upload-area" id="media1Area">
                                     <i class="fas fa-file-upload"></i>
                                     <p>Click to upload media</p>
                                     <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
-                                    <input type="file" id="media1" name="media1" class="file-input" accept="image/*,video/*,.svg">
+                                    <input type="file" id="media1" name="additionalMedia[]" class="file-input" accept="image/*,video/*,.svg">
                                     <img id="preview1" class="preview-image" alt="Media preview">
                                 </div>
                             </div>
 
-                            <!-- Repeat for media 2-4 -->
                             <!-- Media 2 -->
                             <div class="upload-section">
                                 <span class="upload-label">Additional Media 2</span>
-                                <div class="upload-area" onclick="document.getElementById('media2').click()">
+                                <div class="upload-area" id="media2Area">
                                     <i class="fas fa-file-upload"></i>
                                     <p>Click to upload media</p>
                                     <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
-                                    <input type="file" id="media2" name="media2" class="file-input" accept="image/*,video/*,.svg">
+                                    <input type="file" id="media2" name="additionalMedia[]" class="file-input" accept="image/*,video/*,.svg">
                                     <img id="preview2" class="preview-image" alt="Media preview">
                                 </div>
                             </div>
@@ -367,11 +366,11 @@
                             <!-- Media 3 -->
                             <div class="upload-section">
                                 <span class="upload-label">Additional Media 3</span>
-                                <div class="upload-area" onclick="document.getElementById('media3').click()">
+                                <div class="upload-area" id="media3Area">
                                     <i class="fas fa-file-upload"></i>
                                     <p>Click to upload media</p>
                                     <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
-                                    <input type="file" id="media3" name="media3" class="file-input" accept="image/*,video/*,.svg">
+                                    <input type="file" id="media3" name="additionalMedia[]" class="file-input" accept="image/*,video/*,.svg">
                                     <img id="preview3" class="preview-image" alt="Media preview">
                                 </div>
                             </div>
@@ -379,11 +378,11 @@
                             <!-- Media 4 -->
                             <div class="upload-section">
                                 <span class="upload-label">Additional Media 4</span>
-                                <div class="upload-area" onclick="document.getElementById('media4').click()">
+                                <div class="upload-area" id="media4Area">
                                     <i class="fas fa-file-upload"></i>
                                     <p>Click to upload media</p>
                                     <span class="upload-sublabel">Supports images, videos, or SVGs (Max: 10MB)</span>
-                                    <input type="file" id="media4" name="media4" class="file-input" accept="image/*,video/*,.svg">
+                                    <input type="file" id="media4" name="additionalMedia[]" class="file-input" accept="image/*,video/*,.svg">
                                     <img id="preview4" class="preview-image" alt="Media preview">
                                 </div>
                             </div>
@@ -392,7 +391,7 @@
                         <button type="button" id="nextStep1">Next</button>
                     </div>
 
-                    <!-- Package Details -->
+                    <!-- Package Details section remains the same -->
                     <div class="step" id="step2">
                         <h2>Package Details</h2>
                         <div class="package">
@@ -421,6 +420,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             let currentStep = 1;
 
+            // Step navigation
             const steps = document.querySelectorAll(".step");
             const showStep = (step) => {
                 steps.forEach((el, index) => {
@@ -436,6 +436,77 @@
             document.getElementById("backStep2").addEventListener("click", () => {
                 currentStep--;
                 showStep(currentStep);
+            });
+
+            // File upload handling
+            const setupFileUpload = (areaId, inputId, previewId) => {
+                const area = document.getElementById(areaId);
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+
+                area.addEventListener('click', () => input.click());
+
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    // File size validation
+                    const maxSize = inputId === 'coverImage' ? 5 : 10; // 5MB for cover, 10MB for others
+                    if (file.size > maxSize * 1024 * 1024) {
+                        alert(`File size must be less than ${maxSize}MB`);
+                        input.value = '';
+                        return;
+                    }
+
+                    // Preview handling
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type.startsWith('video/')) {
+                        preview.style.display = 'none';
+                        // You could add video preview here if needed
+                    }
+                });
+            };
+
+            // Setup file upload for all media inputs
+            setupFileUpload('coverImageArea', 'coverImage', 'coverPreview');
+            setupFileUpload('media1Area', 'media1', 'preview1');
+            setupFileUpload('media2Area', 'media2', 'preview2');
+            setupFileUpload('media3Area', 'media3', 'preview3');
+            setupFileUpload('media4Area', 'media4', 'preview4');
+
+            // Form submission
+            document.getElementById('promotionForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                
+                try {
+                    const response = await fetch('/influencer/create-promotion', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Promotion created successfully!');
+                        window.location.href = '/dashboard'; // Redirect to dashboard
+                    } else {
+                        alert(result.message || 'Failed to create promotion');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to create promotion. Please try again.');
+                }
             });
 
             showStep(currentStep);
