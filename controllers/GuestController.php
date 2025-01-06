@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
+use app\core\Helpers\AuthHelper;
+use app\core\Helpers\DebugHelper;
 
 class GuestController extends BaseController
 {
@@ -53,7 +55,29 @@ class GuestController extends BaseController
     }
 
     public function login($req, $res){
-        $this->renderPage('pages/guest/login');
+        if(AuthHelper::isLoggedIn()){
+            $user = AuthHelper::getCurrentUser();
+            // Redirect to the user's dashboard according to their role
+            switch ($user['role']) {
+                case 'admin':
+                    header("Location: /admin/dashboard");
+                    break;
+                case 'businessman':
+                    header("Location: /services");
+                    break;
+                case 'influencer':
+                    header("Location: /influencer/dashboard");
+                    break;
+                case 'designer':
+                    header("Location: /designer/dashboard");
+                    break;
+                default:
+                    header("Location: /auth/login?error=Invalid%20role");
+                    break;
+            }
+        }
+
+        $this->renderPage('pages/guest/login');      
     }
 
     public function forgotPassword($req, $res){
@@ -64,5 +88,35 @@ class GuestController extends BaseController
         $this->renderPage('pages/guest/reset_password');
     }
 
+
+    // API endpoints
+
+    public function getServiceList($req, $res){
+        $serviceModel = $this->model('Services\\Service');
+
+        $conditions = ['service_type' => 'promotion'];
+
+        if ($req->getParam('type')) {
+            $conditions = ['service_type' => $req->getParam('type')];
+        }
+
+        $serviceList = $serviceModel->findAll($conditions);
+
+        $res->sendJson($serviceList);
+    }
+    
+    public function getInfluencerList($req, $res){
+        $userModel = $this->model('Users\\User');
+
+        $conditions = ['role' => 'influencer'];
+
+        $influencerList = $userModel->findAll($conditions);
+
+        $res->sendJson($influencerList);
+    }
+
+
+
+    // *************
 
 }

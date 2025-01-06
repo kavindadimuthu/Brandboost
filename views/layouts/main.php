@@ -26,6 +26,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background: white!important;
         }
 
         main {
@@ -46,7 +47,8 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 6px 18px;
-            font-size: 15px;
+            font-size: 14px;
+            margin-left: 0.2rem;
         }
 
         .header-btn:hover,
@@ -109,15 +111,20 @@
             position: relative;
             z-index: 1;
             padding: 0 20px;
-        }
-
-        .container {
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
             padding: 0 20px;
         }
+
+        /* .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
+        } */
 
         .header.scrolled {
             padding: 15px;
@@ -131,6 +138,7 @@
             justify-content: space-between;
             align-items: center;
         }
+        
 
         .logo {
             font-size: 24px;
@@ -143,6 +151,21 @@
             display: flex;
             align-items: center;
             gap: 25px;
+            background:rgba(37, 37, 37, 0.34);
+            background:rgba(150, 150, 150, 0.25);
+            padding: 8px 40px;
+            border-radius: 15px;
+
+            position: absolute;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+
+        }
+        .nav-links:hover{
+            background:rgba(37, 37, 37, 0.34);
+            background:rgba(150, 150, 150, 0.25);
+            /* scale: 1.01; */
         }
 
         .nav-links a {
@@ -169,6 +192,10 @@
             width: 100%;
         }
 
+        .auth-buttons{
+            margin-left: 10px;
+        }
+
         /* Add these styles in the head section, alongside other existing styles */
 
         /* Profile Section Styles */
@@ -183,6 +210,7 @@
 
         .profile:hover {
             background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
         }
 
         .profile img {
@@ -194,14 +222,16 @@
         }
 
         .profile-info {
-            margin-left: 12px;
+            margin-right: 10px;
+            min-width: 30px;
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
         }
 
         .profile-username {
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
             color: rgba(255, 255, 255, 0.9);
         }
 
@@ -214,20 +244,23 @@
         .header-icons {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 5px;
             margin: 0 10px 0 30px;
         }
 
         .header-icon {
             color: rgba(255, 255, 255, 0.9);
             font-size: 18px;
+            padding: 8px;
+            border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .header-icon:hover {
             color: white;
-            transform: scale(1.1);
+            background:rgba(212, 212, 212, 0.25);
+            /* transform: scale(1.05); */
         }
 
         /* Dropdown Menu Styles */
@@ -235,14 +268,16 @@
             position: absolute;
             top: 100%;
             right: 0;
-            margin-top: 8px;
+            margin-top: 12px;
+            padding: 10px 0 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: white;
+            /* background:rgba(255, 255, 255, 0.98); */
+            background: rgba(65, 105, 225, 1);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            min-width: 150px;
+            min-width: 140px;
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
@@ -259,17 +294,19 @@
         .profile-dropdown-link {
             display: flex;
             align-items: center;
+            width: 90%;
             text-align: center;
             padding: 8px 10px;
-            color: #333;
+            border-radius: 15px;
+            color: white;
             text-decoration: none;
-            font-size: 12px;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            transition: all 0.1s ease;
         }
 
         .profile-dropdown-link:hover {
-            background: #f5f5f5;
             color: #4169E1;
+            background: #f5f5f5;
         }
 
         /* Media Queries */
@@ -366,7 +403,7 @@
 
 <body>
     <header class="header">
-        <div class="header-content container">
+        <div class="header-content">
             <div class="logo" onclick="window.location.href='/'">BrandBoost</div>
             <div class="navigations">
                 <nav class="nav-links">
@@ -375,13 +412,11 @@
                     if (!isset($_SESSION['user']['role'])) {
                         echo '
                         <a href="/services">Services</a>
+                        <a href="/influencers">Influencers</a>
                         <a href="/about">About</a>
                         <a href="/faq">Faq</a>
                         <a href="/contact">Contact</a>
-                        <div>
-                        <button class="header-btn log-btn" onclick="window.location.href=`/register`">Sign Up</button>
-                        <button class="header-btn signup-btn" onclick="window.location.href=`/login`">Login</button>
-                        </div>
+                        
                     ';
                     } else if ($_SESSION['user']['role'] === 'businessman') {
                         echo '
@@ -410,14 +445,18 @@
                     ?>
                 </nav>
                 <div class="nav-icons">
+                    <?php if (!isset($_SESSION['user']['role'])): ?>
+                        <div class="auth-buttons">
+                            <button class="header-btn log-btn" onclick="window.location.href=`/register`">Sign Up</button>
+                            <button class="header-btn signup-btn" onclick="window.location.href=`/login`">Login</button>
+                        </div>
+                    <?php endif; ?>
                     <?php if (isset($_SESSION['user']['role']) && isset($_SESSION['user']['username'])): ?>
                         <div class="header-icons">
                             <i class="fas fa-bell header-icon"></i>
                             <i class="fas fa-comments header-icon" onclick="window.location.href='/chat'"></i>
                         </div>
                         <div class="profile" onclick="toggleProfileMenu()">
-                            <img src="<?php echo $_SESSION['user']['profile_picture'] ?? 'https://storage.googleapis.com/a1aa/image/BVZIkfG5F3XHY60sFbAWhIslKzm9KR8eUunlaCcIJfA5e6oPB.jpg'; ?>"
-                                alt="User profile picture">
                             <div class="profile-info">
                                 <span class="profile-username">
                                     <?php
@@ -426,8 +465,10 @@
                                     echo $firstname;
                                     ?>
                                 </span>
-                                <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span>
+                                <!-- <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span> -->
                             </div>
+                            <img src="<?php echo $_SESSION['user']['profile_picture'] ?? 'https://storage.googleapis.com/a1aa/image/BVZIkfG5F3XHY60sFbAWhIslKzm9KR8eUunlaCcIJfA5e6oPB.jpg'; ?>"
+                                alt="User profile picture">
                         </div>
                         <div class="profile-dropdown" id="profile-menu">
                             <a href="/<?php echo strtolower($_SESSION['user']['role']); ?>/edit-profile" class="profile-dropdown-link">
@@ -440,9 +481,6 @@
                                 <a href="/<?php echo strtolower($_SESSION['user']['role']); ?>/payout-methods" class="profile-dropdown-link">
                                     Payout Methods
                                 </a>
-                            <?php endif; ?>
-                            <?php if ($_SESSION['user']['role'] === 'designer'): ?>
-                                <a href="/designer/my-gigs" class="profile-dropdown-link">My Portfolio</a>
                             <?php endif; ?>
                             <a href="/auth/logout" class="profile-dropdown-link">Logout</a>
                         </div>

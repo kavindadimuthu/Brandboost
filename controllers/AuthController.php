@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 use app\core\Helpers\AuthHelper;
+use app\core\Helpers\DebugHelper;
 
 class AuthController extends BaseController{
 
@@ -32,23 +33,28 @@ class AuthController extends BaseController{
                 die('Passwords do not match.');
             }
 
-            // Save user to the database
-            $result = $this->model('UserModel')->createUser(
-                $name,
-                $email,
-                $password,
-                $role,
-                null,  // Profile picture is null as it is not provided in the UI
-                null   // Bio is null as it is not provided in the UI
-            );
+            $testall = [
+                'name' => $name,
+                'email' => $email,
+                // 'phone' => $phone,
+                'password' => $password,
+                'role' => $role,
+                'profile_picture' => null,
+                'bio'=> null
+            ];
 
-            if ($result) {
-                // Registration successful
-                header('Location: /login');
-                exit;
-            } else {
+            // DebugHelper::dump( $testall);
+
+            // Save user to the database
+            $result = $this->model('Users\\User')->createUser($testall);
+
+            if (!$result) {
                 die('Error registering user.');
             }
+            
+            header('Location: /login'); // Registration successful
+            exit;
+
         } else {
             // Show the registration form (if needed)
             include 'views/register.php';
@@ -67,12 +73,15 @@ class AuthController extends BaseController{
                 exit;
             }
 
-            // Fetch user by email from user table
-            $user = $this->model('UserModel')->getUserByEmail($email);
+            $userModel = $this->model('Users\\User');
+            $user = $userModel->findByEmail($email);
+
 
             // If user not found in user table, check admin table
             if (!$user) {
-                $user = $this->model('UserModel')->getAdminByEmail($email);
+                $adminModel = $this->model('Users\\Admin');
+                $user = $adminModel->findOne($email, 'email');
+                // $user = $this->model('UserModel')->getAdminByEmail($email);
                 if ($user) {
                     $user->role = 'admin';
                 }
@@ -82,12 +91,12 @@ class AuthController extends BaseController{
             if ($user && password_verify($password, $user->password)) {
 
                 // Store user details in session
-                $loggeduser['user_id'] = $user->user_id;
+                $loggeduser['user_id'] = $user->role == 'admin' ? $user->admin_id : $user->user_id;
                 $loggeduser['username'] = $user->name;
                 $loggeduser['email'] = $user->email;
                 $loggeduser['role'] = $user->role;
 
-                $_SESSION['user'] = $loggeduser;
+                AuthHelper::login($loggeduser);
 
                 // Redirect to the user's dashboard according to their role
                 switch ($user->role) {

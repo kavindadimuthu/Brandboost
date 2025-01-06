@@ -172,11 +172,11 @@
     <div class="min-h-screen">
         <div class="card">
             <div class="card-header">
-                <button class="back-button">
+                <button class="back-button" onclick="window.location.href='/register'">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    <span>Back to Home</span>
+                    <span>Back to Register</span>
                 </button>
                 <h1 class="card-title">Create an Account</h1>
                 <p class="card-description">Register as a <?php echo $data[0] ?> user to get started with BrandBoost</p>
@@ -309,13 +309,7 @@
         //     alert('Registration successful!');
         // });
 
-        // Add back button functionality
-        document.querySelector('.back-button').addEventListener('click', function() {
-            // For demo purposes, just log the action
-            window.location.href = '/register';
-            console.log('Back button clicked');
-            // In a real application, you would use: window.location.href = '/';
-        });
+        
     </script>
 </body>
 </html>

@@ -1,4 +1,7 @@
 <?php
+
+namespace app\models;
+
 use app\core\BaseModel;
 
 class PromotionModel extends BaseModel {

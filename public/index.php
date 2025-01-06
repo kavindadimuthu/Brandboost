@@ -101,6 +101,8 @@ $app->router->get('/admin/action-details/{id}', 'AdminController@actionDetails')
 
 // Common routes
 $app->router->get('/chat', 'CommonController@chat');
+//test route
+$app->router->get('/test', 'CommonController@test');
 
 
 // Auth routes
@@ -108,6 +110,13 @@ $app->router->post('/auth/register', 'AuthController@register');
 $app->router->post('/auth/login', 'AuthController@login');
 $app->router->get('/auth/logout', 'AuthController@logout');
 
+
+
+// API routes
+$app->router->get('/api/services', 'GuestController@getServiceList');
+$app->router->get('/api/influencers', 'GuestController@getInfluencerList');
+
+$app->router->get('/api/create-gig', 'DesignerController@createGig');
 
 
 // Run the application

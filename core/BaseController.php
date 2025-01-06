@@ -5,7 +5,7 @@ namespace app\core;
 class BaseController
 {
     public function model($model) {
-        require_once __DIR__ . '/../models/' . $model . '.php';
+        $model = 'app\\models\\' . str_replace('/', '\\', $model);
         return new $model();
     }
 

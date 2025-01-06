@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Cards</title>
+    <title>Service Listings</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2563eb;
@@ -17,6 +18,8 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
             --radius-md: 0.5rem;
             --radius-lg: 1rem;
+            --accent-yellow: #eab308;
+            --border-color: #e5e7eb;
         }
 
         * {
@@ -38,25 +41,40 @@
             padding: 2rem;
         }
 
-        .page-header {
+        .breadcrumb {
             display: flex;
-            flex-direction: column;
-            /* position: sticky; */
-            top: 0;
-            z-index: 10;
-            background: var(--bg-primary);
-            padding: 1rem;
-            /* margin-bottom: 2rem; */
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-secondary);
+        }
+
+        .page-header {
+            /* background: var(--bg-primary); */
+            /* padding: 1.5rem; */
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            /* box-shadow: var(--shadow-md); */
+            margin-bottom: 2rem;
         }
 
         .page-header-content {
-            display: flex;
-            flex-direction: column;
             max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
+            /* margin: 0 auto; */
+            /* text-align: center; */
         }
 
         .header-title {
@@ -69,7 +87,7 @@
         .header-subtitle {
             font-size: 1.125rem;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .search-controls {
@@ -79,17 +97,17 @@
             margin: 0 auto;
         }
 
-        .dropdown select,
-        .search-bar {
+        .search-controls select,
+        .search-controls input {
             padding: 0.75rem 1rem;
             font-size: 1rem;
             border-radius: var(--radius-md);
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             background-color: var(--bg-primary);
             transition: all 0.2s ease;
         }
 
-        .dropdown select {
+        .search-controls select {
             min-width: 200px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
             background-position: right 0.5rem center;
@@ -100,15 +118,12 @@
         }
 
         .search-bar-container {
-            max-width: 800px;
-            width: 100%;
             flex: 1;
             position: relative;
         }
 
         .search-bar {
             width: 100%;
-            width: 800px;
         }
 
         .search-icon {
@@ -119,22 +134,31 @@
             color: var(--text-secondary);
         }
 
-        .dropdown select:hover,
-        .search-bar:hover {
-            border-color: var(--primary-color);
+        .results-summary {
+            /* padding: 1rem; */
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            /* background: var(--bg-primary); */
+            border-radius: var(--radius-md);
+            /* margin-bottom: 1rem; */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .dropdown select:focus,
-        .search-bar:focus {
+        #sortOrder{
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            transition: all 0.2s ease;
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        /* Rest of the styles remain the same */
         .service-card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 2rem;
             padding: 1rem;
         }
@@ -193,7 +217,7 @@
             border-radius: 50%;
             overflow: hidden;
             margin-right: 0.75rem;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--border-color);
         }
 
         .user-avatar img {
@@ -232,7 +256,7 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 1rem;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--border-color);
         }
 
         .rating {
@@ -242,7 +266,7 @@
         }
 
         .star-icon {
-            color: #eab308;
+            color: var(--accent-yellow);
         }
 
         .price {
@@ -250,281 +274,287 @@
             color: var(--primary-color);
         }
 
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
-            }
-
-            .page-header {
-                padding: 1.5rem 1rem;
             }
 
             .search-controls {
                 flex-direction: column;
             }
 
-            .dropdown select {
+            .search-controls select,
+            .search-bar {
                 width: 100%;
             }
-        }
-
-        .results-summary {
-            text-align: left;
-            color: var(--text-secondary);
-            margin: 1rem 0;
-            font-size: 0.875rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Breadcrumb navigation -->
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="/services">Services</a>
+            <span class="breadcrumb-separator">/</span>
+            <span id="current-category">All Services</span>
+        </div>
+
         <div class="page-header">
             <div class="page-header-content">
                 <h1 id="header-title" class="header-title">Services</h1>
                 <p class="header-subtitle">Discover and connect with talented professionals for your next project</p>
                 
                 <div class="search-controls">
-                    <div class="dropdown"></div>
+                    <select id="categoryFilter" class="category-filter" onchange="handleCategoryChange()">
+                        <option value="">All Categories</option>
+                        <option value="design">Design</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="development">Development</option>
+                    </select>
+                    
                     <div class="search-bar-container">
                         <input
                             type="text"
                             id="searchBar"
                             class="search-bar"
-                            placeholder="Search by service title..."
-                            oninput="filterProfiles()"
+                            placeholder="Search services..."
                         />
-                        <span class="search-icon">🔍</span>
+                        <i class="fas fa-search search-icon"></i>
                     </div>
+                    
+                    <select id="serviceType" class="service-type" onchange="handleServiceTypeChange()">
+                        <option value="gig">Gigs</option>
+                        <option value="promotion">Promotions</option>
+                    </select>
                 </div>
             </div>
         </div>
 
-        <div class="results-summary" id="results-summary"></div>
-        <div id="service-card-container" class="service-card-grid"></div>
+        <div class="results-summary" id="resultsSummary">
+            <span>Showing all services</span>
+            <select id="sortOrder" onchange="handleSortChange()">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="price_low">Price: Low to High</option>
+            </select>
+        </div>
+
+        <div id="serviceCardContainer" class="service-card-grid">
+            <!-- Service cards will be dynamically inserted here -->
+        </div>
     </div>
 
     <script>
-        // Your existing data arrays remain the same
-        // Dynamic data array with 5 service cards
-        const designerGigs = [
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/178097622/original/a42b2d3b2f93a703a3dea7b3cc329610fd98a2cd/setup-and-manage-facebook-ads-campaign-to-grow-your-business.jpg",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "Sallada",
-                isVerified: true,
-                serviceTitle: "Review on podcast recording recommendation video",
-                rating: 5.0,
-                ratingCount: 786,
-                price: "LKR 25,000"
-            },
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/68748376/original/7d9d3d6e4efd2e35bc8e8b3cc2dcf2fde1e27271/design-2-outstanding-logo-in-24-hours.jpg",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "MarkMedia",
-                isVerified: false,
-                serviceTitle: "Professional Facebook Ads Campaign Management",
-                rating: 4.9,
-                ratingCount: 543,
-                price: "LKR 35,000"
-            },
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/202847553/original/5277824ba5daa4cf5204a305d978094a2f4363f2/design-outstanding-flyer-or-poster-with-unlimited-revisions.jpg",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "DigitalPro",
-                isVerified: true,
-                serviceTitle: "Creative Social Media Ad Designs",
-                rating: 4.8,
-                ratingCount: 329,
-                price: "LKR 15,000"
-            },
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/183533956/original/7ca4175e3ef914e8ca7d632d886d17078c7c1b0d/design-10-unique-facebook-and-instagram-posts-banners-ads.jpg",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "AdExpert",
-                isVerified: true,
-                serviceTitle: "Facebook & Instagram Ads Setup",
-                rating: 4.7,
-                ratingCount: 892,
-                price: "LKR 45,000"
-            },
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/videos/t_main1,q_auto,f_auto/feaisnlcn2cval6ddhdh/create-an-instagram-puzzle-grid-feed.png",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "SocialGuru",
-                isVerified: true,
-                serviceTitle: "Complete Social Media Marketing Package",
-                rating: 5.0,
-                ratingCount: 456,
-                price: "LKR 55,000"
-            },
-            {
-                imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/145296688/original/4a8aa1411871dae6ab5c22a7ba489535e0e4b17d/creative-carousel-post-for-your-instagram-account.jpg",
-                userAvatar: "https://via.placeholder.com/40",
-                username: "SocialGuru",
-                isVerified: true,
-                serviceTitle: "Complete Social Media Marketing Package",
-                rating: 5.0,
-                ratingCount: 456,
-                price: "LKR 55,000"
+        // State management
+        let services = [];
+        let filters = {
+            category: '',
+            type: 'gig',
+            search: '',
+            sort: 'newest'
+        };
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Fetch services with filters
+        async function fetchServices() {
+            const container = document.getElementById('serviceCardContainer');
+            container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading services...</div>';
+
+            try {
+                const queryParams = new URLSearchParams({
+                    type: filters.type,
+                    category: filters.category,
+                    query: filters.search,
+                    sort: filters.sort
+                });
+
+                const response = await fetch(`/api/services?${queryParams}`);
+                services = await response.json();
+                
+                updateUI();
+            } catch (error) {
+                console.error('Error fetching services:', error);
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h2>Error loading services</h2>
+                        <p>Please try again later</p>
+                    </div>
+                `;
             }
-        ];
-
-        const influencerPromotions = [
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/126784228/original/d6398878193c5dbb88b9ef92278e250192d62780/be-your-social-media-manager.jpg",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "PromoExpert",
-            isVerified: true,
-            serviceTitle: "I will promote your brand on my 500K Instagram followers",
-            rating: 4.8,
-            ratingCount: 240,
-            price: "LKR 50,000"
-        },
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_0.104812,t_main1,q_auto,f_auto/yazvfbtb0a9qqowqc14h/be-your-social-media-marketing-manager-and-content-creator.png",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "InstaBoost",
-            isVerified: false,
-            serviceTitle: "I will feature your product in my Instagram story highlights",
-            rating: 4.7,
-            ratingCount: 360,
-            price: "LKR 30,000"
-        },
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/370540065/original/c8ebc6ffa846e17c4496f7e86c03bf4f6cbac3f4/do-organic-youtube-video-promotion-and-marketing-by-social-media.png",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "TubePro",
-            isVerified: true,
-            serviceTitle: "I will promote your business on my 1M subscriber YouTube channel",
-            rating: 5.0,
-            ratingCount: 500,
-            price: "LKR 75,000"
-        },
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_58.345428,t_main1,q_auto,f_auto/lokyruezin7kdrtxkxx1/create-business-commercial-video-or-social-media-video-ad.png",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "SocialStar",
-            isVerified: false,
-            serviceTitle: "I will provide product placement on my TikTok videos",
-            rating: 4.6,
-            ratingCount: 150,
-            price: "LKR 20,000"
-        },
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/155959096/original/84e9c92839c7c7fb53b1b9a67ed04c9c6ebf26fa/be-your-professional-social-media-manager.png",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "AdKing",
-            isVerified: true,
-            serviceTitle: "I will advertise your business on my Facebook page with 200K followers",
-            rating: 4.9,
-            ratingCount: 220,
-            price: "LKR 40,000"
-        },
-        {
-            imageUrl: "https://fiverr-res.cloudinary.com/videos/so_1.436549,t_main1,q_auto,f_auto/sbvse6ifboxearybu1fy/be-your-social-media-manager-for-your-business.png",
-            userAvatar: "https://via.placeholder.com/40",
-            username: "TrendSetter",
-            isVerified: true,
-            serviceTitle: "I will promote your brand on my verified Twitter account",
-            rating: 5.0,
-            ratingCount: 300,
-            price: "LKR 35,000"
-        }
-    ]; 
-
-        function updateResultsSummary(count) {
-            const summary = document.getElementById('results-summary');
-            summary.textContent = `Showing ${count} services`;
         }
 
-        function createServiceCards(services) {
-            const cardsHTML = services.map(data => `
+        // Update UI with filtered and sorted services
+        function updateUI() {
+            const container = document.getElementById('serviceCardContainer');
+            const summary = document.getElementById('resultsSummary');
+            const currentCategory = document.getElementById('current-category');
+
+            if (services.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h2>No services found</h2>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                summary.innerHTML = '<span>No services found</span>';
+                return;
+            }
+
+            // Update breadcrumb
+            currentCategory.textContent = filters.category ? 
+                filters.category.charAt(0).toUpperCase() + filters.category.slice(1) : 
+                'All Services';
+
+            // Update results summary
+            summary.innerHTML = `
+                <span>Showing ${services.length} service${services.length === 1 ? '' : 's'}</span>
+                <select id="sortOrder" onchange="handleSortChange()">
+                    <option value="newest" ${filters.sort === 'newest' ? 'selected' : ''}>Newest First</option>
+                    <option value="oldest" ${filters.sort === 'oldest' ? 'selected' : ''}>Oldest First</option>
+                    <option value="price_high" ${filters.sort === 'price_high' ? 'selected' : ''}>Price: High to Low</option>
+                    <option value="price_low" ${filters.sort === 'price_low' ? 'selected' : ''}>Price: Low to High</option>
+                </select>
+            `;
+
+            // Render service cards
+            container.innerHTML = services.map(service => `
                 <div class="service-card">
-                    <a href="/services/1">
+                    <a href="/services/${service.service_id}">
                         <div class="main-image">
-                            <img src="${data.imageUrl}" alt="${data.serviceTitle}">
+                            <img src="${service.cover_image || '/api/placeholder/400/225'}" 
+                                 alt="${service.title}"
+                                 >
                         </div>
                         <div class="card-content">
                             <div class="user-info">
                                 <div class="user-avatar">
-                                    <img src="${data.userAvatar}" alt="${data.username}">
+                                    <img src="${service.user_avatar || '/api/placeholder/40/40'}" 
+                                         alt="User ${service.user_id}"
+                                         >
                                 </div>
                                 <div class="user-details">
                                     <div class="username">
-                                        ${data.username}
-                                        ${data.isVerified ? '<span class="verified-badge">Verified</span>' : ''}
+                                        ${service.user_name || `User ${service.user_id}`}
+                                        ${service.is_verified ? '<span class="verified-badge">Verified</span>' : ''}
                                     </div>
                                 </div>
                             </div>
                             <div class="service-title">
-                                ${data.serviceTitle}
+                                ${service.title}
                             </div>
                             <div class="service-stats">
                                 <div class="rating">
                                     <span class="star-icon">★</span>
-                                    <span class="rating-number">${data.rating}</span>
-                                    <span class="rating-count">(${data.ratingCount})</span>
+                                    <span class="rating-number">${service.rating || '5.0'}</span>
+                                    <span class="rating-count">(${service.rating_count || '0'})</span>
                                 </div>
-                                <div class="price">${data.price}</div>
+                                <div class="price">LKR ${service.price?.toLocaleString() || '25,000'}</div>
                             </div>
                         </div>
                     </a>
                 </div>
             `).join('');
-
-            document.getElementById('service-card-container').innerHTML = cardsHTML;
-            updateResultsSummary(services.length);
         }
 
-        function renderDropdown() {
-            const dropdown = document.querySelector('.dropdown');
-            const select = document.createElement('select');
-            
-            select.innerHTML = `
-                <option value="default">Filter by category</option>
-                <option value="option2">Search by Influencer names</option>
-            `;
-            
-            select.addEventListener('change', function() {
-                if (this.value === 'option2') {
-                    window.location.href = "http://localhost:8000/BusinessViewController/viewInfluencers";
+        // Event Handlers
+        function handleCategoryChange() {
+            filters.category = document.getElementById('categoryFilter').value;
+            fetchServices();
+        }
+
+        function handleServiceTypeChange() {
+            filters.type = document.getElementById('serviceType').value;
+            fetchServices();
+        }
+
+        function handleSortChange() {
+            filters.sort = document.getElementById('sortOrder').value;
+            fetchServices();
+        }
+
+        // Debounced search handler
+        const handleSearch = debounce(() => {
+            filters.search = document.getElementById('searchBar').value;
+            fetchServices();
+        }, 500);
+
+        // Initialize page
+        function initializePage() {
+            // Set up search input listener
+            document.getElementById('searchBar').addEventListener('input', handleSearch);
+
+            // Initialize filters from URL parameters if any
+            const urlParams = new URLSearchParams(window.location.search);
+            filters.category = urlParams.get('category') || '';
+            filters.type = urlParams.get('type') || 'gig';
+            filters.search = urlParams.get('search') || '';
+            filters.sort = urlParams.get('sort') || 'newest';
+
+            // Set initial form values
+            document.getElementById('categoryFilter').value = filters.category;
+            document.getElementById('serviceType').value = filters.type;
+            document.getElementById('searchBar').value = filters.search;
+            document.getElementById('sortOrder').value = filters.sort;
+
+            // Fetch initial data
+            fetchServices();
+        }
+
+        // Update URL with current filters
+        function updateURL() {
+            const url = new URL(window.location);
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value) {
+                    url.searchParams.set(key, value);
+                } else {
+                    url.searchParams.delete(key);
                 }
             });
-            
-            dropdown.appendChild(select);
+            window.history.pushState({}, '', url);
         }
 
-        function filterProfiles() {
-            const searchQuery = document.getElementById("searchBar").value.toLowerCase();
-            const services = window.location.pathname.includes("viewDesignerGigs") 
-                ? designerGigs 
-                : influencerPromotions;
-
-            const filteredServices = services.filter(service => 
-                service.serviceTitle.toLowerCase().includes(searchQuery)
-            );
-
-            createServiceCards(filteredServices);
-        }
-
-        function initializePage() {
-            const path = window.location.pathname;
-            const headerTitle = document.getElementById("header-title");
-            const services = path.includes("viewDesignerGigs") ? designerGigs : influencerPromotions;
-            
-            if (path.includes("viewDesignerGigs")) {
-                headerTitle.textContent = "Designer Gigs";
-            } else if (path.includes("viewInfluencerPromotions")) {
-                headerTitle.textContent = "Influencer Promotions";
-                renderDropdown();
-            }
-            
-            // Initialize with all services
-            createServiceCards(services);
+        // Error handler for images
+        function handleImageError(img) {
+            img.onerror = null; // Prevent infinite loop
+            img.src = '/api/placeholder/400/225';
         }
 
         // Call initialization function when page loads
         document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            initializePage();
+        });
     </script>
 </body>
 </html>
