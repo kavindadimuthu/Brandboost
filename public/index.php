@@ -116,7 +116,7 @@ $app->router->get('/auth/logout', 'AuthController@logout');
 $app->router->get('/api/services', 'GuestController@getServiceList');
 $app->router->get('/api/influencers', 'GuestController@getInfluencerList');
 
-$app->router->get('/api/create-gig', 'DesignerController@createGig');
+$app->router->post('/api/create-gig', 'DesignerController@createGig');
 
 
 // Run the application

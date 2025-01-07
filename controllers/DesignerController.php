@@ -4,6 +4,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 
+use app\core\BaseModel;
+use app\models\Services\ServicePackage;
+use app\core\Helpers\ResponseHelper;
+
 class DesignerController extends BaseController
 {
     public function __construct()
@@ -74,51 +78,113 @@ class DesignerController extends BaseController
 
 
     // API endpoints
+
     public function createGig($req, $res)
     {
-        $serviceModel = $this->model('Services\\Service');
+        // Extract data from the request
+        $inputData = $req->getParsedBody();
 
-        $gigs = [
-            [
-                'service_id' => 6,
-                'user_id' => 16,
-                'title' => 'Review on podcast recording recommendation video',
-                'description' => 'Provide a comprehensive review on podcast recording with recommendations and actionable insights.',
-                'cover_image' => 'https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/178097622/original/a42b2d3b2f93a703a3dea7b3cc329610fd98a2cd/setup-and-manage-facebook-ads-campaign-to-grow-your-business.jpg',
-                'media' => 'https://via.placeholder.com/40',
-                'service_type' => 'gig',
-                'platforms' => 'YouTube, Podcast',
-                'delivery_formats' => 'PDF, Video',
-                'tags' => 'podcast, review, recording',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ],
-            [
-                'service_id' => 7,
-                'user_id' => 16,
-                'title' => 'Professional Facebook Ads Campaign Management',
-                'description' => 'Expert Facebook ads campaign management to maximize your business reach.',
-                'cover_image' => 'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/68748376/original/7d9d3d6e4efd2e35bc8e8b3cc2dcf2fde1e27271/design-2-outstanding-logo-in-24-hours.jpg',
-                'media' => 'https://via.placeholder.com/40',
-                'service_type' => 'gig',
-                'platforms' => 'Facebook, Instagram',
-                'delivery_formats' => 'Report, PDF',
-                'tags' => 'Facebook, ads, campaign',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ]
-        ];
+        // Simulated input data (mimicking frontend input)
+        // $inputData = [
+        //     'user_id' => 1,
+        //     'title' => 'Professional Logo Design',
+        //     'description' => 'I will create a professional logo tailored to your brand.',
+        //     'cover_image' => 'logo_cover.jpg',
+        //     'imageUploadPaths' => [
+        //         'https://example.com/image1.jpg',
+        //         'https://example.com/image2.jpg',
+        //         'https://example.com/image3.jpg',
+        //         'https://example.com/image4.jpg'
+        //     ],
+        //     'service_type' => 'graphic_design',
+        //     'platforms' => ['Facebook', 'Instagram'],
+        //     'delivery_formats' => ['PNG', 'JPEG'],
+        //     'tags' => ['logo', 'branding', 'design'],
+        //     'packages' => [
+        //         [
+        //             'package_type' => 'Basic',
+        //             'benefits' => 'Simple logo design with one revision',
+        //             'delivery_days' => 2,
+        //             'revisions' => 1,
+        //             'price' => 50
+        //         ],
+        //         [
+        //             'package_type' => 'Premium',
+        //             'benefits' => 'Advanced logo design with unlimited revisions',
+        //             'delivery_days' => 7,
+        //             'revisions' => null,
+        //             'price' => 150
+        //         ]
+        //     ]
+        // ];
 
 
-        // Loop through the gigs and create each one
-        foreach ($gigs as $gig) {
-            $serviceModel->create($gig);
+
+        // Validate incoming data
+
+
+        if (!isset($inputData['user_id'], $inputData['title'], $inputData['description'], $inputData['cover_image'], $inputData['service_type'], $inputData['packages']) || empty($inputData['packages'])) {
+            $res->sendError('Invalid data provided.', 400);
+            return;
         }
 
-        // Provide a response indicating success
-        $res->json(['message' => 'Gigs created successfully!']);
-    }
+        $serviceData = [
+            'user_id'          => $inputData['user_id'],
+            'title'            => $inputData['title'],
+            'description'      => $inputData['description'],
+            'cover_image'      => $inputData['cover_image'],
+            // 'media'            => json_encode( $inputData['imageUploadPaths']) ?? null,
+            'media'            => null,
+            'service_type'     => $inputData['service_type'],
+            'platforms'        => json_encode($inputData['platforms']) ?? null,
+            'delivery_formats' => json_encode($inputData['delivery_formats']) ?? null,
+            'tags'             => json_encode($inputData['tags']) ?? null,
+        ];
 
+        $serviceModel = new BaseModel('service');
+        $servicePackageModel = new ServicePackage();
+
+        try {
+            // Begin transaction
+            $serviceModel->beginTransaction();
+
+            // Insert service data
+            $serviceModel->create($serviceData);
+            $serviceId = $serviceModel->lastInsertId();
+
+            // Insert service packages
+            foreach ($inputData['packages'] as $package) {
+                if (!isset($package['type'], $package['benefits'], $package['delivery_days'], $package['price'])) {
+                    throw new \Exception('Invalid package data provided.');
+                }
+
+                $packageData = [
+                    'service_id'    => $serviceId,
+                    'package_type'  => $package['type'],
+                    'benefits'      => $package['benefits'],
+                    'delivery_days' => $package['delivery_days'],
+                    'revisions'     => $package['revisions'] ?? null,
+                    'price'         => $package['price'],
+                ];
+
+                $servicePackageModel->create($packageData);
+            }
+
+            // Commit transaction
+            $serviceModel->commit();
+
+            $res->sendJson([
+                'success' => true,
+                'message' => 'Gig created successfully.',
+                'service_id' => $serviceId,
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction in case of failure
+            $serviceModel->rollback();
+
+            $res->sendError('Failed to create gig. ' . $e->getMessage(), 500);
+        }
+    }
 
 
     // *************

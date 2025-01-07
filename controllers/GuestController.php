@@ -91,17 +91,41 @@ class GuestController extends BaseController
 
     // API endpoints
 
-    public function getServiceList($req, $res){
+    public function getServiceList($req, $res) {
         $serviceModel = $this->model('Services\\Service');
-
-        $conditions = ['service_type' => 'promotion'];
-
+    
+        $conditions = [];
+    
         if ($req->getParam('type')) {
-            $conditions = ['service_type' => $req->getParam('type')];
+            $conditions['service_type'] = $req->getParam('type');
         }
-
-        $serviceList = $serviceModel->findAll($conditions);
-
+    
+        if ($req->getParam('category')) {
+            $conditions['category'] = $req->getParam('category');
+        }
+    
+        if ($req->getParam('query')) {
+            $conditions['title LIKE'] = '%' . $req->getParam('query') . '%';
+        }
+    
+        $sort = 'name ASC'; // Default sort
+        switch ($req->getParam('sort')) {
+            case 'newest':
+                $sort = 'created_at DESC';
+                break;
+            case 'oldest':
+                $sort = 'created_at ASC';
+                break;
+            case 'price_high':
+                $sort = 'price DESC';
+                break;
+            case 'price_low':
+                $sort = 'price ASC';
+                break;
+        }
+    
+        $serviceList = $serviceModel->findAll($conditions, $sort);
+    
         $res->sendJson($serviceList);
     }
     

@@ -337,7 +337,7 @@
 <body>
     <div class="container">
         <!-- Progress Timeline -->
-        <div class="progress-timeline">
+        <div class="progress-timeline" id="progressTimeline">
             <div class="progress-step active">
                 1
                 <span class="step-label">Gig Details</span>
@@ -426,7 +426,6 @@
                     <p>Add up to 4 more images</p>
                     <p><small>Max size: 5MB each, Formats: JPG/PNG</small></p>
                     <div id="additionalImagesPreview"></div>
-                    <!-- <img class="image-preview" id="mainImagePreview" alt="Preview"> -->
                 </div>
             </div>
         </div>
@@ -498,47 +497,25 @@
         </div>
 
         <!-- Notification -->
-        <div class="notification" id="saveNotification">
+        <div class="notification" id="notification">
             Progress saved successfully
         </div>
     </div>
 
     <script>
-        // State Management
+        // Previous JavaScript remains the same
+        // Stage Management
         let currentStage = 1;
         const totalStages = 3;
-        let tags = [];
-        let mainImageFile = null;
-        // let additionalImages = null;
-        let additionalImages = [];
 
-        // DOM Elements
-        const elements = {
-            stageContainers: document.querySelectorAll('.main-content'),
-            progressSteps: document.querySelectorAll('.progress-step'),
-            nextBtn: document.getElementById('nextBtn'),
-            backBtn: document.getElementById('backBtn'),
-            tagsInput: document.querySelector('#tagsInput input'),
-            tagsContainer: document.getElementById('tagsInput'),
-            mainImageUpload: document.getElementById('mainImageUpload'),
-            mainImagePreview: document.getElementById('mainImagePreview'),
-            additionalImagesUpload: document.getElementById('additionalImagesUpload'),
-            additionalImagesPreview: document.getElementById('additionalImagesPreview'),
-            notification: document.getElementById('saveNotification')
-        };
-
-        // Stage Management Functions
         function showStage(stageNumber) {
-            // Hide all stages
-            elements.stageContainers.forEach(container => {
-                container.style.display = 'none';
+            document.querySelectorAll('.main-content').forEach(content => {
+                content.style.display = 'none';
             });
-
-            // Show current stage
             document.getElementById(`stage${stageNumber}`).style.display = 'block';
 
             // Update progress steps
-            elements.progressSteps.forEach((step, index) => {
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
                 step.classList.remove('active', 'completed');
                 if (index + 1 === stageNumber) {
                     step.classList.add('active');
@@ -547,139 +524,246 @@
                 }
             });
 
-            // Update button text
-            elements.nextBtn.textContent = stageNumber === totalStages ? 'Preview & Publish' : 'Next';
-            elements.backBtn.style.display = stageNumber === 1 ? 'none' : 'block';
+            // Update button text for final stage
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.textContent = stageNumber === totalStages ? 'Preview & Publish' : 'Next';
         }
 
-        // Tags Management
-        function handleTagInput(event) {
-            const tagValue = event.target.value.trim();
+        // Navigation
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentStage < totalStages) {
+                currentStage++;
+                showStage(currentStage);
+            } else {
+                // Handle preview and publish
+                showPublishConfirmation();
+            }
+        });
 
-            if (event.key === 'Enter' && tagValue && tags.length < 5) {
-                event.preventDefault();
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (currentStage > 1) {
+                currentStage--;
+                showStage(currentStage);
+            }
+        });
 
-                if (!tags.includes(tagValue)) {
-                    tags.push(tagValue);
+
+        // Tags Input Functionality
+        const tagsInput = document.querySelector('#tagsInput input');
+        const tagsContainer = document.getElementById('tagsInput');
+        let tags = [];
+
+        tagsInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagsInput.value.trim() && tags.length < 5) {
+                e.preventDefault();
+                const tag = tagsInput.value.trim();
+                if (!tags.includes(tag)) {
+                    tags.push(tag);
                     renderTags();
                 }
-                event.target.value = '';
+                tagsInput.value = '';
             }
-        }
+        });
 
         function renderTags() {
-            const existingTags = elements.tagsContainer.querySelectorAll('.tag');
+            const existingTags = tagsContainer.querySelectorAll('.tag');
             existingTags.forEach(tag => tag.remove());
 
             tags.forEach(tag => {
                 const tagElement = document.createElement('span');
                 tagElement.classList.add('tag');
                 tagElement.innerHTML = `
-            ${tag}
-            <span class="tag-remove" data-tag="${tag}">&times;</span>
-        `;
-                elements.tagsContainer.insertBefore(tagElement, elements.tagsInput);
+                    ${tag}
+                    <span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>
+                `;
+                tagsContainer.insertBefore(tagElement, tagsInput);
             });
         }
 
-        function removeTag(event) {
-            if (event.target.classList.contains('tag-remove')) {
-                const tagToRemove = event.target.getAttribute('data-tag');
-                tags = tags.filter(tag => tag !== tagToRemove);
-                renderTags();
-            }
+        function removeTag(tag) {
+            tags = tags.filter(t => t !== tag);
+            renderTags();
         }
 
         // File Upload Handling
-        function handleFileUpload(file, previewElement, maxSize = 5) {
-            return new Promise((resolve, reject) => {
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    reject(new Error('Please upload an image file'));
-                    return;
-                }
+        const mainImageUpload = document.getElementById('mainImageUpload');
+        const mainImagePreview = document.getElementById('mainImagePreview');
+        let mainImageFile = null;
 
-                // Validate file size (in MB)
-                if (file.size > maxSize * 1024 * 1024) {
-                    reject(new Error(`File size should not exceed ${maxSize}MB`));
-                    return;
-                }
+        function handleFileUpload(file, previewElement) {
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size should not exceed 5MB');
+                return;
+            }
 
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewElement.src = e.target.result;
-                    previewElement.style.display = 'block';
-                    resolve(file);
-                };
-                reader.onerror = () => reject(new Error('Error reading file'));
-                reader.readAsDataURL(file);
-            });
+            // Preview image
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewElement.src = e.target.result;
+                previewElement.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            return file;
         }
+
+        // Main image upload
+        mainImageUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            mainImageUpload.classList.add('dragover');
+        });
+
+        mainImageUpload.addEventListener('dragleave', () => {
+            mainImageUpload.classList.remove('dragover');
+        });
+
+        mainImageUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            mainImageUpload.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            mainImageFile = handleFileUpload(file, mainImagePreview);
+        });
+
+        mainImageUpload.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                mainImageFile = handleFileUpload(file, mainImagePreview);
+            };
+            input.click();
+        });
+
+        // Save Progress
+        const saveBtn = document.getElementById('saveBtn');
+        const notification = document.getElementById('saveNotification');
+
+        function saveProgress() {
+            // Collect form data
+            const formData = {
+                stage: currentStage,
+                gigTitle: document.getElementById('gigTitle').value,
+                gigDescription: document.getElementById('gigDescription').value,
+                deliveryFormats: Array.from(document.getElementById('deliveryFormats').selectedOptions).map(opt => opt.value),
+                tags: tags,
+                mainImage: mainImageFile,
+                // Add other form fields as needed
+            };
+
+            // Simulate saving to server
+            console.log('Saving progress:', formData);
+
+            // Show notification
+            notification.style.display = 'block';
+            notification.textContent = 'Progress saved successfully!';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        saveBtn.addEventListener('click', saveProgress);
 
         // Form Validation
         function validateStage(stageNumber) {
-            const stage = document.getElementById(`stage${stageNumber}`);
             let isValid = true;
-            const errors = [];
+            const stage = document.getElementById(`stage${stageNumber}`);
 
-            // Common field validation
+            // Validate required fields
             stage.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
                     field.classList.add('invalid');
-                    errors.push(`${field.getAttribute('placeholder')} is required`);
                 }
             });
 
             // Stage-specific validation
-            switch (stageNumber) {
-                case 1:
-                    if (tags.length === 0) {
+            if (stageNumber === 1) {
+                if (tags.length === 0) {
+                    isValid = false;
+                    alert('Please add at least one tag');
+                }
+            } else if (stageNumber === 2) {
+                if (!mainImageFile) {
+                    isValid = false;
+                    alert('Please upload a main image');
+                }
+            } else if (stageNumber === 3) {
+                // Validate package details
+                const requiredPackageFields = ['Benefits', 'Delivery Days', 'Revisions', 'Price'];
+                for (const field of requiredPackageFields) {
+                    const basicField = document.querySelector(`.basic [placeholder*="${field}"]`);
+                    const premiumField = document.querySelector(`.premium [placeholder*="${field}"]`);
+
+                    if (!basicField.value.trim() || !premiumField.value.trim()) {
                         isValid = false;
-                        errors.push('Please add at least one tag');
+                        alert('Please complete all package details');
+                        break;
                     }
-                    break;
-
-                case 2:
-                    if (!mainImageFile) {
-                        isValid = false;
-                        errors.push('Please upload a main image');
-                    }
-                    break;
-
-                case 3:
-                    const packageFields = ['Benefits', 'Delivery Days', 'Price'];
-                    for (const type of ['basic', 'premium']) {
-                        for (const field of packageFields) {
-                            const element = document.querySelector(`.${type} [placeholder*="${field}"]`);
-                            // if (!element.value.trim()) {
-                            //     isValid = false;
-                            //     errors.push(`${type} package ${field} is required`);
-                            // }
-                        }
-                    }
-                    break;
-            }
-
-            if (!isValid) {
-                showNotification(errors.join('\n'), 'error');
+                }
             }
 
             return isValid;
         }
 
-        // Data Collection and Submission
-        function collectFormData() {
+        // Preview & Publish
+        function showPublishConfirmation() {
+            if (validateStage(currentStage)) {
+                if (confirm('Would you like to preview your gig before publishing?')) {
+                    // Show preview (implement preview logic)
+                    console.log('Showing preview');
+                } else {
+                    publishGig();
+                }
+            }
+        }
+
+        // function publishGig() {
+        //     // Validate all stages
+        //     for (let i = 1; i <= totalStages; i++) {
+        //         if (!validateStage(i)) {
+        //             currentStage = i;
+        //             showStage(i);
+        //             return;
+        //         }
+        //     }
+
+        //     // Simulate publishing
+        //     console.log('Publishing gig...');
+        //     notification.style.display = 'block';
+        //     notification.textContent = 'Your gig has been successfully published!';
+        //     setTimeout(() => {
+        //         notification.style.display = 'none';
+        //         // Redirect to gig page or dashboard
+        //     }, 3000);
+        // }
+
+        // Replace the publishGig function with this updated version:
+        function publishGig() {
+            // Validate all stages
+            for (let i = 1; i <= totalStages; i++) {
+                if (!validateStage(i)) {
+                    currentStage = i;
+                    showStage(i);
+                    return;
+                }
+            }
+
+            // Collect all form data
             const basicPackage = document.querySelector('.package-panel.basic');
             const premiumPackage = document.querySelector('.package-panel.premium');
 
-            return {
-                user_id: 1, // Should be dynamically set
+            const gigData = {
+                user_id: 1, // This should be dynamically set based on logged-in user
                 title: document.getElementById('gigTitle').value,
                 description: document.getElementById('gigDescription').value,
-                cover_image: mainImageFile.name,
-                // cover_image: mainImageFile,
-                // additional_images: additionalImages,
+                cover_image: mainImageFile ? mainImageFile.name : null,
+                imageUploadPaths: Array.from(document.querySelectorAll('#additionalImagesPreview img'))
+                    .map(img => img.src),
                 service_type: document.getElementById('serviceType').value,
                 platforms: Array.from(document.getElementById('platforms').selectedOptions)
                     .map(option => option.value),
@@ -687,160 +771,66 @@
                     .map(option => option.value),
                 tags: tags,
                 packages: [{
-                        type: 'Basic',
+                        package_type: 'Basic',
                         benefits: basicPackage.querySelector('textarea').value,
                         delivery_days: parseInt(basicPackage.querySelector('input[type="number"][placeholder*="days"]').value),
-                        revisions: parseInt(basicPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || 0,
+                        revisions: parseInt(basicPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || null,
                         price: parseFloat(basicPackage.querySelector('input[type="number"][placeholder*="price"]').value)
                     },
                     {
-                        type: 'Premium',
+                        package_type: 'Premium',
                         benefits: premiumPackage.querySelector('textarea').value,
                         delivery_days: parseInt(premiumPackage.querySelector('input[type="number"][placeholder*="days"]').value),
-                        revisions: parseInt(premiumPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || 0,
+                        revisions: parseInt(premiumPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || null,
                         price: parseFloat(premiumPackage.querySelector('input[type="number"][placeholder*="price"]').value)
                     }
                 ]
             };
-        }
 
-        async function publishGig() {
-            try {
-                const formData = collectFormData();
+            console.log('Gig data:', gigData);
 
-                console.log("Form data to be submitted:", formData);
-
-                const response = await fetch('/api/create-gig', {
+            // Send data to backend
+            fetch('/api/create-gig', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formData)
-                });
-
-                const data = await response.json();
-
-                console.log(data);
-
-                if (data.success) {
-                    showNotification('Gig published successfully!', 'success');
-                    // setTimeout(() => {
-                    //     window.location.href = `/designer/add-gig`;
-                    // }, 2000);
-                } else {
-                    throw new Error(data.message);
-                }
-            } catch (error) {
-                showNotification(`Failed to publish gig: ${error.message}`, 'error');
-            }
-        }
-
-        // Utility Functions
-        function showNotification(message, type = 'success') {
-            elements.notification.textContent = message;
-            elements.notification.className = `notification ${type}`;
-            elements.notification.style.display = 'block';
-
-            setTimeout(() => {
-                elements.notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Event Listeners
-        function setupEventListeners() {
-            // Navigation
-            elements.nextBtn.addEventListener('click', () => {
-                if (validateStage(currentStage)) {
-                    if (currentStage < totalStages) {
-                        currentStage++;
-                        showStage(currentStage);
+                    body: JSON.stringify(gigData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        notification.style.display = 'block';
+                        notification.textContent = data.message;
+                        setTimeout(() => {
+                            notification.style.display = 'none';
+                            window.location.href = `/gigs/${data.service_id}`;
+                        }, 3000);
                     } else {
-                        publishGig();
+                        throw new Error(data.message);
                     }
-                }
-            });
-
-            elements.backBtn.addEventListener('click', () => {
-                if (currentStage > 1) {
-                    currentStage--;
-                    showStage(currentStage);
-                }
-            });
-
-            // Tags
-            elements.tagsInput.addEventListener('keydown', handleTagInput);
-            elements.tagsContainer.addEventListener('click', removeTag);
-
-            // File Upload
-            elements.mainImageUpload.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add('dragover');
-            });
-
-            elements.mainImageUpload.addEventListener('dragleave', (e) => {
-                e.currentTarget.classList.remove('dragover');
-            });
-
-            elements.mainImageUpload.addEventListener('drop', async (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-
-                try {
-                    mainImageFile = await handleFileUpload(e.dataTransfer.files[0], elements.mainImagePreview);
-                } catch (error) {
-                    showNotification(error.message, 'error');
-                }
-            });
-            // // File Upload additional
-            // elements.additionalImagesUpload.addEventListener('dragover', (e) => {
-            //     e.preventDefault();
-            //     e.currentTarget.classList.add('dragover');
-            // });
-
-            // elements.additionalImagesUpload.addEventListener('dragleave', (e) => {
-            //     e.currentTarget.classList.remove('dragover');
-            // });
-
-            // elements.additionalImagesUpload.addEventListener('drop', async (e) => {
-            //     e.preventDefault();
-            //     e.currentTarget.classList.remove('dragover');
-
-            //     try {
-            //         additionalImages = await handleFileUpload(e.dataTransfer.files[0], elements.additionalImagePreview);
-            //     } catch (error) {
-            //         showNotification(error.message, 'error');
-            //     }
-            // });
-
-            // Form auto-save
-            let autoSaveTimeout;
-            document.querySelectorAll('input, textarea, select').forEach(element => {
-                element.addEventListener('input', () => {
-                    clearTimeout(autoSaveTimeout);
-                    autoSaveTimeout = setTimeout(() => {
-                        const formData = collectFormData();
-                        localStorage.setItem('gigFormData', JSON.stringify(formData));
-                        showNotification('Progress auto-saved');
-                    }, 2000);
+                })
+                .catch(error => {
+                    notification.style.display = 'block';
+                    notification.textContent = 'Failed to create gig: ' + error.message;
+                    notification.style.backgroundColor = '#ff4444';
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 3000);
                 });
+        }
+
+        // Initialize
+        showStage(1);
+
+        // Auto-save
+        let autoSaveTimeout;
+        document.querySelectorAll('input, textarea, select').forEach(element => {
+            element.addEventListener('input', () => {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(saveProgress, 2000);
             });
-        }
-
-        // Initialization
-        function init() {
-            setupEventListeners();
-            showStage(1);
-
-            // Load saved data if exists
-            const savedData = localStorage.getItem('gigFormData');
-            if (savedData) {
-                // Implement restoration of saved data
-                showNotification('Restored saved progress');
-            }
-        }
-
-        // Start the application
-        document.addEventListener('DOMContentLoaded', init);
+        });
     </script>
 </body>
 
