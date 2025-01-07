@@ -4,10 +4,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 
-use app\core\BaseModel;
-use app\models\Services\ServicePackage;
-use app\core\Helpers\ResponseHelper;
-
 class DesignerController extends BaseController
 {
     public function __construct()
@@ -77,74 +73,88 @@ class DesignerController extends BaseController
     }
 
 
+
+
     // API endpoints
 
     public function createGig($req, $res)
     {
         // Extract data from the request
         $inputData = $req->getParsedBody();
+        $inputFileData = $req->getFiles();
 
-        // Simulated input data (mimicking frontend input)
-        // $inputData = [
-        //     'user_id' => 1,
-        //     'title' => 'Professional Logo Design',
-        //     'description' => 'I will create a professional logo tailored to your brand.',
-        //     'cover_image' => 'logo_cover.jpg',
-        //     'imageUploadPaths' => [
-        //         'https://example.com/image1.jpg',
-        //         'https://example.com/image2.jpg',
-        //         'https://example.com/image3.jpg',
-        //         'https://example.com/image4.jpg'
-        //     ],
-        //     'service_type' => 'graphic_design',
-        //     'platforms' => ['Facebook', 'Instagram'],
-        //     'delivery_formats' => ['PNG', 'JPEG'],
-        //     'tags' => ['logo', 'branding', 'design'],
-        //     'packages' => [
-        //         [
-        //             'package_type' => 'Basic',
-        //             'benefits' => 'Simple logo design with one revision',
-        //             'delivery_days' => 2,
-        //             'revisions' => 1,
-        //             'price' => 50
-        //         ],
-        //         [
-        //             'package_type' => 'Premium',
-        //             'benefits' => 'Advanced logo design with unlimited revisions',
-        //             'delivery_days' => 7,
-        //             'revisions' => null,
-        //             'price' => 150
-        //         ]
-        //     ]
-        // ];
-
-
-
-        // Validate incoming data
-
-
-        if (!isset($inputData['user_id'], $inputData['title'], $inputData['description'], $inputData['cover_image'], $inputData['service_type'], $inputData['packages']) || empty($inputData['packages'])) {
-            $res->sendError('Invalid data provided.', 400);
+        // Validate required fields
+        if (!isset($inputData['title'], $inputData['description'], $inputData['serviceType'], $inputData['packages'])) {
+            $res->sendError('Missing required fields', 400);
             return;
         }
 
-        $serviceData = [
-            'user_id'          => $inputData['user_id'],
-            'title'            => $inputData['title'],
-            'description'      => $inputData['description'],
-            'cover_image'      => $inputData['cover_image'],
-            // 'media'            => json_encode( $inputData['imageUploadPaths']) ?? null,
-            'media'            => null,
-            'service_type'     => $inputData['service_type'],
-            'platforms'        => json_encode($inputData['platforms']) ?? null,
-            'delivery_formats' => json_encode($inputData['delivery_formats']) ?? null,
-            'tags'             => json_encode($inputData['tags']) ?? null,
-        ];
+        // Define upload directory
+        $uploadDir = __DIR__ . '/../public/cdn_uploads/services/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-        $serviceModel = new BaseModel('service');
-        $servicePackageModel = new ServicePackage();
+        // Handle file uploads and get paths
+        $uploadedImages = [];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        
+        // Function to handle image upload
+        $handleImageUpload = function($file) use ($uploadDir, $allowedTypes) {
+            if (!in_array($file['type'], $allowedTypes)) {
+                throw new \Exception('Invalid file type. Only JPG, PNG and WEBP are allowed.');
+            }
+
+            // Generate unique filename
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('service_') . '_' . time() . '.' . $extension;
+            $filepath = $uploadDir . $filename;
+
+            // Move uploaded file
+            if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+                throw new \Exception('Failed to upload file.');
+            }
+
+            // Return relative path for database storage
+            return 'cdn_uploads/services/' . $filename;
+        };
 
         try {
+            // Handle main image
+            if (isset($inputFileData['mainImage']) && $inputFileData['mainImage']['error'] === 0) {
+                $coverImage = $handleImageUpload($inputFileData['mainImage']);
+                $uploadedImages[] = $coverImage;
+            } else {
+                $res->sendError('Main image is required', 400);
+                return;
+            }
+
+            // Handle additional images
+            for ($i = 0; $i < 4; $i++) {
+                $key = "additionalImage{$i}";
+                if (isset($inputFileData[$key]) && $inputFileData[$key]['error'] === 0) {
+                    $imagePath = $handleImageUpload($inputFileData[$key]);
+                    $uploadedImages[] = $imagePath;
+                }
+            }
+
+            // Prepare service data
+            $serviceData = [
+                'user_id'          => $_SESSION['user_id'] ?? 1,
+                'title'            => $inputData['title'],
+                'description'      => $inputData['description'],
+                'cover_image'      => $coverImage,
+                'media'            => json_encode($uploadedImages),
+                'service_type'     => 'gig',
+                'platforms'        => json_encode($inputData['platforms']),
+                'delivery_formats' => json_encode($inputData['delivery_formats']),
+                'tags'            => $inputData['tags'],
+            ];
+
+
+            $serviceModel = $this->model('Services\\Service');
+            $servicePackageModel = $this->model('Services\\ServicePackage');
+
             // Begin transaction
             $serviceModel->beginTransaction();
 
@@ -152,22 +162,22 @@ class DesignerController extends BaseController
             $serviceModel->create($serviceData);
             $serviceId = $serviceModel->lastInsertId();
 
-            // Insert service packages
-            foreach ($inputData['packages'] as $package) {
-                if (!isset($package['type'], $package['benefits'], $package['delivery_days'], $package['price'])) {
-                    throw new \Exception('Invalid package data provided.');
+            // Insert packages
+            foreach (['basic', 'premium'] as $packageType) {
+                if (isset($inputData['packages'][$packageType])) {
+                    $package = $inputData['packages'][$packageType];
+                    
+                    $packageData = [
+                        'service_id'    => $serviceId,
+                        'package_type'  => $package['type'],
+                        'benefits'      => $package['benefits'],
+                        'delivery_days' => $package['delivery_days'],
+                        'revisions'     => $package['revisions'],
+                        'price'         => $package['price'],
+                    ];
+
+                    $servicePackageModel->create($packageData);
                 }
-
-                $packageData = [
-                    'service_id'    => $serviceId,
-                    'package_type'  => $package['type'],
-                    'benefits'      => $package['benefits'],
-                    'delivery_days' => $package['delivery_days'],
-                    'revisions'     => $package['revisions'] ?? null,
-                    'price'         => $package['price'],
-                ];
-
-                $servicePackageModel->create($packageData);
             }
 
             // Commit transaction
@@ -178,9 +188,20 @@ class DesignerController extends BaseController
                 'message' => 'Gig created successfully.',
                 'service_id' => $serviceId,
             ]);
+
         } catch (\Exception $e) {
             // Rollback transaction in case of failure
-            $serviceModel->rollback();
+            if (isset($serviceModel)) {
+                $serviceModel->rollback();
+            }
+
+            // Clean up any uploaded files in case of database failure
+            foreach ($uploadedImages as $imagePath) {
+                $fullPath = __DIR__ . '/../' . $imagePath;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
 
             $res->sendError('Failed to create gig. ' . $e->getMessage(), 500);
         }

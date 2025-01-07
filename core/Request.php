@@ -57,7 +57,7 @@ class Request {
             return $_POST;
         }
 
-        return null;
+        return $_POST;
     }
 
     /**

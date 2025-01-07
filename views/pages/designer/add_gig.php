@@ -11,6 +11,7 @@
             --primary-gradient: linear-gradient(135deg, #4169E1, #8A2BE2);
             --secondary: #64748b;
             --success: #22c55e;
+            --error: #ef4444;
             --background: #f8f9fa;
             --text: #1e293b;
             --border: #e2e8f0;
@@ -197,11 +198,6 @@
             background: #f1f5f9;
         }
 
-        .upload-area.dragover {
-            border-color: #4169E1;
-            background: #f1f5f9;
-        }
-
         /* Package Panels */
         .packages {
             display: grid;
@@ -331,6 +327,135 @@
                 padding: 1.5rem;
             }
         }
+
+        /* Add this to your existing styles section */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-item span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked+span {
+            color: var(--primary);
+        }
+
+        /* Add these styles to your CSS section */
+        .image-placeholder {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .additional-images-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .additional-image-placeholder {
+            width: 100%;
+            aspect-ratio: 3/2;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .additional-image-placeholder .remove-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--error);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .additional-image-placeholder .remove-image-btn:hover {
+            background: #dc2626;
+        }
+
+        .additional-image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: var(--secondary);
+            font-size: 0.875rem;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .additional-images-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 
@@ -353,494 +478,773 @@
         </div>
 
         <!-- Stage 1: Gig Details -->
-        <div class="main-content" id="stage1">
-            <h2>Gig Details</h2>
-            <div class="form-group">
-                <label for="gigTitle">Gig Title</label>
-                <input type="text" id="gigTitle" placeholder="e.g., Professional Logo Design" required>
-                <small>Make it clear and catchy (max 80 characters)</small>
-            </div>
-
-            <div class="form-group">
-                <label for="gigDescription">Gig Description</label>
-                <textarea id="gigDescription" rows="6" placeholder="Describe your services in detail..."
-                    required></textarea>
-                <small>Include your process, what clients will receive, and your unique value proposition</small>
-            </div>
-
-            <div class="form-group">
-                <label for="deliveryFormats">Delivery Formats</label>
-                <select id="deliveryFormats" multiple required>
-                    <option value="jpg">JPG</option>
-                    <option value="png">PNG</option>
-                    <option value="psd">PSD</option>
-                    <option value="ai">AI</option>
-                    <option value="svg">SVG</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="serviceType">Service Type</label>
-                <select id="serviceType" required>
-                    <option value="graphic_design">Graphic Design</option>
-                    <option value="web_development">Web Development</option>
-                    <option value="digital_marketing">Digital Marketing</option>
-                    <!-- Add other service types as needed -->
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Platforms</label>
-                <select id="platforms" multiple required>
-                    <option value="Facebook">Facebook</option>
-                    <option value="Instagram">Instagram</option>
-                    <option value="Twitter">Twitter</option>
-                    <option value="LinkedIn">LinkedIn</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Tags</label>
-                <div class="tags-input" id="tagsInput">
-                    <input type="text" placeholder="Type and press Enter to add tags">
+        <form id="gigForm">
+            <div class="main-content" id="stage1">
+                <h2>Gig Details</h2>
+                <div class="form-group">
+                    <label for="gigTitle">Gig Title</label>
+                    <input type="text" id="gigTitle" name="title" placeholder="e.g., Professional Logo Design" required maxlength="80">
+                    <small>Make it clear and catchy (max 80 characters)</small>
                 </div>
-                <small>Add up to 5 relevant tags to help buyers find your gig</small>
-            </div>
-        </div>
 
-        <!-- Stage 2: Media -->
-        <div class="main-content" id="stage2" style="display: none;">
-            <h2>Media Upload</h2>
-            <div class="form-group">
-                <label>Main Image</label>
-                <div class="upload-area" id="mainImageUpload">
-                    <p>Drag and drop your main image here or click to browse</p>
-                    <p><small>Max size: 5MB, Formats: JPG/PNG</small></p>
-                    <img class="image-preview" id="mainImagePreview" alt="Preview">
+                <div class="form-group">
+                    <label for="gigDescription">Gig Description</label>
+                    <textarea id="gigDescription" name="description" rows="6" placeholder="Describe your services in detail..." required></textarea>
+                    <small>Include your process, what clients will receive, and your unique value proposition</small>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Additional Images</label>
-                <div class="upload-area" id="additionalImagesUpload">
-                    <p>Add up to 4 more images</p>
-                    <p><small>Max size: 5MB each, Formats: JPG/PNG</small></p>
-                    <div id="additionalImagesPreview"></div>
-                    <!-- <img class="image-preview" id="mainImagePreview" alt="Preview"> -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Stage 3: Packages -->
-        <div class="main-content" id="stage3" style="display: none;">
-            <h2>Package Details</h2>
-            <div class="packages">
-                <div class="package-panel basic">
-                    <h3>Basic Package</h3>
-                    <div class="form-group">
-                        <label>Package Type</label>
-                        <input type="text" value="Basic" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Benefits</label>
-                        <textarea rows="4" placeholder="List the features included in this package..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Delivery Days</label>
-                        <input type="number" min="1" max="30" placeholder="Number of days" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Revisions</label>
-                        <input type="number" min="0" max="10" placeholder="Number of revisions">
-                    </div>
-                    <div class="form-group">
-                        <label>Price (USD)</label>
-                        <input type="number" min="5" step="5" placeholder="Enter price" required>
+                <div class="form-group">
+                    <label>Delivery Formats</label>
+                    <div class="checkbox-group" id="deliveryFormats">
+                        <!-- Delivery format checkboxes will be inserted here by JavaScript -->
                     </div>
                 </div>
 
-                <div class="package-panel premium">
-                    <h3>Premium Package</h3>
-                    <div class="form-group">
-                        <label>Package Type</label>
-                        <input type="text" value="Premium" readonly>
+                <div class="form-group">
+                    <label for="serviceType">Service Type</label>
+                    <select id="serviceType" name="serviceType" required>
+                        <!-- Service types will be inserted here by JavaScript -->
+                    </select>
+                </div>
+
+                <div id="platforms" class="checkbox-group">
+                    <!-- Platforms will be populated here -->
+                </div>
+
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div class="tags-input" id="tagsInput">
+                        <input type="text" placeholder="Type and press Enter to add tags">
                     </div>
-                    <div class="form-group">
-                        <label>Benefits</label>
-                        <textarea rows="4" placeholder="List the features included in this package..." required></textarea>
+                    <small>Add up to 5 relevant tags to help buyers find your gig</small>
+                </div>
+            </div>
+
+            <!-- Stage 2: Media -->
+            <div class="main-content" id="stage2" style="display: none;">
+                <h2>Media Upload</h2>
+                <div class="form-group">
+                    <label>Main Image</label>
+                    <div class="upload-area" id="mainImageUpload">
+                        <p>Drag and drop your main image here or click to browse</p>
+                        <p><small>Max size: 5MB, Formats: JPG/PNG</small></p>
+                        <input type="file" id="mainImageInput" accept="image/*" style="display: none">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('mainImageInput').click()">
+                            Choose File
+                        </button>
+                        <div class="image-placeholder">
+                            <div class="placeholder-text" id="mainImagePlaceholder">
+                                300 x 200
+                            </div>
+                            <img id="mainImagePreview" alt="Preview" style="display: none;">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Delivery Days</label>
-                        <input type="number" min="1" max="30" placeholder="Number of days" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Revisions</label>
-                        <input type="number" min="0" max="10" placeholder="Number of revisions">
-                    </div>
-                    <div class="form-group">
-                        <label>Price (USD)</label>
-                        <input type="number" min="5" step="5" placeholder="Enter price" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Images</label>
+                    <div class="upload-area" id="additionalImagesUpload">
+                        <p>Add up to 4 more images</p>
+                        <p><small>Max size: 5MB each, Formats: JPG/PNG</small></p>
+                        <input type="file" id="additionalImagesInput" accept="image/*" multiple style="display: none">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('additionalImagesInput').click()">
+                            Choose Files
+                        </button>
+                        <div class="additional-images-grid">
+                            <div class="additional-image-placeholder" data-index="0">
+                                <div class="placeholder-text">300 x 200</div>
+                            </div>
+                            <div class="additional-image-placeholder" data-index="1">
+                                <div class="placeholder-text">300 x 200</div>
+                            </div>
+                            <div class="additional-image-placeholder" data-index="2">
+                                <div class="placeholder-text">300 x 200</div>
+                            </div>
+                            <div class="additional-image-placeholder" data-index="3">
+                                <div class="placeholder-text">300 x 200</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Additional Notes</label>
-                <textarea rows="3" placeholder="Any additional information about your packages..."></textarea>
-            </div>
-        </div>
+            <!-- Stage 3: Packages -->
+            <div class="main-content" id="stage3" style="display: none;">
+                <h2>Package Details</h2>
+                <div class="packages">
+                    <div class="package-panel basic">
+                        <h3>Basic Package</h3>
+                        <div class="form-group">
+                            <label>Package Type</label>
+                            <input type="text" value="Basic" readonly name="basic_package_type">
+                        </div>
+                        <div class="form-group">
+                            <label>Benefits</label>
+                            <textarea rows="4" placeholder="List the features included in this package..." 
+                                required name="basic_package_benefits"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Days</label>
+                            <input type="number" min="1" max="30" placeholder="Number of days" 
+                                required name="basic_package_delivery_days">
+                        </div>
+                        <div class="form-group">
+                            <label>Revisions</label>
+                            <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                name="basic_package_revisions">
+                        </div>
+                        <div class="form-group">
+                            <label>Price (USD)</label>
+                            <input type="number" min="5" step="5" placeholder="Enter price" 
+                                required name="basic_package_price">
+                        </div>
+                    </div>
 
-        <!-- Navigation Buttons -->
-        <div class="button-group">
-            <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
-            <!-- <button type="button" class="btn btn-secondary" id="saveBtn">Save Progress</button> -->
-            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
-        </div>
+                    <div class="package-panel premium">
+                        <h3>Premium Package</h3>
+                        <div class="form-group">
+                            <label>Package Type</label>
+                            <input type="text" value="Premium" readonly name="premium_package_type">
+                        </div>
+                        <div class="form-group">
+                            <label>Benefits</label>
+                            <textarea rows="4" placeholder="List the features included in this package..." 
+                                required name="premium_package_benefits"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Days</label>
+                            <input type="number" min="1" max="30" placeholder="Number of days" 
+                                required name="premium_package_delivery_days">
+                        </div>
+                        <div class="form-group">
+                            <label>Revisions</label>
+                            <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                name="premium_package_revisions">
+                        </div>
+                        <div class="form-group">
+                            <label>Price (USD)</label>
+                            <input type="number" min="5" step="5" placeholder="Enter price" 
+                                required name="premium_package_price">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
+                <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+            </div>
+        </form>
 
         <!-- Notification -->
-        <div class="notification" id="saveNotification">
-            Progress saved successfully
-        </div>
+        <div class="notification" id="notification"></div>
     </div>
 
     <script>
-        // State Management
-        let currentStage = 1;
-        const totalStages = 3;
-        let tags = [];
-        let mainImageFile = null;
-        // let additionalImages = null;
-        let additionalImages = [];
-
-        // DOM Elements
-        const elements = {
-            stageContainers: document.querySelectorAll('.main-content'),
-            progressSteps: document.querySelectorAll('.progress-step'),
-            nextBtn: document.getElementById('nextBtn'),
-            backBtn: document.getElementById('backBtn'),
-            tagsInput: document.querySelector('#tagsInput input'),
-            tagsContainer: document.getElementById('tagsInput'),
-            mainImageUpload: document.getElementById('mainImageUpload'),
-            mainImagePreview: document.getElementById('mainImagePreview'),
-            additionalImagesUpload: document.getElementById('additionalImagesUpload'),
-            additionalImagesPreview: document.getElementById('additionalImagesPreview'),
-            notification: document.getElementById('saveNotification')
-        };
-
-        // Stage Management Functions
-        function showStage(stageNumber) {
-            // Hide all stages
-            elements.stageContainers.forEach(container => {
-                container.style.display = 'none';
-            });
-
-            // Show current stage
-            document.getElementById(`stage${stageNumber}`).style.display = 'block';
-
-            // Update progress steps
-            elements.progressSteps.forEach((step, index) => {
-                step.classList.remove('active', 'completed');
-                if (index + 1 === stageNumber) {
-                    step.classList.add('active');
-                } else if (index + 1 < stageNumber) {
-                    step.classList.add('completed');
-                }
-            });
-
-            // Update button text
-            elements.nextBtn.textContent = stageNumber === totalStages ? 'Preview & Publish' : 'Next';
-            elements.backBtn.style.display = stageNumber === 1 ? 'none' : 'block';
-        }
-
-        // Tags Management
-        function handleTagInput(event) {
-            const tagValue = event.target.value.trim();
-
-            if (event.key === 'Enter' && tagValue && tags.length < 5) {
-                event.preventDefault();
-
-                if (!tags.includes(tagValue)) {
-                    tags.push(tagValue);
-                    renderTags();
-                }
-                event.target.value = '';
+        const CONFIG = {
+            DELIVERY_FORMATS: [
+                { value: 'jpg', label: 'JPG' },
+                { value: 'png', label: 'PNG' },
+                { value: 'psd', label: 'PSD' },
+                { value: 'ai', label: 'AI' },
+                { value: 'svg', label: 'SVG' }
+            ],
+            
+            SERVICE_TYPES: [
+                { value: 'graphic_design', label: 'Graphic Design' },
+                { value: 'web_development', label: 'Web Development' },
+                { value: 'digital_marketing', label: 'Digital Marketing' }
+            ],
+            
+            PLATFORMS: [
+                { value: 'facebook', label: 'Facebook' },
+                { value: 'instagram', label: 'Instagram' },
+                { value: 'twitter', label: 'Twitter' },
+                { value: 'linkedin', label: 'LinkedIn' }
+            ],
+            
+            API_ENDPOINTS: {
+                CREATE_GIG: '/api/create-gig'
             }
-        }
+        }; 
 
-        function renderTags() {
-            const existingTags = elements.tagsContainer.querySelectorAll('.tag');
-            existingTags.forEach(tag => tag.remove());
-
-            tags.forEach(tag => {
-                const tagElement = document.createElement('span');
-                tagElement.classList.add('tag');
-                tagElement.innerHTML = `
-            ${tag}
-            <span class="tag-remove" data-tag="${tag}">&times;</span>
-        `;
-                elements.tagsContainer.insertBefore(tagElement, elements.tagsInput);
-            });
-        }
-
-        function removeTag(event) {
-            if (event.target.classList.contains('tag-remove')) {
-                const tagToRemove = event.target.getAttribute('data-tag');
-                tags = tags.filter(tag => tag !== tagToRemove);
-                renderTags();
+        class ImageUploader {
+            constructor() {
+                this.mainImageFile = null;
+                this.additionalImages = [];
+                this.maxFileSize = 5; // MB
+                this.allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
             }
-        }
 
-        // File Upload Handling
-        function handleFileUpload(file, previewElement, maxSize = 5) {
-            return new Promise((resolve, reject) => {
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    reject(new Error('Please upload an image file'));
+            init() {
+                this.setupListeners();
+            }
+
+            setupListeners() {
+                const mainImageInput = document.getElementById('mainImageInput');
+                const additionalImagesInput = document.getElementById('additionalImagesInput');
+                
+                if (mainImageInput) {
+                    mainImageInput.addEventListener('change', (e) => this.handleMainImageUpload(e));
+                }
+                
+                if (additionalImagesInput) {
+                    additionalImagesInput.addEventListener('change', (e) => this.handleAdditionalImagesUpload(e));
+                }
+            }
+
+            handleMainImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!this.validateImage(file)) {
                     return;
                 }
 
-                // Validate file size (in MB)
-                if (file.size > maxSize * 1024 * 1024) {
-                    reject(new Error(`File size should not exceed ${maxSize}MB`));
-                    return;
-                }
+                console.log('mainImageFile', file);
 
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewElement.src = e.target.result;
-                    previewElement.style.display = 'block';
-                    resolve(file);
-                };
-                reader.onerror = () => reject(new Error('Error reading file'));
-                reader.readAsDataURL(file);
-            });
-        }
+                this.mainImageFile = file;
+                this.displayMainImagePreview(file);
+            }
 
-        // Form Validation
-        function validateStage(stageNumber) {
-            const stage = document.getElementById(`stage${stageNumber}`);
-            let isValid = true;
-            const errors = [];
-
-            // Common field validation
-            stage.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
-                if (!field.value.trim()) {
-                    isValid = false;
-                    field.classList.add('invalid');
-                    errors.push(`${field.getAttribute('placeholder')} is required`);
-                }
-            });
-
-            // Stage-specific validation
-            switch (stageNumber) {
-                case 1:
-                    if (tags.length === 0) {
-                        isValid = false;
-                        errors.push('Please add at least one tag');
-                    }
-                    break;
-
-                case 2:
-                    if (!mainImageFile) {
-                        isValid = false;
-                        errors.push('Please upload a main image');
-                    }
-                    break;
-
-                case 3:
-                    const packageFields = ['Benefits', 'Delivery Days', 'Price'];
-                    for (const type of ['basic', 'premium']) {
-                        for (const field of packageFields) {
-                            const element = document.querySelector(`.${type} [placeholder*="${field}"]`);
-                            // if (!element.value.trim()) {
-                            //     isValid = false;
-                            //     errors.push(`${type} package ${field} is required`);
-                            // }
+            handleAdditionalImagesUpload(event) {
+                const files = Array.from(event.target.files);
+                
+                files.forEach(file => {
+                    if (this.validateImage(file)) {
+                        if (this.additionalImages.length < 4) {
+                            this.additionalImages.push(file);
+                            this.displayAdditionalImagePreview(file);
+                        } else {
+                            this.showError('Maximum 4 additional images allowed');
                         }
                     }
-                    break;
+                });
             }
 
-            if (!isValid) {
-                showNotification(errors.join('\n'), 'error');
+            validateImage(file) {
+                // Check file type
+                if (!this.allowedTypes.includes(file.type)) {
+                    this.showError('Invalid file type. Please upload JPG, PNG or WebP images only.');
+                    return false;
+                }
+
+                // Check file size
+                if (file.size > this.maxFileSize * 1024 * 1024) {
+                    this.showError(`File size must be less than ${this.maxFileSize}MB`);
+                    return false;
+                }
+
+                return true;
             }
 
-            return isValid;
-        }
+            displayMainImagePreview(file) {
+                const preview = document.getElementById('mainImagePreview');
+                const placeholder = document.getElementById('mainImagePlaceholder');
+                
+                if (preview && placeholder) {
+                    // Clear any existing preview
+                    preview.src = '';
+                    
+                    // Create object URL for the image
+                    const objectUrl = URL.createObjectURL(file);
+                    
+                    // Set up the preview image
+                    preview.src = objectUrl;
+                    preview.style.display = 'block';
+                    
+                    // Hide the placeholder text
+                    placeholder.style.display = 'none';
+                    
+                    // Clean up object URL after image loads
+                    preview.onload = () => {
+                        URL.revokeObjectURL(objectUrl);
+                    };
+                }
+            }
 
-        // Data Collection and Submission
-        function collectFormData() {
-            const basicPackage = document.querySelector('.package-panel.basic');
-            const premiumPackage = document.querySelector('.package-panel.premium');
+            displayAdditionalImagePreview(file) {
+                const grid = document.querySelector('.additional-images-grid');
+                if (!grid) return;
 
-            return {
-                user_id: 1, // Should be dynamically set
-                title: document.getElementById('gigTitle').value,
-                description: document.getElementById('gigDescription').value,
-                cover_image: mainImageFile.name,
-                // cover_image: mainImageFile,
-                // additional_images: additionalImages,
-                service_type: document.getElementById('serviceType').value,
-                platforms: Array.from(document.getElementById('platforms').selectedOptions)
-                    .map(option => option.value),
-                delivery_formats: Array.from(document.getElementById('deliveryFormats').selectedOptions)
-                    .map(option => option.value),
-                tags: tags,
-                packages: [{
-                        type: 'Basic',
-                        benefits: basicPackage.querySelector('textarea').value,
-                        delivery_days: parseInt(basicPackage.querySelector('input[type="number"][placeholder*="days"]').value),
-                        revisions: parseInt(basicPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || 0,
-                        price: parseFloat(basicPackage.querySelector('input[type="number"][placeholder*="price"]').value)
-                    },
-                    {
-                        type: 'Premium',
-                        benefits: premiumPackage.querySelector('textarea').value,
-                        delivery_days: parseInt(premiumPackage.querySelector('input[type="number"][placeholder*="days"]').value),
-                        revisions: parseInt(premiumPackage.querySelector('input[type="number"][placeholder*="revisions"]').value) || 0,
-                        price: parseFloat(premiumPackage.querySelector('input[type="number"][placeholder*="price"]').value)
-                    }
-                ]
-            };
-        }
-
-        async function publishGig() {
-            try {
-                const formData = collectFormData();
-
-                console.log("Form data to be submitted:", formData);
-
-                const response = await fetch('/api/create-gig', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
+                // Find the first empty placeholder
+                const emptyPlaceholder = Array.from(grid.children).find(placeholder => {
+                    return !placeholder.querySelector('img');
                 });
 
-                const data = await response.json();
+                if (emptyPlaceholder) {
+                    // Clear the placeholder text
+                    const placeholderText = emptyPlaceholder.querySelector('.placeholder-text');
+                    if (placeholderText) {
+                        placeholderText.style.display = 'none';
+                    }
 
-                console.log(data);
+                    // Create and add the image
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    
+                    // Create remove button
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = '×';
+                    removeBtn.className = 'remove-image-btn';
+                    removeBtn.onclick = () => {
+                        this.removeAdditionalImage(file, img, emptyPlaceholder);
+                    };
 
-                if (data.success) {
-                    showNotification('Gig published successfully!', 'success');
-                    // setTimeout(() => {
-                    //     window.location.href = `/designer/add-gig`;
-                    // }, 2000);
-                } else {
-                    throw new Error(data.message);
+                    emptyPlaceholder.appendChild(img);
+                    emptyPlaceholder.appendChild(removeBtn);
+
+                    // Clean up object URL after image loads
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    };
                 }
-            } catch (error) {
-                showNotification(`Failed to publish gig: ${error.message}`, 'error');
             }
-        }
 
-        // Utility Functions
-        function showNotification(message, type = 'success') {
-            elements.notification.textContent = message;
-            elements.notification.className = `notification ${type}`;
-            elements.notification.style.display = 'block';
+            removeAdditionalImage(file, img, placeholder) {
+                const index = this.additionalImages.indexOf(file);
+                if (index > -1) {
+                    this.additionalImages.splice(index, 1);
+                    
+                    // Remove the image and button
+                    img.remove();
+                    const removeBtn = placeholder.querySelector('.remove-image-btn');
+                    if (removeBtn) {
+                        removeBtn.remove();
+                    }
 
-            setTimeout(() => {
-                elements.notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Event Listeners
-        function setupEventListeners() {
-            // Navigation
-            elements.nextBtn.addEventListener('click', () => {
-                if (validateStage(currentStage)) {
-                    if (currentStage < totalStages) {
-                        currentStage++;
-                        showStage(currentStage);
-                    } else {
-                        publishGig();
+                    // Show placeholder text again
+                    const placeholderText = placeholder.querySelector('.placeholder-text');
+                    if (placeholderText) {
+                        placeholderText.style.display = 'block';
                     }
                 }
-            });
+            }
 
-            elements.backBtn.addEventListener('click', () => {
-                if (currentStage > 1) {
-                    currentStage--;
-                    showStage(currentStage);
+            showError(message) {
+                // If NotificationManager is available, use it
+                if (window.NotificationManager) {
+                    window.NotificationManager.showError(message);
+                } else {
+                    alert(message);
                 }
-            });
+            }
 
-            // Tags
-            elements.tagsInput.addEventListener('keydown', handleTagInput);
-            elements.tagsContainer.addEventListener('click', removeTag);
+            // Method to get all selected images
+            getSelectedImages() {
+                return {
+                    mainImage: this.mainImageFile,
+                    additionalImages: [...this.additionalImages]
+                };
+            }
 
-            // File Upload
-            elements.mainImageUpload.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add('dragover');
-            });
+            hasMainImage() {
+                return this.mainImageFile !== null;
+            }
+        } 
 
-            elements.mainImageUpload.addEventListener('dragleave', (e) => {
-                e.currentTarget.classList.remove('dragover');
-            });
+        class NotificationManager {
+            constructor() {
+                this.element = document.getElementById('notification');
+                this.timeout = null;
+            }
 
-            elements.mainImageUpload.addEventListener('drop', async (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
+            show(message, type = 'success') {
+                clearTimeout(this.timeout);
+                
+                this.element.textContent = message;
+                this.element.className = `notification ${type}`;
+                this.element.style.display = 'block';
+                
+                this.timeout = setTimeout(() => {
+                    this.hide();
+                }, 3000);
+            }
+
+            hide() {
+                this.element.style.display = 'none';
+            }
+        }
+        
+        class FormValidator {
+            validateStage(stageNumber, formData) {
+                const errors = [];
+                
+                switch(stageNumber) {
+                    case 1:
+                        this.validateStage1(formData, errors);
+                        break;
+                    case 2:
+                        this.validateStage2(formData, errors);
+                        break;
+                    case 3:
+                        this.validateStage3(formData, errors);
+                        break;
+                }
+                
+                return errors;
+            }
+
+            validateStage1(stageElement) {
+                const title = stageElement.querySelector('#gigTitle').value;
+                const description = stageElement.querySelector('#gigDescription').value;
+                const serviceType = stageElement.querySelector('#serviceType').value;
+                const deliveryFormats = stageElement.querySelectorAll('input[name="delivery_formats"]:checked');
+                const platforms = stageElement.querySelectorAll('input[name="platforms"]:checked');
+
+                if (!title || title.length > 80) {
+                    this.showError('Please enter a valid title (max 80 characters)');
+                    return false;
+                }
+
+                if (!description || description.length < 50) {
+                    this.showError('Please enter a detailed description (min 50 characters)');
+                    return false;
+                }
+
+                if (!serviceType) {
+                    this.showError('Please select a service type');
+                    return false;
+                }
+
+                if (deliveryFormats.length === 0) {
+                    this.showError('Please select at least one delivery format');
+                    return false;
+                }
+
+                if (platforms.length === 0) {
+                    this.showError('Please select at least one platform');
+                    return false;
+                }
+
+                return true;
+            }
+
+            validateStage2(imageUploader) {
+                if (!imageUploader.hasMainImage()) {
+                    this.showError('Please upload a main image');
+                    return false;
+                }
+                return true;
+            }
+
+            validateStage3(stageElement) {
+                const basicPackage = stageElement.querySelector('.package-panel.basic');
+                const premiumPackage = stageElement.querySelector('.package-panel.premium');
+
+                if (!this.validatePackage(basicPackage) || !this.validatePackage(premiumPackage)) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            validatePackage(packageElement) {
+                const benefits = packageElement.querySelector('textarea').value;
+                const deliveryDays = packageElement.querySelector('input[type="number"][placeholder="Number of days"]').value;
+                const price = packageElement.querySelector('input[type="number"][placeholder="Enter price"]').value;
+
+                if (!benefits) {
+                    this.showError('Please enter package benefits');
+                    return false;
+                }
+
+                if (!deliveryDays || deliveryDays < 1 || deliveryDays > 30) {
+                    this.showError('Please enter valid delivery days (1-30)');
+                    return false;
+                }
+
+                if (!price || price < 5) {
+                    this.showError('Please enter a valid price (minimum $5)');
+                    return false;
+                }
+
+                return true;
+            }
+
+            showError(message) {
+                // Assuming you have a notification manager instance
+                const notification = new NotificationManager();
+                notification.show(message, 'error');
+            }
+        } 
+
+        class GigForm {
+            constructor() {
+                this.currentStage = 1;
+                this.totalStages = 3;
+                this.tags = [];
+                this.imageUploader = new ImageUploader();
+                this.notification = new NotificationManager();
+                this.validator = new FormValidator();
+                
+                this.elements = {
+                    form: document.getElementById('gigForm'),
+                    stages: Array.from(document.querySelectorAll('.main-content')),
+                    progressSteps: Array.from(document.querySelectorAll('.progress-step')),
+                    nextBtn: document.getElementById('nextBtn'),
+                    backBtn: document.getElementById('backBtn'),
+                    tagsInput: document.querySelector('#tagsInput input')
+                };
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.populateFormOptions();
+                this.showStage(1);
+            }
+
+            setupEventListeners() {
+                this.elements.nextBtn.addEventListener('click', () => this.handleNext());
+                this.elements.backBtn.addEventListener('click', () => this.handleBack());
+                this.elements.tagsInput.addEventListener('keydown', (e) => this.handleTagInput(e));
+                this.elements.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Setup image upload listeners
+                this.imageUploader.init();
+            }
+
+            populateFormOptions() {
+                // Populate delivery formats
+                const deliveryFormatsContainer = document.getElementById('deliveryFormats');
+                CONFIG.DELIVERY_FORMATS.forEach(format => {
+                    deliveryFormatsContainer.innerHTML += `
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="delivery_formats" value="${format.value}">
+                            <span>${format.label}</span>
+                        </label>
+                    `;
+                });
+
+                // Populate service types
+                const serviceTypeSelect = document.getElementById('serviceType');
+                CONFIG.SERVICE_TYPES.forEach(type => {
+                    serviceTypeSelect.innerHTML += `
+                        <option value="${type.value}">${type.label}</option>
+                    `;
+                });
+
+                // Populate platforms
+                const platformsContainer = document.getElementById('platforms');
+                CONFIG.PLATFORMS.forEach(platform => {
+                    platformsContainer.innerHTML += `
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="platforms" value="${platform.value}">
+                            <span>${platform.label}</span>
+                        </label>
+                    `;
+                });
+            }
+
+            showStage(stageNumber) {
+                this.elements.stages.forEach((stage, index) => {
+                    stage.style.display = index + 1 === stageNumber ? 'block' : 'none';
+                });
+
+                this.elements.progressSteps.forEach((step, index) => {
+                    if (index + 1 === stageNumber) {
+                        step.classList.add('active');
+                    } else if (index + 1 < stageNumber) {
+                        step.classList.add('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+
+                // Update button text based on stage
+                this.elements.nextBtn.textContent = stageNumber === this.totalStages ? 'Submit' : 'Next';
+                this.elements.backBtn.style.display = stageNumber === 1 ? 'none' : 'block';
+            }
+
+            handleNext() {
+                if (!this.validateCurrentStage()) {
+                    // this.notification.show('Please fill out all required fields', 'error');
+                    console.log('Please fill out all required fields');
+                    return;
+                }
+
+                if (this.currentStage === this.totalStages) {
+                    this.elements.form.requestSubmit();
+                    return;
+                }
+
+                this.currentStage++;
+                this.showStage(this.currentStage);
+            }
+
+            handleBack() {
+                if (this.currentStage > 1) {
+                    this.currentStage--;
+                    this.showStage(this.currentStage);
+                }
+            }
+
+            handleTagInput(event) {
+                if (event.key === 'Enter' || event.key === ',') {
+                    event.preventDefault();
+                    const value = this.elements.tagsInput.value.trim();
+                    
+                    if (value && this.tags.length < 5) {
+                        if (!this.tags.includes(value)) {
+                            this.tags.push(value);
+                            this.renderTags();
+                        }
+                    } else if (this.tags.length >= 5) {
+                        this.notification.show('You can only add up to 5 tags', 'warning');
+                    }
+                    
+                    this.elements.tagsInput.value = '';
+                }
+            }
+
+            renderTags() {
+                const tagsContainer = document.getElementById('tagsInput');
+                const existingTags = tagsContainer.querySelectorAll('.tag');
+                existingTags.forEach(tag => tag.remove());
+
+                this.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.classList.add('tag');
+                    tagElement.innerHTML = `
+                        ${tag}
+                        <span class="remove-tag" onclick="this.removeTag('${tag}')">&times;</span>
+                    `;
+                    tagsContainer.insertBefore(tagElement, this.elements.tagsInput);
+                });
+            }
+
+            removeTag(tagToRemove) {
+                this.tags = this.tags.filter(tag => tag !== tagToRemove);
+                this.renderTags();
+            }
+
+            validateCurrentStage() {
+                const currentStageElement = this.elements.stages[this.currentStage - 1];
+                
+                switch (this.currentStage) {
+                    case 1:
+                        return this.validator.validateStage1(currentStageElement);
+                    case 2:
+                        return this.validator.validateStage2(this.imageUploader);
+                    case 3:
+                        return this.validator.validateStage3(currentStageElement);
+                    default:
+                        return false;
+                }
+            }
+
+            async handleSubmit(event) {
+                event.preventDefault();
+
+                if (!this.validateCurrentStage()) {
+                    return;
+                }
 
                 try {
-                    mainImageFile = await handleFileUpload(e.dataTransfer.files[0], elements.mainImagePreview);
+                    const formData = new FormData(this.elements.form);
+                    
+                    // Handle multiple checkbox selections for delivery formats and platforms
+                    const deliveryFormats = Array.from(document.querySelectorAll('input[name="delivery_formats"]:checked'))
+                        .map(checkbox => checkbox.value);
+                    const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
+                        .map(checkbox => checkbox.value);
+                    
+                    // Remove individual checkbox entries
+                    formData.delete('delivery_formats');
+                    formData.delete('platforms');
+                    
+                    // Add arrays as JSON strings
+                    formData.append('delivery_formats', JSON.stringify(deliveryFormats));
+                    formData.append('platforms', JSON.stringify(platforms));
+                    
+                    // Add tags to form data
+                    formData.append('tags', JSON.stringify(this.tags));
+                    
+                    // Add images to form data
+                    const images = this.imageUploader.getSelectedImages();
+                    formData.append('mainImage', images.mainImage);
+                    
+                    images.additionalImages.forEach((image, index) => {
+                        formData.append(`additionalImage${index}`, image);
+                    });
+
+                    // Structure package data as associative array
+                    const packageData = {
+                        'packages[basic][type]': formData.get('basic_package_type'),
+                        'packages[basic][benefits]': formData.get('basic_package_benefits'),
+                        'packages[basic][delivery_days]': formData.get('basic_package_delivery_days'),
+                        'packages[basic][revisions]': formData.get('basic_package_revisions'),
+                        'packages[basic][price]': formData.get('basic_package_price'),
+                        
+                        'packages[premium][type]': formData.get('premium_package_type'),
+                        'packages[premium][benefits]': formData.get('premium_package_benefits'),
+                        'packages[premium][delivery_days]': formData.get('premium_package_delivery_days'),
+                        'packages[premium][revisions]': formData.get('premium_package_revisions'),
+                        'packages[premium][price]': formData.get('premium_package_price')
+                    };
+
+                    // Remove old package fields from FormData
+                    formData.delete('basic_package_type');
+                    formData.delete('basic_package_benefits');
+                    formData.delete('basic_package_delivery_days');
+                    formData.delete('basic_package_revisions');
+                    formData.delete('basic_package_price');
+                    formData.delete('premium_package_type');
+                    formData.delete('premium_package_benefits');
+                    formData.delete('premium_package_delivery_days');
+                    formData.delete('premium_package_revisions');
+                    formData.delete('premium_package_price');
+
+                    // Add structured package data to FormData
+                    Object.entries(packageData).forEach(([key, value]) => {
+                        formData.append(key, value);
+                    });
+
+                    // Log FormData in a readable way
+                    const formDataObj = {};
+                    formData.forEach((value, key) => {
+                        // Handle file objects specially
+                        if (value instanceof File) {
+                            formDataObj[key] = {
+                                fileName: value.name,
+                                fileType: value.type,
+                                fileSize: `${(value.size / 1024).toFixed(2)} KB`
+                            };
+                        } else {
+                            formDataObj[key] = value;
+                        }
+                    });
+                    console.log('Form Data:', formDataObj);
+
+                    const response = await fetch('/api/create-gig', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to create gig');
+                    }
+
+                    const data = await response.json();
+                    this.notification.show('Gig created successfully!', 'success');
+                    
+                    // Redirect to the gig page after successful creation
+                    setTimeout(() => {
+                        window.location.href = `/designer/my-gigs`;
+                    }, 1500);
+
                 } catch (error) {
-                    showNotification(error.message, 'error');
+                    console.error('Error creating gig:', error);
+                    this.notification.show('Failed to create gig. Please try again.', 'error');
                 }
-            });
-            // // File Upload additional
-            // elements.additionalImagesUpload.addEventListener('dragover', (e) => {
-            //     e.preventDefault();
-            //     e.currentTarget.classList.add('dragover');
-            // });
-
-            // elements.additionalImagesUpload.addEventListener('dragleave', (e) => {
-            //     e.currentTarget.classList.remove('dragover');
-            // });
-
-            // elements.additionalImagesUpload.addEventListener('drop', async (e) => {
-            //     e.preventDefault();
-            //     e.currentTarget.classList.remove('dragover');
-
-            //     try {
-            //         additionalImages = await handleFileUpload(e.dataTransfer.files[0], elements.additionalImagePreview);
-            //     } catch (error) {
-            //         showNotification(error.message, 'error');
-            //     }
-            // });
-
-            // Form auto-save
-            let autoSaveTimeout;
-            document.querySelectorAll('input, textarea, select').forEach(element => {
-                element.addEventListener('input', () => {
-                    clearTimeout(autoSaveTimeout);
-                    autoSaveTimeout = setTimeout(() => {
-                        const formData = collectFormData();
-                        localStorage.setItem('gigFormData', JSON.stringify(formData));
-                        showNotification('Progress auto-saved');
-                    }, 2000);
-                });
-            });
-        }
-
-        // Initialization
-        function init() {
-            setupEventListeners();
-            showStage(1);
-
-            // Load saved data if exists
-            const savedData = localStorage.getItem('gigFormData');
-            if (savedData) {
-                // Implement restoration of saved data
-                showNotification('Restored saved progress');
             }
-        }
+        } 
 
-        // Start the application
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            const gigForm = new GigForm();
+            gigForm.init();
+        }); 
     </script>
 </body>
 

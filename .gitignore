@@ -5,4 +5,5 @@ vendor
 composer.lock
 .env
 
-/uploads
+/public/uploads
+/public/cdn_uploads

@@ -399,6 +399,8 @@
 
                 const response = await fetch(`/api/services?${queryParams}`);
                 services = await response.json();
+
+                console.log(services);
                 
                 updateUI();
             } catch (error) {
@@ -463,7 +465,7 @@
                                 </div>
                                 <div class="user-details">
                                     <div class="username">
-                                        ${service.user_name || `User ${service.user_id}`}
+                                        ${service.user?.name || `User ${service.user_id}`}
                                         ${service.is_verified ? '<span class="verified-badge">Verified</span>' : ''}
                                     </div>
                                 </div>

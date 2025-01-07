@@ -93,6 +93,7 @@ class GuestController extends BaseController
 
     public function getServiceList($req, $res) {
         $serviceModel = $this->model('Services\\Service');
+        $userModel = $this->model('Users\\User');
     
         $conditions = [];
     
@@ -123,10 +124,31 @@ class GuestController extends BaseController
                 $sort = 'price ASC';
                 break;
         }
-    
+
         $serviceList = $serviceModel->findAll($conditions, $sort);
+
+        // Enhance service list with user details
+        $enhancedServiceList = $serviceList;
+
+        try {
+            foreach ($enhancedServiceList as &$service) {
+                $user = $userModel->getUserById($service->user_id);
+                error_log(print_r($user, true));
+                if ($user) {
+                    // Add only necessary user details
+                    $service->user = [
+                        'user_id' => $user->user_id,
+                        'name' => $user->name,
+                        'profile_picture' => $user->profile_picture,
+                        'bio' => $user->bio
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            error_log("Error enhancing service list with user details: " . $e->getMessage());
+        }
     
-        $res->sendJson($serviceList);
+        $res->sendJson($enhancedServiceList);
     }
     
     public function getInfluencerList($req, $res){
