@@ -1,10 +1,21 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>UI Layout with Flexbox</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Gig Details Page</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #4f46e5;
+      --text-color: #333;
+      --light-gray: #f5f5f5;
+      --border-color: #e5e7eb;
+      --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,478 +23,741 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.6;
-      color: #333;
-      background-color: #f5f5f5;
+      color: var(--text-color);
+      background-color: var(--light-gray);
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+    /* Breadcrumb Styles */
+    .breadcrumb {
+      /* padding: 2rem; */
+      padding: 2rem 2rem 0;
     }
 
-    /* Main Service Section */
-    .main-service {
+    .breadcrumb ul {
+      display: flex;
+      list-style: none;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .breadcrumb li:not(:last-child)::after {
+      content: "/";
+      margin-left: 0.5rem;
+      color: #666;
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .breadcrumb i {
+      font-size: 0.9rem;
+    }
+
+    /* Main Layout */
+    .page-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+    }
+
+    /* Gig Content Container */
+    .gig-content {
       background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
     }
 
-    .service-header {
-      margin-bottom: 20px;
+    /* Gig Header */
+    .gig-header {
+      padding: 1rem 2rem 2rem;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .service-header h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
+    .gig-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .seller-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .seller-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .seller-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .seller-name {
+      font-weight: 600;
+      color: var(--primary-color);
     }
 
     .rating {
-      color: #ffb33e;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .rating-text {
-      color: #666;
-      margin-left: 10px;
+    /* Media Preview */
+    .media-preview {
+      position: relative;
+      padding: 1rem 0;
+      max-width: 850px;
+      margin: 0 auto;
     }
 
-    .main-image {
+    .preview-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      padding-top: 56.25%;
+      background: #f5f5f5;
+    }
+
+    .preview-image {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      margin-bottom: 20px;
+      height: 100%;
+      object-fit: cover;
+      background: #f5f5f5;
     }
 
-    .main-image img {
-      width: 100%;
-      height: auto;
-      border-radius: 4px;
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .thumbnail-grid {
+    .prev-button {
+      left: 1rem;
+    }
+
+    .next-button {
+      right: 1rem;
+    }
+
+    .thumbnails {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 1rem;
+      margin-top: 1rem;
+      max-width: 850px;
     }
 
     .thumbnail {
       width: 100%;
-      aspect-ratio: 1;
+      height: 100%;
+      max-height: 100px;
       object-fit: cover;
       border-radius: 4px;
       cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s;
     }
 
-    /* Categories Section */
-    .categories-section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .categories-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .category-card {
-      padding: 10px;
-      background: #e1e2e3;
-      border-radius: 20px;
-      text-align: center;
+    .thumbnail:hover {
+      opacity: 0.8;
     }
 
     /* About Section */
     .about-section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .about-content {
-      margin-top: 15px;
+      color: #666;
+      line-height: 1.8;
     }
 
-    /* Delivery Section */
-    .delivery-section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
+    /* Delivery Formats */
     .delivery-formats {
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .format-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
+      gap: 1rem;
     }
 
     .format-card {
-      padding: 10px;
-      background: #e1e2e3;
-      border-radius: 20px;
+      background: var(--light-gray);
+      padding: 1rem;
+      border-radius: 8px;
       text-align: center;
+      font-weight: 500;
     }
 
     /* Reviews Section */
     .reviews-section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
     }
 
+    .ratings-breakdown {
+      background: var(--light-gray);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .rating-bars {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .rating-fill {
+      height: 100%;
+      background: var(--primary-color);
+    }
+
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+
     .review-card {
-      border-bottom: 1px solid #eee;
-      padding: 15px 0;
+      padding: 1.5rem 1rem;
+      border: 0.5px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
     }
 
     .review-header {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
 
     .reviewer-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      margin-right: 10px;
     }
 
-    .reviewer-name {
-      font-weight: bold;
+    /* Tags Section */
+    .tags-section {
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
     }
 
-    .outer-container {
+    .tags-container {
       display: flex;
-      flex-direction: column;
-      height: 100%;
-      width: 100%;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
-    .main-content {
-      display: flex;
-      flex-grow: 1;
-      height: auto;
-      margin: 20px;
-      flex-direction: column;
+    .tag {
+      background: var(--light-gray);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      color: #666;
     }
 
-    .main {
-      flex-grow: 1;
-    }
-
-    .sidebar {
-      width: 100%;
-      flex-shrink: 0;
-      margin-top: 20px;
-    }
-
+    /* Pricing Card */
     .pricing-card {
-      width: 100%;
       background: white;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-shadow: var(--card-shadow);
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
     }
 
     .tabs {
       display: flex;
-      font-weight: 600;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .tab {
       flex: 1;
-      padding: 15px;
+      padding: 1rem;
       text-align: center;
       cursor: pointer;
+      font-weight: 600;
       color: #666;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
 
     .tab.active {
-      color: #6366f1;
-      background-color: #f8f8ff;
+      color: var(--primary-color);
+      background: #f8f8ff;
     }
 
-    .content {
-      padding: 24px;
-    }
-
-    .features {
-      margin: 24px 0;
+    .pricing-content {
+      padding: 1.5rem;
     }
 
     .time-info {
       display: flex;
-      gap: 20px;
-      margin-bottom: 24px;
-      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .time-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 0.5rem;
       color: #666;
+    }
+
+    .features-list {
+      margin: 1.5rem 0;
     }
 
     .feature-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      color: #333;
-    }
-
-    .check-icon {
-      color: #6366f1;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .price {
-      font-size: 32px;
+      font-size: 2rem;
       font-weight: 600;
       text-align: center;
-      margin: 24px 0;
+      margin: 1.5rem 0;
     }
 
     .order-button {
       width: 100%;
-      padding: 12px;
-      background-color: #6366f1;
+      padding: 1rem;
+      background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
 
     .order-button:hover {
-      background-color: #4f46e5;
+      background: var(--secondary-color);
     }
 
     .contact-button {
-      margin-top: 16px;
       width: 100%;
-      padding: 12px;
-      background-color: #ecf0f1;
-      color: #6366f1;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--light-gray);
+      color: var(--primary-color);
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
 
     .contact-button:hover {
-      background-color: #bdc3c2;
+      background: #e5e7eb;
     }
 
-    @media (min-width: 768px) {
-      .main-content {
-        flex-direction: row;
+    @media (max-width: 1024px) {
+      .page-container {
+        grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        width: 370px;
+      .pricing-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .media-preview {
+        padding: 1rem;
       }
 
-      .thumbnail-grid {
-        grid-template-columns: repeat(5, 1fr);
-      }
-
-      .time-info {
-        flex-direction: row;
+      .thumbnails {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="outer-container">
-    <div class="main-content">
-      <div class="main">
-        <div class="container">
-          <!-- Main Service Image -->
-          <div class="main-service">
-            <div class="service-header">
-              <h1>Our Agency Will Boost Your Brand's Visibility with Targeted Influencer Campaigns</h1>
-              <div class="rating">
-                <span class="stars">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                </span>
-                <span class="rating-text">4.8 (2k+ Reviews)</span>
+  <div class="page-container">
+    <!-- Main Content -->
+    <div class="gig-content">
+      <!-- Add breadcrumb here -->
+      <nav class="breadcrumb"></nav>
+
+      <!-- Gig Header -->
+      <div class="gig-header">
+        <h1 class="gig-title"></h1>
+        <div class="seller-info">
+          <img class="seller-avatar">
+          <div class="seller-details">
+            <span class="seller-name"></span>
+            <div class="rating">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
               </div>
-            </div>
-            <div class="main-image">
-                <img src="https://fiverr-res.cloudinary.com/videos/so_58.345428,t_main1,q_auto,f_auto/lokyruezin7kdrtxkxx1/create-business-commercial-video-or-social-media-video-ad.png">
-                <!-- <img alt="A professional business commercial video or social media video ad" height="800" src="https://storage.googleapis.com/a1aa/image/N5GoaqOFR0oaHZFEDTdbLfcQfoKf90HagrncrOlcKM1IGVfPB.jpg" width="1200"/> -->
-            </div>
-            <div class="thumbnail-grid" id="thumbnailGrid">
-              <img alt="Thumbnail 1" class="thumbnail" height="200" src="https://storage.googleapis.com/a1aa/image/MyQmLiVrKmJ7EVIC6FvRdBFpiMiuo1D6XYDrtAXHkCnxo6fJA.jpg" width="200"/>
-              <img alt="Thumbnail 2" class="thumbnail" height="200" src="https://storage.googleapis.com/a1aa/image/y199g5SqLLoJF5ECVl1AQHyAXYjUrvtab3t0jafHguimR1fTA.jpg" width="200"/>
-              <img alt="Thumbnail 3" class="thumbnail" height="200" src="https://storage.googleapis.com/a1aa/image/JvGI4E8zWO4lC5S0DyfoPyqPL3fqAN46w1ntpWuftUIiGVfPB.jpg" width="200"/>
-              <img alt="Thumbnail 4" class="thumbnail" height="200" src="https://storage.googleapis.com/a1aa/image/fvZb9PeqtRtKLEgn7q57tdUFTa3HJixmOOuJJSqOMR0IjqfnA.jpg" width="200"/>
-              <img alt="Thumbnail 5" class="thumbnail" height="200" src="https://storage.googleapis.com/a1aa/image/ocA01MPxQQbxGZ3eg3Jjks6e0FfQPunp3gq7ThL4bH1fMqefE.jpg" width="200"/>
-            </div>
-          </div>
-          <!-- Categories Section -->
-          <div class="categories-section">
-            <h2>Categories</h2>
-            <div class="categories-grid" id="categoriesGrid">
-              <div class="category-card">Instagram Promotions</div>
-              <div class="category-card">YouTube Promotions</div>
-              <div class="category-card">Facebook Ads</div>
-              <div class="category-card">TikTok Campaigns</div>
-              <div class="category-card">Twitter Promotions</div>
-            </div>
-          </div>
-          <!-- About Section -->
-          <div class="about-section">
-            <h2>About this gig</h2>
-            <div class="about-content" id="aboutContent">
-              <p>Maximize your brand's reach with targeted influencer promotions. Connect with audiences through engaging and impactful campaigns.</p>
-              <ul>
-                <li>Wide Reach: Gain visibility with millions of followers</li>
-                <li>Platform Diversity: Promote across multiple platforms</li>
-                <li>Creative Strategies: Tailored campaigns for your audience</li>
-                <li>Service Guarantee: 100% satisfaction or money back</li>
-              </ul>
-            </div>
-          </div>
-          <!-- Delivering Formats -->
-          <div class="delivery-section">
-            <h2>Platforms</h2>
-            <div class="delivery-formats" id="deliveryFormats">
-              <div class="format-card">Instagram</div>
-              <div class="format-card">YouTube</div>
-              <div class="format-card">Facebook</div>
-              <div class="format-card">TikTok</div>
-              <div class="format-card">Twitter</div>
-            </div>
-          </div>
-          <!-- Reviews Section -->
-          <div class="reviews-section">
-            <h2>Reviews</h2>
-            <div class="reviews-container" id="reviewsContainer">
-              <div class="review-card">
-                <div class="review-header">
-                  <img alt="Reviewer Emma L." class="reviewer-avatar" height="100" src="https://storage.googleapis.com/a1aa/image/znYRxSozIoYxMJZqdfLimb0I3JNp2vsIwclyyxd7CAdlR1fTA.jpg" width="100"/>
-                  <div>
-                    <div class="reviewer-name">Emma L.</div>
-                    <div class="rating">★★★★★</div>
-                  </div>
-                </div>
-                <div class="review-comment">Amazing experience! The campaign brought in so much traffic to my site.</div>
-              </div>
-              <div class="review-card">
-                <div class="review-header">
-                  <img alt="Reviewer David R." class="reviewer-avatar" height="100" src="https://storage.googleapis.com/a1aa/image/6abcUz2T5eSeMEePFWSKNyTffQtOMdi5CrMfGnpCMRefMjqfnA.jpg" width="100"/>
-                  <div>
-                    <div class="reviewer-name">David R.</div>
-                    <div class="rating">★★★★½</div>
-                  </div>
-                </div>
-                <div class="review-comment">Highly professional service and great ROI. Will work again.</div>
-              </div>
+              <span></span>
             </div>
           </div>
         </div>
       </div>
-      <div class="sidebar">
-        <div class="pricing-card">
-          <div class="tabs">
-            <div class="tab active" onclick="switchTab('standard')">Standard</div>
-            <div class="tab" onclick="switchTab('premium')">Premium</div>
-          </div>
-          <div class="content" id="pricing-content"></div>
+
+      <!-- Media Preview -->
+      <div class="media-preview">
+        <div class="preview-container">
+          <img class="preview-image">
+          <button class="nav-button prev-button">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="nav-button next-button">
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
+        <div class="thumbnails"></div>
+      </div>
+
+      <!-- About Section -->
+      <div class="about-section">
+        <h2 class="section-title">About This Gig</h2>
+        <div class="about-content"></div>
+      </div>
+
+      <!-- Delivery Formats -->
+      <div class="delivery-formats">
+        <h2 class="section-title">Platforms</h2>
+        <div class="format-grid"></div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="reviews-section">
+        <h2 class="section-title">Reviews</h2>
+        <div class="ratings-breakdown">
+          <div class="rating-bars">
+            <span>5 stars</span>
+            <div class="rating-bar">
+              <div class="rating-fill"></div>
+            </div>
+            <span></span>
+          </div>
+          <div class="rating-bars">
+            <span>4 stars</span>
+            <div class="rating-bar">
+              <div class="rating-fill"></div>
+            </div>
+            <span></span>
+          </div>
+          <div class="rating-bars">
+            <span>3 stars</span>
+            <div class="rating-bar">
+              <div class="rating-fill"></div>
+            </div>
+            <span></span>
+          </div>
+        </div>
+        <div class="reviews-list"></div>
+      </div>
+
+      <!-- Tags Section -->
+      <div class="tags-section">
+        <h2 class="section-title">Related Tags</h2>
+        <div class="tags-container"></div>
       </div>
     </div>
+
+    <!-- Pricing Card -->
+    <div class="pricing-card">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('standard')">Standard</div>
+        <div class="tab" onclick="switchTab('premium')">Premium</div>
+      </div>
+      <div class="pricing-content" id="pricing-content"></div>
+    </div>
   </div>
+
   <script>
-    const pricingData = {
-      standard: {
-        duration: "2 months",
-        revisions: "2 revisions",
-        features: [
-          "Files Ready for Print",
-          "Custom Designs",
-          "Quality Graphics",
-          "Modern and Trendy Styles"
-        ],
-        price: "LKR 5 000"
-      },
-      premium: {
-        duration: "3 months",
-        revisions: "5 revisions",
-        features: [
-          "Files Ready for Print",
-          "Premium Support",
-          "Priority Delivery",
-          "Advanced Features",
-          "Custom Branding"
-        ],
-        price: "LKR 10 000"
+    let gigData;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Get the gig ID from the URL path
+        const pathSegments = window.location.pathname.split('/');
+        const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+
+        if (!gigId) {
+          throw new Error('Gig ID is required in the URL');
+        }
+
+        const response = await fetch(`/api/gig/${gigId}?service=true&packages=true`);
+        const result = await response.json();
+
+
+        console.log(result.data.service.service_type);
+
+        console.log(result);
+
+        if (!result.success) {
+          throw new Error('Failed to fetch gig data');
+        }
+
+        const serviceType = result.data.service.service_type.charAt(0).toUpperCase() + result.data.service.service_type.slice(1) + 's';
+
+        // Assign the complete structure to gigData before using it
+        gigData = {
+          breadcrumb: {
+            categories: ["Services", serviceType] // Static categories for now
+          },
+          gig: {
+            title: result.data.service.title,
+            seller: {
+              name: "Designer Name",
+              avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=48&h=48&fit=crop",
+              rating: 4.8,
+              reviewCount: "2k+"
+            },
+            media: {
+              images: result.data.service.media.map(path => `/${path}`),
+              thumbnails: result.data.service.media.map(path => `/${path}`)
+            },
+            about: {
+              description: result.data.service.description,
+              features: ["Wide Reach", "Platform Diversity", "Creative Strategies", "Service Guarantee"]
+            },
+            platforms: Array.isArray(result.data.service.platforms)
+              ? result.data.service.platforms
+              : JSON.parse(result.data.service.platforms || '[]'),
+            reviews: {
+              ratings: {
+                "5": 80,
+                "4": 15,
+                "3": 5
+              },
+              list: [
+                {
+                  name: "Emma L.",
+                  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop",
+                  rating: 5,
+                  text: "Amazing experience! The campaign brought in so much traffic to my site."
+                }
+              ]
+            },
+            tags: Array.isArray(result.data.service.tags)
+              ? result.data.service.tags
+              : JSON.parse(result.data.service.tags || '[]'),
+            pricing: {
+              standard: {
+                duration: `${result.data.packages[0].delivery_days} days`,
+                revisions: `${result.data.packages[0].revisions} revisions`,
+                features: result.data.packages[0].benefits.split(','),
+                price: `LKR ${result.data.packages[0].price}`
+              },
+              premium: {
+                duration: `${result.data.packages[1].delivery_days} days`,
+                revisions: `${result.data.packages[1].revisions} revisions`,
+                features: result.data.packages[1].benefits.split(','),
+                price: `LKR ${result.data.packages[1].price}`
+              }
+            }
+          }
+        };
+
+        // Only call render functions after gigData is fully populated
+        renderBreadcrumb();
+        renderGigHeader();
+        renderMediaPreview();
+        renderAboutSection();
+        renderPlatforms();
+        renderReviews();
+        renderTags();
+        renderPricingContent('standard');
+
+        // Image navigation functionality
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const previewImage = document.querySelector('.preview-image');
+        let currentImageIndex = 0;
+
+        thumbnails.forEach((thumbnail, index) => {
+          thumbnail.addEventListener('click', () => {
+            previewImage.src = gigData.gig.media.images[index];
+            currentImageIndex = index;
+          });
+        });
+
+        document.querySelector('.prev-button').addEventListener('click', () => {
+          currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
+          previewImage.src = gigData.gig.media.images[currentImageIndex];
+        });
+
+        document.querySelector('.next-button').addEventListener('click', () => {
+          currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
+          previewImage.src = gigData.gig.media.images[currentImageIndex];
+        });
+
+      } catch (error) {
+        console.error('Error fetching gig data:', error);
       }
-    };
+    });
+
+    function renderBreadcrumb() {
+      const breadcrumbHtml = `
+                <ul>
+                    <li><a href="/"><i class="fas fa-home"></i></a></li>
+                    ${gigData.breadcrumb.categories.map(category =>
+        `<li><a href="#">${category}</a></li>`
+      ).join('')}
+                </ul>
+            `;
+      document.querySelector('.breadcrumb').innerHTML = breadcrumbHtml;
+    }
+
+    function renderGigHeader() {
+      const { title, seller } = gigData.gig;
+      document.querySelector('.gig-title').textContent = title;
+      document.querySelector('.seller-avatar').src = seller.avatar;
+      document.querySelector('.seller-name').textContent = seller.name;
+      document.querySelector('.rating span').textContent = `${seller.rating} (${seller.reviewCount} Reviews)`;
+    }
+
+    function renderMediaPreview() {
+      const { images, thumbnails } = gigData.gig.media;
+      document.querySelector('.preview-image').src = images[0];
+
+      const thumbnailsHtml = thumbnails.map((thumb, index) => `
+                <img src="${thumb}" alt="Preview ${index + 1}" class="thumbnail">
+            `).join('');
+      document.querySelector('.thumbnails').innerHTML = thumbnailsHtml;
+    }
+
+    function renderAboutSection() {
+      const { description, features } = gigData.gig.about;
+      const aboutHtml = `
+                <p>${description}</p>
+                
+            `;
+      document.querySelector('.about-content').innerHTML = aboutHtml;
+    }
+
+    function renderPlatforms() {
+      const platformsHtml = gigData.gig.platforms.map(platform =>
+        `<div class="format-card">${platform}</div>`
+      ).join('');
+      document.querySelector('.format-grid').innerHTML = platformsHtml;
+    }
+
+    function renderReviews() {
+      const { ratings, list } = gigData.gig.reviews;
+
+      // Render ratings breakdown
+      Object.entries(ratings).reverse().forEach(([stars, percentage]) => {
+        const ratingBar = document.querySelector(`.rating-bars:nth-child(${6 - stars})`);
+        ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
+        ratingBar.querySelector('span:last-child').textContent = `${percentage}%`;
+      });
+
+      // Render review list
+      const reviewsHtml = list.map(review => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="${review.avatar}" alt="${review.name}" class="reviewer-avatar">
+                        <div>
+                            <div class="reviewer-name">${review.name}</div>
+                            <div class="rating">
+                                ${Array(Math.floor(review.rating)).fill('<i class="fas fa-star"></i>').join('')}
+                                ${review.rating % 1 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                </div>
+            `).join('');
+      document.querySelector('.reviews-list').innerHTML = reviewsHtml;
+    }
+
+    function renderTags() {
+      const tagsHtml = gigData.gig.tags.map(tag =>
+        `<span class="tag">${tag}</span>`
+      ).join('');
+      document.querySelector('.tags-container').innerHTML = tagsHtml;
+    }
 
     function renderPricingContent(plan) {
-      const data = pricingData[plan];
+      const data = gigData.gig.pricing[plan];
       const content = `
-        <div class="time-info">
-          <div class="time-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            ${data.duration}
-          </div>
-          <div class="time-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-            </svg>
-            ${data.revisions}
-          </div>
-        </div>
-        <div class="features">
-          ${data.features.map(feature => `
-            <div class="feature-item">
-              <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5"/>
-              </svg>
-              ${feature}
-            </div>
-          `).join('')}
-        </div>
-        <div class="price">${data.price}</div>
-        <a href="/businessman/place-order">
-          <button class="order-button">Order Now</button>
-        </a>
-        <a href="http://localhost:8000/homecontroller/chat">
-          <button class="contact-button">Contact</button>
-        </a>
-      `;
-
+                <div class="time-info">
+                    <div class="time-item">
+                        <i class="far fa-clock"></i>
+                        ${data.duration}
+                    </div>
+                    <div class="time-item">
+                        <i class="fas fa-sync-alt"></i>
+                        ${data.revisions}
+                    </div>
+                </div>
+                <div class="features-list">
+                    ${data.features.map(feature => `
+                        <div class="feature-item">
+                            <i class="fas fa-check" style="color: var(--primary-color)"></i>
+                            ${feature}
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="price">${data.price}</div>
+                <button class="order-button">Order Now</button>
+                <button class="contact-button">Contact Seller</button>
+            `;
       document.getElementById('pricing-content').innerHTML = content;
     }
 
@@ -494,8 +768,7 @@
       document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
       renderPricingContent(plan);
     }
-
-    renderPricingContent('standard');
   </script>
 </body>
+
 </html>

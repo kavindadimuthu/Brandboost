@@ -77,6 +77,8 @@ class DesignerController extends BaseController
 
     // API endpoints
 
+    
+
     public function createGig($req, $res)
     {
         // Extract data from the request

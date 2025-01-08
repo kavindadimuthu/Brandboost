@@ -150,6 +150,53 @@ class GuestController extends BaseController
     
         $res->sendJson($enhancedServiceList);
     }
+
+    public function findGig($req, $res)
+    {
+        try {
+            // Get the gig ID and query parameters
+            $gigId = $req->getParam('id');
+            $includeService = $req->getParam('service') === 'true';
+            $includePackages = $req->getParam('packages') === 'true';
+            
+            if (!$gigId) {
+                $res->sendError('Gig ID is required', 400);
+                return;
+            }
+
+            // Initialize response data
+            $responseData = ['success' => true, 'data' => []];
+
+            // Load models
+            $serviceModel = $this->model('Services\\Service');
+            $servicePackageModel = $this->model('Services\\ServicePackage');
+
+            // Get service details if requested
+            if ($includeService) {
+                $service = $serviceModel->findOne($gigId, 'service_id');
+                if (!$service) {
+                    $res->sendError('Gig not found', 404);
+                    return;
+                }
+                // Decode JSON fields
+                $service->media = json_decode($service->media);
+                $service->platforms = json_decode($service->platforms);
+                $service->delivery_formats = json_decode($service->delivery_formats);
+                $responseData['data']['service'] = $service;
+            }
+
+            // Get packages if requested
+            if ($includePackages) {
+                $packages = $servicePackageModel->findAll(['service_id' => $gigId]);
+                $responseData['data']['packages'] = $packages;
+            }
+
+            $res->sendJson($responseData);
+
+        } catch (\Exception $e) {
+            $res->sendError('Failed to fetch gig details. ' . $e->getMessage(), 500);
+        }
+    }
     
     public function getInfluencerList($req, $res){
         $userModel = $this->model('Users\\User');
