@@ -19,7 +19,8 @@
 
         .container {
             display: flex;
-            /* margin: auto; */
+            margin: auto;
+            max-width: 1200px;
         }
 
         .content {

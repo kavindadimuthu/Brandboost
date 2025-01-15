@@ -87,37 +87,6 @@
             color: var(--text);
         }
 
-        /* Tags Input */
-        .tags-input {
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 0.75rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            min-height: 50px;
-            background: #f8fafc;
-        }
-
-        .tag {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .tag-remove {
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-        /* -------------------- */
-
         input[type="text"],
         input[type="number"],
         textarea,
@@ -401,18 +370,6 @@
                     </div>
                 </div>
 
-                <!-- Tags Section -->
-                <div class="section">
-                    <h2 class="section-title">Tags</h2>
-                    <div class="form-group">
-                        <label>Tags</label>
-                        <div class="tags-input" id="tagsInput">
-                            <input type="text" placeholder="Type and press Enter to add tags">
-                        </div>
-                        <small>Add up to 5 relevant tags to help buyers find your gig</small>
-                    </div>
-                </div>
-
                 <!-- Media Section -->
                 <div class="section">
                     <h2 class="section-title">Media</h2>
@@ -501,6 +458,7 @@
         <div class="notification" id="notification"></div>
     </div>
 
+
     <script>
         class NotificationManager {
             constructor() {
@@ -530,7 +488,6 @@
                 this.setupFormElements();
                 this.setupEventListeners();
                 this.loadGigData();
-                this.removedImages = []; // Array to track removed images
             }
 
             setupFormElements() {
@@ -552,55 +509,14 @@
                 document.getElementById('additionalImagesUpload').addEventListener('click', () => {
                     this.additionalImagesInput.click();
                 });
-
-                this.setupTagsInput();
-            }
-
-            setupTagsInput() {
-                const tagsInput = document.querySelector('#tagsInput input');
-                const tags = new Set();
-
-                tagsInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && tags.size < 5) {
-                        e.preventDefault();
-                        const tag = tagsInput.value.trim();
-                        if (tag && !tags.has(tag)) {
-                            tags.add(tag);
-                            this.addTagToDisplay(tag);
-                            tagsInput.value = '';
-                        }
-                    }
-                });
-            }
-
-            addTagToDisplay(tag) {
-                const tagsContainer = document.createElement('span');
-                tagsContainer.className = 'tag';
-                tagsContainer.textContent = tag;
-
-                // Create a remove button for the tag
-                const removeButton = document.createElement('button');
-                removeButton.className = 'tag-remove';
-                removeButton.innerHTML = '×'; // You can use an icon or text for the remove button
-                removeButton.onclick = () => {
-                    this.removeTag(tag, tagsContainer); // Call the remove function
-                };
-
-                tagsContainer.appendChild(removeButton); // Append the remove button to the tag
-                document.getElementById('tagsInput').appendChild(tagsContainer);
-            }
-
-            removeTag(tag, tagsContainer) {
-                // Remove the tag from the displayed tags
-                tagsContainer.remove();
-                // Also remove the tag from the Set (if you are using one)
-                const tags = Array.from(document.querySelectorAll('#tagsInput .tag')).map(tag => tag.textContent.replace('×', '').trim());
-                const tagSet = new Set(tags);
-                tagSet.delete(tag);
             }
 
             async loadGigData() {
                 try {
+                    // const urlParams = new URLSearchParams(window.location.search);
+                    // const gigId = urlParams.get('id');
+
+                    // Get the gig ID from the URL path
                     const pathSegments = window.location.pathname.split('/');
                     const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
 
@@ -610,12 +526,13 @@
 
                     const response = await fetch(`/api/gig/${gigId}?packages=true&service=true`);
 
+                    console.log(response);
                     if (!response.ok) {
                         throw new Error('Failed to fetch gig data');
                     }
 
                     const result = await response.json();
-                    console.log(result);
+                    console.log(result.data);
                     if (result.success) {
                         this.populateForm(result.data);
                     } else {
@@ -636,32 +553,24 @@
                 document.getElementById('serviceType').value = service.service_type;
 
                 // Populate delivery formats
-                // const deliveryFormats = service.delivery_formats.split(',');
-                const deliveryFormats = JSON.parse(service.delivery_formats);
+                const deliveryFormats = service.delivery_formats.split(',');
                 deliveryFormats.forEach(format => {
                     const checkbox = document.querySelector(`input[name="delivery_formats"][value="${format}"]`);
                     if (checkbox) checkbox.checked = true;
                 });
 
                 // Populate platforms
-                // const platforms = service.platforms.split(',');
                 const platforms = JSON.parse(service.platforms);
                 platforms.forEach(platform => {
                     const checkbox = document.querySelector(`input[name="platforms"][value="${platform}"]`);
                     if (checkbox) checkbox.checked = true;
                 });
 
-                // Populate tags
-                const tags = JSON.parse(service.tags);
-                tags.forEach(tag => {
-                    this.addTagToDisplay(tag);
-                });
-
                 // Populate images
-                this.displayImage(this.mainImagePreview, "/" + service.cover_image, true);
+                this.displayImage(this.mainImagePreview, service.cover_image, true);
                 service.media.forEach(imageUrl => {
                     if (imageUrl !== service.cover_image) {
-                        this.displayImage(this.additionalImagesPreview, "/" + imageUrl);
+                        this.displayImage(this.additionalImagesPreview, imageUrl);
                     }
                 });
 
@@ -680,7 +589,7 @@
                 wrapper.className = 'preview-item';
 
                 const img = document.createElement('img');
-                img.src = imageUrl;
+                img.src = "/" + imageUrl;
                 img.alt = 'Gig image';
 
                 const removeButton = document.createElement('button');
@@ -688,19 +597,12 @@
                 removeButton.innerHTML = '×';
                 removeButton.onclick = (e) => {
                     e.stopPropagation();
-                    this.removeImage(imageUrl, wrapper, isMain); // Call the remove function
+                    wrapper.remove();
                 };
 
                 wrapper.appendChild(img);
                 wrapper.appendChild(removeButton);
                 container.appendChild(wrapper);
-            }
-
-            removeImage(imageUrl, wrapper, isMain) {
-                // Remove the image from the displayed images
-                wrapper.remove();
-                // Add the image URL to the removedImages array
-                this.removedImages.push(imageUrl);
             }
 
             handleMainImageChange(event) {
@@ -729,46 +631,38 @@
                     // Add current images data
                     this.addImagesToFormData(formData);
 
-                    // Add removed images to form data
-                    formData.append('removedImages', JSON.stringify(this.removedImages));
-
-                    // Add tags to form data
-                    const tags = Array.from(document.querySelectorAll('#tagsInput .tag')).map(tag => tag.textContent.replace('×', '').trim());
-                    formData.append('tags', JSON.stringify(tags));
-
-                    // Convert delivery formats to JSON
-                    const deliveryFormats = Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value);
-                    formData.append('deliveryFormats', JSON.stringify(deliveryFormats)); // Convert to JSON
-
-                    // Convert platforms to JSON
-                    const platforms = Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value);
-                    formData.append('platforms', JSON.stringify(platforms)); // Convert to JSON
-
+                    // Get the gig ID from the URL path
                     const pathSegments = window.location.pathname.split('/');
                     const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+
+                    // Get gig ID from URL
+                    // const urlParams = new URLSearchParams(window.location.search);
+                    // const gigId = urlParams.get('id');
                     formData.append('id', gigId);
 
-                    // Log the data to be sent to the backend for debugging
-                    console.log('Data to be sent to the backend:', {
-                        title: document.getElementById('gigTitle').value,
-                        description: document.getElementById('gigDescription').value,
-                        serviceType: document.getElementById('serviceType').value,
-                        deliveryFormats: Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value),
-                        platforms: Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value),
-                        tags: tags,
-                        mainImage: this.mainImageInput.files.length > 0 ? this.mainImageInput.files[0].name : null,
-                        additionalImages: Array.from(this.additionalImagesInput.files).map(file => file.name),
-                        removedImages: this.removedImages, // Log removed images
-                        packages: Array.from(document.querySelectorAll('.package-panel')).map(panel => ({
-                            benefits: panel.querySelector('textarea[name$="_package_benefits"]').value,
-                            deliveryDays: panel.querySelector('input[name$="_package_delivery_days"]').value,
-                            revisions: panel.querySelector('input[name$="_package_revisions"]').value,
-                            price: panel.querySelector('input[name$="_package_price"]').value,
-                        })),
+                    //******************************* */
+                    // for (let [key, value] of formData.entries()) {
+                    //     console.log(`${key}: ${value}`);
+                    // }
+                    // Log FormData in a readable way
+                    const formDataObj = {};
+                    formData.forEach((value, key) => {
+                        // Handle file objects specially
+                        if (value instanceof File) {
+                            formDataObj[key] = {
+                                fileName: value.name,
+                                fileType: value.type,
+                                fileSize: `${(value.size / 1024).toFixed(2)} KB`
+                            };
+                        } else {
+                            formDataObj[key] = value;
+                        }
                     });
+                    console.log('Form Data:', formDataObj);
+                    //********************************* */
 
                     // Make API call to update gig
-                    const response = await fetch(`/api/update-gig/${gigId}`, {
+                    const response = await fetch(`/api/gigs/${gigId}`, {
                         method: 'POST',
                         body: formData
                     });
@@ -778,9 +672,9 @@
                     }
 
                     this.notification.show('Gig updated successfully!', 'success');
-                    // setTimeout(() => {
-                    //     window.location.href = '/designer/my-gigs';
-                    // }, 1500);
+                    setTimeout(() => {
+                        window.location.href = '/designer/my-gigs';
+                    }, 1500);
 
                 } catch (error) {
                     console.error('Error updating gig:', error);

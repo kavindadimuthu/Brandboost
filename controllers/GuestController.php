@@ -93,23 +93,37 @@ class GuestController extends BaseController
 
     public function getServiceList($req, $res) {
         $serviceModel = $this->model('Services\\Service');
+        $servicePackageModel = $this->model('Services\\ServicePackage');
         $userModel = $this->model('Users\\User');
     
         $conditions = [];
     
+        // Filter services based on query parameters
+
+        // Filter by gig or promotion
         if ($req->getParam('type')) {
             $conditions['service_type'] = $req->getParam('type');
         }
     
+        // Filter by category
         if ($req->getParam('category')) {
             $conditions['category'] = $req->getParam('category');
         }
+
+        // Filter by user
+        if ($req->getParam('user') == 'current') {
+            $conditions['user_id'] = AuthHelper::getCurrentUser()['user_id'];
+        } else if ($req->getParam('user') == 'other' && $req->getParam('user_id')) {
+            $conditions['user_id'] = $req->getParam('user_id');
+        }
     
+        // Search by title
         if ($req->getParam('query')) {
             $conditions['title LIKE'] = '%' . $req->getParam('query') . '%';
         }
     
-        $sort = 'name ASC'; // Default sort
+        // Sort services
+        $sort = 'created_at ASC'; // Default sort
         switch ($req->getParam('sort')) {
             case 'newest':
                 $sort = 'created_at DESC';
@@ -132,6 +146,12 @@ class GuestController extends BaseController
 
         try {
             foreach ($enhancedServiceList as &$service) {
+                error_log(print_r($service, true));
+                $servicePackages = $servicePackageModel->find($service->service_id, 'service_id');
+                error_log(print_r($servicePackages, true));
+                $service->packages = $servicePackages;
+
+
                 $user = $userModel->getUserById($service->user_id);
                 error_log(print_r($user, true));
                 if ($user) {
@@ -180,8 +200,6 @@ class GuestController extends BaseController
                 }
                 // Decode JSON fields
                 $service->media = json_decode($service->media);
-                $service->platforms = json_decode($service->platforms);
-                $service->delivery_formats = json_decode($service->delivery_formats);
                 $responseData['data']['service'] = $service;
             }
 

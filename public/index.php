@@ -102,7 +102,7 @@ $app->router->get('/admin/action-details/{id}', 'AdminController@actionDetails')
 // Common routes
 $app->router->get('/chat', 'CommonController@chat');
 //test route
-$app->router->get('/test', 'CommonController@test');
+// $app->router->get('/test', 'CommonController@test');
 
 
 // Auth routes
@@ -119,7 +119,11 @@ $app->router->get('/api/influencers', 'GuestController@getInfluencerList');
 $app->router->get('/api/gig/{id}', 'GuestController@findGig');
 
 $app->router->post('/api/create-gig', 'DesignerController@createGig');
+$app->router->post('/api/update-gig/{id}', 'DesignerController@updateGig');
+$app->router->get('/api/delete-gig/{id}', 'DesignerController@deleteGig');
 
+//test route
+$app->router->get('/test', 'DesignerController@test');
 
 // Run the application
 $app->run();

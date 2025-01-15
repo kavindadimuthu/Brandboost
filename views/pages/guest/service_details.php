@@ -569,8 +569,8 @@
               reviewCount: "2k+"
             },
             media: {
-              images: result.data.service.media.map(path => `/${path}`),
-              thumbnails: result.data.service.media.map(path => `/${path}`)
+              images: [`/${result.data.service.cover_image}`, ...result.data.service.media.map(path => `/${path}`)],
+              thumbnails: [`/${result.data.service.cover_image}`, ...result.data.service.media.map(path => `/${path}`)]
             },
             about: {
               description: result.data.service.description,

@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
+use app\core\Helpers\AuthHelper;
 
 class DesignerController extends BaseController
 {
@@ -85,6 +86,9 @@ class DesignerController extends BaseController
         $inputData = $req->getParsedBody();
         $inputFileData = $req->getFiles();
 
+        error_log("this is in create gig method");
+        error_log(print_r($inputData, true));
+
         // Validate required fields
         if (!isset($inputData['title'], $inputData['description'], $inputData['serviceType'], $inputData['packages'])) {
             $res->sendError('Missing required fields', 400);
@@ -142,14 +146,15 @@ class DesignerController extends BaseController
 
             // Prepare service data
             $serviceData = [
-                'user_id'          => $_SESSION['user_id'] ?? 1,
+                // 'user_id'          => $_SESSION['user_id'] ?? 1,
+                'user_id'          => AuthHelper::getCurrentUser()['user_id'] ?? null,
                 'title'            => $inputData['title'],
                 'description'      => $inputData['description'],
                 'cover_image'      => $coverImage,
                 'media'            => json_encode($uploadedImages),
                 'service_type'     => 'gig',
-                'platforms'        => json_encode($inputData['platforms']),
-                'delivery_formats' => json_encode($inputData['delivery_formats']),
+                'platforms'        => $inputData['platforms'],
+                'delivery_formats' => $inputData['delivery_formats'],
                 'tags'            => $inputData['tags'],
             ];
 
@@ -207,6 +212,167 @@ class DesignerController extends BaseController
 
             $res->sendError('Failed to create gig. ' . $e->getMessage(), 500);
         }
+    }
+
+    public function test($req, $res){
+        $serviceModel = $this->model('Services\\Service'); // Instantiate the Gig model
+        $data = ['title' => 'sri lanka']; // Prepare the data to update
+        $value = 18;
+
+        error_log('flag 00001');
+
+        // Call the update method from BaseModel
+        if ($serviceModel->update( $value, $data, 'service_id')) {
+            error_log('flag 00002');
+            return "Gig title updated successfully.";
+        } else {
+            error_log('flag 00003');
+            return "Failed to update gig title.";
+        }
+    }
+
+    public function updateGig($req, $res)
+    {
+        // error_reporting(E_ALL);
+        // ini_set('display_errors', 1);
+
+        // Extract data from the request
+        $updatedData = $req->getParsedBody();
+        $updatedFileData = $req->getFiles();
+
+        
+        error_log("flag on updated data");
+        error_log(print_r($updatedData, true));
+
+        // Validate required fields
+        if (!isset($updatedData['title'], $updatedData['description'], $updatedData['serviceType'], $updatedData['id'])) {
+            $res->sendError('Missing required fields', 400);
+            return;
+        }
+
+        // Prepare service data
+        $serviceData = [
+            'title'            => $updatedData['title'],
+            'description'      => $updatedData['description'],
+            'service_type'     => $updatedData['serviceType'],
+            'platforms'        => $updatedData['platforms'],
+            'delivery_formats' => $updatedData['deliveryFormats'],
+            'tags'             => $updatedData['tags'],
+        ];
+
+        // Get the service ID from the request
+        $serviceId = $updatedData['id'];
+
+        // Initialize models
+        $serviceModel = $this->model('Services\\Service');
+        $servicePackageModel = $this->model('Services\\ServicePackage');
+
+        // error_log(print_r($updatedData, true));
+
+        try {
+            $serviceModel->update($serviceId, $serviceData, 'service_id');
+
+            // Update service packages
+            if (isset($updatedData['packages'])) {
+                foreach (['basic', 'premium'] as $packageType) {
+                    if (isset($updatedData['packages'][$packageType])) {
+                        $package = $updatedData['packages'][$packageType];
+                        $packageData = [
+                            'benefits'      => $package['benefits'],
+                            'delivery_days' => $package['delivery_days'],
+                            'revisions'     => $package['revisions'],
+                            'price'         => $package['price'],
+                        ];
+
+                        error_log(print_r($packageData, true));
+                        // Update the package in the database
+                        $servicePackageModel->update($serviceId, $packageData, [ 'service_id' => $serviceId, 'package_type' => $packageType]);
+                    }
+                }
+            }
+
+            // Handle file uploads if a new main image is provided
+            if (isset($updatedFileData['mainImage']) && $updatedFileData['mainImage']['error'] === 0) {
+                // Handle main image upload using FileHandler
+                $uploadDir = 'cdn_uploads/services/';
+                $coverImage = \app\utils\FileHandler::imageUploader($updatedFileData['mainImage'], $uploadDir);
+                if ($coverImage) {
+                    $serviceModel->update($serviceId, ['cover_image' => $coverImage], 'service_id');
+                }
+            }
+
+            // Handle removed images
+            if (isset($updatedData['removedImages'])) {
+                $removedImages = json_decode($updatedData['removedImages'], true);
+                foreach ($removedImages as $imagePath) {
+                    $fullPath = $imagePath;
+                    if (file_exists($fullPath)) {
+                        \app\utils\FileHandler::deleteFile($fullPath); // Delete the file from the server
+                    }
+                }
+
+                // Fetch existing media from the database
+                $existingService = $serviceModel->findOne($serviceId, 'service_id');
+                $existingMedia = json_decode($existingService->media, true) ?? [];
+                
+                // Remove the specified images from the existing media
+                $removedImages = array_map(function($image) {
+                    return ltrim($image, '/'); // Remove leading slash
+                }, $removedImages);
+                
+                $existingMedia = array_diff($existingMedia, $removedImages);
+
+                // Update the media field in the database
+                $serviceModel->update($serviceId, ['media' => json_encode($existingMedia)], 'service_id');
+            }
+
+            // Handle additional images
+            $uploadedImages = []; // Array to hold uploaded additional images
+            for ($i = 0; $i < 4; $i++) {
+                $key = "additionalImage{$i}";
+                $uploadDir = 'cdn_uploads/services/';
+                if (isset($updatedFileData[$key]) && $updatedFileData[$key]['error'] === 0) {
+                    $imagePath = \app\utils\FileHandler::imageUploader($updatedFileData[$key], $uploadDir);
+                    if ($imagePath) {
+                        $uploadedImages[] = $imagePath; // Collect uploaded image paths
+                    }
+                }
+            }
+
+            // Fetch existing media from the database again
+            $existingService = $serviceModel->findOne($serviceId, 'service_id');
+            $existingMedia = json_decode($existingService->media, true) ?? [];
+
+            // Merge existing media with newly uploaded images
+            $allImages = array_merge($existingMedia, $uploadedImages);
+            $serviceModel->update($serviceId, ['media' => json_encode($allImages)], 'service_id'); // Update media field
+
+            $res->sendJson([
+                'success' => true,
+                'message' => 'Gig updated successfully.',
+            ]);
+
+        } catch (\Exception $e) {
+            error_log("Exception caught in updateGig: " . $e->getMessage());
+            $res->sendError('Failed to update gig. ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function deleteGig($req, $res){
+
+        $serviceModel = $this->model('Services\\Service');
+
+        $result = $serviceModel->delete($req->getParam('id'), 'service_id');
+
+        if ($result) {
+            $res->sendJson([
+                'success' => true,
+                'message' => 'Gig deleted successfully.',
+            ]);
+        } else {
+            $res->sendError('Failed to delete gig.', 500);
+        }
+
     }
 
 

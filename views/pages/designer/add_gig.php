@@ -176,7 +176,7 @@
             font-weight: 500;
         }
 
-        .tag-remove {
+        .remove-tag {
             cursor: pointer;
             font-weight: bold;
             font-size: 1.25rem;
@@ -1108,7 +1108,7 @@
                     tagElement.classList.add('tag');
                     tagElement.innerHTML = `
                         ${tag}
-                        <span class="remove-tag" onclick="this.removeTag('${tag}')">&times;</span>
+                        <span class="remove-tag" onclick="gigForm.removeTag('${tag}')">&times;</span>
                     `;
                     tagsContainer.insertBefore(tagElement, this.elements.tagsInput);
                 });
@@ -1241,8 +1241,10 @@
             }
         } 
 
+        let gigForm; // Declare gigForm in the global scope
+
         document.addEventListener('DOMContentLoaded', () => {
-            const gigForm = new GigForm();
+            gigForm = new GigForm();
             gigForm.init();
         }); 
     </script>

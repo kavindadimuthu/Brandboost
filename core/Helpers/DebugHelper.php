@@ -20,4 +20,19 @@ class DebugHelper {
             exit;
         }
     }
+
+    public static function log($var, $exit = true) {
+        error_log($var);
+        if ($exit) {
+            exit;
+        }
+    }
+
+    public static function logFile($var, $file) {
+        file_put_contents($file, $var);
+    }
+
+    public static function logArray($var){
+        error_log(print_r($var,true));
+    }
 }

@@ -76,21 +76,49 @@ class BaseModel
     }
 
     // Update a record by custom column and value
-    public function update($value, $data, $column = 'id')
+    public function update($value, $data, $conditions = ['id'])
     {
+        error_log("it entered to update in model");
         // Prepare the SET clause
         $setClauses = [];
-        foreach ($data as $key => $value) {
-            $setClauses[] = "$key = :$key";
+        foreach ($data as $key => $val) {
+            $setClauses[] = "$key = :set_$key";
+        }
+
+        // Prepare WHERE clauses
+        $whereClauses = [];
+        $whereData = [];
+        
+        if (is_array($conditions)) {
+            // Handle multiple conditions
+            foreach ($conditions as $field => $val) {
+                if (is_numeric($field)) {
+                    // Handle backward compatibility case
+                    $whereClauses[] = "id = :where_value";
+                    $whereData['where_value'] = $value;
+                    break;
+                }
+                $whereClauses[] = "$field = :where_$field";
+                $whereData["where_$field"] = $val;
+            }
+        } else {
+            // Handle legacy single column case
+            $whereClauses[] = "$conditions = :where_value";
+            $whereData['where_value'] = $value;
         }
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $setClauses) .
-            " WHERE {$column} = :value";
+            " WHERE " . implode(' AND ', $whereClauses);
 
-        $data['value'] = $value; // Bind the value for the WHERE clause
+        // Prepare final data array with unique parameter names
+        $finalData = [];
+        foreach ($data as $key => $val) {
+            $finalData["set_$key"] = $val;
+        }
+        $finalData = array_merge($finalData, $whereData);
+
         $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute($data); // Execute and return result
+        return $stmt->execute($finalData);
     }
 
     // Delete a record by custom column and value

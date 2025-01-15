@@ -229,7 +229,7 @@
                         <img alt="User profile picture" height="30"
                             src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg"
                             width="30" />
-                        <span><?php echo $_SESSION['user_name']; ?></span>
+                        <span><?php echo $_SESSION['user']['username']; ?></span>
                     </div>
                 </div>
                 <h2>Complains Management</h2>

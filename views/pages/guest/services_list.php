@@ -400,7 +400,7 @@
                 const response = await fetch(`/api/services?${queryParams}`);
                 services = await response.json();
 
-                console.log(services);
+                // console.log(services);
                 
                 updateUI();
             } catch (error) {
@@ -448,7 +448,9 @@
             `;
 
             // Render service cards
-            container.innerHTML = services.map(service => `
+            container.innerHTML = services.map(service => {
+                const basicPackage = service.packages.find(pkg => pkg.package_type === 'basic');
+                return `
                 <div class="service-card">
                     <a href="/services/${service.service_id}">
                         <div class="main-image">
@@ -459,7 +461,7 @@
                         <div class="card-content">
                             <div class="user-info">
                                 <div class="user-avatar">
-                                    <img src="${service.user_avatar || '/api/placeholder/40/40'}" 
+                                    <img src="${service.user.profile_picture || '/api/placeholder/40/40'}" 
                                          alt="User ${service.user_id}"
                                          >
                                 </div>
@@ -479,13 +481,13 @@
                                     <span class="rating-number">${service.rating || '5.0'}</span>
                                     <span class="rating-count">(${service.rating_count || '0'})</span>
                                 </div>
-                                <div class="price">LKR ${service.price?.toLocaleString() || '25,000'}</div>
+                                <div class="price">LKR ${basicPackage.price?.toLocaleString() || '25,000'}</div>
                             </div>
                         </div>
                     </a>
-                </div>
-            `).join('');
-        }
+                </div>`;
+                }).join('');
+            }
 
         // Event Handlers
         function handleCategoryChange() {
