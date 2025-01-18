@@ -101,8 +101,6 @@ $app->router->get('/admin/action-details/{id}', 'AdminController@actionDetails')
 
 // Common routes
 $app->router->get('/chat', 'CommonController@chat');
-//test route
-// $app->router->get('/test', 'CommonController@test');
 
 
 // Auth routes
@@ -113,17 +111,30 @@ $app->router->get('/auth/logout', 'AuthController@logout');
 
 
 // API routes
-$app->router->get('/api/services', 'GuestController@getServiceList');
+
+// User Management
+$app->router->get('/getUserList', 'UserController@getUserList'); // Fetch User Profile
+$app->router->get('/getUser/{id}', 'UserController@getUserProfile'); // Fetch User Profile
+$app->router->post('/updateUser/{id}', 'UserController@updateUserProfile'); // Update User Profile
+$app->router->get('/deleteUser/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
+
 $app->router->get('/api/influencers', 'GuestController@getInfluencerList');
 
-$app->router->get('/api/gig/{id}', 'GuestController@findGig');
+// Service Management
+$app->router->get('/getServiceList', 'ServiceController@getServiceList');
+$app->router->get('/getServiceProfile', 'ServiceController@getServiceProfile');
+$app->router->post('/api/create-gig', 'ServiceController@createService');
+$app->router->post('/api/update-gig/{id}', 'ServiceController@updateService');
+$app->router->get('/api/delete-gig/{id}', 'ServiceController@deleteService');
 
-$app->router->post('/api/create-gig', 'DesignerController@createGig');
-$app->router->post('/api/update-gig/{id}', 'DesignerController@updateGig');
-$app->router->get('/api/delete-gig/{id}', 'DesignerController@deleteGig');
+$app->router->get('/api/services', 'ServiceController@getServiceList');
+$app->router->get('/api/gig/{id}', 'ServiceController@getServiceProfile');
 
-//test route
-$app->router->get('/test', 'DesignerController@test');
+
+//test routes
+// $app->router->get('/test', 'DesignerController@test');
+// $app->router->get('/test', 'CommonController@test');
+$app->router->get('/test', 'TestController@test');
 
 // Run the application
 $app->run();

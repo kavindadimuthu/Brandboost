@@ -1,156 +1,225 @@
 <?php
+/**
+ * BaseModel Class
+ * 
+ * This abstract class provides a base structure for interacting with the database
+ * through various CRUD operations. It leverages the Database class to execute SQL queries.
+ * 
+ * Available Methods:
+ * - __construct() : Initializes the Database instance.
+ * - create(array $data) : Inserts a new record into the database.
+ * - read(array $conditions = [], array $options = []) : Retrieves records based on conditions, options, search, and filtering.
+ * - readOne(array $conditions = []) : Retrieves a single record based on conditions.
+ * - update(array $conditions, array $data) : Updates existing records in the database.
+ * - delete(array $conditions) : Deletes records based on conditions.
+ * - buildWhereClause(array $conditions, $prefix = '') : Constructs the WHERE clause for SQL queries.
+ * - buildOrderAndLimit(array $options) : Adds ORDER BY, LIMIT, and OFFSET to SQL queries.
+ * - logError($e) : Logs database errors.
+ */
 
 namespace app\core;
 
 use app\core\Database\Database;
-use app\core\Helpers\DebugHelper;
 use PDO;
+use PDOException;
 
-class BaseModel
+abstract class BaseModel
 {
+    /** @var Database $db Singleton instance of the Database class */
     protected $db;
-    protected $table; // Table name will be defined in the child model
 
-    public function __construct($table = null)
+    /** @var string $table The name of the table associated with the model */
+    protected $table;
+
+    /**
+     * BaseModel constructor.
+     * Initializes the Database instance.
+     */
+    public function __construct()
     {
-        $this->db = Database::getInstance()->getPdo(); // Get the PDO instance from Database
-        $this->table = $table ?: $this->table; // Initialize table name if provided
+        $this->db = Database::getInstance(); // Singleton instance of Database
     }
 
-    // Find all records that match the given column and value (no LIMIT)
-    public function find($value, $column = 'id')
+    /**
+     * Inserts a new record into the database.
+     * 
+     * @param array $data Key-value pairs of column names and values to insert.
+     * @return bool Success or failure of the operation.
+     */
+    public function create(array $data)
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$column} = :value");
-        $stmt->execute(['value' => $value]);
-        return $stmt->fetchAll(PDO::FETCH_OBJ); // Return all matching records as an array of objects
-    }
+        $columns = implode(", ", array_keys($data));
+        $placeholders = ":" . implode(", :", array_keys($data));
+        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
 
-
-    // Find one record based on custom conditions (column = value)
-    public function findOne($value, $column = 'id')
-    {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$column} = :value LIMIT 1");
-        $stmt->execute(['value' => $value]);
-        return $stmt->fetch(PDO::FETCH_OBJ); // Return the result as an object
-    }
-
-    // Find all records that match custom conditions, order, and limit
-    public function findAll($conditions = [], $orderBy = null, $limit = null)
-    {
-        $sql = "SELECT * FROM {$this->table}";
-
-        if (!empty($conditions)) {
-            $sql .= " WHERE ";
-            $whereClauses = [];
-            foreach ($conditions as $key => $value) {
-                $whereClauses[] = "$key = :$key";
-            }
-            $sql .= implode(' AND ', $whereClauses);
+        try {
+            return $this->db->executeWithParams($sql, $data);
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
         }
-
-        if ($orderBy) {
-            $sql .= " ORDER BY $orderBy";
-        }
-
-        if ($limit) {
-            $sql .= " LIMIT $limit";
-        }
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($conditions);
-        return $stmt->fetchAll(PDO::FETCH_OBJ); // Return all records as an array of objects
     }
 
-    // Create a new record in the database
-    public function create($data)
-    {
-        // DebugHelper::dump( $data);
-        // Prepare columns and values for insertion
-        $columns = implode(', ', array_keys($data));
-        $values = ':' . implode(', :', array_keys($data));
-
-        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($values)";
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute($data); // Execute and return result
-    }
-
-    // Update a record by custom column and value
-    public function update($value, $data, $conditions = ['id'])
-    {
-        error_log("it entered to update in model");
-        // Prepare the SET clause
-        $setClauses = [];
-        foreach ($data as $key => $val) {
-            $setClauses[] = "$key = :set_$key";
-        }
-
-        // Prepare WHERE clauses
-        $whereClauses = [];
-        $whereData = [];
+    /**
+     * Retrieves records from the database based on conditions, options, search, and filtering.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @param array $options Additional options like order, limit, offset, search, and filters.
+     * @return array|false Fetched records or false on failure.
+     */
+    // public function read(array $conditions = [], array $options = [])
+    // {
+    //     $whereClause = $this->buildWhereClause($conditions);
+    //     if (!empty($options['search'])) {
+    //         $searchConditions = array_map(fn($col) => "$col LIKE :search", $options['searchColumns']);
+    //         $whereClause .= ($whereClause ? " AND " : "WHERE ") . "(" . implode(" OR ", $searchConditions) . ")";
+    //         $conditions['search'] = "%" . $options['search'] . "%";
+    //     }
         
-        if (is_array($conditions)) {
-            // Handle multiple conditions
-            foreach ($conditions as $field => $val) {
-                if (is_numeric($field)) {
-                    // Handle backward compatibility case
-                    $whereClauses[] = "id = :where_value";
-                    $whereData['where_value'] = $value;
-                    break;
-                }
-                $whereClauses[] = "$field = :where_$field";
-                $whereData["where_$field"] = $val;
+    //     if (!empty($options['filters'])) {
+    //         foreach ($options['filters'] as $filterCol => $filterValue) {
+    //             $whereClause .= " AND $filterCol = :filter_$filterCol";
+    //             $conditions["filter_$filterCol"] = $filterValue;
+    //         }
+    //     }
+
+    //     $sql = "SELECT * FROM {$this->table} $whereClause";
+    //     $sql .= $this->buildOrderAndLimit($options);
+
+    //     try {
+    //         return $this->db->executeWithParams($sql, $conditions)->fetchAll(PDO::FETCH_OBJ);
+    //     } catch (Exception $e) {
+    //         $this->logError($e);
+    //         return false;
+    //     }
+    // }
+    public function read(array $conditions = [], array $options = [])
+    {
+        $whereClause = $this->buildWhereClause($conditions);
+        if (!empty($options['search'])) {
+            $searchConditions = array_map(fn($col) => "$col LIKE :search", $options['searchColumns']);
+            $whereClause .= ($whereClause ? " AND " : "WHERE ") . "(" . implode(" OR ", $searchConditions) . ")";
+            $conditions['search'] = "%" . $options['search'] . "%";
+        }
+        
+        if (!empty($options['filters'])) {
+            foreach ($options['filters'] as $filterCol => $filterValue) {
+                $whereClause .= " AND $filterCol = :filter_$filterCol";
+                $conditions["filter_$filterCol"] = $filterValue;
             }
-        } else {
-            // Handle legacy single column case
-            $whereClauses[] = "$conditions = :where_value";
-            $whereData['where_value'] = $value;
         }
 
-        $sql = "UPDATE {$this->table} SET " . implode(', ', $setClauses) .
-            " WHERE " . implode(' AND ', $whereClauses);
+        $sql = "SELECT * FROM {$this->table} $whereClause";
+        $sql .= $this->buildOrderAndLimit($options);
 
-        // Prepare final data array with unique parameter names
-        $finalData = [];
-        foreach ($data as $key => $val) {
-            $finalData["set_$key"] = $val;
+        try {
+            return $this->db->executeWithParams($sql, $conditions)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
         }
-        $finalData = array_merge($finalData, $whereData);
-
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute($finalData);
     }
 
-    // Delete a record by custom column and value
-    public function delete($value, $column = 'id')
+    /**
+     * Retrieves a single record from the database based on conditions.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @return array|false Fetched record or false on failure.
+     */
+    public function readOne(array $conditions = [])
     {
-        $sql = "DELETE FROM {$this->table} WHERE {$column} = :value";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute(['value' => $value]); // Execute and return result
+        $options = ['limit' => 1];
+        $result = $this->read($conditions, $options);
+        return $result ? $result[0] : false;
     }
 
-    // Begin a database transaction
-    public function beginTransaction()
+    /**
+     * Updates existing records in the database.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @param array $data Key-value pairs of column names and values to update.
+     * @return bool Success or failure of the operation.
+     */
+    public function update(array $conditions, array $data)
     {
-        return $this->db->beginTransaction();
+        $setClause = implode(", ", array_map(fn($key) => "$key = :$key", array_keys($data)));
+        $whereClause = $this->buildWhereClause($conditions, 'cond_');
+        $sql = "UPDATE {$this->table} SET $setClause $whereClause";
+
+        $params = array_merge($data, array_combine(array_map(fn($key) => 'cond_'.$key, array_keys($conditions)), $conditions));
+
+        try {
+            return $this->db->executeWithParams($sql, $params);
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
+        }
     }
 
-    // Commit the transaction
-    public function commit()
+    /**
+     * Deletes records from the database based on conditions.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @return bool Success or failure of the operation.
+     */
+    public function delete(array $conditions)
     {
-        return $this->db->commit();
+        $whereClause = $this->buildWhereClause($conditions);
+        $sql = "DELETE FROM {$this->table} $whereClause";
+
+        try {
+            return $this->db->executeWithParams($sql, $conditions);
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
+        }
     }
 
-    // Rollback the transaction
-    public function rollback()
+    /**
+     * Constructs the WHERE clause for SQL queries.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @param string $prefix Prefix for the placeholder keys to avoid conflicts.
+     * @return string The constructed WHERE clause.
+     */
+    protected function buildWhereClause(array $conditions, $prefix = '')
     {
-        return $this->db->rollBack();
+        if (empty($conditions)) {
+            return '';
+        }
+
+        $clauses = implode(" AND ", array_map(fn($key) => "$key = :$prefix$key", array_keys($conditions)));
+        return "WHERE $clauses";
     }
 
-    // Optional: Fetch the last insert ID (for after an insert operation)
-    public function lastInsertId()
+    /**
+     * Adds ORDER BY, LIMIT, and OFFSET to SQL queries.
+     * 
+     * @param array $options Key-value pairs for order, limit, and offset.
+     * @return string The constructed ORDER BY, LIMIT, and OFFSET clause.
+     */
+    protected function buildOrderAndLimit(array $options)
     {
+        $order = isset($options['order']) ? " ORDER BY {$options['order']}" : "";
+        $limit = isset($options['limit']) ? " LIMIT {$options['limit']}" : "";
+        $offset = isset($options['offset']) ? " OFFSET {$options['offset']}" : "";
+
+        return $order . $limit . $offset;
+    }
+
+    /**
+     * Logs database errors.
+     * 
+     * @param Exception $e The exception to log.
+     */
+    protected function logError($e)
+    {
+        error_log("[Database BaseModel Error] " . $e->getMessage());
+    }
+
+
+
+    public function getLastInsertedId(){
         return $this->db->lastInsertId();
     }
-
 }

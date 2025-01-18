@@ -1171,18 +1171,22 @@
 
                     // Structure package data as associative array
                     const packageData = {
-                        'packages[basic][type]': formData.get('basic_package_type'),
+                        'packages[basic][package_type]': formData.get('basic_package_type'),
                         'packages[basic][benefits]': formData.get('basic_package_benefits'),
                         'packages[basic][delivery_days]': formData.get('basic_package_delivery_days'),
                         'packages[basic][revisions]': formData.get('basic_package_revisions'),
                         'packages[basic][price]': formData.get('basic_package_price'),
                         
-                        'packages[premium][type]': formData.get('premium_package_type'),
+                        'packages[premium][package_type]': formData.get('premium_package_type'),
                         'packages[premium][benefits]': formData.get('premium_package_benefits'),
                         'packages[premium][delivery_days]': formData.get('premium_package_delivery_days'),
                         'packages[premium][revisions]': formData.get('premium_package_revisions'),
                         'packages[premium][price]': formData.get('premium_package_price')
                     };
+
+                    // Structure media data as associative array of additional images uploaded
+                    const media = {};
+
 
                     // Remove old package fields from FormData
                     formData.delete('basic_package_type');

@@ -3,90 +3,102 @@
 namespace app\models\Users;
 
 use app\core\BaseModel;
-use app\core\Helpers\DebugHelper;
 
 class User extends BaseModel
 {
-    protected $table = 'user'; // Table name for User model
+    protected $table = 'user';
 
-    public function __construct()
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param int $id The ID of the user.
+     * @return array|false The user record or false if not found.
+     */
+    public function getUserById(int $id)
     {
-        parent::__construct($this->table);
+        return $this->readOne(['user_id' => $id]);
     }
 
-    // Create a new user
-    public function createUser($data)
+    /**
+     * Retrieves a user by their email address.
+     *
+     * @param string $email The email of the user.
+     * @return array|false The user record or false if not found.
+     */
+    public function getUserByEmail(string $email)
     {
-        // Hash the password before inserting it
-        if (isset($data['password'])) {
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-        }
-        
+        return $this->readOne(['email' => $email]);
+    }
+
+    /**
+     * Retrieves users by their role.
+     *
+     * @param string $role The role of the users.
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of users or false on failure.
+     */
+    public function getUsersByRole(string $role, array $options = [])
+    {
+        return $this->read(['role' => $role], $options);
+    }
+
+    /**
+     * Creates a new user.
+     *
+     * @param array $data The user data to insert.
+     * @return bool Success or failure of the operation.
+     */
+    public function createUser(array $data)
+    {
         return $this->create($data);
     }
 
-    // Update user details
-    public function updateUser($user_id, $data)
+    /**
+     * Updates a user by their ID.
+     *
+     * @param int $id The ID of the user to update.
+     * @param array $data The data to update.
+     * @return bool Success or failure of the operation.
+     */
+    public function updateUserById(int $id, array $data)
     {
-        // If password is being updated, hash it
-        if (isset($data['password'])) {
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-        }
-        
-        return $this->update($user_id, $data, 'user_id');
+        return $this->update(['user_id' => $id], $data);
     }
 
-    // Find user by email
-    public function findByEmail($email)
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param int $id The ID of the user to delete.
+     * @return bool Success or failure of the operation.
+     */
+    public function deleteUserById(int $id)
     {
-        return $this->findOne($email, 'email');
+        return $this->delete(['user_id' => $id]);
     }
 
-    // Verify if the provided password matches the hashed password
-    public function verifyPassword($password, $hashedPassword)
+    /**
+     * Searches users by their name or email.
+     *
+     * @param string $searchTerm The search term for name or email.
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of users or false on failure.
+     */
+    public function searchUsers(string $searchTerm, array $options = [])
     {
-        return password_verify($password, $hashedPassword);
+        $options['search'] = $searchTerm;
+        $options['searchColumns'] = ['name', 'email'];
+        return $this->read([], $options);
     }
 
-    // Find users by status (active, inactive, suspended)
-    public function findByStatus($status)
+    /**
+     * Retrieves users with a specific account status.
+     *
+     * @param string $status The account status (active, inactive, suspended).
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of users or false on failure.
+     */
+    public function getUsersByStatus(string $status, array $options = [])
     {
-        return $this->findAll(['account_status' => $status]);
-    }
-
-    // Change user account status (active, inactive, suspended)
-    public function changeStatus($user_id, $status)
-    {
-        return $this->update($user_id, ['account_status' => $status], 'user_id');
-    }
-
-    // Get all users with a specific role
-    public function findByRole($role)
-    {
-        return $this->findAll(['role' => $role]);
-    }
-
-    // Update user profile picture
-    public function updateProfilePicture($user_id, $profile_picture)
-    {
-        return $this->update($user_id, ['profile_picture' => $profile_picture], 'user_id');
-    }
-
-    // Update user bio
-    public function updateBio($user_id, $bio)
-    {
-        return $this->update($user_id, ['bio' => $bio], 'user_id');
-    }
-
-    // Get all users (with optional filters)
-    public function getAllUsers($conditions = [], $orderBy = null, $limit = null)
-    {
-        return $this->findAll($conditions, $orderBy, $limit);
-    }
-
-    // Get the user by their ID
-    public function getUserById($user_id)
-    {
-        return $this->findOne($user_id, 'user_id');
+        return $this->read(['account_status' => $status], $options);
     }
 }

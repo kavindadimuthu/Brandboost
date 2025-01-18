@@ -91,6 +91,7 @@ class GuestController extends BaseController
 
     // API endpoints
 
+
     public function getServiceList($req, $res) {
         $serviceModel = $this->model('Services\\Service');
         $servicePackageModel = $this->model('Services\\ServicePackage');
@@ -171,8 +172,7 @@ class GuestController extends BaseController
         $res->sendJson($enhancedServiceList);
     }
 
-    public function findGig($req, $res)
-    {
+    public function findGig($req, $res) {
         try {
             // Get the gig ID and query parameters
             $gigId = $req->getParam('id');

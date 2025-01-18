@@ -600,7 +600,6 @@
             }
 
             async loadGigData() {
-                try {
                     const pathSegments = window.location.pathname.split('/');
                     const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
 
@@ -616,8 +615,9 @@
 
                     const result = await response.json();
                     console.log(result);
-                    if (result.success) {
-                        this.populateForm(result.data);
+                try {
+                    if (result) {
+                        this.populateForm(result);
                     } else {
                         throw new Error('API response indicated failure');
                     }
@@ -628,7 +628,9 @@
             }
 
             populateForm(data) {
-                const { service, packages } = data;
+                // const { service, packages } = data;
+                const service = data;
+                const packages = data.packages;
 
                 // Populate basic information
                 document.getElementById('gigTitle').value = service.title;

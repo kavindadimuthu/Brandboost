@@ -238,10 +238,12 @@
                         <script>
                             document.addEventListener('DOMContentLoaded', async () => {
                                 try {
-                                    const response = await fetch('/api/services?user=current');
-                                    const gigs = await response.json();
+                                    const response = await fetch('/api/services');
+                                    const result = await response.json();
 
-                                    // console.log(gigs);
+                                    const gigs = result.services;
+
+                                    console.log(gigs);
                                     
 
                                     const tableBody = document.getElementById('ordersTableBody');

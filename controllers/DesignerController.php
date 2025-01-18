@@ -78,8 +78,6 @@ class DesignerController extends BaseController
 
     // API endpoints
 
-    
-
     public function createGig($req, $res)
     {
         // Extract data from the request
@@ -211,23 +209,6 @@ class DesignerController extends BaseController
             }
 
             $res->sendError('Failed to create gig. ' . $e->getMessage(), 500);
-        }
-    }
-
-    public function test($req, $res){
-        $serviceModel = $this->model('Services\\Service'); // Instantiate the Gig model
-        $data = ['title' => 'sri lanka']; // Prepare the data to update
-        $value = 18;
-
-        error_log('flag 00001');
-
-        // Call the update method from BaseModel
-        if ($serviceModel->update( $value, $data, 'service_id')) {
-            error_log('flag 00002');
-            return "Gig title updated successfully.";
-        } else {
-            error_log('flag 00003');
-            return "Failed to update gig title.";
         }
     }
 
