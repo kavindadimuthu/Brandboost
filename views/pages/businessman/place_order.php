@@ -80,9 +80,52 @@
                 <label for="description">Description about the Job</label>
                 <textarea id="description" name="description" rows="5" required></textarea>
                 
-                <a href="/businessviewcontroller/businessSingleOrder">
-                    <button type="button">Submit Order</button>
-                </a>
+                <button type="button">Submit Order</button>
+                <script>
+                    document.querySelector('.order-form button').addEventListener('click', function() {
+                        const requirements = document.getElementById('requirements').value;
+                        const description = document.getElementById('description').value;
+                        const documents = document.getElementById('documents').files;
+
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const serviceId = urlParams.get('service_id');
+                        const packageId = urlParams.get('package_id');
+
+                        const formData = new FormData();
+                        formData.append('service_id', serviceId);
+                        formData.append('package_id', packageId);
+                        formData.append('payment_type', 'paypal');
+                        formData.append('promises', JSON.stringify({
+                            accepted_service: ['business_plan'],
+                            delivery_days: 7,
+                            number_of_revisions: 2,
+                            price: 500
+                        }));
+
+                        formData.append('requirements', requirements);
+                        formData.append('description', description);
+                        for (let i = 0; i < documents.length; i++) {
+                            formData.append('documents[]', documents[i]);
+                        }
+
+                        fetch('/api/createOrder', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Order placed successfully!');
+                            } else {
+                                alert('Failed to place order. Please try again.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        });
+                    });
+                </script>
             </form>
         </div>
     </div>

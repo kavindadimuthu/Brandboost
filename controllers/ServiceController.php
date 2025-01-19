@@ -4,9 +4,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 use \app\core\Helpers\AuthHelper;
+use app\utils\FileHandler;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
-use app\utils\FileHandler;
 
 use app\core\Helpers\DebugHelper;
 
@@ -21,6 +21,7 @@ class ServiceController extends BaseController
      */
     public function getServiceList($request, $response): void
     {
+        error_log("entered to getServiceList");
         if ($request->getMethod() !== 'GET') {
             $response->setStatusCode(405);
             $response->sendError('Method Not Allowed');
@@ -29,9 +30,10 @@ class ServiceController extends BaseController
 
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
+        $includeUser =  $queryParams['include_user'] ?? false;
         $search = $queryParams['search'] ?? null;
         $role = $queryParams['role'] ?? null; // 'influencer' or 'designer'
-        $user = $queryParams['user'] ?? AuthHelper::getCurrentUser()['user_id'];
+        $user = $queryParams['user'] ?? null;
         $priceMin = isset($queryParams['price_min']) ? (float)$queryParams['price_min'] : null;
         $priceMax = isset($queryParams['price_max']) ? (float)$queryParams['price_max'] : null;
         $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
@@ -60,7 +62,6 @@ class ServiceController extends BaseController
             $conditions['service_type'] = $role; // Filter by role (influencer or designer)
         }
         
-        error_log($user);
         if ($user) {
             $conditions['user_id'] = $user; // Filter by role (influencer or designer)
         }
@@ -85,6 +86,15 @@ class ServiceController extends BaseController
                 });
             }
             $service['packages'] = array_values($packages);
+        }
+
+        // // Append user details if requested
+        if($includeUser){
+            $userModel = $this->model('Users\\User');
+            foreach ($services as &$service) {
+                $user = $userModel->getUserById($service['user_id']);
+                $service['user'] = $user;
+            }
         }
 
         // Send the response with service data
@@ -211,7 +221,7 @@ class ServiceController extends BaseController
         $service = new Service();
         if ($service->createService($serviceData)) {
             // Retrieve the ID of the newly created service
-            $serviceId = $service->getLastInsertedId();
+            $serviceId = $service->getLastInsertId();
 
             // Create associated service packages if provided
             foreach ($formData['packages'] as $packageType => $packageData) {

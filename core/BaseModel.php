@@ -219,7 +219,7 @@ abstract class BaseModel
 
 
 
-    public function getLastInsertedId(){
+    public function getLastInsertId(){
         return $this->db->lastInsertId();
     }
 }

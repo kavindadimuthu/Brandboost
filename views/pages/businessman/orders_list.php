@@ -46,56 +46,81 @@
 
     <script>
         // Sample data structure - replace this with your actual data source
-        const orders = [
-            {
-                provider: "Kavindya Adhikari",
-                service_type: "Promotion",
-                service: "Promotional Post",
-                dueOn: "3 Days",
-                total: "LKR 10 000",
-                status: "In Progress"
-            },
-            {
-                provider: "Nadun Sandanayake",
-                service_type: "Design",
-                service: "Promotional Post Design",
-                dueOn: "3 Days",
-                total: "LKR 20 000",
-                status: "In Progress"
-            },
-            {
-                provider: "Nethsilu Marasinghe",
-                service_type: "Promotion",
-                service: "Promotional Video",
-                dueOn: "3 Days",
-                total: "LKR 15 000",
-                status: "Completed"
-            },
-            {
-                provider: "Safran Zahim",
-                service_type: "Design",
-                service: "Promotional Post Design",
-                dueOn: "3 Days",
-                total: "LKR 7 500",
-                status: "Completed"
-            }
-        ];
+        // const orders = [
+        //     {
+        //         provider: "Kavindya Adhikari",
+        //         service_type: "Promotion",
+        //         service: "Promotional Post",
+        //         dueOn: "3 Days",
+        //         total: "LKR 10 000",
+        //         status: "In Progress"
+        //     },
+        //     {
+        //         provider: "Nadun Sandanayake",
+        //         service_type: "Design",
+        //         service: "Promotional Post Design",
+        //         dueOn: "3 Days",
+        //         total: "LKR 20 000",
+        //         status: "In Progress"
+        //     },
+        //     {
+        //         provider: "Nethsilu Marasinghe",
+        //         service_type: "Promotion",
+        //         service: "Promotional Video",
+        //         dueOn: "3 Days",
+        //         total: "LKR 15 000",
+        //         status: "Completed"
+        //     },
+        //     {
+        //         provider: "Safran Zahim",
+        //         service_type: "Design",
+        //         service: "Promotional Post Design",
+        //         dueOn: "3 Days",
+        //         total: "LKR 7 500",
+        //         status: "Completed"
+        //     }
+        // ];
+
+        
+
+        // // Fetch orders from backend API and assign response to orders array
+        // fetch('/api/getOrderList')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         // orders.length = 0; // Clear existing orders
+        //         // orders.push(...data); // Populate orders with data from API
+        //         const orders = data.data;
+        //         console.log('Orders:', orders[0].customer_id);
+        //         loadOrdersData(orders); // Load data into the table
+        //     })
+        //     .catch(error => console.error('Error fetching orders:', error));
 
         // Function to load data into the table
-        function loadOrdersData() {
+        async function loadOrdersData(data) {
+            const response = await fetch(`/api/getOrderList?include_seller=true`);
+                result = await response.json();
+
+                const orders = result.data;
+
+                console.log(orders);
+
+
             const tableBody = document.getElementById('ordersTableBody');
+            // const orders = data;
             
             orders.forEach(order => {
+                const jsonData = JSON.parse(order.promise.accepted_service);
+                console.log(jsonData.title);
                 const row = document.createElement('tr');
                 row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-100');
                 
                 row.innerHTML = `
-                    <td class="py-3 px-6 text-left whitespace-nowrap">${order.provider}</td>
-                    <td class="py-3 px-6 text-left">${order.service_type}</td>
-                    <td class="py-3 px-6 text-left">${order.service}</td>
-                    <td class="py-3 px-6 text-left">${order.dueOn}</td>
-                    <td class="py-3 px-6 text-left">${order.total}</td>
-                    <td class="py-3 px-6 text-left"><span class="status ${order.status.toLowerCase().replace(' ', '-')} py-1 px-3 rounded-full text-xs">${order.status}</span></td>
+                    <td class="py-3 px-6 text-left whitespace-nowrap">${order.seller.name}</td>
+                    <td class="py-3 px-6 text-left">${jsonData ? jsonData.serviceType : 'testing'}</td>
+                    <td class="py-3 px-6 text-left">${jsonData ? jsonData.title : 'testing title'}</td>
+                    <td class="py-3 px-6 text-left">${order.promise.delivery_days}</td>
+                    <td class="py-3 px-6 text-left">${order.promise.price}</td>
+                    <td class="py-3 px-6 text-left"><span class="status ${order.order_status.toLowerCase().replace(' ', '-')} py-1 px-3 rounded-full text-xs">${order.order_status}</span></td>
                 `;
                 
                 row.addEventListener('click', () => {

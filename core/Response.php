@@ -37,6 +37,7 @@ class Response {
      * @return void
      */
     public function sendJson($data): void {
+        ini_set('memory_limit', '512M'); // Increase as needed
         $this->setHeader('Content-Type', 'application/json');
         echo json_encode($data, JSON_PRETTY_PRINT);
     }

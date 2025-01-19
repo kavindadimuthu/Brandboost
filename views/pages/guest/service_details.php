@@ -532,6 +532,7 @@
     let gigData;
 
     document.addEventListener('DOMContentLoaded', async () => {
+      try {
         // Get the gig ID from the URL path
         const pathSegments = window.location.pathname.split('/');
         const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
@@ -543,15 +544,10 @@
         const response = await fetch(`/api/gig/${gigId}?service=true&packages=true`);
         const result = await response.json();
 
-
         // console.log(result.service_type);
 
         console.log(result);
-      try {
-
-        // if (!result.success) {
-        //   throw new Error('Failed to fetch gig data');
-        // }
+        const serviceId = result.service_id;
 
         const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
 
@@ -601,12 +597,14 @@
               : JSON.parse(result.tags || '[]'),
             pricing: {
               standard: {
+                packageId: result.packages[0].package_id,
                 duration: `${result.packages[0].delivery_days} days`,
                 revisions: `${result.packages[0].revisions} revisions`,
                 features: result.packages[0].benefits.split(','),
                 price: `LKR ${result.packages[0].price}`
               },
               premium: {
+                packageId: result.packages[1].package_id,
                 duration: `${result.packages[1].delivery_days} days`,
                 revisions: `${result.packages[1].revisions} revisions`,
                 features: result.packages[1].benefits.split(','),
@@ -624,7 +622,7 @@
         renderPlatforms();
         renderReviews();
         renderTags();
-        renderPricingContent('standard');
+        renderPricingContent('standard', serviceId);
 
         // Image navigation functionality
         const thumbnails = document.querySelectorAll('.thumbnail');
@@ -735,8 +733,9 @@
       document.querySelector('.tags-container').innerHTML = tagsHtml;
     }
 
-    function renderPricingContent(plan) {
+    function renderPricingContent(plan, serviceId) {
       const data = gigData.gig.pricing[plan];
+      console.log(data);
       const content = `
                 <div class="time-info">
                     <div class="time-item">
@@ -757,8 +756,8 @@
                     `).join('')}
                 </div>
                 <div class="price">${data.price}</div>
-                <button class="order-button">Order Now</button>
-                <button class="contact-button">Contact Seller</button>
+                <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">Order Now</button>
+                <button class="contact-button" onclick="window.location.href='#'">Contact Seller</button>
             `;
       document.getElementById('pricing-content').innerHTML = content;
     }

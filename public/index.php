@@ -130,6 +130,12 @@ $app->router->get('/api/delete-gig/{id}', 'ServiceController@deleteService');
 $app->router->get('/api/services', 'ServiceController@getServiceList');
 $app->router->get('/api/gig/{id}', 'ServiceController@getServiceProfile');
 
+// Order Management
+$app->router->get('/api/getOrderProfile', 'OrderController@getOrderProfile');
+$app->router->get('/api/getOrderList', 'OrderController@getOrderList');
+$app->router->post('/api/createOrder', 'OrderController@createOrder');
+$app->router->post('/api/updateOrder', 'OrderController@updateOrder');
+
 
 //test routes
 // $app->router->get('/test', 'DesignerController@test');

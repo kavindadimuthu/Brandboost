@@ -26,9 +26,9 @@ class OrderPromises extends BaseModel
      * @param array $options Additional options like order, limit, and offset.
      * @return array|false List of promises or false on failure.
      */
-    public function getPromisesByOrderId(int $orderId, array $options = [])
+    public function getPromiseByOrderId(int $orderId, array $options = [])
     {
-        return $this->read(['order_id' => $orderId], $options);
+        return $this->readOne(['order_id' => $orderId], $options);
     }
 
     /**

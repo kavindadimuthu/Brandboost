@@ -4,9 +4,9 @@ namespace app\models\Orders;
 
 use app\core\BaseModel;
 
-class Order extends BaseModel
+class Orders extends BaseModel
 {
-    protected $table = 'order'; // Specify the database table
+    protected $table = 'orders'; // Specify the database table
 
     /**
      * Retrieve an order by its ID.
