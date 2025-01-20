@@ -67,32 +67,6 @@ abstract class BaseModel
      * @param array $options Additional options like order, limit, offset, search, and filters.
      * @return array|false Fetched records or false on failure.
      */
-    // public function read(array $conditions = [], array $options = [])
-    // {
-    //     $whereClause = $this->buildWhereClause($conditions);
-    //     if (!empty($options['search'])) {
-    //         $searchConditions = array_map(fn($col) => "$col LIKE :search", $options['searchColumns']);
-    //         $whereClause .= ($whereClause ? " AND " : "WHERE ") . "(" . implode(" OR ", $searchConditions) . ")";
-    //         $conditions['search'] = "%" . $options['search'] . "%";
-    //     }
-        
-    //     if (!empty($options['filters'])) {
-    //         foreach ($options['filters'] as $filterCol => $filterValue) {
-    //             $whereClause .= " AND $filterCol = :filter_$filterCol";
-    //             $conditions["filter_$filterCol"] = $filterValue;
-    //         }
-    //     }
-
-    //     $sql = "SELECT * FROM {$this->table} $whereClause";
-    //     $sql .= $this->buildOrderAndLimit($options);
-
-    //     try {
-    //         return $this->db->executeWithParams($sql, $conditions)->fetchAll(PDO::FETCH_OBJ);
-    //     } catch (Exception $e) {
-    //         $this->logError($e);
-    //         return false;
-    //     }
-    // }
     public function read(array $conditions = [], array $options = [])
     {
         $whereClause = $this->buildWhereClause($conditions);
@@ -114,6 +88,7 @@ abstract class BaseModel
 
         try {
             return $this->db->executeWithParams($sql, $conditions)->fetchAll(PDO::FETCH_ASSOC);
+            // return $this->db->executeWithParams($sql, $conditions)->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
             $this->logError($e);
             return false;
