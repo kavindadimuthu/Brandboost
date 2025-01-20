@@ -1234,9 +1234,9 @@
                     this.notification.show('Gig created successfully!', 'success');
                     
                     // Redirect to the gig page after successful creation
-                    // setTimeout(() => {
-                    //     window.location.href = `/designer/my-gigs`;
-                    // }, 1500);
+                    setTimeout(() => {
+                        window.location.href = '/designer/my-gigs';
+                    }, 3000);
 
                 } catch (error) {
                     console.error('Error creating gig:', error);
