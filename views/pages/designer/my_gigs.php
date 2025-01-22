@@ -252,7 +252,6 @@
                                     if (gigs.length > 0) {
                                         gigs.forEach(gig => {
 
-                                            // console.log("date= " + gig['created_at'])
                                             // Ensure packages are present and handle package data correctly
                                             // const basicPackage = gig.package;
                                             const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
