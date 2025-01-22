@@ -169,6 +169,7 @@ class OrderController extends BaseController {
 
         // Parse request body
         $requestData = $request->getParsedBody();
+        DebugHelper::logArray($requestData);
 
         // Validate required fields
         $requiredFields = ['service_id', 'payment_type'];
@@ -183,7 +184,7 @@ class OrderController extends BaseController {
         }
 
         // Extract data from the request
-        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? 1; // tempory user value is 1
 
         if (!$customerId) {
             $response->sendJson([
