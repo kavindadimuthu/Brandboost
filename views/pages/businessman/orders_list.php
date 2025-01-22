@@ -83,17 +83,6 @@
 
         
 
-        // // Fetch orders from backend API and assign response to orders array
-        // fetch('/api/getOrderList')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         // orders.length = 0; // Clear existing orders
-        //         // orders.push(...data); // Populate orders with data from API
-        //         const orders = data.data;
-        //         console.log('Orders:', orders[0].customer_id);
-        //         loadOrdersData(orders); // Load data into the table
-        //     })
-        //     .catch(error => console.error('Error fetching orders:', error));
 
         // Function to load data into the table
         async function loadOrdersData(data) {
