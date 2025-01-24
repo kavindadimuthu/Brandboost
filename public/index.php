@@ -114,7 +114,7 @@ $app->router->get('/auth/logout', 'AuthController@logout');
 
 // User Management
 $app->router->get('/getUserList', 'UserController@getUserList'); // Fetch User Profile
-$app->router->get('/getUser/{id}', 'UserController@getUserProfile'); // Fetch User Profile
+$app->router->get('/api/getUser/{id}', 'UserController@getUserProfile'); // Fetch User Profile
 $app->router->post('/updateUser/{id}', 'UserController@updateUserProfile'); // Update User Profile
 $app->router->get('/deleteUser/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 

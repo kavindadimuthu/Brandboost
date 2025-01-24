@@ -1,3 +1,5 @@
+
+
 <html lang="en">
 
 <head>
@@ -219,10 +221,10 @@
                     width="100" />
                 <div class="ml-6">
                     <h1 class="text-2xl font-bold">
-                        Ravi Fernando
+                        <!-- Will be set by JavaScript -->
                     </h1>
-                    <p class="text-gray-600">
-                        Graphic &amp; UX/UI Design
+                    <p id="userRole-container" class="text-gray-600">
+                        <!-- Role will be set by JavaScript -->
                     </p>
                 </div>
             </div>
@@ -242,48 +244,7 @@
             </p>
         </div>
         <!-- Contact Information -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Contact Information
-            </h3>
-            <div class="mt-4">
-                <p class="flex items-center text-gray-600">
-                    <i class="fas fa-envelope mr-2">
-                    </i>
-                    ravi.fernando@example.com
-                </p>
-                <p class="flex items-center text-gray-600 mt-2">
-                    <i class="fas fa-phone-alt mr-2">
-                    </i>
-                    +94123456789
-                </p>
-                <p class="flex items-center text-gray-600 mt-2">
-                    <i class="fas fa-globe mr-2">
-                    </i>
-                    <a class="text-indigo-600" href="https://ravifernando.com">
-                        https://ravifernando.com
-                    </a>
-                </p>
-                <div class="flex mt-4 space-x-4">
-                    <a class="text-gray-600" href="https://instagram.com/ravi_fernando">
-                        <i class="fab fa-instagram">
-                        </i>
-                    </a>
-                    <a class="text-gray-600" href="https://behance.net/ravi_fernando">
-                        <i class="fab fa-behance">
-                        </i>
-                    </a>
-                    <a class="text-gray-600" href="https://dribbble.com/ravi_fernando">
-                        <i class="fab fa-dribbble">
-                        </i>
-                    </a>
-                    <a class="text-gray-600" href="https://linkedin.com/in/ravi_fernando">
-                        <i class="fab fa-linkedin">
-                        </i>
-                    </a>
-                </div>
-            </div>
-        </div>
+
         <!-- Design Expertise -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h3 class="text-lg font-semibold text-indigo-700">
@@ -325,68 +286,7 @@
                 <h4 class="text-md font-semibold text-indigo-700">
                     Featured Projects:
                 </h4>
-                <!-- <div class="mt-4">
-                    <h5 class="text-sm font-semibold text-gray-700">
-                        Project Title: Modern Website Redesign
-                    </h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mt-2">
-                        <img alt="Project Image 1 of a modern website redesign"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/edeCiwtf2Ke6XTWWeecgtwiYlNiACnM2ckRr1rc6LaLsKdn9E.jpg"
-                            width="300" />
-                        <img alt="Project Image 2 of a modern website redesign"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/gKatfTFEbywTMirfNHYkIBe2hnYhaIxWreZsXnlH5npNS3ZPB.jpg"
-                            width="300" />
-                        <img alt="Project Image 3 of a modern website redesign"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/RPtiXCIQ4rYpJJABlF5fznDaEoWvdZPk30Fwqm3N73es0d2TA.jpg"
-                            width="300" />
-                        <img alt="Project Image 4 of a modern website redesign"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/RLX5mcoT39p9J1ynOpdLjlpUAUWVS28BXkDWZp1wzefm0d2TA.jpg"
-                            width="300" />
-                        <img alt="Project Image 5 of a modern website redesign"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/MShTwQjRkV6OOtf8W0sXU8bbEtI4sPFB2aZzWcs3gZga6O7JA.jpg"
-                            width="300" />
-                    </div>
-                    <p class="text-gray-600 text-sm mt-2">
-                        A complete redesign of a corporate website to enhance user experience and visual appeal. Ravi
-                        was responsible for the UX/UI design and overall visual direction.
-                    </p>
-                </div> -->
-                <!-- <div class="mt-4">
-                    <h5 class="text-sm font-semibold text-gray-700">
-                        Project Title: Branding for a Tech Startup
-                    </h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mt-2">
-                        <img alt="Project Image 1 of branding for a tech startup"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/vRRxgAWXjjKNMdpqcg2Zeue0OlfnZsdgW5jG5Bvt1Jbap7snA.jpg"
-                            width="300" />
-                        <img alt="Project Image 2 of branding for a tech startup"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/sZo5TLuMc4qOIxH6GxbpeRjuEie5jtLwmeiVwSbD20Fvp7snA.jpg"
-                            width="300" />
-                        <img alt="Project Image 3 of branding for a tech startup"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/Suv9boHiQKLNGFYaUnZek8DTPAcuedlxCH0mxawzeD6eS3ZPB.jpg"
-                            width="300" />
-                        <img alt="Project Image 4 of branding for a tech startup"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/IqCJRKBThD6UCFJeJaQH11orcQ2jdzWJXBnqTXroHBJR6O7JA.jpg"
-                            width="300" />
-                        <img alt="Project Image 5 of branding for a tech startup"
-                            class="w-full h-40 object-cover rounded-lg" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/Bb5eFZtbJPwafEfurAea7h3RBIDEf5ZodkmeyoloNB5lMdn9E.jpg"
-                            width="300" />
-                    </div>
-                    <p class="text-gray-600 text-sm mt-2">
-                        Developed a comprehensive branding strategy for a new tech startup, including logo design, color
-                        palette, and brand guidelines. Ravi led the creative direction and execution.
-                    </p>
-                </div> -->
+               
 
                 <div class="dynamic-portfolio" id="dynamic-portfolio"></div>
 
@@ -394,12 +294,12 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', async () => {
                         try {
-                            const response = await fetch(`/DesignerDataController/viewPortfolio`);
-                            const portfolio = await response.json();
+                            // const response = await fetch(`/DesignerDataController/viewPortfolio`);
+                            // const portfolio = await response.json();
 
-                            console.log(portfolio[0]);
+                            // console.log(portfolio[0]);
 
-                            renderPortfolioDetails(portfolio);
+                            // renderPortfolioDetails(portfolio);
                         } catch (error) {
                             console.error('Error fetching portfolio details:', error);
                         }
@@ -448,66 +348,8 @@
             </div>
         </div>
         <!-- Client Testimonials -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Client Testimonials
-            </h3>
-            <div class="mt-4">
-                <p class="text-gray-700">
-                    "Ravi's design work exceeded our expectations. His attention to detail and creativity brought our
-                    vision to life." - John Doe, CEO of TechCorp
-                </p>
-                <p class="text-gray-700 mt-2">
-                    "Working with Ravi was a fantastic experience. He understood our needs and delivered exceptional
-                    results." - Jane Smith, Marketing Director at Creative Solutions
-                </p>
-            </div>
-        </div>
+
         <!-- Services Offered -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Services Offered
-            </h3>
-            <div class="mt-4">
-                <p class="text-gray-700">
-                    <strong>
-                        Service Name:
-                    </strong>
-                    Logo Design
-                </p>
-                <p class="text-gray-700 mt-2">
-                    <strong>
-                        Price:
-                    </strong>
-                    $300 - $800
-                </p>
-                <p class="text-gray-700 mt-4">
-                    <strong>
-                        Service Name:
-                    </strong>
-                    Website Design
-                </p>
-                <p class="text-gray-700 mt-2">
-                    <strong>
-                        Price:
-                    </strong>
-                    $1000 - $5000
-                </p>
-                <p class="text-gray-700 mt-4">
-                    <strong>
-                        Service Name:
-                    </strong>
-                    Branding Consultation
-                </p>
-                <p class="text-gray-700 mt-2">
-                    <strong>
-                        Price:
-                    </strong>
-                    $500 - $2000
-                </p>
-            </div>
-        </div>
-        <!-- Gigs Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h3 class="text-lg font-semibold text-indigo-700">
                 Gigs
@@ -560,20 +402,7 @@
                 </div>
             </div>
         </div>
-        <!-- Call to Action -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Call to Action
-            </h3>
-            <div class="mt-4 flex space-x-4">
-                <button class="gradient-bg text-white px-4 py-2 rounded-lg">
-                    Hire Ravi Fernando
-                </button>
-                <button class="gradient-bg text-white px-4 py-2 rounded-lg">
-                    View Full Portfolio
-                </button>
-            </div>
-        </div>
+
         <!-- Analytics -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h3 class="text-lg font-semibold text-indigo-700">
@@ -601,6 +430,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // let UserData;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get the gig ID from the URL path
+            const pathSegments = window.location.pathname.split('/');
+            const userId = pathSegments[pathSegments.length - 1]; // Get the last segment
+
+            if (!userId) {
+            throw new Error('User ID is required in the URL');
+            }
+
+            const response = await fetch(`/api/getUser/${userId}?service=true&packages=true`);
+            const userData = await response.json();
+
+            // console.log(result);
+            // Update DOM elements with user data
+            document.querySelector('h1.text-2xl').textContent = userData.name || 'Name Not Available';
+            document.querySelector('img.w-24.h-24').src = userData.profile_picture || 'default-profile-picture.jpg';
+            document.querySelector('p.text-gray-700.mt-4').textContent = userData.bio || 'No bio available';
+            document.querySelector('#userRole-container').textContent = userData.role || 'role not available';
+            
+            // Update page title
+            document.title = `${userData.name}'s Profile`;
+        });
+    </script>
 </body>
 
 </html>

@@ -110,16 +110,16 @@ class UserController extends BaseController
         }
 
         $userProfile = [
-            'user_id'         => $user->user_id,
-            'name'            => $user->name,
-            'email'           => $user->email,
-            'role'            => $user->role,
-            'profile_picture' => $user->profile_picture,
-            'bio'             => $user->bio
+            'user_id'         => $user['user_id'],
+            'name'            => $user['name'],
+            'email'           => $user['email'],
+            'role'            => $user['role'],
+            'profile_picture' => $user['profile_picture'],
+            'bio'             => $user['bio']
         ];
 
         // Fetch additional data based on user role
-        switch ($user->role) {
+        switch ($user['role']) {
             case 'businessman':
                 $businessmanData = $businessmanModel->getBusinessRegistrationByUserId($userId);
                 if ($businessmanData) {
