@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
 use \app\core\Helpers\AuthHelper;
-use app\utils\FileHandler;
+use app\core\Utils\FileHandler;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
 

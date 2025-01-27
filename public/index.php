@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\Application as Application;
@@ -144,4 +143,3 @@ $app->router->get('/test', 'TestController@test');
 
 // Run the application
 $app->run();
-

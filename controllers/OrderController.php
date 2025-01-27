@@ -5,7 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\core\BaseController;
 use app\core\Helpers\AuthHelper;
 use app\core\Helpers\DebugHelper;
-use app\utils\FileHandler;
+use app\core\Utils\FileHandler;
 use app\models\Orders\Orders;
 use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
