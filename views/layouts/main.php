@@ -1,7 +1,12 @@
+<?php
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use app\core\Helpers\AuthHelper;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- Previous head content remains the same until body styling -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -467,12 +472,16 @@
                                 </span>
                                 <!-- <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span> -->
                             </div>
-                            <img src="<?php echo $_SESSION['user']['profile_picture'] ?? 'https://storage.googleapis.com/a1aa/image/BVZIkfG5F3XHY60sFbAWhIslKzm9KR8eUunlaCcIJfA5e6oPB.jpg'; ?>"
+                            <img src="<?php echo AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
                                 alt="User profile picture">
                         </div>
                         <div class="profile-dropdown" id="profile-menu">
+                            
+                            <a href="/user/<?php echo AuthHelper::getCurrentUser()['user_id'] ?>" class="profile-dropdown-link">
+                                My Profile
+                            </a>
                             <a href="/<?php echo strtolower($_SESSION['user']['role']); ?>/edit-profile" class="profile-dropdown-link">
-                                Change Profile
+                                Edit Profile
                             </a>
                             <a href="/<?php echo strtolower($_SESSION['user']['role']); ?>/change-password" class="profile-dropdown-link">
                                 Change Password

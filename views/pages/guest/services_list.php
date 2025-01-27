@@ -389,18 +389,21 @@
             const container = document.getElementById('serviceCardContainer');
             container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading services...</div>';
 
-            try {
                 const queryParams = new URLSearchParams({
                     type: filters.type,
                     category: filters.category,
                     query: filters.search,
-                    sort: filters.sort
+                    sort: filters.sort,
+                    include_user: true
                 });
 
                 const response = await fetch(`/api/services?${queryParams}`);
-                services = await response.json();
+                result = await response.json();
 
-                // console.log(services);
+                services = result.services;
+
+                console.log(services);
+            try {
                 
                 updateUI();
             } catch (error) {

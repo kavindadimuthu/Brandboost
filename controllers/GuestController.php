@@ -22,7 +22,7 @@ class GuestController extends BaseController
     }
 
     public function userProfile($req, $res){
-        $userId = $req->getParam('') ?? null;
+        $userId = $req->getParam('id') ?? null;
         $this->renderLayout('main', 'pages/guest/user_profile');
     }
 
@@ -90,6 +90,7 @@ class GuestController extends BaseController
 
 
     // API endpoints
+
 
     public function getServiceList($req, $res) {
         $serviceModel = $this->model('Services\\Service');
@@ -171,8 +172,7 @@ class GuestController extends BaseController
         $res->sendJson($enhancedServiceList);
     }
 
-    public function findGig($req, $res)
-    {
+    public function findGig($req, $res) {
         try {
             // Get the gig ID and query parameters
             $gigId = $req->getParam('id');

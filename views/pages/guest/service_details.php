@@ -544,16 +544,14 @@
         const response = await fetch(`/api/gig/${gigId}?service=true&packages=true`);
         const result = await response.json();
 
-
-        console.log(result.data.service.service_type);
+        // console.log(result.service_type);
 
         console.log(result);
+        const serviceId = result.service_id;
 
-        if (!result.success) {
-          throw new Error('Failed to fetch gig data');
-        }
+        const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
 
-        const serviceType = result.data.service.service_type.charAt(0).toUpperCase() + result.data.service.service_type.slice(1) + 's';
+        // console.log(serviceType);
 
         // Assign the complete structure to gigData before using it
         gigData = {
@@ -561,7 +559,7 @@
             categories: ["Services", serviceType] // Static categories for now
           },
           gig: {
-            title: result.data.service.title,
+            title: result.title,
             seller: {
               name: "Designer Name",
               avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=48&h=48&fit=crop",
@@ -569,16 +567,16 @@
               reviewCount: "2k+"
             },
             media: {
-              images: [`/${result.data.service.cover_image}`, ...result.data.service.media.map(path => `/${path}`)],
-              thumbnails: [`/${result.data.service.cover_image}`, ...result.data.service.media.map(path => `/${path}`)]
+              images: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)],
+              thumbnails: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)]
             },
             about: {
-              description: result.data.service.description,
+              description: result.description,
               features: ["Wide Reach", "Platform Diversity", "Creative Strategies", "Service Guarantee"]
             },
-            platforms: Array.isArray(result.data.service.platforms)
-              ? result.data.service.platforms
-              : JSON.parse(result.data.service.platforms || '[]'),
+            platforms: Array.isArray(result.platforms)
+              ? result.platforms
+              : JSON.parse(result.platforms || '[]'),
             reviews: {
               ratings: {
                 "5": 80,
@@ -594,21 +592,23 @@
                 }
               ]
             },
-            tags: Array.isArray(result.data.service.tags)
-              ? result.data.service.tags
-              : JSON.parse(result.data.service.tags || '[]'),
+            tags: Array.isArray(result.tags)
+              ? result.tags
+              : JSON.parse(result.tags || '[]'),
             pricing: {
               standard: {
-                duration: `${result.data.packages[0].delivery_days} days`,
-                revisions: `${result.data.packages[0].revisions} revisions`,
-                features: result.data.packages[0].benefits.split(','),
-                price: `LKR ${result.data.packages[0].price}`
+                packageId: result.packages[0].package_id,
+                duration: `${result.packages[0].delivery_days} days`,
+                revisions: `${result.packages[0].revisions} revisions`,
+                features: result.packages[0].benefits.split(','),
+                price: `LKR ${result.packages[0].price}`
               },
               premium: {
-                duration: `${result.data.packages[1].delivery_days} days`,
-                revisions: `${result.data.packages[1].revisions} revisions`,
-                features: result.data.packages[1].benefits.split(','),
-                price: `LKR ${result.data.packages[1].price}`
+                packageId: result.packages[1].package_id,
+                duration: `${result.packages[1].delivery_days} days`,
+                revisions: `${result.packages[1].revisions} revisions`,
+                features: result.packages[1].benefits.split(','),
+                price: `LKR ${result.packages[1].price}`
               }
             }
           }
@@ -622,7 +622,7 @@
         renderPlatforms();
         renderReviews();
         renderTags();
-        renderPricingContent('standard');
+        renderPricingContent('standard', serviceId);
 
         // Image navigation functionality
         const thumbnails = document.querySelectorAll('.thumbnail');
@@ -733,8 +733,9 @@
       document.querySelector('.tags-container').innerHTML = tagsHtml;
     }
 
-    function renderPricingContent(plan) {
+    function renderPricingContent(plan, serviceId) {
       const data = gigData.gig.pricing[plan];
+      console.log(data);
       const content = `
                 <div class="time-info">
                     <div class="time-item">
@@ -755,8 +756,8 @@
                     `).join('')}
                 </div>
                 <div class="price">${data.price}</div>
-                <button class="order-button">Order Now</button>
-                <button class="contact-button">Contact Seller</button>
+                <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">Order Now</button>
+                <button class="contact-button" onclick="window.location.href='#'">Contact Seller</button>
             `;
       document.getElementById('pricing-content').innerHTML = content;
     }

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 05:41 PM
+-- Generation Time: Jan 15, 2025 at 09:54 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,14 +50,6 @@ CREATE TABLE `admin` (
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`admin_id`, `name`, `email`, `password`, `created_at`) VALUES
-(1, 'kavinda', 'kavinda@gmail', 'kavinda', '2024-12-29 17:33:34'),
-(2, 'John Admin', 'admin@admin.com', 'pass', '2024-12-31 05:13:04');
 
 -- --------------------------------------------------------
 
@@ -329,21 +321,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`user_id`, `name`, `email`, `password`, `profile_picture`, `bio`, `role`, `account_status`, `created_at`, `updated_at`) VALUES
-(14, 'John Business', 'john@business.com', 'pass', 'john.jpg', 'Entrepreneur with 10 years experience', 'businessman', 'active', '2024-12-31 05:13:04', '2024-12-31 05:13:04'),
-(15, 'Sarah Influencer', 'sarah@social.com', 'pass', 'sarah.jpg', 'Fashion and lifestyle influencer', 'influencer', 'active', '2024-12-31 05:13:04', '2024-12-31 05:13:04'),
-(16, 'Mike Designer', 'mike@design.com', 'pass', 'mike.jpg', 'Creative designer with modern style', 'designer', 'active', '2024-12-31 05:13:04', '2024-12-31 05:13:04'),
-(17, 'Lisa Business', 'lisa@business.com', 'pass', 'lisa.jpg', 'Tech startup founder', 'businessman', 'active', '2024-12-31 05:13:04', '2024-12-31 05:13:04'),
-(18, 'Tom Influencer', 'tom@social.com', 'pass', 'tom.jpg', 'Tech and gaming influencer', 'influencer', 'active', '2024-12-31 05:13:04', '2024-12-31 05:13:04'),
-(20, 'Isuru Naveen', 'isuru@gmail.com', '$2y$10$W9qcTCnyvnt3wTkoc6HqIuonWpWkK7piJeCacfDURUhahwPsr/o.K', NULL, NULL, 'designer', 'active', '2025-01-02 05:53:35', '2025-01-02 05:53:35'),
-(21, 'thiwanga jayasinghe', 'thiwa@gmail.com', '$2y$10$U7jTwjUgjECojRJAm8Q8t.R4aFRdnQln4R19sKnka51LKjTwmPtp6', NULL, NULL, 'influencer', 'active', '2025-01-02 10:31:15', '2025-01-02 10:31:15'),
-(22, 'tharusha tharu', 'tharusha@gmail.com', '$2y$10$PHaAXk1aa072qJAe6cw8K.6EExTok44ghQlACGn/m7xGRJkCkO0dy', NULL, NULL, 'businessman', 'active', '2025-01-04 06:52:36', '2025-01-04 06:52:36'),
-(23, 'isuru Naveen', 'isurunaveen27@gmail.com', '$2y$10$0PsZXlzPGPM0TQOOqPiX1ubNVwfB6wbrxTGog/l/CkVw6R/HD2/5C', NULL, NULL, 'designer', 'active', '2025-01-04 07:46:18', '2025-01-04 07:46:18');
-
---
 -- Indexes for dumped tables
 --
 
@@ -499,7 +476,7 @@ ALTER TABLE `action`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `admin_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chat_message`
@@ -523,7 +500,7 @@ ALTER TABLE `complaint`
 -- AUTO_INCREMENT for table `designer_project`
 --
 ALTER TABLE `designer_project`
-  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `influencer_social_account`
@@ -589,7 +566,7 @@ ALTER TABLE `service_package`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

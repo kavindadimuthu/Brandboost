@@ -207,7 +207,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('http://localhost:8005/requestsdata.json');
+                const response = await fetch('/data/requestsdata.json');
                 const jsonData = await response.json();
 
                 console.log("Data fetched successfully:", jsonData);

@@ -238,10 +238,12 @@
                         <script>
                             document.addEventListener('DOMContentLoaded', async () => {
                                 try {
-                                    const response = await fetch('/api/services?user=current');
-                                    const gigs = await response.json();
+                                    const response = await fetch('/api/services');
+                                    const result = await response.json();
 
-                                    // console.log(gigs);
+                                    const gigs = result.services;
+
+                                    console.log(gigs);
                                     
 
                                     const tableBody = document.getElementById('ordersTableBody');
@@ -250,7 +252,6 @@
                                     if (gigs.length > 0) {
                                         gigs.forEach(gig => {
 
-                                            // console.log("date= " + gig['created_at'])
                                             // Ensure packages are present and handle package data correctly
                                             // const basicPackage = gig.package;
                                             const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
