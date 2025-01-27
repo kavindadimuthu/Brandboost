@@ -12,7 +12,7 @@ class FileHandler
 
     private static $maxFileSize = 5 * 1024 * 1024; // 5 MB
 
-    private static $basePath = __DIR__ . '/../public/';
+    private static $basePath = __DIR__ . '/../../public/';
 
     /**
      * Uploads a file to the specified destination.

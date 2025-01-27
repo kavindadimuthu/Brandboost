@@ -470,7 +470,7 @@ use app\core\Helpers\AuthHelper;
                                     echo $firstname;
                                     ?>
                                 </span>
-                                <!-- <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span> -->
+                                <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span>
                             </div>
                             <img src="<?php echo AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
                                 alt="User profile picture">

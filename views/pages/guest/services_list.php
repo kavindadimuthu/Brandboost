@@ -351,8 +351,8 @@
             <select id="sortOrder" onchange="handleSortChange()">
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
-                <option value="price_high">Price: High to Low</option>
-                <option value="price_low">Price: Low to High</option>
+                <!-- <option value="price_high">Price: High to Low</option> -->
+                <!-- <option value="price_low">Price: Low to High</option> -->
             </select>
         </div>
 
@@ -368,7 +368,7 @@
             category: '',
             type: 'gig',
             search: '',
-            sort: 'newest'
+            sort: 'title'
         };
 
         // Debounce function
@@ -445,8 +445,6 @@
                 <select id="sortOrder" onchange="handleSortChange()">
                     <option value="newest" ${filters.sort === 'newest' ? 'selected' : ''}>Newest First</option>
                     <option value="oldest" ${filters.sort === 'oldest' ? 'selected' : ''}>Oldest First</option>
-                    <option value="price_high" ${filters.sort === 'price_high' ? 'selected' : ''}>Price: High to Low</option>
-                    <option value="price_low" ${filters.sort === 'price_low' ? 'selected' : ''}>Price: Low to High</option>
                 </select>
             `;
 

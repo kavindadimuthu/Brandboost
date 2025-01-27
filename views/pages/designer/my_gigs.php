@@ -238,7 +238,11 @@
                         <script>
                             document.addEventListener('DOMContentLoaded', async () => {
                                 try {
-                                    const response = await fetch('/api/services');
+                                    const queryParams = new URLSearchParams({
+                                        current_user: true
+                                    });
+
+                                    const response = await fetch(`/api/services?${queryParams}`);
                                     const result = await response.json();
 
                                     const gigs = result.services;
