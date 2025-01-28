@@ -68,7 +68,7 @@
             /* padding: 1.5rem; */
             border-radius: var(--radius-lg);
             /* box-shadow: var(--shadow-md); */
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .page-header-content {
@@ -124,6 +124,7 @@
 
         .search-bar {
             width: 100%;
+            outline: none;
         }
 
         .search-icon {
@@ -132,6 +133,10 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
+        }
+
+        #serviceType{
+            outline: none;
         }
 
         .results-summary {
@@ -160,7 +165,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 2rem;
-            padding: 1rem;
+            /* padding: 1rem; */
+            padding: 1rem 0;
         }
 
         .service-card {
@@ -308,7 +314,7 @@
     <div class="container">
         <!-- Breadcrumb navigation -->
         <div class="breadcrumb">
-            <a href="/">Home</a>
+            <a href="/"><i class="fas fa-home"></i></a>
             <span class="breadcrumb-separator">/</span>
             <a href="/services">Services</a>
             <span class="breadcrumb-separator">/</span>
@@ -321,12 +327,12 @@
                 <p class="header-subtitle">Discover and connect with talented professionals for your next project</p>
                 
                 <div class="search-controls">
-                    <select id="categoryFilter" class="category-filter" onchange="handleCategoryChange()">
+                    <!-- <select id="categoryFilter" class="category-filter" onchange="handleCategoryChange()">
                         <option value="">All Categories</option>
                         <option value="design">Design</option>
                         <option value="marketing">Marketing</option>
                         <option value="development">Development</option>
-                    </select>
+                    </select> -->
                     
                     <div class="search-bar-container">
                         <input
@@ -365,7 +371,7 @@
         // State management
         let services = [];
         let filters = {
-            category: '',
+            // category: '',
             type: 'gig',
             search: '',
             sort: 'title'
@@ -391,7 +397,7 @@
 
                 const queryParams = new URLSearchParams({
                     type: filters.type,
-                    category: filters.category,
+                    // category: filters.category,
                     query: filters.search,
                     sort: filters.sort,
                     include_user: true
@@ -435,8 +441,8 @@
             }
 
             // Update breadcrumb
-            currentCategory.textContent = filters.category ? 
-                filters.category.charAt(0).toUpperCase() + filters.category.slice(1) : 
+            currentCategory.textContent = filters.type ? 
+                filters.type.charAt(0).toUpperCase() + filters.type.slice(1) + 's' : 
                 'All Services';
 
             // Update results summary
@@ -519,13 +525,13 @@
 
             // Initialize filters from URL parameters if any
             const urlParams = new URLSearchParams(window.location.search);
-            filters.category = urlParams.get('category') || '';
+            // filters.category = urlParams.get('category') || '';
             filters.type = urlParams.get('type') || 'gig';
             filters.search = urlParams.get('search') || '';
             filters.sort = urlParams.get('sort') || 'newest';
 
             // Set initial form values
-            document.getElementById('categoryFilter').value = filters.category;
+            // document.getElementById('categoryFilter').value = filters.category;
             document.getElementById('serviceType').value = filters.type;
             document.getElementById('searchBar').value = filters.search;
             document.getElementById('sortOrder').value = filters.sort;

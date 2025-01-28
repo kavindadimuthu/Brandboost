@@ -115,6 +115,9 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 1.25rem;
+            background: none;
+            border: none;
+            color: white;
         }
         /* -------------------- */
 
@@ -607,7 +610,7 @@
                         throw new Error('No gig ID provided');
                     }
 
-                    const response = await fetch(`/api/gig/${gigId}?packages=true&service=true`);
+                    const response = await fetch(`/api/service/${gigId}?packages=true&service=true`);
 
                     if (!response.ok) {
                         throw new Error('Failed to fetch gig data');

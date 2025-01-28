@@ -535,13 +535,13 @@
       try {
         // Get the gig ID from the URL path
         const pathSegments = window.location.pathname.split('/');
-        const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+        const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
 
-        if (!gigId) {
+        if (!serviceID) {
           throw new Error('Gig ID is required in the URL');
         }
 
-        const response = await fetch(`/api/gig/${gigId}?service=true&packages=true`);
+        const response = await fetch(`/api/service/${serviceID}?service=true&packages=true`);
         const result = await response.json();
 
         // console.log(result.service_type);

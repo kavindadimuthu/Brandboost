@@ -15,7 +15,11 @@ SessionHelper::startSession();
 // Create the application instance
 $app = new Application();
 
-// Define routes for Guest views
+// Define routes here
+
+// ==================================
+// Guest routes
+// ==================================
 $app->router->get('/', 'GuestController@home'); // Home (Landing Page)
 $app->router->get('/services', 'GuestController@servicesList'); // Services List
 $app->router->get('/services/{id}', 'GuestController@serviceDetails'); // Service Details
@@ -30,7 +34,9 @@ $app->router->get('/login', 'GuestController@login'); // Login
 $app->router->get('/forgot-password', 'GuestController@forgotPassword'); // Forgot Password
 $app->router->get('/reset-password', 'GuestController@resetPassword'); // Reset Password
 
+// ==================================
 // Businessman routes
+// ==================================
 $app->router->get('/businessman/orders-list', 'BusinessmanController@ordersList');
 $app->router->get('/businessman/order-details/{id}', 'BusinessmanController@orderDetails');
 $app->router->get('/businessman/request-order', 'BusinessmanController@requestOrder');
@@ -41,8 +47,9 @@ $app->router->get('/businessman/custom-packages', 'BusinessmanController@customP
 $app->router->get('/businessman/edit-profile', 'BusinessmanController@editProfile');
 $app->router->get('/businessman/change-password', 'BusinessmanController@changePassword');
 
-
+// ==================================
 // Influencer routes
+// ==================================
 $app->router->get('/influencer/dashboard', 'InfluencerController@dashboard');
 $app->router->get('/influencer/my-promotions', 'InfluencerController@myPromotions');
 $app->router->get('/influencer/add-promotion', 'InfluencerController@addPromotion');
@@ -56,11 +63,10 @@ $app->router->get('/influencer/earnings', 'InfluencerController@earnings');
 $app->router->get('/influencer/edit-profile', 'InfluencerController@editProfile');
 $app->router->get('/influencer/change-password', 'InfluencerController@changePassword');
 $app->router->get('/influencer/payout-methods', 'InfluencerController@payoutMethods');
-// Influencer API routes
-$app->router->post('/influencer/create-promotion', 'InfluencerController@createPromotion');
 
-
+// ==================================
 // Designer routes
+// ==================================
 $app->router->get('/designer/dashboard', 'DesignerController@dashboard');
 $app->router->get('/designer/my-gigs', 'DesignerController@myGigs');
 $app->router->get('/designer/add-gig', 'DesignerController@addGig');
@@ -75,10 +81,11 @@ $app->router->get('/designer/edit-profile', 'DesignerController@editProfile');
 $app->router->get('/designer/change-password', 'DesignerController@changePassword');
 $app->router->get('/designer/payout-methods', 'DesignerController@payoutMethods');
 
-
+// ==================================
 // Admin routes
+// ==================================
 $app->router->get('/admin/dashboard', 'AdminController@dashboard');
-// Guest service management for admin
+// Service management
 $app->router->get('/admin/services-list', 'AdminController@servicesList');
 $app->router->get('/admin/service-details/{id}', 'AdminController@serviceDetails');
 // User management
@@ -98,47 +105,55 @@ $app->router->get('/admin/actions-list', 'AdminController@actionsList');
 $app->router->get('/admin/action-details/{id}', 'AdminController@actionDetails');
 
 
+
+// ==================================
 // Common routes
-$app->router->get('/chat', 'CommonController@chat');
-
-
-// Auth routes
-$app->router->post('/auth/register', 'AuthController@register');
-$app->router->post('/auth/login', 'AuthController@login');
-$app->router->get('/auth/logout', 'AuthController@logout');
+// ==================================
+$app->router->get('/chat', 'CommonController@chat'); // Chat
 
 
 
+// ==================================
+// Authentication Routes
+// ==================================
+$app->router->post('/auth/register', 'AuthController@register'); // Register
+$app->router->post('/auth/login', 'AuthController@login'); // Login
+$app->router->get('/auth/logout', 'AuthController@logout'); // Logout
+
+
+
+// ==================================
 // API routes
+// ==================================
 
 // User Management
-$app->router->get('/getUserList', 'UserController@getUserList'); // Fetch User Profile
-$app->router->get('/api/getUser/{id}', 'UserController@getUserProfile'); // Fetch User Profile
-$app->router->post('/updateUser/{id}', 'UserController@updateUserProfile'); // Update User Profile
-$app->router->get('/deleteUser/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
+$app->router->get('/api/users', 'UserController@getUserList'); // Get User Profile
+$app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
+$app->router->post('/update-user/{id}', 'UserController@updateUserProfile'); // Update User Profile
+$app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
-$app->router->get('/api/influencers', 'GuestController@getInfluencerList');
 
 // Service Management
-$app->router->get('/getServiceList', 'ServiceController@getServiceList');
-$app->router->get('/getServiceProfile', 'ServiceController@getServiceProfile');
-$app->router->post('/api/create-gig', 'ServiceController@createService');
-$app->router->post('/api/update-gig/{id}', 'ServiceController@updateService');
-$app->router->get('/api/delete-gig/{id}', 'ServiceController@deleteService');
+$app->router->get('/api/services', 'ServiceController@getServiceList'); // Get Service List
+$app->router->get('/api/service/{id}', 'ServiceController@getServiceProfile'); // Get Service Profile
+// ** gigs specific routes
+$app->router->post('/api/create-gig', 'ServiceController@createService'); // Create Gig
+$app->router->post('/api/update-gig/{id}', 'ServiceController@updateService'); // Update Gig
+$app->router->get('/api/delete-gig/{id}', 'ServiceController@deleteService'); // Delete Gig
+// ** promotions specific routes
+$app->router->post('/api/create-promotion', 'ServiceController@createService'); // Create Promotion
+$app->router->post('/api/update-promotion/{id}', 'ServiceController@updateService'); // Update Promotion
+$app->router->get('/api/delete-promotion/{id}', 'ServiceController@deleteService'); // Delete Promotion
 
-$app->router->get('/api/services', 'ServiceController@getServiceList');
-$app->router->get('/api/gig/{id}', 'ServiceController@getServiceProfile');
 
 // Order Management
-$app->router->get('/api/getOrderProfile', 'OrderController@getOrderProfile');
-$app->router->get('/api/getOrderList', 'OrderController@getOrderList');
-$app->router->post('/api/createOrder', 'OrderController@createOrder');
-$app->router->post('/api/updateOrder', 'OrderController@updateOrder');
+$app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List
+$app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get Order Profile
+$app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
+$app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 
 
 //test routes
-// $app->router->get('/test', 'DesignerController@test');
-// $app->router->get('/test', 'CommonController@test');
 $app->router->get('/test', 'TestController@test');
 
 // Run the application

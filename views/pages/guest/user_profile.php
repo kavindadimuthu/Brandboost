@@ -443,7 +443,7 @@
             throw new Error('User ID is required in the URL');
             }
 
-            const response = await fetch(`/api/getUser/${userId}?service=true&packages=true`);
+            const response = await fetch(`/api/user/${userId}?service=true&packages=true`);
             const userData = await response.json();
 
             // console.log(result);

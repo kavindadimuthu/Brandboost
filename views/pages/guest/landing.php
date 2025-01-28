@@ -279,7 +279,7 @@
             <h1>Where Influencers, Designers & Businesses Unite</h1>
             <p>The ultimate marketplace connecting influencers, designers, and business owners. Transform your brand
                 with world-class talent.</p>
-            <button class="cta-button">Get Started →</button>
+            <button class="cta-button" onclick="window.location.href=`/register`">Get Started →</button>
         </div>
     </section>
 
@@ -331,8 +331,8 @@
             <p class="fade-up">Join thousands of successful businesses who have found their perfect creative partners
             </p>
             <div class="cta-buttons fade-up">
-                <button class="cta-button">Sign Up Now</button>
-                <button class="secondary-button">Learn More</button>
+                <button class="cta-button" onclick="window.location.href=`/register`">Sign Up Now</button>
+                <button class="secondary-button" onclick="window.location.href=`/about`">Learn More</button>
             </div>
         </div>
     </section>
