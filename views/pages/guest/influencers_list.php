@@ -102,8 +102,8 @@
         }
 
         .profile-image {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: var(--radius-full);
             object-fit: cover;
             margin-bottom: 1rem;
@@ -181,10 +181,14 @@
         
         // Fetch influencers data
         async function fetchInfluencers() {
-            try {
-                const response = await fetch('/api/influencers');
-                influencers = await response.json();
+                const response = await fetch('/api/users?role=influencer');
+                result = await response.json();
+                console.log(result);
+
+                influencers = result.users;
+
                 renderInfluencers(influencers);
+            try {
             } catch (error) {
                 console.error('Error fetching influencers:', error);
                 document.getElementById('influencerGrid').innerHTML = `
@@ -211,7 +215,7 @@
             }
 
             grid.innerHTML = influencersToRender.map(influencer => `
-                <div class="influencer-card">
+                <div class="influencer-card" onclick="window.location.href='/user/${influencer.user_id}'">
                     <img 
                         src="${influencer.profile_picture ? influencer.profile_picture : '/api/placeholder/120/120'}" 
                         alt="${influencer.name}" 
@@ -247,6 +251,7 @@
         // Search functionality
         function handleSearch(event) {
             const searchTerm = event.target.value.toLowerCase();
+            console.log(influencers);
             const filteredInfluencers = influencers.filter(influencer => 
                 influencer.name.toLowerCase().includes(searchTerm) ||
                 (influencer.bio && influencer.bio.toLowerCase().includes(searchTerm))

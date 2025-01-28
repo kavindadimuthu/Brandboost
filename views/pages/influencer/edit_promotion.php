@@ -1,294 +1,815 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Gig</title>
-
+    <title>Update promotion - Brandboost</title>
     <style>
-        .container{
-            width: 60%;
-            margin: 2rem auto;
+        :root {
+            --primary: #4169E1;
+            --primary-gradient: linear-gradient(135deg, #4169E1, #8A2BE2);
+            --secondary: #64748b;
+            --success: #22c55e;
+            --error: #ef4444;
+            --background: #f8f9fa;
+            --text: #1e293b;
+            --border: #e2e8f0;
         }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
         label {
-            font-weight: bold;
-            margin-top: 10px;
             display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text);
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .common-details {
-            max-width: 900px; /* Set a maximum width for the common details section */
-            margin: 0 auto; /* Center the section */
-        }
-
-        .package-details {
+        /* Tags Input */
+        .tags-input {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            min-height: 50px;
+            background: #f8fafc;
         }
 
-        .package-section {
-            width: 48%; /* Each package section takes up 48% of the width */
-            padding: 10px; /* Add some padding */
-            border: 1px solid #ddd; /* Optional: Add a border for clarity */
-            border-radius: 4px; /* Round the corners */
-            background-color: #f9f9f9; /* Optional: Add a background color */
-        }
-
-        .package-fields {
-            display: flex;
-            justify-content: space-between; /* Space between left and right sections */
-            align-items: stretch; /* Make left and right fields full height */
-        }
-
-        .left-fields {
-            width: 28%; /* Adjust width as needed */
-        }
-
-        .right-field {
-            width: 70%; /* Adjust width as needed */
-            height: auto; /* Let it stretch to fill the height */
-        }
-
-        .section-heading {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
-        .form-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #4CAF50;
+        .tag {
+            background: var(--primary-gradient);
             color: white;
-            font-size: 16px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .tag-remove {
             cursor: pointer;
-            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.25rem;
+            background: none;
+            border: none;
+            color: white;
+        }
+        /* -------------------- */
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
         }
 
-        button:hover {
-            background-color: #45a049;
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(65, 105, 225, 0.1);
+            background: white;
         }
 
-        button.cancel {
-            background-color: #f44336;
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.5rem 0;
         }
 
-        button.cancel:hover {
-            background-color: #da190b;
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .packages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .package-panel {
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .package-panel.basic {
+            border-color: var(--secondary);
+        }
+
+        .package-panel.premium {
+            border-color: var(--primary);
+            background: linear-gradient(to bottom right, #f8fafc, #e6f0ff);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #f1f5f9;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(65, 105, 225, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: var(--secondary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .packages {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-item {
+                width: 100%;
+                max-width: 200px;
+            }
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-
-    <div class="content">
-        <div class="main-content">
-            <h2>Edit Gig</h2>
-
-            <!-- Common Details -->
-            <div class="common-details">
-                <label for="editTitle">Title:</label>
-                <input id="editTitle" type="text" placeholder="Enter gig title" required>
-
-                <label for="editDescription">Description:</label>
-                <textarea id="editDescription" placeholder="Enter gig description" required></textarea>
-
-                <label for="editplatform">Delivery Formats (comma-separated):</label>
-                <input id="editplatform" type="text" placeholder="e.g. PDF, Image, Video" required>
-
-                <label for="editTags">Tags (comma-separated):</label>
-                <input id="editTags" type="text" placeholder="e.g. web design, graphics" required>
-            </div>
-
-            <!-- Package Details -->
-            <div class="package-details">
-                <!-- Basic Package Details -->
-                <div class="package-section">
-                    <p class="section-heading">Basic Package</p>
-                    <div class="package-fields">
-                        <div class="left-fields">
-                            <label for="editBasicPrice">Price:</label>
-                            <input id="editBasicPrice" type="number" placeholder="Basic price" required>
-
-                            <label for="editBasicDeliveryDays">Delivery Days:</label>
-                            <input id="editBasicDeliveryDays" type="number" placeholder="Days for delivery" required>
-
-                            <label for="editBasicRevisions">Revisions:</label>
-                            <input id="editBasicRevisions" type="number" placeholder="Number of revisions" required>
-                        </div>
-                        <div class="right-field">
-                            <label for="editBasicBenefits">Benefits:</label>
-                            <input id="editBasicBenefits" type="text" placeholder="Basic package benefits" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Premium Package Details -->
-                <div class="package-section">
-                    <p class="section-heading">Premium Package</p>
-                    <div class="package-fields">
-                        <div class="left-fields">
-                            <label for="editPremiumPrice">Price:</label>
-                            <input id="editPremiumPrice" type="number" placeholder="Premium price" required>
-
-                            <label for="editPremiumDeliveryDays">Delivery Days:</label>
-                            <input id="editPremiumDeliveryDays" type="number" placeholder="Days for delivery" required>
-
-                            <label for="editPremiumRevisions">Revisions:</label>
-                            <input id="editPremiumRevisions" type="number" placeholder="Number of revisions" required>
-                        </div>
-                        <div class="right-field">
-                            <label for="editPremiumBenefits">Benefits:</label>
-                            <input id="editPremiumBenefits" type="text" placeholder="Premium package benefits" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Save and Cancel Buttons -->
-            <div class="form-buttons">
-                <button id="saveEditButton">Save Changes</button>
-                <button class="cancel" onclick="window.history.back()">Cancel</button>
-            </div>
+    <div class="container">
+        <div class="page-header">
+            <h1>Update Your promotion</h1>
         </div>
-    </div>
-</div>
 
+        <form id="updatepromotionForm">
+            <div class="main-content">
+                <!-- Basic Information Section -->
+                <div class="section">
+                    <h2 class="section-title">Basic Information</h2>
+                    <div class="form-group">
+                        <label for="promotionTitle">promotion Title</label>
+                        <input type="text" id="promotionTitle" name="title" placeholder="e.g., Professional Logo Design" required maxlength="80">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promotionDescription">promotion Description</label>
+                        <textarea id="promotionDescription" name="description" rows="6" placeholder="Describe your services in detail..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceType">Service Type</label>
+                        <select id="serviceType" name="serviceType" required>
+                            <option value="promotion">promotion</option>
+                            <option value="service">Service</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Delivery & Platforms Section -->
+                <div class="section">
+                    <h2 class="section-title">Delivery & Platforms</h2>
+                    <div class="form-group">
+                        <label>Delivery Formats</label>
+                        <div class="checkbox-group" id="deliveryFormats">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="delivery_formats" value="jpg">
+                                <span>JPG</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="delivery_formats" value="png">
+                                <span>PNG</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="delivery_formats" value="psd">
+                                <span>PSD</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="delivery_formats" value="ai">
+                                <span>AI</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="delivery_formats" value="svg">
+                                <span>SVG</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Platforms</label>
+                        <div class="checkbox-group" id="platforms">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="platforms" value="facebook">
+                                <span>Facebook</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="platforms" value="instagram">
+                                <span>Instagram</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="platforms" value="twitter">
+                                <span>Twitter</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="platforms" value="linkedin">
+                                <span>LinkedIn</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tags Section -->
+                <div class="section">
+                    <h2 class="section-title">Tags</h2>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <div class="tags-input" id="tagsInput">
+                            <input type="text" placeholder="Type and press Enter to add tags">
+                        </div>
+                        <small>Add up to 5 relevant tags to help buyers find your promotion</small>
+                    </div>
+                </div>
+
+                <!-- Media Section -->
+                <div class="section">
+                    <h2 class="section-title">Media</h2>
+                    <div class="form-group">
+                        <label>Main Image</label>
+                        <div class="upload-area" id="mainImageUpload">
+                            <p>Click to update main image</p>
+                            <input type="file" id="mainImageInput" accept="image/*" style="display: none">
+                            <div class="image-preview" id="mainImagePreview"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Additional Images</label>
+                        <div class="upload-area" id="additionalImagesUpload">
+                            <p>Click to update additional images</p>
+                            <input type="file" id="additionalImagesInput" accept="image/*" multiple style="display: none">
+                            <div class="image-preview" id="additionalImagesPreview"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Packages Section -->
+                <div class="section">
+                    <h2 class="section-title">Packages</h2>
+                    <div class="packages">
+                        <!-- Basic Package -->
+                        <div class="package-panel basic">
+                            <h3>Basic Package</h3>
+                            <div class="form-group">
+                                <label>Benefits</label>
+                                <textarea rows="4" placeholder="List the features included in this package..." 
+                                    required name="basic_package_benefits"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Delivery Days</label>
+                                <input type="number" min="1" max="30" placeholder="Number of days" 
+                                    required name="basic_package_delivery_days">
+                            </div>
+                            <div class="form-group">
+                                <label>Revisions</label>
+                                <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                    name="basic_package_revisions">
+                            </div>
+                            <div class="form-group">
+                                <label>Price (USD)</label>
+                                <input type="number" min="5" step="5" placeholder="Enter price" 
+                                    required name="basic_package_price">
+                            </div>
+                        </div>
+
+                        <!-- Premium Package -->
+                        <div class="package-panel premium">
+                            <h3>Premium Package</h3>
+                            <div class="form-group">
+                                <label>Benefits</label>
+                                <textarea rows="4" placeholder="List the features included in this package..." 
+                                    required name="premium_package_benefits"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Delivery Days</label>
+                                <input type="number" min="1" max="30" placeholder="Number of days" 
+                                    required name="premium_package_delivery_days">
+                            </div>
+                            <div class="form-group">
+                                <label>Revisions</label>
+                                <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                    name="premium_package_revisions">
+                            </div>
+                            <div class="form-group">
+                                <label>Price (USD)</label>
+                                <input type="number" min="5" step="5" placeholder="Enter price" 
+                                    required name="premium_package_price">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update promotion</button>
+            </div>
+        </form>
+
+        <div class="notification" id="notification"></div>
+    </div>
 
     <script>
-    // Function to fetch and populate gig details
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchGigDetails();
-        });
-
-        async function fetchGigDetails() {
-            const gigId = new URLSearchParams(window.location.search).get('gigId');
-            console.log("Gig ID:", gigId);
-
-            if (!gigId) {
-                alert('Gig ID not provided.');
-                return;
+        class NotificationManager {
+            constructor() {
+                this.element = document.getElementById('notification');
+                this.timeout = null;
             }
 
-            try {
-                // Use the correct endpoint based on your router's route structure
-                const response = await fetch(`/influencerDataController/fetchSinglePromotion/${gigId}`);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch gig details. Status: ${response.status}`);
-                }
+            show(message, type = 'success') {
+                clearTimeout(this.timeout);
+                this.element.textContent = message;
+                this.element.className = `notification ${type}`;
+                this.element.style.display = 'block';
+                
+                this.timeout = setTimeout(() => {
+                    this.hide();
+                }, 3000);
+            }
 
-                const gig = await response.json();
-                console.log("Gig details:", gig);
-
-                // Populate form fields with fetched gig details
-                document.getElementById('editTitle').value = gig.title || '';
-                document.getElementById('editDescription').value = gig.description || '';
-                document.getElementById('editplatform').value = Array.isArray(gig.platform)
-                    ? gig.platform.join(', ')
-                    : (gig.platform || '');
-                document.getElementById('editTags').value = Array.isArray(gig.tags)
-                    ? gig.tags.join(', ')
-                    : (gig.tags || '');
-
-                // Basic Package
-                document.getElementById('editBasicPrice').value = gig.packages[0].price || '';
-                document.getElementById('editBasicBenefits').value = gig.packages[0].benefits || '';
-                document.getElementById('editBasicDeliveryDays').value = gig.packages[0].delivery_days || '';
-                document.getElementById('editBasicRevisions').value = gig.packages[0].revisions || '';
-
-                // Premium Package
-                document.getElementById('editPremiumPrice').value = gig.packages[1].price || '';
-                document.getElementById('editPremiumBenefits').value = gig.packages[1].benefits || '';
-                document.getElementById('editPremiumDeliveryDays').value = gig.packages[1].delivery_days || '';
-                document.getElementById('editPremiumRevisions').value = gig.packages[1].revisions || '';
-            } catch (error) {
-                console.error("Error fetching gig details:", error);
-                alert("Failed to fetch gig details. Please try again.");
+            hide() {
+                this.element.style.display = 'none';
             }
         }
 
-        async function saveGigDetails() {
-            const gigId = new URLSearchParams(window.location.search).get('gigId');
-            if (!gigId) {
-                alert("No gig ID provided in the URL.");
-                return;
+        class UpdatepromotionManager {
+            constructor() {
+                this.notification = new NotificationManager();
+                this.setupFormElements();
+                this.setupEventListeners();
+                this.loadpromotionData();
+                this.removedImages = []; // Array to track removed images
             }
 
-            // Construct the updated gig object
-            const updatedGig = {
-                title: document.getElementById('editTitle').value,
-                description: document.getElementById('editDescription').value,
-                platform: document.getElementById('editplatform').value
-                    .split(',')
-                    .map(format => format.trim()), // Trim whitespace from each format
-                tags: document.getElementById('editTags').value.split(',').map(tag => tag.trim()), // Trim whitespace
-                basic: {
-                    price: parseFloat(document.getElementById('editBasicPrice').value) || 0, // Ensure numeric value
-                    benefits: document.getElementById('editBasicBenefits').value || '',
-                    delivery_days: parseInt(document.getElementById('editBasicDeliveryDays').value) || 0, // Ensure integer
-                    revisions: parseInt(document.getElementById('editBasicRevisions').value) || 0 // Ensure integer
-                },
-                premium: {
-                    price: parseFloat(document.getElementById('editPremiumPrice').value) || 0, // Ensure numeric value
-                    benefits: document.getElementById('editPremiumBenefits').value || '',
-                    delivery_days: parseInt(document.getElementById('editPremiumDeliveryDays').value) || 0, // Ensure integer
-                    revisions: parseInt(document.getElementById('editPremiumRevisions').value) || 0 // Ensure integer
-                }
-            };
+            setupFormElements() {
+                this.form = document.getElementById('updatepromotionForm');
+                this.mainImageInput = document.getElementById('mainImageInput');
+                this.mainImagePreview = document.getElementById('mainImagePreview');
+                this.additionalImagesInput = document.getElementById('additionalImagesInput');
+                this.additionalImagesPreview = document.getElementById('additionalImagesPreview');
+            }
 
-            try {
-                const response = await fetch(`/influencerDataController/updatePromotion/${gigId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedGig)
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                this.mainImageInput.addEventListener('change', (e) => this.handleMainImageChange(e));
+                this.additionalImagesInput.addEventListener('change', (e) => this.handleAdditionalImagesChange(e));
+
+                document.getElementById('mainImageUpload').addEventListener('click', () => {
+                    this.mainImageInput.click();
+                });
+                document.getElementById('additionalImagesUpload').addEventListener('click', () => {
+                    this.additionalImagesInput.click();
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to save gig details. Status: ${response.status}`);
+                this.setupTagsInput();
+            }
+
+            setupTagsInput() {
+                const tagsInput = document.querySelector('#tagsInput input');
+                const tags = new Set();
+
+                tagsInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && tags.size < 5) {
+                        e.preventDefault();
+                        const tag = tagsInput.value.trim();
+                        if (tag && !tags.has(tag)) {
+                            tags.add(tag);
+                            this.addTagToDisplay(tag);
+                            tagsInput.value = '';
+                        }
+                    }
+                });
+            }
+
+            addTagToDisplay(tag) {
+                const tagsContainer = document.createElement('span');
+                tagsContainer.className = 'tag';
+                tagsContainer.textContent = tag;
+
+                // Create a remove button for the tag
+                const removeButton = document.createElement('button');
+                removeButton.className = 'tag-remove';
+                removeButton.innerHTML = '×'; // You can use an icon or text for the remove button
+                removeButton.onclick = () => {
+                    this.removeTag(tag, tagsContainer); // Call the remove function
+                };
+
+                tagsContainer.appendChild(removeButton); // Append the remove button to the tag
+                document.getElementById('tagsInput').appendChild(tagsContainer);
+            }
+
+            removeTag(tag, tagsContainer) {
+                // Remove the tag from the displayed tags
+                tagsContainer.remove();
+                // Also remove the tag from the Set (if you are using one)
+                const tags = Array.from(document.querySelectorAll('#tagsInput .tag')).map(tag => tag.textContent.replace('×', '').trim());
+                const tagSet = new Set(tags);
+                tagSet.delete(tag);
+            }
+
+            async loadpromotionData() {
+                    const pathSegments = window.location.pathname.split('/');
+                    const promotionId = pathSegments[pathSegments.length - 1]; // Get the last segment
+
+                    if (!promotionId) {
+                        throw new Error('No promotion ID provided');
+                    }
+
+                    const response = await fetch(`/api/service/${promotionId}?packages=true&service=true`);
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch promotion data');
+                    }
+
+                    const result = await response.json();
+                    console.log(result);
+                try {
+                    if (result) {
+                        this.populateForm(result);
+                    } else {
+                        throw new Error('API response indicated failure');
+                    }
+                } catch (error) {
+                    console.error('Error loading promotion data:', error);
+                    this.notification.show('Failed to load promotion data', 'error');
+                }
+            }
+
+            populateForm(data) {
+                // const { service, packages } = data;
+                const service = data;
+                const packages = data.packages;
+
+                // Populate basic information
+                document.getElementById('promotionTitle').value = service.title;
+                document.getElementById('promotionDescription').value = service.description;
+                document.getElementById('serviceType').value = service.service_type;
+
+                // Populate delivery formats
+                // const deliveryFormats = service.delivery_formats.split(',');
+                const deliveryFormats = JSON.parse(service.delivery_formats);
+                deliveryFormats.forEach(format => {
+                    const checkbox = document.querySelector(`input[name="delivery_formats"][value="${format}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Populate platforms
+                // const platforms = service.platforms.split(',');
+                const platforms = JSON.parse(service.platforms);
+                platforms.forEach(platform => {
+                    const checkbox = document.querySelector(`input[name="platforms"][value="${platform}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Populate tags
+                const tags = JSON.parse(service.tags);
+                tags.forEach(tag => {
+                    this.addTagToDisplay(tag);
+                });
+
+                // Populate images
+                this.displayImage(this.mainImagePreview, "/" + service.cover_image, true);
+                service.media.forEach(imageUrl => {
+                    if (imageUrl !== service.cover_image) {
+                        this.displayImage(this.additionalImagesPreview, "/" + imageUrl);
+                    }
+                });
+
+                // Populate packages
+                packages.forEach(pkg => {
+                    const type = pkg.package_type;
+                    document.querySelector(`[name="${type}_package_benefits"]`).value = pkg.benefits;
+                    document.querySelector(`[name="${type}_package_delivery_days"]`).value = pkg.delivery_days;
+                    document.querySelector(`[name="${type}_package_revisions"]`).value = pkg.revisions;
+                    document.querySelector(`[name="${type}_package_price"]`).value = parseFloat(pkg.price);
+                });
+            }
+
+            displayImage(container, imageUrl, isMain = false) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-item';
+
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = 'promotion image';
+
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-image';
+                removeButton.innerHTML = '×';
+                removeButton.onclick = (e) => {
+                    e.stopPropagation();
+                    this.removeImage(imageUrl, wrapper, isMain); // Call the remove function
+                };
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeButton);
+                container.appendChild(wrapper);
+            }
+
+            removeImage(imageUrl, wrapper, isMain) {
+                // Remove the image from the displayed images
+                wrapper.remove();
+                // Add the image URL to the removedImages array
+                this.removedImages.push(imageUrl);
+            }
+
+            handleMainImageChange(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    this.mainImagePreview.innerHTML = '';
+                    this.displayImage(this.mainImagePreview, URL.createObjectURL(file), true);
+                }
+            }
+
+            handleAdditionalImagesChange(event) {
+                const files = Array.from(event.target.files);
+                files.forEach(file => {
+                    if (this.additionalImagesPreview.children.length < 4) {
+                        this.displayImage(this.additionalImagesPreview, URL.createObjectURL(file));
+                    }
+                });
+            }
+
+            async handleSubmit(event) {
+                event.preventDefault();
+
+                try {
+                    const formData = new FormData(this.form);
+                    
+                    // Add current images data
+                    this.addImagesToFormData(formData);
+
+                    // Add removed images to form data
+                    formData.append('removedImages', JSON.stringify(this.removedImages));
+
+                    // Add tags to form data
+                    const tags = Array.from(document.querySelectorAll('#tagsInput .tag')).map(tag => tag.textContent.replace('×', '').trim());
+                    formData.append('tags', JSON.stringify(tags));
+
+                    // Convert delivery formats to JSON
+                    const deliveryFormats = Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value);
+                    formData.append('deliveryFormats', JSON.stringify(deliveryFormats)); // Convert to JSON
+
+                    // Convert platforms to JSON
+                    const platforms = Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value);
+                    formData.append('platforms', JSON.stringify(platforms)); // Convert to JSON
+
+                    const pathSegments = window.location.pathname.split('/');
+                    const promotionId = pathSegments[pathSegments.length - 1]; // Get the last segment
+                    formData.append('id', promotionId);
+
+                    // Log the data to be sent to the backend for debugging
+                    console.log('Data to be sent to the backend:', {
+                        title: document.getElementById('promotionTitle').value,
+                        description: document.getElementById('promotionDescription').value,
+                        serviceType: document.getElementById('serviceType').value,
+                        deliveryFormats: Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value),
+                        platforms: Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value),
+                        tags: tags,
+                        mainImage: this.mainImageInput.files.length > 0 ? this.mainImageInput.files[0].name : null,
+                        additionalImages: Array.from(this.additionalImagesInput.files).map(file => file.name),
+                        removedImages: this.removedImages, // Log removed images
+                        packages: Array.from(document.querySelectorAll('.package-panel')).map(panel => ({
+                            benefits: panel.querySelector('textarea[name$="_package_benefits"]').value,
+                            deliveryDays: panel.querySelector('input[name$="_package_delivery_days"]').value,
+                            revisions: panel.querySelector('input[name$="_package_revisions"]').value,
+                            price: panel.querySelector('input[name$="_package_price"]').value,
+                        })),
+                    });
+
+                    // Make API call to update promotion
+                    const response = await fetch(`/api/update-promotion/${promotionId}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update promotion');
+                    }
+
+                    this.notification.show('promotion updated successfully!', 'success');
+                    // setTimeout(() => {
+                    //     window.location.href = '/designer/my-promotions';
+                    // }, 1500);
+
+                } catch (error) {
+                    console.error('Error updating promotion:', error);
+                    this.notification.show('Failed to update promotion. Please try again.', 'error');
+                }
+            }
+
+            addImagesToFormData(formData) {
+                if (this.mainImageInput.files.length > 0) {
+                    formData.append('mainImage', this.mainImageInput.files[0]);
                 }
 
-                const result = await response.json();
-                alert(result.message || "Gig updated successfully.");
-                if (result.status === "success") {
-                    window.location.href = "/influencerViewController/influencerpackages"; // Redirect to the gigs page after successful update
+                if (this.additionalImagesInput.files.length > 0) {
+                    Array.from(this.additionalImagesInput.files).forEach((file, index) => {
+                        formData.append(`additionalImage${index}`, file);
+                    });
                 }
-            } catch (error) {
-                console.error("Error saving gig details:", error);
-                alert("Failed to save changes. Please try again.");
             }
         }
 
-        // Attach event listener to the Save button after DOM is fully loaded
+        // Initialize the update promotion manager when the DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            const saveButton = document.getElementById('saveEditButton');
-            if (saveButton) {
-                saveButton.addEventListener('click', saveGigDetails);
-            } else {
-                console.error("Save button not found in the DOM.");
-            }
+            new UpdatepromotionManager();
         });
-
     </script>
+</body>
 </html>

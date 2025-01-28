@@ -115,6 +115,9 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 1.25rem;
+            background: none;
+            border: none;
+            color: white;
         }
         /* -------------------- */
 
@@ -340,13 +343,13 @@
                         <textarea id="gigDescription" name="description" rows="6" placeholder="Describe your services in detail..." required></textarea>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="serviceType">Service Type</label>
                         <select id="serviceType" name="serviceType" required>
                             <option value="gig">Gig</option>
                             <option value="service">Service</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Delivery & Platforms Section -->
@@ -607,7 +610,7 @@
                         throw new Error('No gig ID provided');
                     }
 
-                    const response = await fetch(`/api/gig/${gigId}?packages=true&service=true`);
+                    const response = await fetch(`/api/service/${gigId}?packages=true&service=true`);
 
                     if (!response.ok) {
                         throw new Error('Failed to fetch gig data');
@@ -635,7 +638,7 @@
                 // Populate basic information
                 document.getElementById('gigTitle').value = service.title;
                 document.getElementById('gigDescription').value = service.description;
-                document.getElementById('serviceType').value = service.service_type;
+                // document.getElementById('serviceType').value = service.service_type;
 
                 // Populate delivery formats
                 // const deliveryFormats = service.delivery_formats.split(',');

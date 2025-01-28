@@ -1,5 +1,3 @@
-
-
 <html lang="en">
 
 <head>
@@ -13,8 +11,8 @@
 
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            margin-top: 3rem;
+            margin: 0rem auto;
+            /* margin-top: 3rem; */
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
@@ -443,7 +441,7 @@
             throw new Error('User ID is required in the URL');
             }
 
-            const response = await fetch(`/api/getUser/${userId}?service=true&packages=true`);
+            const response = await fetch(`/api/user/${userId}?service=true&packages=true`);
             const userData = await response.json();
 
             // console.log(result);

@@ -183,7 +183,7 @@
             </div>
 
             <div class="card-content">
-                <form id="registrationForm" class="form-grid" method="POST" action="/auth/register">
+                <form id="registrationForm" class="form-grid" method="POST" action="/api/register">
                     <input type="hidden" id="role" name="role" value="<?php echo $data[0] ?>" required>
                     <div class="two-columns">
                         <div class="input-group">

@@ -312,7 +312,7 @@
       overflow: hidden;
       box-shadow: var(--card-shadow);
       position: sticky;
-      top: 2rem;
+      top: 6rem;
       height: fit-content;
     }
 
@@ -535,18 +535,18 @@
       try {
         // Get the gig ID from the URL path
         const pathSegments = window.location.pathname.split('/');
-        const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+        const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
 
-        if (!gigId) {
+        if (!serviceID) {
           throw new Error('Gig ID is required in the URL');
         }
 
-        const response = await fetch(`/api/gig/${gigId}?service=true&packages=true`);
+        const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
         const result = await response.json();
 
         // console.log(result.service_type);
 
-        console.log(result);
+        console.log(result.user);
         const serviceId = result.service_id;
 
         const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
@@ -558,11 +558,12 @@
           breadcrumb: {
             categories: ["Services", serviceType] // Static categories for now
           },
+          serviceType: result.service_type,
           gig: {
             title: result.title,
             seller: {
-              name: "Designer Name",
-              avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=48&h=48&fit=crop",
+              name: result.user.name,
+              avatar: result.user.profile_picture,
               rating: 4.8,
               reviewCount: "2k+"
             },
@@ -622,7 +623,7 @@
         renderPlatforms();
         renderReviews();
         renderTags();
-        renderPricingContent('standard', serviceId);
+        renderPricingContent('standard', serviceId, gigData.serviceType);
 
         // Image navigation functionality
         const thumbnails = document.querySelectorAll('.thumbnail');
@@ -656,7 +657,7 @@
                 <ul>
                     <li><a href="/"><i class="fas fa-home"></i></a></li>
                     ${gigData.breadcrumb.categories.map(category =>
-        `<li><a href="#">${category}</a></li>`
+        `<li><a href="/services">${category}</a></li>`
       ).join('')}
                 </ul>
             `;
@@ -733,7 +734,7 @@
       document.querySelector('.tags-container').innerHTML = tagsHtml;
     }
 
-    function renderPricingContent(plan, serviceId) {
+    function renderPricingContent(plan, serviceId, serviceType) {
       const data = gigData.gig.pricing[plan];
       console.log(data);
       const content = `
@@ -756,9 +757,10 @@
                     `).join('')}
                 </div>
                 <div class="price">${data.price}</div>
-                <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">Order Now</button>
-                <button class="contact-button" onclick="window.location.href='#'">Contact Seller</button>
-            `;
+                <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">${serviceType == "gig" ? "Order Now" : "Request to Order"}</button>
+                ${serviceType == "promotion" ? '<button class="contact-button" onclick="window.location.href=\'/businessman/request-package\'">Request custom package</button>' : ''}
+                <button class="contact-button" onclick="window.location.href='#'">Contact ${serviceType == "gig" ? "Designer" : "Influencer"}</button>
+                `;
       document.getElementById('pricing-content').innerHTML = content;
     }
 

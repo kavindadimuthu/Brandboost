@@ -31,15 +31,42 @@ class ServiceController extends BaseController
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
         $includeUser =  $queryParams['include_user'] ?? false;
-        $search = $queryParams['search'] ?? null;
+        $search = $queryParams['query'] ?? null;
+        $serviceType = $queryParams['type'] ?? null;
         $role = $queryParams['role'] ?? null; // 'influencer' or 'designer'
-        $user = $queryParams['user'] ?? null;
+        $user = isset($queryParams['current_user']) && $queryParams['current_user'] == 'true' ? AuthHelper::getCurrentUser()['user_id'] : null;
         $priceMin = isset($queryParams['price_min']) ? (float)$queryParams['price_min'] : null;
         $priceMax = isset($queryParams['price_max']) ? (float)$queryParams['price_max'] : null;
-        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 20;
         $offset = isset($queryParams['offset']) ? (int)$queryParams['offset'] : 0;
-        $sortBy = $queryParams['sort_by'] ?? 'created_at';
-        $orderDir = $queryParams['order_dir'] ?? 'asc';
+
+        $sort = $queryParams['sort'] ?? null;
+        // DebugHelper::dump($sort);
+
+        // $sortBy = $queryParams['sort'] ?? 'created_at';
+        // $orderDir = $queryParams['order_dir'] ?? 'asc';
+
+        if($sort){
+            if($sort == 'newest'){
+                $sortBy = 'created_at';
+                $orderDir = 'desc';
+            } else if($sort == 'oldest'){
+                $sortBy = 'created_at';
+                $orderDir = 'asc';
+            } else if($sort == 'price_asc'){
+                $sortBy = 'price';
+                $orderDir = 'asc';
+            } else if($sort == 'price_desc'){
+                $sortBy = 'price';
+                $orderDir = 'desc';
+            } else {
+                $sortBy = 'created_at';
+                $orderDir = 'asc';
+            }
+        } else {
+            $sortBy = 'created_at';
+            $orderDir = 'asc';
+        }
 
         // Retrieve the necessary models
         $serviceModel = $this->model('Services\Service');
@@ -58,9 +85,13 @@ class ServiceController extends BaseController
             $options['searchColumns'] = ['title', 'description'];
         }
 
-        if ($role) {
-            $conditions['service_type'] = $role; // Filter by role (influencer or designer)
+        if ($serviceType) {
+            $conditions['service_type'] = $serviceType;
         }
+
+        // if ($role) {
+        //     $conditions['service_type'] = $role; // Filter by role (influencer or designer)
+        // }
         
         if ($user) {
             $conditions['user_id'] = $user; // Filter by role (influencer or designer)
@@ -124,6 +155,7 @@ class ServiceController extends BaseController
         $serviceId = $queryParams['id'] ?? null;
         $includeAnalytics = $queryParams['include_analytics'] ?? false;
         $includecustomPackages = $queryParams['include_custom_packages'] ?? false;
+        $includeUser =  $queryParams['include_user'] ?? false;
 
         // Validate required parameter
         if (!$serviceId) {
@@ -161,6 +193,13 @@ class ServiceController extends BaseController
         if ($includecustomPackages) {
             $customPackages = $serviceCustomPackageModel->getCustomPackagesByServiceId($serviceId);
             $service['custom_packages'] = $customPackages;
+        }
+
+        // Include user details if requested
+        if ($includeUser){
+            $userModel = $this->model('Users\\User');
+            $user = $userModel->getUserById($service['user_id']);
+            $service['user'] = $user;
         }
 
         // Send the response with complete service details
@@ -202,6 +241,12 @@ class ServiceController extends BaseController
                     $mediaPaths[] = $mediaPath;
                 }
             }
+        }
+
+        if(AuthHelper::getCurrentUser()['role'] == 'designer'){
+            $formData['service_type'] = 'gig';
+        } else if (AuthHelper::getCurrentUser()['role'] == 'influencer'){
+            $formData['service_type'] = 'promotion';
         }
 
         // Prepare service data for insertion
