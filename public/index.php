@@ -116,7 +116,6 @@ $app->router->get('/chat', 'CommonController@chat'); // Chat
 // ==================================
 // Authentication Routes
 // ==================================
-$app->router->post('/auth/register', 'AuthController@register'); // Register
 $app->router->post('/auth/login', 'AuthController@login'); // Login
 $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 
@@ -129,6 +128,7 @@ $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 // User Management
 $app->router->get('/api/users', 'UserController@getUserList'); // Get User Profile
 $app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
+$app->router->post('/api/register', 'UserController@createUser'); // Register User
 $app->router->post('/update-user/{id}', 'UserController@updateUserProfile'); // Update User Profile
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
