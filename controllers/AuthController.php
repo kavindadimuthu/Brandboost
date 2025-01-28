@@ -49,7 +49,8 @@ class AuthController extends BaseController {
             'username' => $user['name'],
             'email' => $user['email'],
             'profile_picture' => $user['profile_picture'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            'verification_status' => $user['verification_status']
         ];
         AuthHelper::logIn($loggedUser);
 

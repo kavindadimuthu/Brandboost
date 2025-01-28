@@ -186,6 +186,12 @@ class UserController extends BaseController
             return;
         }
 
+        if ($role == 'businessman' || $role == 'influencer'){
+            $verificationStatus = 'unverified';
+        } else if ($role == 'designer'){
+            $verificationStatus = 'verified';
+        } 
+
         // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -199,7 +205,9 @@ class UserController extends BaseController
             'password' => $hashedPassword,
             'role' => $role,
             'profile_picture' => null,
-            'bio' => null
+            'bio' => null,
+            'account_status' => 'active',
+            'verification_status' => $verificationStatus
         ];
 
         if (!$userModel->createUser($user)) {
