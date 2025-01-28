@@ -7,7 +7,7 @@ use app\core\BaseController;
 class BusinessmanController extends BaseController
 {
     public function __construct(){
-        // \app\core\Helpers\AuthHelper::CheckPermission('businessman');
+        \app\core\Helpers\AuthHelper::CheckPermission('businessman');
     }
 
     public function ordersList($req, $res){

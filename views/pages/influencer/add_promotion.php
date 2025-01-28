@@ -970,7 +970,7 @@
             }
         } 
 
-        class promotionForm {
+        class PromotionForm {
             constructor() {
                 this.currentStage = 1;
                 this.totalStages = 3;
@@ -1006,6 +1006,7 @@
             }
 
             populateFormOptions() {
+                // console.log('Populating form options...');
                 // Populate delivery formats
                 const deliveryFormatsContainer = document.getElementById('deliveryFormats');
                 CONFIG.DELIVERY_FORMATS.forEach(format => {
@@ -1248,7 +1249,7 @@
         let promotionForm; // Declare promotionForm in the global scope
 
         document.addEventListener('DOMContentLoaded', () => {
-            promotionForm = new promotionForm();
+            promotionForm = new PromotionForm();
             promotionForm.init();
         }); 
     </script>

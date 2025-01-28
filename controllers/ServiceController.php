@@ -235,6 +235,12 @@ class ServiceController extends BaseController
             }
         }
 
+        if(AuthHelper::getCurrentUser()['role'] == 'designer'){
+            $formData['service_type'] = 'gig';
+        } else if (AuthHelper::getCurrentUser()['role'] == 'influencer'){
+            $formData['service_type'] = 'promotion';
+        }
+
         // Prepare service data for insertion
         $serviceData = [
             'user_id' => $formData['user_id'] ?? AuthHelper::getCurrentUser()['user_id'],
