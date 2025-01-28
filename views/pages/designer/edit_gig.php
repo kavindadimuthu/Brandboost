@@ -343,13 +343,13 @@
                         <textarea id="gigDescription" name="description" rows="6" placeholder="Describe your services in detail..." required></textarea>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="serviceType">Service Type</label>
                         <select id="serviceType" name="serviceType" required>
                             <option value="gig">Gig</option>
                             <option value="service">Service</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Delivery & Platforms Section -->
@@ -638,7 +638,7 @@
                 // Populate basic information
                 document.getElementById('gigTitle').value = service.title;
                 document.getElementById('gigDescription').value = service.description;
-                document.getElementById('serviceType').value = service.service_type;
+                // document.getElementById('serviceType').value = service.service_type;
 
                 // Populate delivery formats
                 // const deliveryFormats = service.delivery_formats.split(',');

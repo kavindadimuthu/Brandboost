@@ -155,6 +155,7 @@ class ServiceController extends BaseController
         $serviceId = $queryParams['id'] ?? null;
         $includeAnalytics = $queryParams['include_analytics'] ?? false;
         $includecustomPackages = $queryParams['include_custom_packages'] ?? false;
+        $includeUser =  $queryParams['include_user'] ?? false;
 
         // Validate required parameter
         if (!$serviceId) {
@@ -192,6 +193,13 @@ class ServiceController extends BaseController
         if ($includecustomPackages) {
             $customPackages = $serviceCustomPackageModel->getCustomPackagesByServiceId($serviceId);
             $service['custom_packages'] = $customPackages;
+        }
+
+        // Include user details if requested
+        if ($includeUser){
+            $userModel = $this->model('Users\\User');
+            $user = $userModel->getUserById($service['user_id']);
+            $service['user'] = $user;
         }
 
         // Send the response with complete service details

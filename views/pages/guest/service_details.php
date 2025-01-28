@@ -541,12 +541,12 @@
           throw new Error('Gig ID is required in the URL');
         }
 
-        const response = await fetch(`/api/service/${serviceID}?service=true&packages=true`);
+        const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
         const result = await response.json();
 
         // console.log(result.service_type);
 
-        console.log(result);
+        console.log(result.user);
         const serviceId = result.service_id;
 
         const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
@@ -562,8 +562,8 @@
           gig: {
             title: result.title,
             seller: {
-              name: "Designer Name",
-              avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=48&h=48&fit=crop",
+              name: result.user.name,
+              avatar: result.user.profile_picture,
               rating: 4.8,
               reviewCount: "2k+"
             },

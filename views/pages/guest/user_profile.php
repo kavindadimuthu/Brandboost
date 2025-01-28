@@ -1,5 +1,3 @@
-
-
 <html lang="en">
 
 <head>
@@ -13,8 +11,8 @@
 
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            margin-top: 3rem;
+            margin: 0rem auto;
+            /* margin-top: 3rem; */
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
