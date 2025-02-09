@@ -204,232 +204,112 @@
     </style>
 </head>
 
+
+<?php
+$user = $_SESSION['user'] ?? null;
+$userRole = $user['role'] ?? 'guest';
+?>
+
 <body>
-    <div class="container">
-        <!-- Profile Header -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-            <img alt="Cover Photo of a creative workspace with design tools" class="w-full h-52 object-cover"
-                height="200"
-                src="https://storage.googleapis.com/a1aa/image/zdP2me4yHzUAcyQqJHQwjpQbwcIK2ZXubqgYsLl9OPaY6O7JA.jpg"
-                width="1200" />
-            <div class="p-6 flex items-center">
-                <img alt="Profile Picture of Ravi Fernando" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
-                    height="100"
-                    src="https://storage.googleapis.com/a1aa/image/cHPenI4r0MSgNKvpHTTQu8HgtqOTcVjayefFEeD7FZ3gS3ZPB.jpg"
-                    width="100" />
-                <div class="ml-6">
-                    <h1 class="text-2xl font-bold">
-                        <!-- Will be set by JavaScript -->
-                    </h1>
-                    <p id="userRole-container" class="text-gray-600">
-                        <!-- Role will be set by JavaScript -->
-                    </p>
-                </div>
-            </div>
+  <main class="container mx-auto p-4">
+    <!-- Profile Header: common for all roles -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+      <img alt="Cover Photo" class="w-full h-52 object-cover"
+           src="<?php echo $user['cover_photo'] ?? '/assets/images/default-cover.jpg'; ?>" />
+      <div class="p-6 flex items-center">
+        <img alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
+             src="<?php echo $user['profile_picture'] ?? '/assets/images/dp-empty.png'; ?>" />
+        <div class="ml-6">
+          <h1 class="text-2xl font-bold"><?php echo $user['username'] ?? 'Unknown User'; ?></h1>
+          <p class="text-gray-600"><?php echo ucfirst($userRole); ?></p>
         </div>
-        <!-- Bio Section -->
+      </div>
+    </div>
+
+    <!-- Bio Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-semibold text-indigo-700">Bio</h3>
+        <p class="text-gray-700 mt-4"></p>
+        <p class="text-gray-700 mt-2">Location: <?php echo $user['location'] ?? 'Not specified'; ?></p>
+      </div>
+
+
+      <?php if (in_array($userRole, ['designer'])): ?>
+
+        <!-- Design Expertise Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Bio
-            </h3>
-            <p class="text-gray-700 mt-4">
-                Ravi Fernando is a seasoned designer specializing in graphic and UX/UI design. With over 10 years of
-                experience, Ravi has a unique style that blends creativity with functionality. His work is known for its
-                clean aesthetics and user-centric approach.
-            </p>
-            <p class="text-gray-700 mt-2">
-                Location: Colombo, Sri Lanka
-            </p>
+        <h3 class="text-lg font-semibold text-indigo-700">Design Expertise</h3>
+        <div class="mt-4">
+            <h4 class="text-md font-semibold text-indigo-700">Specialties:</h4>
+            <p class="text-gray-700 mt-2"><?php echo $user['specialties'] ?? 'Not specified'; ?></p>
+            <h4 class="text-md font-semibold text-indigo-700 mt-4">Tools Used:</h4>
+            <p class="text-gray-700 mt-2"><?php echo $user['tools_used'] ?? 'Not specified'; ?></p>
         </div>
-        <!-- Contact Information -->
-
-        <!-- Design Expertise -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Design Expertise
-            </h3>
-            <div class="mt-4">
-                <h4 class="text-md font-semibold text-indigo-700">
-                    Specialties:
-                </h4>
-                <p class="text-gray-700 mt-2">
-                    Graphic Design
-                </p>
-                <p class="text-gray-700 mt-2">
-                    UX/UI Design
-                </p>
-                <p class="text-gray-700 mt-2">
-                    Branding
-                </p>
-                <h4 class="text-md font-semibold text-indigo-700 mt-4">
-                    Tools Used:
-                </h4>
-                <p class="text-gray-700 mt-2">
-                    Adobe Photoshop
-                </p>
-                <p class="text-gray-700 mt-2">
-                    Sketch
-                </p>
-                <p class="text-gray-700 mt-2">
-                    Figma
-                </p>
-            </div>
         </div>
-        <!-- Portfolio Highlights -->
+        <?php endif; ?>
+
+
+        <?php if (in_array($userRole, ['influencer'])): ?>
+
+        <!-- Design Expertise Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Portfolio Highlights
-            </h3>
-            <div class="mt-4">
-                <h4 class="text-md font-semibold text-indigo-700">
-                    Featured Projects:
-                </h4>
-               
-
-                <div class="dynamic-portfolio" id="dynamic-portfolio"></div>
-
-                <!-- dynamic portfolio -->
-                <script>
-                    document.addEventListener('DOMContentLoaded', async () => {
-                        try {
-                            // const response = await fetch(`/DesignerDataController/viewPortfolio`);
-                            // const portfolio = await response.json();
-
-                            // console.log(portfolio[0]);
-
-                            // renderPortfolioDetails(portfolio);
-                        } catch (error) {
-                            console.error('Error fetching portfolio details:', error);
-                        }
-
-                    });
-
-                    function renderPortfolioDetails(portfolio) {
-                        const portfolioContainer = document.getElementById('dynamic-portfolio');
-
-                        console.log(portfolio);
-
-                        portfolio.forEach(item => {
-                            const portfolioHTML = `
-                            <h5 class="text-sm font-semibold text-gray-700">
-                            Project Title: ${escapeHtml(item.title)}
-                            </h5>
-                            <p class="text-gray-600 text-sm mt-2">${escapeHtml(item.description)}</p>
-                            <div class="images">
-                                <div class="image-gallery grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mt-2">
-                                    ${item.cover_image ? `<img src="/${escapeHtml(item.cover_image)}" alt="Cover Image"
-                                    class="w-full h-40 object-cover rounded-lg" height="200px">` : ''}
-                                    ${item.first_image ? `<img src="/${escapeHtml(item.first_image)}" alt="First Image"
-                                    class="w-full h-40 object-cover rounded-lg" height="200px">` : ''}
-                                    ${item.second_image ? `<img src="/${escapeHtml(item.second_image)}" alt="Second Image" 
-                                    class="w-full h-40 object-cover rounded-lg" height="200px">` : ''}
-                                    ${item.third_image ? `<img src="/${escapeHtml(item.third_image)}" alt="Third Image" 
-                                    class="w-full h-40 object-cover rounded-lg" height="200px">` : ''}
-                                    ${item.fourth_image ? `<img src="/${escapeHtml(item.fourth_image)}" alt="Fourth Image" 
-                                    class="w-full h-40 object-cover rounded-lg" height="200px">` : ''}
-                                </div>
-                            </div>
-                `;
-                            portfolioContainer.innerHTML += portfolioHTML;
-                        });
-
-                    }
-
-                    function escapeHtml(text) {
-                        const div = document.createElement('div');
-                        div.innerText = text;
-                        return div.innerHTML;
-                    }
-                </script>
-                <!-- dynamic portfolio ends -->
-
-            </div>
+        <h3 class="text-lg font-semibold text-indigo-700">Social Media Accounts</h3>
+        <div class="mt-4">
+            <h4 class="text-md font-semibold text-indigo-700">Specialties:</h4>
+            <p class="text-gray-700 mt-2"><?php echo $user['specialties'] ?? 'Not specified'; ?></p>
+            <h4 class="text-md font-semibold text-indigo-700 mt-4">Tools Used:</h4>
+            <p class="text-gray-700 mt-2"><?php echo $user['tools_used'] ?? 'Not specified'; ?></p>
         </div>
-        <!-- Client Testimonials -->
-
-        <!-- Services Offered -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Gigs
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                <div class="bg-white rounded-lg shadow-lg p-4">
-                    <img alt="Gig Image for Logo Design" class="w-full h-40 object-cover rounded-lg" height="200"
-                        src="https://storage.googleapis.com/a1aa/image/oPbkknGr7fT6IaFpDZEh5oBtrcN6AkqdtCiudvpGsrCQ6O7JA.jpg"
-                        width="300" />
-                    <h4 class="text-md font-semibold text-gray-700 mt-2">
-                        Logo Design
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-2">
-                        Starting at $300
-                    </p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-4">
-                    <img alt="Gig Image for Website Design" class="w-full h-40 object-cover rounded-lg" height="200"
-                        src="https://storage.googleapis.com/a1aa/image/FCyIAWv8lTYLMROa0KwZCKH37xVEefaLWP5ZaQNnh3efR3ZPB.jpg"
-                        width="300" />
-                    <h4 class="text-md font-semibold text-gray-700 mt-2">
-                        Website Design
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-2">
-                        Starting at $1000
-                    </p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-4">
-                    <img alt="Gig Image for Branding Consultation" class="w-full h-40 object-cover rounded-lg"
-                        height="200"
-                        src="https://storage.googleapis.com/a1aa/image/nseMLfVsPDp1w0lw9xnAkFMnfHB11QBNQ4DPAMnmU7NLp7snA.jpg"
-                        width="300" />
-                    <h4 class="text-md font-semibold text-gray-700 mt-2">
-                        Branding Consultation
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-2">
-                        Starting at $500
-                    </p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-4">
-                    <img alt="Gig Image for UX/UI Design" class="w-full h-40 object-cover rounded-lg" height="200"
-                        src="https://storage.googleapis.com/a1aa/image/aGSe54vHvgUQIiHskC1ODfpNdcEJL0Q75ETYbhDnRJj00d2TA.jpg"
-                        width="300" />
-                    <h4 class="text-md font-semibold text-gray-700 mt-2">
-                        UX/UI Design
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-2">
-                        Starting at $800
-                    </p>
-                </div>
-            </div>
         </div>
+        <?php endif; ?>
 
-        <!-- Analytics -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 class="text-lg font-semibold text-indigo-700">
-                Analytics
-            </h3>
-            <div class="mt-4">
-                <p class="text-gray-700">
-                    <strong>
-                        Total Projects Completed:
-                    </strong>
-                    120
-                </p>
-                <p class="text-gray-700 mt-2">
-                    <strong>
-                        Average Client Rating:
-                    </strong>
-                    4.9 out of 5
-                </p>
-                <p class="text-gray-700 mt-2">
-                    <strong>
-                        Years of Experience:
-                    </strong>
-                    10
-                </p>
-            </div>
+    <?php if (in_array($userRole, ['designer','influencer'])): ?>
+      <!-- Portfolio Highlights Section (loaded dynamically) -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-semibold text-indigo-700">Portfolio Highlights</h3>
+        <div class="mt-4" id="dynamic-portfolio">
+          <!-- Portfolio items will be loaded here via JavaScript -->
         </div>
     </div>
 
-    <script>
+
+    <!-- Gigs Section -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+<?php if (in_array($userRole, ['influencer'])): ?>
+  <h3 class="text-lg font-semibold text-indigo-700">Promotions</h3>
+  <?php endif; ?>
+
+  <?php if (in_array($userRole, ['designer'])): ?>
+  <h3 class="text-lg font-semibold text-indigo-700">Gigs</h3>
+  <?php endif; ?>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6" id="gigs-container">
+    <!-- Gig items will be loaded here dynamically via JavaScript -->
+  </div>
+</div>
+
+      <!-- Analytics Section -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-semibold text-indigo-700">Analytics</h3>
+        <div class="mt-4">
+          <p class="text-gray-700"><strong>Total Projects Completed:</strong> <?php echo $user['total_projects'] ?? '0'; ?></p>
+          <p class="text-gray-700 mt-2"><strong>Average Client Rating:</strong> <?php echo $user['average_rating'] ?? '0'; ?></p>
+          <p class="text-gray-700 mt-2"><strong>Years of Experience:</strong> <?php echo $user['experience_years'] ?? '0'; ?></p>
+        </div>
+      </div>      
+      
+    <?php elseif ($userRole === 'businessman'): ?>
+      <!-- BUSINESSMAN: Show order history -->
+
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-semibold text-indigo-700">Reviews from sellers</h3>
+        <p class="text-gray-700 mt-4">Order history and details go here...</p>
+      </div>
+    <?php endif; ?>
+
+  </main>
+
+  <script>
         // let UserData;
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -455,6 +335,60 @@
             document.title = `${userData.name}'s Profile`;
         });
     </script>
+
+    
+<script>
+// Fetch gigs data using your updated parameters and render them into the gigs-container
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // Build query parameters based on your changes (current_user: true)
+    const queryParams = new URLSearchParams({ current_user: true });
+    // Fetch gigs data from your API endpoint (adjust the URL as needed)
+    const response = await fetch(`/api/services?${queryParams}`);
+    const result = await response.json();
+    const gigs = result.services;
+
+    console.log(gigs);
+    
+    // Render the gigs using the renderGigs function
+    renderGigs(gigs);
+  } catch (error) {
+    console.error('Error fetching gigs:', error);
+  }
+});
+
+// Function to render the gigs into the gigs-container
+function renderGigs(gigs) {
+  const gigsContainer = document.getElementById('gigs-container');
+  
+  if (!gigs || gigs.length === 0) {
+    gigsContainer.innerHTML = '<p class="text-gray-600">No gigs available at the moment.</p>';
+    return;
+  }
+  
+  gigs.forEach(gig => {
+    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+    const gigHTML = `
+      <div class="bg-white rounded-lg shadow-lg p-4"  onclick="window.location.href='/services/${gig.service_id}'" style="cursor: pointer;">
+        <img alt="Gig Image for ${escapeHtml(gig.title)}" 
+             class="w-full h-40 object-cover rounded-lg" 
+             <img src="/${gig.cover_image}" class="gig-thumb me-2" alt="thumbnail">
+        <h4 class="text-md font-semibold text-gray-700 mt-2">${escapeHtml(gig.title)}</h4>
+        <p class="text-gray-600 text-sm mt-2">Starting at $${escapeHtml(basicPackage.price)}</p>
+      </div>
+    `;
+    gigsContainer.innerHTML += gigHTML;
+  });
+}
+
+// Utility function to safely escape HTML
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.innerText = text;
+  return div.innerHTML;
+}
+</script>
+    
 </body>
 
 </html>
