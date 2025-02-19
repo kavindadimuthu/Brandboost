@@ -320,6 +320,14 @@
                 document.querySelector('.feature-value.delivery-time').textContent = `${packageDetails.delivery_days} Days`;
                 document.querySelector('.feature-value.revisions').textContent = `${packageDetails.revisions} Revisions`;
                 document.querySelector('.feature-value.price').textContent = `$${packageDetails.price}`;
+
+                // Update badge based on package type
+                const badgeElement = document.querySelector('.badge');
+                if (packageDetails.package_type === 'basic') {
+                    badgeElement.textContent = 'Basic Package';
+                } else if (packageDetails.package_type === 'premium') {
+                    badgeElement.textContent = 'Premium Package';
+                }
             }
         }
 
