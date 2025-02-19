@@ -230,21 +230,21 @@
                     <i class="fas fa-clock feature-icon"></i>
                     <div>
                         <div class="feature-label">Delivery Time</div>
-                        <div class="feature-value">7 Days</div>
+                        <div class="feature-value delivery-time">0 Days</div>
                     </div>
                 </div>
                 <div class="feature-item">
                     <i class="fas fa-sync feature-icon"></i>
                     <div>
                         <div class="feature-label">Revisions</div>
-                        <div class="feature-value">2 Revisions</div>
+                        <div class="feature-value revisions">0 Revisions</div>
                     </div>
                 </div>
                 <div class="feature-item">
                     <i class="fas fa-dollar-sign feature-icon"></i>
                     <div>
                         <div class="feature-label">Price</div>
-                        <div class="feature-value">$500</div>
+                        <div class="feature-value price">$0</div>
                     </div>
                 </div>
             </div>
@@ -280,7 +280,7 @@
                 </div>
 
                 <div class="button-group">
-                    <button type="button" class="btn-secondary">Save Draft</button>
+                    <button type="button" class="btn-secondary">Cancel</button>
                     <button type="submit" class="btn-primary">Place Order</button>
                 </div>
             </form>
@@ -292,6 +292,38 @@
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const fileList = document.getElementById('fileList');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('service_id');
+        const packageId = urlParams.get('package_id');
+
+        if (!serviceId) {
+          throw new Error('Gig ID is required in the URL');
+        }
+
+        async function fetchServiceDetails(serviceId) {
+            try {
+                const response = await fetch(`/api/service/${serviceId}?service=true&packages=true&include_user=true`);
+                const result = await response.json();
+                console.log(result);
+                updateGigFeatures(result);
+            } catch (error) {
+                console.error('Error fetching service details:', error);
+            }
+        }
+
+        function updateGigFeatures(data) {
+            console.log(data);
+            const packageDetails = data.packages.find(pkg => pkg.package_id == packageId);
+            console.log(packageDetails);
+            if (packageDetails) {
+                document.querySelector('.feature-value.delivery-time').textContent = `${packageDetails.delivery_days} Days`;
+                document.querySelector('.feature-value.revisions').textContent = `${packageDetails.revisions} Revisions`;
+                document.querySelector('.feature-value.price').textContent = `$${packageDetails.price}`;
+            }
+        }
+
+        fetchServiceDetails(serviceId);
 
         dropZone.addEventListener('click', () => fileInput.click());
 
@@ -334,7 +366,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const serviceId = urlParams.get('service_id');
             const packageId = urlParams.get('package_id');
-            
+
             const formData = new FormData();
             formData.append('requirements', document.getElementById('requirements').value);
             formData.append('description', document.getElementById('description').value);
@@ -353,7 +385,7 @@
 
             // Simulated API call
             console.log('Form submitted:', Object.fromEntries(formData));
-            fetch('/api/createOrder', {
+            fetch('/api/create-order', {
                             method: 'POST',
                             body: formData
                         })
