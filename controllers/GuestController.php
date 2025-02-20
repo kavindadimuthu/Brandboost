@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/UserController.php';
 
 use app\core\BaseController;
 use app\core\Helpers\AuthHelper;
@@ -24,8 +25,17 @@ class GuestController extends BaseController
 
     public function userProfile($req, $res)
     {
-        $userId = $req->getParam('id') ?? null;
-        $this->renderLayout('main', 'pages/guest/user_profile');
+        $userController = new UserController();
+        // $userId = $req->getParam('id');
+        $userData = $userController->getUserProfile($req, $res, true);
+
+        if ($userData) {
+            error_log(print_r($userData, true));
+        } else {
+            error_log('User data is empty or invalid');
+        }
+
+        $this->renderLayout('main', 'pages/guest/user_profile', ['userData' => $userData]);
     }
 
     public function influencersList($req, $res)
