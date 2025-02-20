@@ -24,7 +24,7 @@ class GuestController extends BaseController
 
     public function userProfile($req, $res)
     {
-        $userId = $req->getParam('id') ?? null;
+        $userId = $req->getParam('id') ?? null;   
         $this->renderLayout('main', 'pages/guest/user_profile');
     }
 

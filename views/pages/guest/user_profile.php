@@ -248,6 +248,14 @@ $userRole = $user['role'] ?? 'guest';
         </div>
         <?php endif; ?>
 
+        <!-- Portfolio Highlights Section (loaded dynamically) -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-semibold text-indigo-700">Portfolio Highlights</h3>
+        <div class="mt-4" id="dynamic-portfolio">
+          <!-- Portfolio items will be loaded here via JavaScript -->
+        </div>
+    </div>
+
 
         <?php if (in_array($userRole, ['influencer'])): ?>
 
@@ -264,15 +272,7 @@ $userRole = $user['role'] ?? 'guest';
         <?php endif; ?>
 
     <?php if (in_array($userRole, ['designer','influencer'])): ?>
-      <!-- Portfolio Highlights Section (loaded dynamically) -->
-      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h3 class="text-lg font-semibold text-indigo-700">Portfolio Highlights</h3>
-        <div class="mt-4" id="dynamic-portfolio">
-          <!-- Portfolio items will be loaded here via JavaScript -->
-        </div>
-    </div>
-
-
+      
     <!-- Gigs Section -->
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
 <?php if (in_array($userRole, ['influencer'])): ?>
@@ -302,92 +302,18 @@ $userRole = $user['role'] ?? 'guest';
       <!-- BUSINESSMAN: Show order history -->
 
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h3 class="text-lg font-semibold text-indigo-700">Reviews from sellers</h3>
-        <p class="text-gray-700 mt-4">Order history and details go here...</p>
-      </div>
+  <h3 class="text-lg font-semibold text-indigo-700">Business Informations</h3>
+  <div id="business-info"></div>
+</div>
+
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+  <h3 class="text-lg font-semibold text-indigo-700">Reviews from sellers</h3>
+  <div id="seller-reviews"></div>
+</div>
+
     <?php endif; ?>
 
   </main>
-
-  <script>
-        // let UserData;
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Get the gig ID from the URL path
-            const pathSegments = window.location.pathname.split('/');
-            const userId = pathSegments[pathSegments.length - 1]; // Get the last segment
-
-            if (!userId) {
-            throw new Error('User ID is required in the URL');
-            }
-
-            const response = await fetch(`/api/user/${userId}?service=true&packages=true`);
-            const userData = await response.json();
-
-            // console.log(result);
-            // Update DOM elements with user data
-            document.querySelector('h1.text-2xl').textContent = userData.name || 'Name Not Available';
-            document.querySelector('img.w-24.h-24').src = userData.profile_picture || 'default-profile-picture.jpg';
-            document.querySelector('p.text-gray-700.mt-4').textContent = userData.bio || 'No bio available';
-            document.querySelector('#userRole-container').textContent = userData.role || 'role not available';
-            
-            // Update page title
-            document.title = `${userData.name}'s Profile`;
-        });
-    </script>
-
-    
-<script>
-// Fetch gigs data using your updated parameters and render them into the gigs-container
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // Build query parameters based on your changes (current_user: true)
-    const queryParams = new URLSearchParams({ current_user: true });
-    // Fetch gigs data from your API endpoint (adjust the URL as needed)
-    const response = await fetch(`/api/services?${queryParams}`);
-    const result = await response.json();
-    const gigs = result.services;
-
-    console.log(gigs);
-    
-    // Render the gigs using the renderGigs function
-    renderGigs(gigs);
-  } catch (error) {
-    console.error('Error fetching gigs:', error);
-  }
-});
-
-// Function to render the gigs into the gigs-container
-function renderGigs(gigs) {
-  const gigsContainer = document.getElementById('gigs-container');
-  
-  if (!gigs || gigs.length === 0) {
-    gigsContainer.innerHTML = '<p class="text-gray-600">No gigs available at the moment.</p>';
-    return;
-  }
-  
-  gigs.forEach(gig => {
-    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-    const gigHTML = `
-      <div class="bg-white rounded-lg shadow-lg p-4"  onclick="window.location.href='/services/${gig.service_id}'" style="cursor: pointer;">
-        <img alt="Gig Image for ${escapeHtml(gig.title)}" 
-             class="w-full h-40 object-cover rounded-lg" 
-             <img src="/${gig.cover_image}" class="gig-thumb me-2" alt="thumbnail">
-        <h4 class="text-md font-semibold text-gray-700 mt-2">${escapeHtml(gig.title)}</h4>
-        <p class="text-gray-600 text-sm mt-2">Starting at $${escapeHtml(basicPackage.price)}</p>
-      </div>
-    `;
-    gigsContainer.innerHTML += gigHTML;
-  });
-}
-
-// Utility function to safely escape HTML
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.innerText = text;
-  return div.innerHTML;
-}
-</script>
     
 </body>
 
