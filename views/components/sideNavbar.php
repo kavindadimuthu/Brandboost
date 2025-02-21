@@ -1,229 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
 <style>
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
 
-*{
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 70px;
+    --primary-color: #4361ee;
+    --hover-color: #3651d4;
+    --text-color: #f8f9fa;
+    --transition-speed: 0.3s;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f8f9fa;
 }
-.container {
-    display: flex;
-}
-
-
-/* Side bar Styles Begin......... */
 
 .sidebar {
-    width: 250px;
-    background-color: #fff;
-    border-right: 1px solid #e0e0e0;
-    padding: 20px;
+    width: var(--sidebar-width);
     height: 100vh;
+    background: var(--primary-color);
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 1.5rem;
+    transition: all var(--transition-speed) ease;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-y: auto;
-    transition: width 0.3s;
-    background: linear-gradient(135deg, #4b0082 0%, #6a11cb 100%);
-    color: #fff;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    z-index: 1000;
 }
+
 .sidebar.collapsed {
-    width: 80px;
+    width: var(--sidebar-collapsed-width);
 }
-.sidebar-top-container {
+
+.sidebar-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 50px;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    color: var(--text-color);
 }
-.sidebar h1 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    transition: opacity 0.3s;
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
 }
-.toggle-sidebar {
-    cursor: pointer;
-    padding: 10px;
-    background-color: #000;
-    color: #fff;
+
+.logo-container h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--transition-speed);
+}
+
+.sidebar.collapsed .logo-container h1 {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
     border: none;
+    width: 35px;
+    height: 35px;
     border-radius: 8px;
-    /* Add curvature */
-    height: 40px;
-    width: 40px;
-}
-.sidebar.collapsed h1 {
-    display: none;
-}
-.sidebar.collapsed .sidebar-top-container {
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    transition: background var(--transition-speed);
 }
-.sidebar ul {
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
-.sidebar ul li {
-    margin-bottom: 10px;
+
+.nav-item {
+    margin-bottom: 0.5rem;
 }
-.sidebar ul li a {
-    text-decoration: none;
-    color: #fff;
+
+.nav-link {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 0.8rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
     border-radius: 8px;
-    transition: padding 0.3s;
-    font-size: 14px;
+    transition: background var(--transition-speed);
+    white-space: nowrap;
 }
-.sidebar ul li a i {
-    margin-right: 10px;
-    transition: margin 0.3s;
+
+.nav-link:hover {
+    background: var(--hover-color);
 }
-.sidebar.collapsed ul li a {
-    padding: 10px 10px;
+
+.nav-link i {
+    font-size: 1.2rem;
+    min-width: 25px;
+    display: flex;
     justify-content: center;
 }
-.sidebar.collapsed ul li a i {
-    margin-right: 0;
+
+.link-text {
+    margin-left: 0.8rem;
+    font-size: 0.95rem;
+    opacity: 1;
+    transition: opacity var(--transition-speed);
 }
-.sidebar.collapsed ul li a .link-text {
+
+.sidebar.collapsed .link-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 500;
+}
+
+.bottom-nav {
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+.sidebar.collapsed .badge {
     display: none;
 }
-/* .sidebar ul li a.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    font-weight: bold;
-} */
-.sidebar ul li.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    font-weight: bold;
-}
-.sidebar ul li a .badge {
-    margin-left: auto;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 12px;
-    font-size: 12px;
-}
-.sidebar .bottom-links {
-    margin-top: auto;
+
+/* Main content adjustment */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    transition: margin var(--transition-speed);
 }
 
-/* ..........Side bar Styles Ends */
-
-
-
+.main-content.expanded {
+    margin-left: var(--sidebar-collapsed-width);
+}
 </style>
 
-
 <div class="sidebar" id="sidebar">
-    <div>
-        <div class="sidebar-top-container">
+    <div class="sidebar-header">
+        <div class="logo-container">
+            <i class="fas fa-shield-alt"></i>
             <h1>Admin Portal</h1>
-            <button class="toggle-sidebar" onclick="toggleSidebar()">
-                <i class="fas fa-arrow-left" id="toggle-icon"></i>
-            </button>
         </div>
-        <ul>
-            <li>
-                <a href="/admin/dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
+        <button class="toggle-btn" id="toggle-btn">
+            <i class="fas fa-chevron-left" id="toggle-icon"></i>
+        </button>
+    </div>
+    
+    <nav>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/admin/dashboard" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/users-list">
+            <li class="nav-item">
+                <a href="/admin/users-list" class="nav-link">
                     <i class="fas fa-users"></i>
-                    <span class="link-text">User management</span>
+                    <span class="link-text">User Management</span>
+                    <span class="badge">23</span>
                 </a>
             </li>
-            <li>
-                <a class="active" href="/admin/complaints-list">
+            <li class="nav-item">
+                <a href="/admin/complaints-list" class="nav-link">
                     <i class="fas fa-exclamation-circle"></i>
-                    <span class="link-text">Complains</span>
+                    <span class="link-text">Complaints</span>
+                    <span class="badge">5</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/verifications-list">
-                    <i class="fa-brands fa-cloudversify"></i>
+            <li class="nav-item">
+                <a href="/admin/verifications-list" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
                     <span class="link-text">Verifications</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/orders-list">
-                    <i class="fa-regular fa-circle-question"></i>
+            <li class="nav-item">
+                <a href="/admin/orders-list" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
                     <span class="link-text">Orders</span>
                 </a>
             </li>
-            <li>
-                <a href="/admin/actions-list">
-                    <i class="fa-regular fa-circle-question"></i>
+            <li class="nav-item">
+                <a href="/admin/actions-list" class="nav-link">
+                    <i class="fas fa-tasks"></i>
                     <span class="link-text">Actions</span>
                 </a>
             </li>
         </ul>
-    </div>
-    <div class="bottom-links">
-        <ul>
-            <li>
-                <a href="/auth/logout">
+    </nav>
+
+    <nav class="bottom-nav">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/auth/logout" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span class="link-text">Log out</span>
+                    <span class="link-text">Logout</span>
                 </a>
             </li>
         </ul>
-    </div>
+    </nav>
 </div>
 
 <script>
-    // Function to dynamically change the active class
-    document.addEventListener("DOMContentLoaded", function () {
-        const sidebarItems = document.querySelectorAll(".sidebar li");
-
-        // Remove 'active' class from all items initially
-        sidebarItems.forEach(item => item.classList.remove("active"));
-
-        // Add 'active' class based on current URL
-        sidebarItems.forEach(item => {
-            const link = item.querySelector("a");
-
-            // Check if the pathname of the link matches the current page's pathname
-            if (link && link.pathname === window.location.pathname) {
-                item.classList.add("active");
-            }
-
-            // Add click event listener to set the active class when clicked
-            item.addEventListener("click", function () {
-                sidebarItems.forEach(i => i.classList.remove("active"));
-                item.classList.add("active");
-            });
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const mainContent = document.querySelector('.main-content');
+    
+    // Toggle sidebar
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        mainContent?.classList.toggle('expanded');
+        
+        // Toggle icon
+        if (sidebar.classList.contains('collapsed')) {
+            toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        } else {
+            toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+        }
     });
 
+    // Set active link based on current URL
+    const navLinks = document.querySelectorAll('.nav-link');
+    const currentPath = window.location.pathname;
 
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleIcon = document.getElementById('toggle-icon');
-        sidebar.classList.toggle('collapsed');
-        if (sidebar.classList.contains('collapsed')) {
-            toggleIcon.classList.remove('fa-arrow-left');
-            toggleIcon.classList.add('fa-arrow-right');
-        } else {
-            toggleIcon.classList.remove('fa-arrow-right');
-            toggleIcon.classList.add('fa-arrow-left');
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
         }
-    }
 
+        // Add hover effect for touch devices
+        link.addEventListener('touchstart', function() {
+            this.style.background = 'var(--hover-color)';
+        });
+
+        link.addEventListener('touchend', function() {
+            setTimeout(() => {
+                this.style.background = '';
+            }, 200);
+        });
+    });
+});
 </script>

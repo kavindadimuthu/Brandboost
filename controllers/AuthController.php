@@ -33,10 +33,17 @@ class AuthController extends BaseController {
         }
 
         // Retrieve the User model using baseController method
+        $adminModel = $this->model('Users\Admin');
         $userModel = $this->model('Users\User');
 
-        // Fetch user by email
-        $user = $userModel->getUserByEmail($email);
+        // Fetch admin or user by email
+        $user = $adminModel->getAdminByEmail($email);
+        if($user) {
+            $user['role'] = 'admin';
+            $user['user_id'] = $user['admin_id'];
+        } else {
+            $user = $userModel->getUserByEmail($email);
+        }
 
         if (!$user || !password_verify($password, $user['password'])) {
             $response->sendError('Invalid email or password.', 401);
@@ -44,13 +51,18 @@ class AuthController extends BaseController {
         }
 
         // Set session data for the authenticated user
+        if ($user['role'] === 'admin') {
+            $loggedUser['admin_id'] = $user['user_id'];
+        } else {
+            $loggedUser['user_id'] = $user['user_id'];
+            $loggedUser['profile_picture'] = $user['profile_picture'];
+            $loggedUser['verification_status'] = $user['verification_status'];
+        }
         $loggedUser = [
-            'user_id' => $user['user_id'],
+            // 'user_id' => $user['user_id'],
             'username' => $user['name'],
             'email' => $user['email'],
-            'profile_picture' => $user['profile_picture'],
             'role' => $user['role'],
-            'verification_status' => $user['verification_status']
         ];
         AuthHelper::logIn($loggedUser);
 

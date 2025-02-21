@@ -23,7 +23,7 @@
 </head>
 <body>
     <nav>
-        <?php include APP_ROOT.'/views/components/sideNavbar.php' ?>
+        <?php include '../views/components/sideNavbar.php' ?>
     </nav>
 
     <main>
