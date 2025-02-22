@@ -363,7 +363,7 @@
                     <div class="chat-header">
                         <div class="user">
                             <div class="avatar"></div>
-                            <span class="username">Kaikos Cafe</span>
+                            <span class="username" id="username"></span>
                         </div>
                     </div>
                     <div class="chat-box" id="chatBox">
@@ -426,136 +426,118 @@
 
 
     <script>
-        window.onload = function() {
-            startCountdown();
-        };
+    document.addEventListener('DOMContentLoaded', function() {
+    const username = document.getElementById('username');
+    const chatBox = document.getElementById('chatBox');
+    const orderedBy = document.getElementById('orderedBy');
+    const orderDate = document.getElementById('orderDate');
+    const orderDue = document.getElementById('orderDue');
+    const countdown = document.getElementById('countdown');
+    const reviewPopup = document.getElementById('reviewPopup');
+    const cancelPopup = document.getElementById('cancelPopup');
 
-        // Mock data
-        const orderDetails = {
-            orderedBy: "Kaikos Cafe",
-            orderDate: "Nov 27, 2024, 8:50 AM",
-            orderDue: "Dec 8, 2024, 8:50 AM",
-        };
+    // Extract orderId from the URL
+    const pathSegments = window.location.pathname.split('/');
+    const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment of the URL
 
-        const messages = [{
-                sender: "Kaikos",
-                text: "Hello"
-            },
-            {
-                sender: "Me",
-                text: "Hi"
-            },
-        ];
-
-        // Populate order details
-        document.getElementById("orderedBy").innerText = orderDetails.orderedBy;
-        document.getElementById("orderDate").innerText = orderDetails.orderDate;
-        document.getElementById("orderDue").innerText = orderDetails.orderDue;
-
-        // Populate chat messages
-        const chatBox = document.getElementById("chatBox");
-        messages.forEach((msg) => {
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add("message", msg.sender === "Me" ? "sent" : "received");
-            messageDiv.innerText = msg.text;
-            chatBox.appendChild(messageDiv);
-        });
-
-        // Handle new messages
-        document.getElementById("sendMessage").addEventListener("click", () => {
-            const messageInput = document.getElementById("messageInput");
-            if (messageInput.value.trim() !== "") {
-                const newMessage = {
-                    sender: "Me",
-                    text: messageInput.value.trim()
-                };
-                messages.push(newMessage);
-
-                const messageDiv = document.createElement("div");
-                messageDiv.classList.add("message", "sent");
-                messageDiv.innerText = newMessage.text;
-                chatBox.appendChild(messageDiv);
-
-                messageInput.value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
+    // Fetch order details
+    async function fetchOrderDetails() {
+        try {
+            const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        });
+            const result = await response.json();
 
-        // Countdown timer
-        function startCountdown() {
-            const countdownElement = document.getElementById("countdown");
-            const dueDate = new Date(orderDetails.orderDue).getTime();
-            const interval = setInterval(() => {
-                const now = Date.now();
-                const timeLeft = dueDate - now;
+            console.log('Order details:', result);
 
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    countdownElement.innerText = "Delivery Time Reached!";
-                    document.getElementById("deliverNow").disabled = false;
-                } else {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            // Render order details
+            username.textContent = result.data.user.name;
+            orderedBy.textContent = result.data.user.name;
+            orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
 
-                    countdownElement.innerText = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-                }
-            }, 1000);
+            // Calculate due date
+            const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
+            const deliveryDays = result.data.promise.delivery_days;
+            const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
+            orderDue.textContent = dueDate.toLocaleString();
+
+            // Start countdown
+            startCountdown(dueDate);
+
+            // Render chat messages (if applicable)
+            if (result.data.messages) {
+                result.data.messages.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', message.type);
+                    messageElement.textContent = message.text;
+                    chatBox.appendChild(messageElement);
+                });
+            }
+
+        } catch (error) {
+            console.error('Error fetching order details:', error);
         }
+    }
 
-        // Review Popup
-        const reviewButton = document.getElementById("reviewOrder");
-        const reviewPopup = document.getElementById("reviewPopup");
-        const closePopupButton = document.getElementById("closePopup");
-        const stars = document.querySelectorAll(".stars i");
+    function startCountdown(dueDate) {
+        const countdownElement = document.getElementById('countdown');
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const timeLeft = dueDate - now;
 
-        reviewButton.addEventListener("click", () => {
-            reviewPopup.classList.add("active");
-        });
-
-        closePopupButton.addEventListener("click", () => {
-            reviewPopup.classList.remove("active");
-        });
-
-        stars.forEach(star => {
-            star.addEventListener("click", () => {
-                stars.forEach(s => s.classList.remove("active"));
-                star.classList.add("active");
-                let rating = star.getAttribute("data-rating");
-                for (let i = 0; i < rating; i++) {
-                    stars[i].classList.add("active");
-                }
-            });
-        });
-
-        document.getElementById("submitReview").addEventListener("click", () => {
-            alert("Review submitted!");
-            reviewPopup.classList.remove("active");
-        });
-
-        // Cancel Order Popup
-        const cancelButton = document.getElementById("cancelOrder");
-        const cancelPopup = document.getElementById("cancelPopup");
-        const closeCancelPopupButton = document.getElementById("closeCancelPopup");
-
-        cancelButton.addEventListener("click", () => {
-            cancelPopup.classList.add("active");
-        });
-
-        closeCancelPopupButton.addEventListener("click", () => {
-            cancelPopup.classList.remove("active");
-        });
-
-        document.getElementById("requestCancel").addEventListener("click", () => {
-            const reason = document.getElementById("cancelReason").value.trim();
-            if (reason) {
-                alert("Cancellation requested with reason: " + reason);
-                cancelPopup.classList.remove("active");
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                countdownElement.innerText = 'Delivery Time Reached!';
+                document.getElementById('deliverNow').disabled = false;
             } else {
-                alert("Please provide a reason for cancellation.");
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                countdownElement.innerText = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
             }
-        });
+        }, 1000);
+    }
+
+    // Event listeners for review and cancel popups
+    document.getElementById('reviewOrder').addEventListener('click', () => {
+        reviewPopup.style.display = 'block';
+    });
+
+    document.getElementById('closePopup').addEventListener('click', () => {
+        reviewPopup.style.display = 'none';
+    });
+
+    document.getElementById('cancelOrder').addEventListener('click', () => {
+        cancelPopup.style.display = 'block';
+    });
+
+    document.getElementById('closeCancelPopup').addEventListener('click', () => {
+        cancelPopup.style.display = 'none';
+    });
+
+    // Submit review
+    document.getElementById('submitReview').addEventListener('click', () => {
+        const stars = document.querySelectorAll('.stars .fa-star.active');
+        const rating = stars.length;
+        // Send rating to the server
+        console.log('Rating submitted:', rating);
+        reviewPopup.style.display = 'none';
+    });
+
+    // Request cancellation
+    document.getElementById('requestCancel').addEventListener('click', () => {
+        const cancelReason = document.getElementById('cancelReason').value;
+        // Send cancellation request to the server
+        console.log('Cancellation reason:', cancelReason);
+        cancelPopup.style.display = 'none';
+    });
+
+    // Initialize
+    fetchOrderDetails();
+});
     </script>
 </body>
 

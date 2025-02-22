@@ -20,30 +20,37 @@ class OrderController extends BaseController {
      * @param Response $response The response object to return data.
      * @return void JSON response with order details or error message.
      */
-    public function getOrderProfile($request, $response): void {
-        // Initialize models
-        $orderModel = new Orders();
-        $orderPromiseModel = new OrderPromises();
-
-        // Parse request parameters
-        $orderId = $request->getParam('order_id');
-
-        if (empty($orderId)) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Missing required parameter: order_id.'
-            ]);
+    public function getOrderProfile($request, $response): void
+    {
+        error_log("entered to getOrderProfile");
+        if ($request->getMethod() !== 'GET') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
             return;
         }
 
+        // Retrieve query parameters
+        $queryParams = $request->getQueryParams();
+        $orderId = $queryParams['order_id'];
+        $includeUser = $queryParams['include_user'] ?? false;
+
+        // Validate required parameter
+        if (empty($orderId)) {
+            $response->sendError('Missing required parameter: order_id.', 400);
+            return;
+        }
+
+        // Retrieve the necessary models
+        $orderModel = $this->model('Orders\Orders');
+        $orderPromiseModel = $this->model('Orders\OrderPromises');
+        $userModel = $this->model('Users\User'); // Assuming a User model exists
+
+        error_log($orderId);
         // Fetch order data
         $orderData = $orderModel->getOrderById($orderId);
 
         if (!$orderData) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Order not found.'
-            ]);
+            $response->sendError('Order not found.', 404);
             return;
         }
 
@@ -51,10 +58,7 @@ class OrderController extends BaseController {
         $promise = $orderPromiseModel->getPromiseByOrderId($orderId);
 
         if (!$promise) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'No promise found for this order.'
-            ]);
+            $response->sendError('No promise found for this order.', 404);
             return;
         }
 
@@ -64,7 +68,19 @@ class OrderController extends BaseController {
             'promise' => $promise
         ];
 
-        // Return the response
+        // Include user details if requested
+        if ($includeUser) {
+            $userId = $orderData['customer_id']; // Assuming the order data contains a user_id field
+            $user = $userModel->getUserById($userId);
+
+            if ($user) {
+                $orderProfile['user'] = $user;
+            } else {
+                $orderProfile['user'] = null; // Or handle the case where the user is not found
+            }
+        }
+
+        // Send the response with order profile data
         $response->sendJson([
             'success' => true,
             'message' => 'Order profile retrieved successfully.',
