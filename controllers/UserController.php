@@ -81,7 +81,7 @@ class UserController extends BaseController
      * @param object $request  Request object containing input data (e.g., user_id).
      * @param object $response Response object to send back HTTP responses.
      */
-    public function getUserProfile($request, $response): void {
+    public function getUserProfile($request, $response, $byController = false) {
         if ($request->getMethod() !== 'GET') {
             $response->setStatusCode(405);
             $response->sendError('Method Not Allowed');
@@ -147,7 +147,11 @@ class UserController extends BaseController
         }
 
         // Send the response with user profile data
-        $response->sendJson($userProfile);
+        if($byController){
+            return $userProfile;
+        } else{
+            $response->sendJson($userProfile);
+        }
     }
 
     /**

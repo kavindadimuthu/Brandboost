@@ -253,10 +253,16 @@ class OrderController extends BaseController {
             'service_type' => $serviceData['service_type'] 
         ]);
 
+        $buyerRequest = json_encode([
+            'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
+            'description' => $requestData['description'] ?? 'No description provided.'
+        ]);
+
         // Create promises associated with the order
         $promiseData = [
             'order_id' => $orderId,
             'accepted_service' => $agreedData,
+            'requested_service' => $buyerRequest,
             'delivery_days' => $packageData['delivery_days'] ?? 0,
             'number_of_revisions' => $packageData['revisions'] ?? 0,
             'price' => $packageData['price'] ?? 0.00

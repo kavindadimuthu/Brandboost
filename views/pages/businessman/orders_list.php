@@ -86,7 +86,7 @@
 
         // Function to load data into the table
         async function loadOrdersData(data) {
-            const response = await fetch(`/api/getOrderList?include_seller=true`);
+            const response = await fetch(`/api/orders?include_seller=true`);
                 result = await response.json();
 
                 const orders = result.data;
@@ -113,7 +113,7 @@
                 `;
                 
                 row.addEventListener('click', () => {
-                    window.location.href = '/businessman/order-details/2';
+                    window.location.href = '/businessman/order-details/' + order.order_id;
                 });
                 
                 tableBody.appendChild(row);
