@@ -224,7 +224,6 @@
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                             </svg>
-                            <input type="tel" id="phone" name="phone" class="input" placeholder="+1 (555) 000-0000" required>
                         </div>
                     </div>
 
@@ -270,46 +269,6 @@
         </div>
     </div>
 
-    <script>
-        // document.getElementById('registrationForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-            
-        //     // Get form values
-        //     const firstName = document.getElementById('firstName').value;
-        //     const lastName = document.getElementById('lastName').value;
-        //     const email = document.getElementById('email').value;
-        //     const phone = document.getElementById('phone').value;
-        //     const gender = document.getElementById('gender').value;
-        //     const password = document.getElementById('password').value;
-        //     const confirmPassword = document.getElementById('confirmPassword').value;
-        //     const privacy = document.getElementById('privacy').checked;
-
-        //     // Basic validation
-        //     if (password !== confirmPassword) {
-        //         alert('Passwords do not match!');
-        //         return;
-        //     }
-
-        //     if (!privacy) {
-        //         alert('Please agree to the Privacy Policy');
-        //         return;
-        //     }
-
-        //     // Here you would typically send the data to your server
-        //     console.log('Form submitted:', {
-        //         firstName,
-        //         lastName,
-        //         email,
-        //         phone,
-        //         gender,
-        //         password
-        //     });
-
-        //     // For demo purposes, show success message
-        //     alert('Registration successful!');
-        // });
-
-        
-    </script>
+   
 </body>
 </html>
