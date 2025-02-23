@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/UserController.php';
+require_once __DIR__ . '/ServiceController.php';
 
 use app\core\BaseController;
 use app\core\Helpers\AuthHelper;
@@ -23,20 +24,46 @@ class GuestController extends BaseController
         $this->renderLayout('main', 'pages/guest/service_details');
     }
 
+
+
     public function userProfile($req, $res)
-    {
-        $userController = new UserController();
-        // $userId = $req->getParam('id');
-        $userData = $userController->getUserProfile($req, $res, true);
+{
+    $userController = new UserController();
+    $serviceController = new ServiceController();
 
-        if ($userData) {
-            error_log(print_r($userData, true));
-        } else {
-            error_log('User data is empty or invalid');
-        }
+    // Fetch user profile data
+    $userData = $userController->getUserProfile($req, $res, true);
 
-        $this->renderLayout('main', 'pages/guest/user_profile', ['userData' => $userData]);
+    // Fetch service profile data
+    $serviceData = $serviceController->getServiceList($req, $res, true);
+
+    // Log the retrieved data for debugging
+    if ($userData) {
+        error_log('User Data: ' . print_r($userData, true));
+    } else {
+        error_log('User data is empty or invalid');
     }
+
+    if ($serviceData) {
+        error_log('Service Data: ' . print_r($serviceData, true));
+    } else {
+        error_log('Service data is empty or invalid');
+    }
+
+    // Combine both data into one array
+    $combinedData = [
+        'userData' => $userData,
+        'serviceData' => $serviceData
+    ];
+
+    error_log('Combined Data: ' . print_r($combinedData, true));
+
+    // Render the page with combined data
+    $this->renderLayout('main', 'pages/guest/user_profile', ['combinedData' => $combinedData]);
+}
+
+
+
 
     public function influencersList($req, $res)
     {

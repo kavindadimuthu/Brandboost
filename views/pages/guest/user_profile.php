@@ -206,21 +206,23 @@
 
 
 <?php
-$user = $_SESSION['user'] ?? null;
-$userRole = $user['role'] ?? 'guest';
+    $user = $combinedData['userData'] ?? []; // Ensure $userData is available
+    $userRole = $user['role'] ?? 'guest'; // Default to 'guest' if role is missing
+    $services = $combinedData['serviceData'] ?? []; // Ensure $serviceData is available
 ?>
+
 
 <body>
   <main class="container mx-auto p-4">
     <!-- Profile Header: common for all roles -->
     <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
       <img alt="Cover Photo" class="w-full h-52 object-cover"
-           src="<?php echo $user['cover_photo'] ?? '/assets/images/default-cover.jpg'; ?>" />
+           src="<?php echo $user['cover_picture'] ?? '/assets/images/default_cover.jpg'; ?>" />
       <div class="p-6 flex items-center">
         <img alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-white -mt-12"
              src="<?php echo $user['profile_picture'] ?? '/assets/images/dp-empty.png'; ?>" />
         <div class="ml-6">
-          <h1 class="text-2xl font-bold"><?php echo $user['username'] ?? 'Unknown User'; ?></h1>
+          <h1 class="text-2xl font-bold"><?php echo $user['name'] ?? 'Unknown User'; ?></h1>
           <p class="text-gray-600"><?php echo ucfirst($userRole); ?></p>
         </div>
       </div>
@@ -229,7 +231,7 @@ $userRole = $user['role'] ?? 'guest';
     <!-- Bio Section -->
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h3 class="text-lg font-semibold text-indigo-700">Bio</h3>
-        <p class="text-gray-700 mt-4"></p>
+        <p class="text-gray-700 mt-4"><?php echo $user['bio'] ?? 'Not specified'; ?></p>
         <p class="text-gray-700 mt-2">Location: <?php echo $user['location'] ?? 'Not specified'; ?></p>
       </div>
 
@@ -273,20 +275,72 @@ $userRole = $user['role'] ?? 'guest';
 
     <?php if (in_array($userRole, ['designer','influencer'])): ?>
       
-    <!-- Gigs Section -->
+        
+<!-- Gigs Section -->
+<?php
+// Extract user ID from the URL
+$requestUri = $_SERVER['REQUEST_URI'];
+$segments = explode('/', trim($requestUri, '/'));
+$userId = end($segments); // Gets the last segment (user ID)
+
+?>
+
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-<?php if (in_array($userRole, ['influencer'])): ?>
-  <h3 class="text-lg font-semibold text-indigo-700">Promotions</h3>
-  <?php endif; ?>
+    <h3 class="text-lg font-semibold text-indigo-700 mb-4">Services Offered</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <?php if (!empty($services) && is_array($services)): ?>
+            <?php foreach ($services as $service): ?>
+                <?php
+                // Ensure the service belongs to the correct user
+                if (!isset($service['user_id']) || $service['user_id'] != $userId) {
+                    continue;
+                }
 
-  <?php if (in_array($userRole, ['designer'])): ?>
-  <h3 class="text-lg font-semibold text-indigo-700">Gigs</h3>
-  <?php endif; ?>
+                error_log('Service Data: ' . print_r($service, true));
+                error_log('Service ID: ' . $service['cover_image']);
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6" id="gigs-container">
-    <!-- Gig items will be loaded here dynamically via JavaScript -->
-  </div>
+                $serviceId = $service['service_id'] ?? '';
+                $title = $service['title'] ?? 'Untitled';
+                $coverImage = $service['cover_image'] ?? '/assets/images/default-service.png';
+                $status = $service['status'] ?? 'Active';
+                $updatedAt = !empty($service['updated_at']) ? date('m/d/Y', strtotime($service['updated_at'])) : 'N/A';
+
+                $basicPrice = 'N/A';
+                $premiumPrice = 'N/A';
+
+                if (!empty($service['packages']) && is_array($service['packages'])) {
+                    foreach ($service['packages'] as $package) {
+                        if ($package['package_type'] === 'basic') {
+                            $basicPrice = $package['price'] ?? 'N/A';
+                        } elseif ($package['package_type'] === 'premium') {
+                            $premiumPrice = $package['price'] ?? 'N/A';
+                        }
+                    }
+                }
+                error_log('Basic Price: ' . $coverImage);
+                ?>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                    <img src="<?php echo $service['cover_image'] ?? '/assets/images/dp-empty.png'; ?>" class="w-full h-48 object-cover" alt="Service thumbnail"/>
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg text-gray-900 mb-2"> <?= htmlspecialchars($title) ?> </h4>
+                        <p class="text-sm text-gray-600">Basic: <span class="font-semibold text-gray-800">$<?= htmlspecialchars($basicPrice) ?></span></p>
+                        <p class="text-sm text-gray-600 mb-2">Premium: <span class="font-semibold text-gray-800">$<?= htmlspecialchars($premiumPrice) ?></span></p>
+                        <p class="text-xs text-gray-500 mb-2">Updated: <?= htmlspecialchars($updatedAt) ?></p>
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full <?= $status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' ?>">
+                            <?= htmlspecialchars($status) ?>
+                        </span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-span-full text-center text-gray-700 py-4">
+                No services found.
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
+
+
 
       <!-- Analytics Section -->
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -303,6 +357,9 @@ $userRole = $user['role'] ?? 'guest';
 
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
   <h3 class="text-lg font-semibold text-indigo-700">Business Informations</h3>
+  <p class="text-gray-700 mt-4">Buisness Name: <?php echo $user['br_details']['business_name'] ?? 'Not specified'; ?></p>
+  <p class="text-gray-700 mt-4">BR Status: <?php echo $user['br_status'] ?? 'Not specified'; ?></p>
+  <p class="text-gray-700 mt-4">BR Document: <?php echo $user['br_document'] ?? 'Not specified'; ?></p>
   <div id="business-info"></div>
 </div>
 

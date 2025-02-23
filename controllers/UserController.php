@@ -115,6 +115,7 @@ class UserController extends BaseController
             'email'           => $user['email'],
             'role'            => $user['role'],
             'profile_picture' => $user['profile_picture'],
+            'cover_picture'   => $user['cover_picture'],
             'bio'             => $user['bio']
         ];
 
@@ -209,6 +210,7 @@ class UserController extends BaseController
             'password' => $hashedPassword,
             'role' => $role,
             'profile_picture' => null,
+            'cover_picture' => null,
             'bio' => null,
             'account_status' => 'active',
             'verification_status' => $verificationStatus
@@ -269,6 +271,7 @@ class UserController extends BaseController
             'name' => $data['name'] ?? $user['name'],
             'email' => $data['email'] ?? $user['email'],
             'profile_picture' => $data['profile_picture'] ?? $user['profile_picture'],
+            'cover_picture' => $data['cover_picture'] ?? $user['cover_picture'],
             'bio' => $data['bio'] ?? $user['bio']
         ];
 

@@ -19,7 +19,7 @@ class ServiceController extends BaseController
      * @param object $request  Request object containing query parameters.
      * @param object $response Response object for returning HTTP responses.
      */
-    public function getServiceList($request, $response): void
+    public function getServiceList($request, $response, $bycontroller = False)
     {
         error_log("entered to getServiceList");
         if ($request->getMethod() !== 'GET') {
@@ -129,6 +129,9 @@ class ServiceController extends BaseController
         }
 
         // Send the response with service data
+        if($bycontroller){
+            return $services;
+        }else
         $response->sendJson(['services' => $services]);
     }
 
