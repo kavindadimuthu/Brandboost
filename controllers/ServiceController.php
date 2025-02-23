@@ -121,7 +121,7 @@ class ServiceController extends BaseController
 
         // // Append user details if requested
         if($includeUser){
-            $userModel = $this->model('Users\\User');
+            $userModel = $this->model('Users\User');
             foreach ($services as &$service) {
                 $user = $userModel->getUserById($service['user_id']);
                 $service['user'] = $user;
