@@ -43,7 +43,7 @@ $app->router->get('/businessman/request-order', 'BusinessmanController@requestOr
 $app->router->get('/businessman/place-order', 'BusinessmanController@placeOrder');
 $app->router->get('/businessman/request-package', 'BusinessmanController@requestPackage');
 // Common shared routes for businessman
-$app->router->get('/businessman/custom-packages', 'BusinessmanController@customPackages');
+$app->router->get('/businessman/custom-packages', 'BusinessmanController@requestedCustomPackages');
 $app->router->get('/businessman/edit-profile', 'BusinessmanController@editProfile');
 $app->router->get('/businessman/change-password', 'BusinessmanController@changePassword');
 
@@ -57,7 +57,7 @@ $app->router->get('/influencer/edit-promotion/{id}', 'InfluencerController@editP
 $app->router->get('/influencer/orders-list', 'InfluencerController@ordersList');
 $app->router->get('/influencer/order-details/{id}', 'InfluencerController@orderDetails');
 // Shared routes for influencer
-$app->router->get('/influencer/custom-packages', 'InfluencerController@customPackages');
+$app->router->get('/influencer/custom-packages', 'InfluencerController@sellerCustomPackages');
 $app->router->get('/influencer/offer-package', 'InfluencerController@offerPackage');
 $app->router->get('/influencer/earnings', 'InfluencerController@earnings');
 $app->router->get('/influencer/edit-profile', 'InfluencerController@editProfile');
@@ -74,7 +74,7 @@ $app->router->get('/designer/edit-gig/{id}', 'DesignerController@editGig');
 $app->router->get('/designer/orders-list', 'DesignerController@ordersList');
 $app->router->get('/designer/order-details/{id}', 'DesignerController@orderDetails');
 // Shared routes for designer
-$app->router->get('/designer/custom-packages', 'DesignerController@customPackages');
+// $app->router->get('/designer/custom-packages', 'DesignerController@customPackages');
 $app->router->get('/designer/offer-package', 'DesignerController@offerPackage');
 $app->router->get('/designer/earnings', 'DesignerController@earnings');
 $app->router->get('/designer/edit-profile', 'DesignerController@editProfile');
@@ -145,6 +145,12 @@ $app->router->post('/api/create-promotion', 'ServiceController@createService'); 
 $app->router->post('/api/update-promotion/{id}', 'ServiceController@updateService'); // Update Promotion
 $app->router->get('/api/delete-promotion/{id}', 'ServiceController@deleteService'); // Delete Promotion
 
+// Custom Package Management
+$app->router->get('/api/custom-packages', 'CustomPackageController@getCustomPackageList'); // Get Custom Package List
+$app->router->get('/api/custom-package/{id}', 'CustomPackageController@getCustomPackageProfile'); // Get Custom Package Profile
+$app->router->post('/api/create-custom-package', 'CustomPackageController@createCustomPackage'); // Create Custom Package
+$app->router->post('/api/update-custom-package/{id}', 'CustomPackageController@updateCustomPackageProfile'); // Get Custom Package Profile
+$app->router->get('/api/delete-custom-package/{id}', 'CustomPackageController@deleteCustomPackage'); // Delete Custom Package
 
 // Order Management
 $app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List

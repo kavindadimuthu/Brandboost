@@ -42,9 +42,9 @@ class InfluencerController extends BaseController
         $this->renderLayout('main', 'pages/common/seller_order_details');
     }
 
-    public function customPackages($req, $res)
+    public function sellerCustomPackages($req, $res)
     {
-        $this->renderLayout('main', 'pages/common/custom_packages');
+        $this->renderLayout('main', 'pages/common/seller_custom_packages');
     }
 
     public function offerPackage($req, $res)

@@ -181,19 +181,20 @@
             <section class="request-details">
                 <h2>Original Request Details</h2>
                 <div class="detail-group">
-                    <h3>Title</h3>
+                    <h3>Promotion Title</h3>
                     <p id="original-title">Website Design Package</p>
                 </div>
                 <div class="detail-group">
-                    <h3>Description</h3>
+                    <h3>Promotion Description</h3>
                     <p id="original-description">Complete website design including homepage, about page, and contact form</p>
                 </div>
                 <div class="detail-group">
                     <h3>Benefits Requested</h3>
                     <p id="original-benefits">- Responsive design
-- SEO optimization
-- Social media integration
-- Contact form setup</p>
+                        - SEO optimization
+                        - Social media integration
+                        - Contact form setup
+                    </p>
                 </div>
                 <div class="detail-group">
                     <h3>Delivery Days</h3>
@@ -253,37 +254,44 @@
 
     <script>
         // Populate original values in the form
-        document.addEventListener('DOMContentLoaded', () => {
-            // In a real implementation, these values would be populated from PHP
-            const originalData = {
-                benefits: document.getElementById('original-benefits').textContent,
-                delivery: '14',
-                revisions: '3',
-                price: '5000'
-            };
-
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const customPackageId = urlParams.get('request_id'); // Get the request_id parameter
+    
+            // Fetch the custom package data from the backend
+            const response = await fetch(`/api/custom-package/${customPackageId}`);
+            const data = await response.json();
+    
+            console.log('Custom Package Data:', data);
+            console.log('Custom Package ID:', customPackageId);
+    
+            const originalData = data;
+    
             // Set original values in the form
-            document.getElementById('modified-benefits').value = originalData.benefits;
-            document.getElementById('modified-delivery').value = originalData.delivery;
-            document.getElementById('modified-revisions').value = originalData.revisions;
-            document.getElementById('modified-price').value = originalData.price;
-
+            document.getElementById('modified-benefits').value = originalData.benefits_requested;
+            document.getElementById('modified-delivery').value = originalData.delivery_days_requested;
+            document.getElementById('modified-revisions').value = originalData.revisions_requested;
+            document.getElementById('modified-price').value = originalData.price_requested;
+    
             // Display original values
-            document.getElementById('benefits-original').textContent = originalData.benefits;
-            document.getElementById('delivery-original').textContent = originalData.delivery + ' days';
-            document.getElementById('revisions-original').textContent = originalData.revisions + ' revisions';
-            document.getElementById('price-original').textContent = 'LKR' + originalData.price;
+            document.getElementById('benefits-original').textContent = originalData.benefits_requested;
+            document.getElementById('delivery-original').textContent = originalData.delivery_days_requested + ' days';
+            document.getElementById('revisions-original').textContent = originalData.revisions_requested + ' revisions';
+            document.getElementById('price-original').textContent = 'LKR' + originalData.price_requested;
+    
+            document.getElementById('original-title').textContent = originalData.service.title;
+            document.getElementById('original-description').textContent = originalData.service.description;
         });
-
-        // Form validation
+    
+        // Form validation and submission
         function validateForm(event) {
             event.preventDefault();
             let isValid = true;
-
+    
             // Reset error states
             document.querySelectorAll('.error-message').forEach(msg => msg.style.display = 'none');
             document.querySelectorAll('.form-control').forEach(input => input.classList.remove('error'));
-
+    
             // Validate Benefits
             const benefits = document.getElementById('modified-benefits').value.trim();
             if (!benefits) {
@@ -291,7 +299,7 @@
                 document.getElementById('modified-benefits').classList.add('error');
                 isValid = false;
             }
-
+    
             // Validate Delivery Days
             const delivery = document.getElementById('modified-delivery').value;
             if (!delivery || delivery < 1) {
@@ -299,7 +307,7 @@
                 document.getElementById('modified-delivery').classList.add('error');
                 isValid = false;
             }
-
+    
             // Validate Revisions
             const revisions = document.getElementById('modified-revisions').value;
             if (!revisions || revisions < 0) {
@@ -307,7 +315,7 @@
                 document.getElementById('modified-revisions').classList.add('error');
                 isValid = false;
             }
-
+    
             // Validate Price
             const price = document.getElementById('modified-price').value;
             if (!price || price <= 0) {
@@ -315,19 +323,43 @@
                 document.getElementById('modified-price').classList.add('error');
                 isValid = false;
             }
-
+    
             if (isValid) {
-                // In a real implementation, this would submit to a PHP endpoint
-                console.log('Form submitted:', {
-                    benefits,
-                    delivery,
-                    revisions,
-                    price
-                });
-                alert('Custom package offer submitted successfully!');
+                const formData = {
+                    benefits: benefits,
+                    delivery: delivery,
+                    revisions: revisions,
+                    price: price,
+                    timestamp: new Date().toISOString()
+                };
+    
+                // Submit the form data to the backend
+                updateCustomPackage(formData);
             }
-
+    
             return false;
+        }
+    
+        async function updateCustomPackage(formData) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const customPackageId = urlParams.get('request_id');
+    
+            const response = await fetch(`/api/update-custom-package/${customPackageId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+    
+            const data = await response.json();
+            console.log(data);
+    
+            if (data.success) {
+                alert('Custom package offer submitted successfully!');
+            } else {
+                alert('Failed to submit custom package offer.');
+            }
         }
     </script>
 </body>

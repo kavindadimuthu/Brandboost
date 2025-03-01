@@ -52,18 +52,22 @@ class AuthController extends BaseController {
 
         // Set session data for the authenticated user
         if ($user['role'] === 'admin') {
-            $loggedUser['admin_id'] = $user['user_id'];
+            $loggedUser['user_id'] = $user['admin_id'];
         } else {
             $loggedUser['user_id'] = $user['user_id'];
             $loggedUser['profile_picture'] = $user['profile_picture'];
             $loggedUser['verification_status'] = $user['verification_status'];
         }
-        $loggedUser = [
-            // 'user_id' => $user['user_id'],
-            'username' => $user['name'],
-            'email' => $user['email'],
-            'role' => $user['role'],
-        ];
+        $loggedUser['username'] = $user['name'];
+        $loggedUser['email'] = $user['email'];
+        $loggedUser['role'] = $user['role'];
+        // $loggedUser = [
+        //     // 'user_id' => $user['user_id'],
+        //     'username' => $user['name'],
+        //     'email' => $user['email'],
+        //     'role' => $user['role'],
+        // ];
+        error_log(print_r($loggedUser, true));
         AuthHelper::logIn($loggedUser);
 
         // Redirect to appropriate dashboard based on user role

@@ -758,7 +758,7 @@
                 </div>
                 <div class="price">${data.price}</div>
                 <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">${serviceType == "gig" ? "Order Now" : "Request to Order"}</button>
-                ${serviceType == "promotion" ? '<button class="contact-button" onclick="window.location.href=\'/businessman/request-package\'">Request custom package</button>' : ''}
+                ${serviceType == "promotion" ? `<button class="contact-button" onclick="window.location.href='/businessman/request-package?service_id=${serviceId}'">Request custom package</button>` : ''}
                 <button class="contact-button" onclick="window.location.href='#'">Contact ${serviceType == "gig" ? "Designer" : "Influencer"}</button>
                 `;
       document.getElementById('pricing-content').innerHTML = content;
