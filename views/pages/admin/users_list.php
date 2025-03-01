@@ -23,15 +23,6 @@
             display: flex;
         }
 
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            transition: margin-left 0.3s;
-            background-color: #f0f0f0;
-            border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
-            font-size: 14px;
-        }
 
 
         .header {
@@ -65,12 +56,12 @@
         }
 
         .main-content {
+            width: 100%;
             background-color: #fff;
             border-radius: 20px;
             /* Add curvature */
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-left: 20px;
             /* Add gap between sidebar and main content */
             color: #333;
         }
@@ -132,6 +123,12 @@
             background-color: #f9f9f9;
         }
 
+        /* .main-content table td {
+            font-size: 14px;
+        } */
+        .user-id-column {
+            display: none;
+        }
         .main-content table td img {
             border-radius: 50%;
             width: 30px;
@@ -177,7 +174,7 @@
             color: #fff;
         }
 
-        .badge.verified {
+        .badge.active {
             background-color: #28a745;
         }
 
@@ -221,7 +218,6 @@
 
 <body>
     <div class="container">
-        <div class="content">
             <div class="main-content">
                 <div class="header">
                     <div class="breadcrumb">Sisyphus Ventures &gt; User management</div>
@@ -248,6 +244,7 @@
                 <table id="usersTable">
                     <thead>
                         <tr>
+                            <!-- <th>User ID</th> -->
                             <th>User name</th>
                             <th>Role</th>
                             <th>Account Status</th>
@@ -268,84 +265,21 @@
                     <button>6</button>
                 </div>
             </div>
-        </div>
+        
     </div>
 
     <script>
-        const users = [{
-                userName: "Florence Shaw",
-                email: "florence@untitledui.com",
-                role: "Influencer",
-                accountStatus: "Verified",
-                lastActive: "Mar 4, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Amélie Laurent",
-                email: "amelie@untitledui.com",
-                role: "Designer",
-                accountStatus: "Blocked",
-                lastActive: "Mar 4, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Ammar Foley",
-                email: "ammar@untitledui.com",
-                role: "Businessman",
-                accountStatus: "Banned",
-                lastActive: "Mar 2, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Caitlyn King",
-                email: "caitlyn@untitledui.com",
-                role: "Influencer",
-                accountStatus: "Verified",
-                lastActive: "Mar 2, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Sienna Hewitt",
-                email: "sienna@untitledui.com",
-                role: "Designer",
-                accountStatus: "Blocked",
-                lastActive: "Mar 2, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Olly Shroeder",
-                email: "olly@untitledui.com",
-                role: "Businessman",
-                accountStatus: "Banned",
-                lastActive: "Mar 6, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Mathilde Lewis",
-                email: "mathilde@untitledui.com",
-                role: "Influencer",
-                accountStatus: "Verified",
-                lastActive: "Mar 6, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                userName: "Jaya Willis",
-                email: "jaya@untitledui.com",
-                role: "Designer",
-                accountStatus: "Blocked",
-                lastActive: "Mar 6, 2024",
-                dateAdded: "July 4, 2022",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            }
-        ];
+        let users = [];
 
+        async function fetchUsers() {
+            const response = await fetch('/api/users');
+            const result = await response.json();
+            console.log(result);
+
+            users = result.users;
+
+            renderUsers(users);
+        }
 
         function renderUsers(users) {
             var tableBody = document.querySelector('#usersTable tbody');
@@ -358,14 +292,17 @@
 
                 row.innerHTML = `
                     <tr>
+                            <td class="user-id-column">
+                                ${user.user_id}
+                            </td>
                             <td>
                                 <div class="user-info">
                                     <img alt="User profile picture" height="30"
-                                        src="${user.imagePath}"
+                                        src="${user.profile_picture}"
                                         width="30" />
                                     <div class="user-details">
                                         <span>
-                                            ${user.userName}
+                                            ${user.name} |
                                         </span>
                                         <span>
                                             ${user.email}
@@ -377,15 +314,15 @@
                                 ${user.role}
                             </td>
                             <td>
-                                <span class="badge ${user.accountStatus.toLowerCase()}">
-                                    ${user.accountStatus}
+                                <span class="badge ${user.account_status.toLowerCase()}">
+                                    ${user.account_status}
                                 </span>
                             </td>
                             <td>
-                                ${user.lastActive}
+                                ${user.updated_at}
                             </td>
                             <td>
-                                ${user.dateAdded}
+                                ${user.created_at}
                             </td>
                             <td>
                                 <center>...</center>
@@ -410,9 +347,14 @@
         });
 
         function handleRowClick(userId) {
-            console.log('Row clicked, complaint ID:', userId);
-            window.location.href = '/admin/user-profile/1';
+            userId = userId.replace(/\D/g, '');
+            // console.log('Row clicked, complaint ID:', userId);
+            window.location.href = '/admin/user-profile/' + userId;
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchUsers();
+        });
     </script>
 </body>
 

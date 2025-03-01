@@ -205,16 +205,19 @@
     </div>
 
     <script>
+        // Add this before the fetch call
+        const userRole = '<?php echo $_SESSION['user']['role']; ?>';
+
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('/data/requestsdata.json');
-                const jsonData = await response.json();
+                // const response = await fetch('/data/requestsdata.json');
+                const response = await fetch('/api/custom-packages');
+                const data = await response.json();
 
-                console.log("Data fetched successfully:", jsonData);
+                console.log("Data fetched successfully:", data);
 
-                const {
-                    requests
-                } = jsonData; // Extract the 'requests' array
+                // const { requests } = jsonData; // Extract the 'requests' array
+                const requests = data; // Extract the 'requests' array
                 const container = document.getElementById('requestsContainer');
 
                 // Check if requests exist
@@ -234,11 +237,11 @@
                     <div class="request-card">
                         <div>
                             <div class="request-header">
-                                <h2 class="request-title">${request.title}</h2>
+                                <h2 class="request-title">${request.service_title}</h2>
                                 <div class="request-meta">
                                     <div class="meta-item">
                                         <span class="meta-icon">⏰</span>
-                                        <span>${request.delivery_days} days</span>
+                                        <span>${request.delivery_days_requested} days</span>
                                     </div>
                                     <div class="meta-item">
                                         <span class="meta-icon">📅</span>
@@ -250,31 +253,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="request-description">${request.description}</p>
+                            <p class="request-description">${request.benefits_requested}</p>
                         </div>
                         <div class="request-card-right-box">
                             <div class="request-price">
-                                LKR ${Number(request.price).toLocaleString()}
+                                LKR ${Number(request.price_requested).toLocaleString()}
                             </div>
-                            <div class="request-actions">
-                                    <?php 
-                                        if($_SESSION['user']['role'] == 'businessman'){
-                                            echo '
-                                                <a href="/'.$_SESSION['user']['role'].'/place-order?request_id=${request.id}" class="offer-button">Place Order</a>
-                                                <button class="reject-button" onclick="rejectRequest(${request.id})">Reject</button>
-                                                ';
-                                        }else{
-                                            echo '
-                                                <a href="/'.$_SESSION['user']['role'].'/offer-package?request_id=${request.id}" class="offer-button">
-                                                    Make an Offer
-                                                </a>
-                                                <button class="reject-button" onclick="rejectRequest(${request.id})">
-                                                    Reject
-                                                </button>
-                                            ';
-                                        }
-                                    ?>
-                                
+                            <div class="request-actions">    
+                                <a href="/businessman/place-order?request_id=${request.custom_package_id}" class="offer-button">Place Order</a>
+                                <button class="reject-button" onclick="rejectRequest(${request.custom_package_id})">Reject</button>
                             </div>
 
                         </div>

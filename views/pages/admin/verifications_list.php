@@ -23,17 +23,6 @@
             display: flex;
         }
 
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            transition: margin-left 0.3s;
-            background-color: #f0f0f0;
-            border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
-            font-size: 14px;
-        }
-
-
         .header {
             display: flex;
             justify-content: space-between;
@@ -65,12 +54,12 @@
         }
 
         .main-content {
+            width: 100%;
             background-color: #fff;
             border-radius: 20px;
             /* Add curvature */
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-left: 20px;
             /* Add gap between sidebar and main content */
             color: #333;
         }
@@ -221,7 +210,6 @@
 
 <body>
     <div class="container">
-        <div class="content">
             <div class="main-content">
                 <div class="header">
                     <div class="breadcrumb">Sisyphus Ventures &gt; User management</div>
@@ -264,7 +252,7 @@
                     <button>6</button>
                 </div>
             </div>
-        </div>
+        
     </div>
 
     <script>

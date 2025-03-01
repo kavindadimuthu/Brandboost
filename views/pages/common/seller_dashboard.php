@@ -4,350 +4,252 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brand Boost Dashboard</title>
+    <!-- Include Chart.js for graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background: linear-gradient(135deg, #e6d5ff 0%, #e5eaff 100%);
+            min-height: 100vh;
         }
 
         .container {
-            display: flex;
-            margin: auto;
+            /* display: flex; */
             max-width: 1200px;
+            margin: 1rem auto;
+            padding: 20px;
+            /* background: rgb(235, 235, 235) ; */
+            background:rgb(242, 237, 250);
+            border-radius: 10px;
         }
 
-        .content {
-            flex-grow: 1;
-            padding: 20px 0px;
-        }
+        
 
+        /* Main Content Styles */
         .main-content {
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .cards {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f0f0f0;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e0e0;
             flex: 1;
-        }
-
-        .card h2 {
-            font-size: 1.2em;
-            margin: 0;
-        }
-
-        .card .value {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .card img {
-            width: 60px;
-            height: 60px;
-            margin-left: 20px;
-        }
-
-        .orders-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
             padding: 20px;
-            margin: 0 20px;
         }
 
-        .orders-table {
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .positive {
+            color: #00b894;
+        }
+
+        .negative {
+            color: #ff7675;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .orders-table th, .orders-table td {
-            padding: 16px;
+        th, td {
+            padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
-            font-size: 14px;
         }
 
-        .orders-table th {
-            background: #f8f9fa;
-            color: #666;
-            font-weight: 500;
-        }
 
-        .orders-table tr:hover td {
-            color: #007bff;
-            cursor: pointer;
-        }
-
-        .status {
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status.in-progress {
-            color: #b86e00;
-            background: #fff3e5;
-        }
-
-        .status.completed {
-            color: #0a7c42;
-            background: #e6f4ed;
-        }
-
-        .header-row {
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #6c5ce7;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header-row h2 {
-            color: #333;
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .pagination {
-            display: flex;
             justify-content: center;
-            margin: 20px 0;
         }
 
-        .pagination button {
-            margin: 0 5px;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .pagination button:hover {
-            background: #0056b3;
-        }
-
-        .pagination button.active {
-            background: #a29bfe;
-        }
-
-        .charts-row {
+        .user-profile {
             display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .chart-container {
-            flex: 1;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        canvas {
-            max-width: 100%;
-            height: 100%;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="content">
+            <!-- Main Content -->
             <div class="main-content">
-                <div class="cards">
-                    <div class="card">
-                        <div>
-                            <h2>Gross Revenue</h2>
-                            <div class="value">LKR 9500.32</div>
-                            <p>From Jan 01, 2024 - March 30, 2024</p>
-                        </div>
-                        <img src="../../assets/dollar.png" alt="Gross Revenue">
+
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Income</div>
+                        <div class="stat-value">$8,500<span class="stat-change positive">+4.85%</span></div>
                     </div>
-                    <div class="card">
-                        <div>
-                            <h2>Avg. Order Value</h2>
-                            <div class="value">LKR 7000.12</div>
-                            <p>From Jan 01, 2024 - March 30, 2024</p>
-                        </div>
-                        <img src="../../assets/satisfaction.png" alt="Avg. Order Value">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Sales</div>
+                        <div class="stat-value">3,500K<span class="stat-change negative">-5.52%</span></div>
                     </div>
-                    <div class="card">
-                        <div>
-                            <h2>Total Orders</h2>
-                            <div class="value">LKR 45000.00</div>
-                            <p>From Jan 01, 2024 - March 30, 2024</p>
-                        </div>
-                        <img src="../../assets/layer.png" alt="Total Orders">
+                    <div class="stat-card">
+                        <div class="stat-title">New Clients</div>
+                        <div class="stat-value">1,700K<span class="stat-change positive">+9.55%</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Users</div>
+                        <div class="stat-value">14,800K<span class="stat-change negative">-10.30%</span></div>
                     </div>
                 </div>
 
-                <div class="orders-container">
-                    <div class="header-row">
-                        <h2>Customer Orders</h2>
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <canvas id="statisticsChart"></canvas>
                     </div>
-                    <table class="orders-table">
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tables Section -->
+                <div class="table-container">
+                    <h3>Last Orders</h3>
+                    <table>
                         <thead>
                             <tr>
-                                <th>Buyer</th>
-                                <th>Gig</th>
-                                <th>Due On</th>
-                                <th>Total</th>
-                                <th>Status</th>
+                                <th>Customer Name</th>
+                                <th>Order No.</th>
+                                <th>Amount</th>
+                                <th>Payment Type</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody id="ordersTableBody">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <img src="/api/placeholder/32/32" alt="User" class="user-avatar">
+                                        Regina Cooper
+                                    </div>
+                                </td>
+                                <td>#730541</td>
+                                <td>$2,500</td>
+                                <td>Credit Card</td>
+                                <td>12.09.2019</td>
+                            </tr>
+                            <!-- Add more rows as needed -->
                         </tbody>
                     </table>
                 </div>
-
-                <div class="pagination">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>&gt;</button>
-                </div>
-
-                <div class="charts-row">
-                    <div class="chart-container">
-                        <h2>Order Status</h2>
-                        <canvas id="orderStatusChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h2>Orders Over Last 6 Months</h2>
-                        <canvas id="monthlyOrdersChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h2>Profile Views (Last Month)</h2>
-                        <canvas id="profileViewsChart"></canvas>
-                    </div>
-                </div>
             </div>
-        </div>
+        
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const orders = [
-            {
-                buyer: "Apple Asia",
-                gig: "Do Business Promotion through Tiktok and Youtube",
-                dueOn: "7 Days",
-                total: "LKR 25,000",
-                status: "Pending"
+        // Statistics Chart
+        const statisticsCtx = document.getElementById('statisticsChart').getContext('2d');
+        new Chart(statisticsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Income',
+                    data: [3000, 3500, 4000, 3200, 3800, 2500, 3700],
+                    backgroundColor: '#6c5ce7',
+                }, {
+                    label: 'Expense',
+                    data: [2000, 2200, 3000, 2300, 2600, 1500, 2500],
+                    backgroundColor: '#ff7675',
+                }]
             },
-            {
-                buyer: "Spa Ceylon",
-                gig: "Do Business Promotion through Facebook and Instagram",
-                dueOn: "Delivered",
-                total: "LKR 30,000",
-                status: "In Progress"
-            },
-            {
-                buyer: "CAMERA.LK",
-                gig: "Do Business Promotion through my 1M Youtube channel",
-                dueOn: "Delivered",
-                total: "LKR 40,000",
-                status: "Completed"
-            }
-        ];
-
-        function loadOrdersData(data) {
-            const tableBody = document.getElementById('ordersTableBody');
-            tableBody.innerHTML = '';
-
-            data.forEach(order => {
-                const row = document.createElement('tr');
-                const statusClass = order.status.toLowerCase().replace(' ', '-');
-                
-                row.innerHTML = `
-                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.buyer}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.gig}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.dueOn}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'">${order.total}</td>
-                    <td onclick="window.location.href='/influencerviewcontroller/orderrequestview'"><span class="status ${statusClass}">${order.status}</span></td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadOrdersData(orders);
-
-            // Order Status Chart
-            new Chart(document.getElementById('orderStatusChart').getContext('2d'), {
-                type: 'pie',
-                data: {
-                    labels: ['Delivered', 'In Progress', 'Pending'],
-                    datasets: [{
-                        data: [12, 19, 8],
-                        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
-                    }]
-                }
-            });
-
-            // Monthly Orders Chart
-            new Chart(document.getElementById('monthlyOrdersChart').getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Orders',
-                        data: [65, 59, 80, 81, 56, 55],
-                        backgroundColor: '#42A5F5'
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            // Profile Views Chart
-            new Chart(document.getElementById('profileViewsChart').getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
-                    datasets: [{
-                        label: 'Profile Views',
-                        data: [30, 50, 75, 40, 60],
-                        borderColor: '#FF6384',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        fill: true
-                    }]
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Current Week', 'Last Week'],
+                datasets: [{
+                    data: [2500, 1000],
+                    backgroundColor: ['#6c5ce7', '#ff7675'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
                 }
-            });
+            }
         });
     </script>
 </body>

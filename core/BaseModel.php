@@ -182,6 +182,11 @@ abstract class BaseModel
         return $order . $limit . $offset;
     }
 
+    protected function executeWithParams($sql, $params = [])
+    {
+        return $this->db->executeWithParams($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Logs database errors.
      * 

@@ -37,9 +37,9 @@ class BusinessmanController extends BaseController
         $this->renderLayout('main', 'pages/businessman/request_package');
     }
 
-    public function customPackages($req, $res)
+    public function requestedCustomPackages($req, $res)
     {
-        $this->renderLayout('main', 'pages/common/custom_packages');
+        $this->renderLayout('main', 'pages/businessman/requested_custom_packages');
     }
 
     public function editProfile($req, $res)

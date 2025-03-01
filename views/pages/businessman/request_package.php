@@ -6,9 +6,9 @@
     <title>Custom Package Request - Brandboost</title>
     <style>
         .form-container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 40px auto;
-            padding: 40px;
+            padding: 40px 10%;
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -35,12 +35,16 @@
         .form-group {
             margin-bottom: 25px;
         }
+        .lower-form-group {
+            display: flex;
+            justify-content: space-between;
+        }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
+            color: black;
         }
 
         .form-group input,
@@ -60,7 +64,7 @@
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 200px;
             resize: vertical;
         }
 
@@ -119,15 +123,13 @@
 
         <form id="customPackageForm" action="process_request.php" method="POST">
             <div class="form-group">
-                <label for="title">Package Title*</label>
-                <input type="text" id="title" name="title" placeholder="e.g., Premium Brand Design Package" required>
-                <div class="error-message" id="titleError">Please enter a package title</div>
+                <label for="title">Promotion Title*</label>
+                <span id="promotion-title"></span>
             </div>
 
             <div class="form-group">
-                <label for="description">Package Description*</label>
-                <textarea id="description" name="description" placeholder="Describe what services you're looking for..." required></textarea>
-                <div class="error-message" id="descriptionError">Please provide a package description</div>
+                <label for="description">Promotion Description*</label>
+                <span id="promotion-description"></span>
             </div>
 
             <div class="form-group">
@@ -136,21 +138,21 @@
                 <div class="error-message" id="benefitsError">Please list the expected benefits</div>
             </div>
 
-            <div class="form-group">
-                <label for="delivery_days">Delivery Days*</label>
-                <input type="number" id="delivery_days" name="delivery_days" min="1" placeholder="e.g. 30" required>
-                <div class="error-message" id="deliveryError">Please enter the number of delivery days</div>
-            </div>
-
-            <div class="form-group">
-                <label for="revisions">Number of Revisions</label>
-                <input type="number" id="revisions" name="revisions" min="0" placeholder="e.g. 3">
-            </div>
-
-            <div class="form-group">
-                <label for="price">Budget (LKR)*</label>
-                <input type="number" id="price" name="price" min="1" placeholder="e.g. 5000" required>
-                <div class="error-message" id="priceError">Please enter your budget</div>
+            <div class="lower-form-group">
+                <div class="form-group">
+                    <label for="delivery_days">Delivery Days*</label>
+                    <input type="number" id="delivery_days" name="delivery_days" min="1" placeholder="e.g. 30" required>
+                    <div class="error-message" id="deliveryError">Please enter the number of delivery days</div>
+                </div>
+                <div class="form-group">
+                    <label for="revisions">Number of Revisions</label>
+                    <input type="number" id="revisions" name="revisions" min="0" placeholder="e.g. 3">
+                </div>
+                <div class="form-group">
+                    <label for="price">Budget (LKR)*</label>
+                    <input type="number" id="price" name="price" min="1" placeholder="e.g. 5000" required>
+                    <div class="error-message" id="priceError">Please enter your budget</div>
+                </div>
             </div>
 
             <button type="submit" class="submit-btn">Submit Request</button>
@@ -158,53 +160,93 @@
     </div>
 
     <script>
-        document.getElementById('customPackageForm').addEventListener('submit', function(e) {
+        // Update the form action to remove the PHP file
+        document.getElementById('customPackageForm').action = '';
+        
+        // Replace the existing script with this updated version
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('service_id');
+        
+        async function fetchPromotion(serviceId) {
+            try {
+                const response = await fetch(`/api/service/${serviceId}?service=true`);
+                const data = await response.json();
+                document.getElementById('promotion-title').innerText = data.title;
+                document.getElementById('promotion-description').innerText = data.description;
+            } catch (error) {
+                console.error('Error fetching promotion:', error);
+            }
+        }
+        
+        document.getElementById('customPackageForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Reset error messages
             document.querySelectorAll('.error-message').forEach(msg => {
                 msg.style.display = 'none';
             });
-
-            let isValid = true;
-            
-            // Validate title
-            const title = document.getElementById('title').value.trim();
-            if (!title) {
-                document.getElementById('titleError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate description
-            const description = document.getElementById('description').value.trim();
-            if (!description) {
-                document.getElementById('descriptionError').style.display = 'block';
-                isValid = false;
-            }
-
+        
+            let isValid = true;          
+        
             // Validate benefits
             const benefits = document.getElementById('benefits').value.trim();
             if (!benefits) {
                 document.getElementById('benefitsError').style.display = 'block';
                 isValid = false;
             }
-
+        
             // Validate delivery days
             const deliveryDays = document.getElementById('delivery_days').value;
             if (!deliveryDays || deliveryDays < 1) {
                 document.getElementById('deliveryError').style.display = 'block';
                 isValid = false;
             }
-
+        
             // Validate price
             const price = document.getElementById('price').value;
             if (!price || price < 1) {
                 document.getElementById('priceError').style.display = 'block';
                 isValid = false;
             }
-
+        
             if (isValid) {
-                this.submit();
+                try {
+                    const formData = {
+                        service_id: serviceId,
+                        benefits_requested: benefits,
+                        delivery_days_requested: parseInt(deliveryDays),
+                        revisions_requested: parseInt(document.getElementById('revisions').value) || 0,
+                        price_requested: parseFloat(price)
+                    };
+        
+                    const response = await fetch('/api/create-custom-package', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+        
+                    const result = await response.json();
+        
+                    if (result.success) {
+                        alert('Custom package request submitted successfully!');
+                        window.location.href = `/services/${serviceId}`; // Redirect to dashboard or appropriate page
+                    } else {
+                        alert('Failed to submit custom package request. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    alert('An error occurred. Please try again.');
+                }
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (serviceId) {
+                fetchPromotion(serviceId);
+            } else {
+                console.error('No service ID provided');
             }
         });
     </script>

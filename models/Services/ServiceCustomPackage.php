@@ -44,6 +44,18 @@ class ServiceCustomPackage extends BaseModel
     }
 
     /**
+     * Retrieve custom packages by seller ID.
+     *
+     * @param int $sellerId The ID of the seller.
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of custom packages or false on failure.
+     */
+    public function getCustomPackagesBySellerId(int $sellerId, array $options = [])
+    {
+        return $this->read(['seller_id' => $sellerId], $options);
+    }
+
+    /**
      * Create a new custom service package.
      *
      * @param array $data The custom package data to insert.
@@ -92,5 +104,53 @@ class ServiceCustomPackage extends BaseModel
             'created_at <=' => $endDate
         ];
         return $this->read($conditions, $options);
+    }
+
+    /**
+     * Retrieve custom packages with service details.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @param array $options Additional options like order, limit, offset, search, and filters.
+     * @return array|false Fetched records or false on failure.
+     */
+    public function getCustomPackagesWithServiceDetails(array $conditions = [], array $options = [])
+    {
+        try {
+            // Start building the base query
+            $sql = "SELECT scp.*, s.title AS service_title, s.description AS service_description, 
+                    s.cover_image AS service_cover_image
+                    FROM {$this->table} scp
+                    JOIN service s ON scp.service_id = s.service_id";
+    
+            // Build WHERE clause
+            if (!empty($conditions)) {
+                $whereClauses = [];
+                foreach ($conditions as $key => $value) {
+                    $whereClauses[] = "scp.$key = :$key";
+                }
+                $sql .= " WHERE " . implode(" AND ", $whereClauses);
+            }
+    
+            // Add ORDER BY if specified
+            if (!empty($options['order'])) {
+                $sql .= " ORDER BY " . $options['order'];
+            }
+    
+            // Add LIMIT and OFFSET if specified
+            if (isset($options['limit'])) {
+                $sql .= " LIMIT " . (int)$options['limit'];
+                if (isset($options['offset'])) {
+                    $sql .= " OFFSET " . (int)$options['offset'];
+                }
+            }
+    
+            // Execute the query with parameters
+            return $this->executeWithParams($sql, $conditions);
+            
+    
+        } catch (\Exception $e) {
+            error_log("Error in getCustomPackagesWithServiceDetails: " . $e->getMessage());
+            return false;
+        }
     }
 }
