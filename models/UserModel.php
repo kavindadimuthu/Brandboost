@@ -17,7 +17,7 @@ class UserModel extends BaseModel {
             ':name' => $name,
             ':email' => $email,
             ':password' => password_hash($password, PASSWORD_DEFAULT),
-            ':profile_picture' => $profilePicture,
+            // ':profile_picture' => $profilePicture,
             ':bio' => $bio,
             ':role' => $role
         ];

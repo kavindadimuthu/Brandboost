@@ -117,4 +117,76 @@ class Orders extends BaseModel
     {
         return $this->read(['payment_type' => $paymentType], $options);
     }
+
+
+
+
+
+        /**
+     * Get orders by service IDs with pagination and search
+     *
+     * @param array $serviceIds Array of service IDs
+     * @param int $limit Number of records to return
+     * @param int $offset Offset for pagination
+     * @param string $search Search term for filtering
+     * @return array Array of order records
+     */
+    public function getOrdersByServiceIds(array $serviceIds): array
+    {
+        if (empty($serviceIds)) {
+            return [];
+        }
+        
+        // Convert array to comma-separated string for IN clause
+        $serviceIdsStr = implode(',', array_map('intval', $serviceIds));
+        
+        $sql = "SELECT * FROM orders WHERE service_id IN ($serviceIdsStr)";
+        
+        // Add search condition if provided
+        // if (!empty($search)) {
+        //     $search = $this->db->escape_string($search);
+        //     $sql .= " AND (order_id LIKE '%$search%' OR EXISTS (
+        //         SELECT 1 FROM users 
+        //         WHERE users.user_id = orders.customer_id 
+        //         AND (users.first_name LIKE '%$search%' OR users.last_name LIKE '%$search%')
+        //     ))";
+        // }
+        
+        // // Add sorting and pagination
+        // $sql .= " ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+        
+        return $this->db->query($sql)->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Count total orders by service IDs with search
+     *
+     * @param array $serviceIds Array of service IDs
+     * @param string $search Search term for filtering
+     * @return int Total number of matching orders
+     */
+    public function countOrdersByServiceIds(array $serviceIds): int
+    {
+        if (empty($serviceIds)) {
+            return 0;
+        }
+        
+        // Convert array to comma-separated string for IN clause
+        $serviceIdsStr = implode(',', array_map('intval', $serviceIds));
+        
+        $sql = "SELECT COUNT(*) as total FROM orders WHERE service_id IN ($serviceIdsStr)";
+        
+        // Add search condition if provided
+        // if (!empty($search)) {
+        //     $search = $this->db->escape_string($search);
+        //     $sql .= " AND (order_id LIKE '%$search%' OR EXISTS (
+        //         SELECT 1 FROM users 
+        //         WHERE users.user_id = orders.customer_id 
+        //         AND (users.first_name LIKE '%$search%' OR users.last_name LIKE '%$search%')
+        //     ))";
+        // }
+        
+        $result = $this->db->query($sql)->fetch_assoc();
+        return (int)($result['total'] ?? 0);
+    }
 }
