@@ -320,7 +320,7 @@
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="cover-photo-container">
-                                        <img id="cover-photo" src="\assets\images\placeholders\cover-photo-empty.jpg" alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img id="cover-photo" src="\assets\images\placeholders\cover-photo-empty.jpg" alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
                     <i class="fas fa-camera edit-icon" id="cover-photo-edit"></i>
                     <input type="file" id="cover-photo-input" hidden accept="image/*">
                 </div>
@@ -347,7 +347,7 @@
                     </div>
                     <div class="form-group">
                         <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" value="Ravi Fernando">
+                        <input type="text" id="fullname" value="Not set">
                     </div>
                     <div class="form-group">
                         <label for="title">Professional Title</label>
@@ -373,10 +373,10 @@
                             <label for="phone">Phone</label>
                             <input type="tel" id="phone" value="+94123456789">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="website">Website</label>
                             <input type="url" id="website" value="https://ravifernando.com">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="location">Location</label>
                             <input type="text" id="location" value="Colombo, Sri Lanka">
@@ -425,14 +425,83 @@
 
                 <!-- Save Button -->
                 <div class="form-section">
-                    <button type="submit" class="save-button">Save Changes</button>
+                    <button type="submit" class="save-button">Update Profile</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+                try {
+                    const formData = new FormData(this.form);
+                    
+                    // formData.append('test0', document.getElementById('gigTitle').value);
+                    formData.append('test1', "Kavinda Fernando");
+                    formData.append('test2', "Isuranga Fernando");
+                    
+
+                    // Log the data to be sent to the backend for debugging
+                    // console.log('Data to be sent to the backend:', {
+                    //     title: document.getElementById('gigTitle').value,
+                    //     description: document.getElementById('gigDescription').value,
+                    //     serviceType: document.getElementById('serviceType').value,
+                    // });
+
+                    // Make API call to update gig
+                    const response = await fetch(`/api/update-user`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update gig');
+                    }
+
+                    // setTimeout(() => {
+                    //     window.location.href = '/designer/my-gigs';
+                    // }, 1500);
+
+                } catch (error) {
+                    console.error('Error updating gig:', error);
+                }
+            }
+
+
         document.addEventListener('DOMContentLoaded', function() {
+
+            // Fetch user data from the server
+            fetch('/api/user/me')
+                .then(response => response.json())
+                .then(data => {
+                    // Populate the form with user data
+                    populateForm(data);
+                    console.log(data);
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+
+
+            // Populate edit profile form
+            function populateForm(userData){
+
+                document.getElementById('cover-photo').src = userData.cover_picture;
+                document.getElementById('profile-photo').src = userData.profile_picture;
+
+                document.getElementById('fullname').value = userData.name;
+                document.getElementById('title').value = userData.professional_title || "Not set";
+                document.getElementById('bio').value = userData.bio;
+
+                document.getElementById('email').value = userData.email;
+                document.getElementById('phone').value = userData.phone || "Not set";
+                // document.getElementById('website').value = userData.website;
+                document.getElementById('location').value = userData.location || "Not set";
+                
+                document.getElementById('specialties').value = userData.specialties || "Not set";
+                document.getElementById('tools').value = userData.tools || "Not set";
+            }
+
             // Image upload functionality
             function setupImageUpload(inputId, imgId, editId) {
                 const input = document.getElementById(inputId);
@@ -515,11 +584,30 @@
                 });
             });
 
+            
+
             // Form submission
             document.getElementById('profile-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                console.log(Object.fromEntries(formData));
+                // e.preventDefault();
+                // const formData = new FormData(this);
+                // console.log(Object.fromEntries(formData));
+
+                // const test = "Kavinda Fernando";
+
+                // fetch('/api/update-user', {
+                //     method: 'POST',
+                //     body: test
+                // })
+                //     .then(response => response.json())
+                //     .then(result => {
+                //         // statusMsg.textContent = result.message;
+                //     })
+                //     .catch(error => {
+                //         console.error('Error updating profile:', error);
+                //         // statusMsg.textContent = 'Failed to update profile.';
+                //     });
+
+                handleSubmit(e);
             });
         });
     </script>

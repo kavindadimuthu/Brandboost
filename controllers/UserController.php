@@ -88,7 +88,16 @@ class UserController extends BaseController
             return;
         }
 
-        $userId = $request->getParam('id');
+        // Retrieve query parameters
+        if($request->getParam('id') == 'me'){
+            if (!AuthHelper::isLoggedIn()) {
+                $response->sendError('Unauthorized', 401);
+                return;
+            }
+            $userId = AuthHelper::getCurrentUser()['user_id'];
+        } else {
+            $userId = $request->getParam('id');
+        }
 
         if (empty($userId)) {
             $response->sendError('User ID is required.', 400);
@@ -231,6 +240,13 @@ class UserController extends BaseController
      * @param object $response Response object to send back HTTP responses.
      */
     public function updateUserProfile($request, $response): void {
+
+        $reqData = $request->getParsedBody();
+        error_log(print_r($reqData, true)); // Log the request data for debugging
+        // error_log('Request Data: ' , $reqData); // Log the request data for debugging
+
+        exit;
+
         if(!AuthHelper::isLoggedIn()){
             $response->sendError('Unauthorized', 401);
             return;
