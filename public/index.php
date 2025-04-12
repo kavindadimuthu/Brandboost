@@ -132,6 +132,10 @@ $app->router->post('/api/register', 'UserController@createUser'); // Register/Cr
 $app->router->post('/update-user/{id}', 'UserController@updateUserProfile'); // Update User Profile
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
+$app->router->get('/auth/verify-email', 'AuthController@verifyEmail');
+$app->router->get('/check-email', 'PageController@checkEmail');
+$app->router->get('/registration-success', 'PageController@registrationSuccess');
+
 
 // Service Management
 $app->router->get('/api/services', 'ServiceController@getServiceList'); // Get Service List

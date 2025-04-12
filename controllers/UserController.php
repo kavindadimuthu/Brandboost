@@ -160,67 +160,161 @@ class UserController extends BaseController
      * @param object $request  Request object containing user input.
      * @param object $response Response object to send back HTTP responses.
      */
-    public function createUser($request, $response): void {
-        if ($request->getMethod() !== 'POST') {
-            $response->setStatusCode(405);
-            $response->sendError('Method Not Allowed');
-            return;
-        }
 
+     public function createUser($request, $response): void {
+        // Get registration data
         $data = $request->getParsedBody();
-        $name = trim(($data['firstName'] ?? '') . ' ' . ($data['lastName'] ?? ''));
-        $email = trim($data['email'] ?? '');
+        $firstName = trim($data['firstName'] ?? '');
+        $lastName = trim($data['lastName'] ?? '');
+        $email = filter_var(trim($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
         $password = $data['password'] ?? '';
         $confirmPassword = $data['confirmPassword'] ?? '';
         $role = $data['role'] ?? 'user';
-
+        $name = "$firstName $lastName";
+    
         // Validate input
-        if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
-            $response->sendError('All fields are required.', 400);
+        $errors = [];
+        if (empty($firstName)) $errors[] = 'First name is required';
+        if (empty($lastName)) $errors[] = 'Last name is required';
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format';
+        if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters';
+        if ($password !== $confirmPassword) $errors[] = 'Passwords do not match';
+    
+        if (!empty($errors)) {
+            $response->sendError(implode(', ', $errors), 400);
             return;
         }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $response->sendError('Invalid email format.', 400);
-            return;
-        }
-
-        if ($password !== $confirmPassword) {
-            $response->sendError('Passwords do not match.', 400);
-            return;
-        }
-
-        if ($role == 'businessman' || $role == 'influencer'){
-            $verificationStatus = 'unverified';
-        } else if ($role == 'designer'){
-            $verificationStatus = 'verified';
-        } 
-
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Retrieve the User model using baseController method
+    
+        // Check existing users
         $userModel = $this->model('Users\User');
-
-        // Prepare user data for insertion
-        $user = [
-            'name' => $name,
-            'email' => $email,
-            'password' => $hashedPassword,
-            'role' => $role,
-            'profile_picture' => null,
-            'bio' => null,
-            'account_status' => 'active',
-            'verification_status' => $verificationStatus
-        ];
-
-        if (!$userModel->createUser($user)) {
-            $response->sendError('Error registering user.', 500);
+        $pendingModel = $this->model('Users\PendingRegistration');
+    
+        if ($userModel->findUserByEmail($email)) {
+            $response->sendError('Email is already registered', 400);
             return;
         }
-
-        $response->redirect('/login');
+    
+        if ($pendingModel->findByEmail($email)) {
+            $response->sendError('Verification already pending for this email', 400);
+            return;
+        }
+    
+        // Generate secure verification token
+        $token = bin2hex(random_bytes(32));
+        $expiresAt = date('Y-m-d H:i:s', time() + 3600); // 1 hour expiration
+    
+        try {
+            // Store in pending registrations
+            $pendingModel->create([
+                'email' => $email,
+                'token' => $token,
+                'name' => $name,
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'role' => $role,
+                'expires_at' => $expiresAt
+            ]);
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            $response->sendError('Error initiating registration', 500);
+            return;
+        }
+    
+        // Send verification email
+        try {
+            $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = getenv('SMTP_HOST');
+            $mail->SMTPAuth = true;
+            $mail->Username = getenv('SMTP_USER');
+            $mail->Password = getenv('SMTP_PASSWORD');
+            $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = 465;
+    
+            $verificationLink = getenv('APP_URL') . "/verify-email?token=$token";
+            
+            $mail->setFrom(getenv('SMTP_USER'), 'Your App Name');
+            $mail->addAddress($email, $name);
+            $mail->isHTML(true);
+            $mail->Subject = 'Verify Your Email Address';
+            $mail->Body = "
+                <h2>Almost done, $firstName!</h2>
+                <p>Click below to verify your email:</p>
+                <a href='$verificationLink'>Verify Email</a>
+                <p>Link expires in 1 hour</p>
+            ";
+    
+            $mail->send();
+        } catch (Exception $e) {
+            $pendingModel->deleteByEmail($email);
+            error_log('Mail Error: ' . $e->getMessage());
+            $response->sendError('Failed to send verification email', 500);
+            return;
+        }
+    
+        $response->sendJson(['message' => 'Verification email sent. Check your inbox.']);
     }
+
+    
+    public function verifyEmail($request, $response): void {
+        $token = $request->getQueryParam('token', '');
+        
+        if (empty($token)) {
+            $response->sendError('Missing verification token', 400);
+            return;
+        }
+    
+        $pendingModel = $this->model('Users\PendingRegistration');
+        $userModel = $this->model('Users\User');
+    
+        try {
+            // Find pending registration
+            $pendingUser = $pendingModel->findByToken($token);
+            
+            if (!$pendingUser) {
+                $response->sendError('Invalid verification link', 400);
+                return;
+            }
+    
+            // Check expiration
+            if (strtotime($pendingUser['expires_at']) < time()) {
+                $pendingModel->delete($pendingUser['id']);
+                $response->sendError('Verification link has expired', 400);
+                return;
+            }
+    
+            // Final check if email was registered since initiating
+            if ($userModel->findUserByEmail($pendingUser['email'])) {
+                $pendingModel->delete($pendingUser['id']);
+                $response->sendError('Email already registered', 400);
+                return;
+            }
+    
+            // Create actual user
+            $userData = [
+                'name' => $pendingUser['name'],
+                'email' => $pendingUser['email'],
+                'password' => $pendingUser['password'],
+                'role' => $pendingUser['role'],
+                'account_status' => 'active',
+                'email_verified_at' => date('Y-m-d H:i:s') // Add verification timestamp
+            ];
+    
+            if (!$userModel->createUser($userData)) {
+                throw new Exception('Failed to create user');
+            }
+    
+            // Cleanup pending registration
+            $pendingModel->delete($pendingUser['id']);
+    
+            // Redirect to success page
+            $response->redirect('/registration-success');
+    
+        } catch (Exception $e) {
+            error_log('Verification Error: ' . $e->getMessage());
+            $response->sendError('Error processing verification', 500);
+        }
+    }
+
 
     /**
      * Update user profile details, including creating, updating, or deleting user-specific details.

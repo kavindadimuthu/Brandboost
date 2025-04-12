@@ -7,6 +7,9 @@ use app\core\Helpers\AuthHelper;
 use app\core\Helpers\SessionHelper;
 use Twilio\Rest\Client;
 
+use app\models\Users\PendingRegistration;
+use app\models\Users\User;
+
 class AuthController extends BaseController {
     
     /**
@@ -64,4 +67,68 @@ class AuthController extends BaseController {
         AuthHelper::logOut();
         $response->redirect('/login');
     }
+
+
+    public function verifyEmail($request, $response): void {
+        $token = $request->getQueryParam('token', '');
+    
+        if (empty($token)) {
+            $response->redirect('/error?code=invalid_token');
+            return;
+        }
+    
+        $pendingModel = $this->model('Users\PendingRegistration');
+        $userModel = $this->model('Users\User');
+    
+        try {
+            $this->db->beginTransaction();
+    
+            // Get pending registration
+            $pendingUser = $pendingModel->findByToken($token);
+            
+            if (!$pendingUser) {
+                throw new Exception('Invalid verification token');
+            }
+    
+            // Check expiration
+            if (strtotime($pendingUser['expires_at']) < time()) {
+                $pendingModel->delete($pendingUser['id']);
+                throw new Exception('Verification link expired');
+            }
+    
+            // Final duplicate check
+            if ($userModel->findUserByEmail($pendingUser['email'])) {
+                $pendingModel->delete($pendingUser['id']);
+                throw new Exception('Email already registered');
+            }
+    
+            // Create user
+            $userData = [
+                'name' => $pendingUser['name'],
+                'email' => $pendingUser['email'],
+                'password' => $pendingUser['password'],
+                'role' => $pendingUser['role'],
+                'email_verified_at' => date('Y-m-d H:i:s'),
+                'account_status' => 'active'
+            ];
+    
+            if (!$userModel->createUser($userData)) {
+                throw new Exception('Failed to create user');
+            }
+    
+            // Cleanup pending registration
+            $pendingModel->delete($pendingUser['id']);
+    
+            $this->db->commit();
+    
+            // Redirect to success page
+            $response->redirect('/registration-success');
+    
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log('Verification Error: ' . $e->getMessage());
+            $response->redirect('/error?code=' . urlencode($e->getMessage()));
+        }
+    }
+
 }
