@@ -249,7 +249,7 @@ class OrderController extends BaseController {
                 // Format order data for frontend
                 $orderList[] = [
                     'order_id' => $order['order_id'],
-                    'buyer' => $customer ? ($customer['first_name'] . ' ' . $customer['last_name']) : 'Unknown',
+                    'buyer' => $customer ? ($customer['name']) : 'Unknown',
                     'buyer_id' => $order['customer_id'],
                     'gig' => $service ? $service['title'] : 'Unknown Service',
                     'service_id' => $order['service_id'],
@@ -356,6 +356,7 @@ class OrderController extends BaseController {
         // Prepare order data
         $orderData = [
             'customer_id' => $customerId,
+            'seller_id' => $serviceData['user_id'],	 // Assuming the service has a user_id field
             'service_id' => $serviceId,
             'package_id' => $packageId,
             'custom_package_id' => $customPackageId,

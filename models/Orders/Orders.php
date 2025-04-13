@@ -44,6 +44,18 @@ class Orders extends BaseModel
     }
 
     /**
+     * Retrieve orders by seller ID.
+     *
+     * @param int $sellerId The ID of the seller.
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of orders or false on failure.
+     */
+    public function getOrdersBySellerId(int $sellerId, array $options = [])
+    {
+        return $this->read(['seller_id' => $sellerId], $options);
+    }
+
+    /**
      * Retrieve orders by status.
      *
      * @param string $status The status of the orders (e.g., pending, in_progress, completed, canceled).
@@ -117,38 +129,5 @@ class Orders extends BaseModel
     {
         return $this->read(['payment_type' => $paymentType], $options);
     }
-
-
-
-
-        /**
-     * Get orders by seller ID with pagination and search support
-     *
-     * @param int $sellerId Seller ID
-     * @param int $limit Number of records to return
-     * @param int $offset Offset for pagination
-     * @param string $search Search term for filtering
-     * @return array Array of order records
-     */
-    public function getOrdersBySellerId(int $sellerId): array
-    {
-        $sellerId = (int)$sellerId;
-        
-        $sql = "SELECT * FROM orders WHERE seller_id = $sellerId";
-        
-
-        // Add sorting and pagination
-        $sql .= " ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
-        
-        $result = $this->db->query($sql);
-        if (!$result) {
-            error_log("SQL Error in getOrdersBySellerId: " . $this->db->error);
-            error_log("SQL Query: " . $sql);
-            return [];
-        }
-        
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
 
 }
