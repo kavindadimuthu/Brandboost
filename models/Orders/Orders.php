@@ -44,6 +44,18 @@ class Orders extends BaseModel
     }
 
     /**
+     * Retrieve orders by seller ID.
+     *
+     * @param int $sellerId The ID of the seller.
+     * @param array $options Additional options like order, limit, and offset.
+     * @return array|false List of orders or false on failure.
+     */
+    public function getOrdersBySellerId(int $sellerId, array $options = [])
+    {
+        return $this->read(['seller_id' => $sellerId], $options);
+    }
+
+    /**
      * Retrieve orders by status.
      *
      * @param string $status The status of the orders (e.g., pending, in_progress, completed, canceled).
@@ -117,4 +129,5 @@ class Orders extends BaseModel
     {
         return $this->read(['payment_type' => $paymentType], $options);
     }
+
 }

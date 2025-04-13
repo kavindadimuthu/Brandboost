@@ -157,6 +157,8 @@ $app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order L
 $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get Order Profile
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
+$app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
+
 
 
 //test routes
