@@ -185,7 +185,9 @@ class OrderController extends BaseController {
             
             // Get current logged-in user (seller)
             $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+            $sellerRole  = AuthHelper::getCurrentUser()['role'];
             error_log("Seller ID: " . ($sellerId ?? 'null'));
+            error_log("Seller role: " . ($sellerRole ?? 'null'));
             
             if (!$sellerId) {
                 $response->sendJson([
@@ -255,7 +257,8 @@ class OrderController extends BaseController {
                     'service_id' => $order['service_id'],
                     'dueOn' => $order['order_status'] === 'completed' ? 'Delivered' : ($dueDate ?? 'N/A'),
                     'total' => $promise ? ('LKR ' . number_format($promise['price'], 2)) : 'N/A',
-                    'status' => ucfirst($order['order_status'] ?? 'Pending')
+                    'status' => ucfirst($order['order_status'] ?? 'Pending'),
+                    'seller_role' => $sellerRole
                 ];
             }
             

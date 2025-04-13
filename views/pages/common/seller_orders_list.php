@@ -263,81 +263,89 @@
         // Render orders to table
         function renderOrders() {
             const tableBody = document.getElementById('ordersTableBody');
-            
             if (state.orders.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="5" class="no-orders">No orders found</td></tr>';
                 return;
             }
-            
             tableBody.innerHTML = '';
-            
             state.orders.forEach(order => {
+                if (!order.order_id) {
+                    console.error('Invalid order ID:', order);
+                    return;
+                }
+                console.log(order.seller_role);
+                
                 const row = document.createElement('tr');
                 const statusClass = order.status.toLowerCase().replace(' ', '-');
-                
                 row.innerHTML = `
-                    <td onclick="navigateToOrderDetails(${order.order_id})">${order.buyer}</td>
-                    <td onclick="navigateToOrderDetails(${order.order_id})">${order.gig}</td>
-                    <td onclick="navigateToOrderDetails(${order.order_id})">${order.dueOn}</td>
-                    <td onclick="navigateToOrderDetails(${order.order_id})">${order.total}</td>
-                    <td onclick="navigateToOrderDetails(${order.order_id})">
-                        <span class="status ${statusClass}">${order.status}</span>
-                    </td>
+                    <td>${order.buyer}</td>
+                    <td>${order.gig}</td>
+                    <td>${order.dueOn}</td>
+                    <td>${order.total}</td>
+                    <td><span class="status ${statusClass}">${order.status}</span></td>
                 `;
-                
+                row.addEventListener('click', () => navigateToOrderDetails(order.order_id, order.seller_role));
                 tableBody.appendChild(row);
             });
         }
 
-        // Generate pagination controls
-        function renderPagination() {
-            const paginationContainer = document.getElementById('pagination');
-            paginationContainer.innerHTML = '';
-            
-            // Previous button
-            const prevButton = document.createElement('button');
-            prevButton.innerHTML = '&lt;';
-            prevButton.disabled = state.currentPage <= 1;
-            prevButton.addEventListener('click', () => {
-                if (state.currentPage > 1) {
-                    state.currentPage--;
-                    fetchOrders();
-                }
-            });
-            paginationContainer.appendChild(prevButton);
-            
-            // Page buttons
-            const startPage = Math.max(1, state.currentPage - 2);
-            const endPage = Math.min(state.totalPages, startPage + 4);
-            
-            for (let i = startPage; i <= endPage; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.className = i === state.currentPage ? 'active' : '';
-                pageButton.addEventListener('click', () => {
-                    state.currentPage = i;
-                    fetchOrders();
-                });
-                paginationContainer.appendChild(pageButton);
-            }
-            
-            // Next button
-            const nextButton = document.createElement('button');
-            nextButton.innerHTML = '&gt;';
-            nextButton.disabled = state.currentPage >= state.totalPages;
-            nextButton.addEventListener('click', () => {
-                if (state.currentPage < state.totalPages) {
-                    state.currentPage++;
-                    fetchOrders();
-                }
-            });
-            paginationContainer.appendChild(nextButton);
-        }
-
+        
         // Navigate to order details page
-        function navigateToOrderDetails(orderId) {
-            window.location.href = `/influencer/order-details/${orderId}`;
+        function navigateToOrderDetails(orderId, sellerRole) {
+            if (sellerRole == 'designer'){
+                window.location.href = `/designer/order-details/${orderId}`;
+            } else if (sellerRole == 'influencer'){
+                window.location.href = `/influencer/order-details/${orderId}`;
+            }
         }
+            
+        
+
+        // Generate pagination controls
+        // function renderPagination() {
+        //     const paginationContainer = document.getElementById('pagination');
+        //     paginationContainer.innerHTML = '';
+            
+        //     // Previous button
+        //     const prevButton = document.createElement('button');
+        //     prevButton.innerHTML = '&lt;';
+        //     prevButton.disabled = state.currentPage <= 1;
+        //     prevButton.addEventListener('click', () => {
+        //         if (state.currentPage > 1) {
+        //             state.currentPage--;
+        //             fetchOrders();
+        //         }
+        //     });
+        //     paginationContainer.appendChild(prevButton);
+            
+        //     // Page buttons
+        //     const startPage = Math.max(1, state.currentPage - 2);
+        //     const endPage = Math.min(state.totalPages, startPage + 4);
+            
+        //     for (let i = startPage; i <= endPage; i++) {
+        //         const pageButton = document.createElement('button');
+        //         pageButton.textContent = i;
+        //         pageButton.className = i === state.currentPage ? 'active' : '';
+        //         pageButton.addEventListener('click', () => {
+        //             state.currentPage = i;
+        //             fetchOrders();
+        //         });
+        //         paginationContainer.appendChild(pageButton);
+        //     }
+            
+        //     // Next button
+        //     const nextButton = document.createElement('button');
+        //     nextButton.innerHTML = '&gt;';
+        //     nextButton.disabled = state.currentPage >= state.totalPages;
+        //     nextButton.addEventListener('click', () => {
+        //         if (state.currentPage < state.totalPages) {
+        //             state.currentPage++;
+        //             fetchOrders();
+        //         }
+        //     });
+        //     paginationContainer.appendChild(nextButton);
+        // }
+
 
         // Handle search input
         function setupSearch() {

@@ -386,9 +386,9 @@
                     </div>
                     <div class="order-details">
                         <h4>Order Details</h4>
-                        <p><strong>Ordered By:</strong> <span id="orderedBy">Kaikos Cafe</span></p>
-                        <p><strong>Date:</strong> <span id="orderDate">Nov 26, 2024, 8:50 AM</span></p>
-                        <p><strong>Due:</strong> <span id="orderDue">Dec 3, 2024, 8:50 AM</span></p>
+                        <p><strong>Ordered By:</strong> <span id="orderedBy"></span></p>
+                        <p><strong>Date:</strong> <span id="orderDate"></span></p>
+                        <p><strong>Due:</strong> <span id="orderDue"></span></p>
                     </div>
                     <div class="support-section">
                         <h4>Support</h4>
