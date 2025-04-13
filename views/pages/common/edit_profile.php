@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile - BrandBoost</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-    
+
     <style>
         * {
             margin: 0;
@@ -297,6 +298,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="settings-container">
         <!-- Sidebar Navigation -->
@@ -320,14 +322,14 @@
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="cover-photo-container">
-                    <img id="cover-photo" src="\assets\images\placeholders\cover-photo-empty.jpg" alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img id="cover-photo" src="/assets/images/placeholders/cover-photo-empty.jpg" alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
                     <i class="fas fa-camera edit-icon" id="cover-photo-edit"></i>
                     <input type="file" id="cover-photo-input" hidden accept="image/*">
                 </div>
                 <div class="profile-info-section">
                     <div class="profile-photo-wrapper">
                         <div class="profile-photo-container">
-                            <img id="profile-photo" src="\assets\images\placeholders\dp-empty.png" alt="Profile Photo" class="profile-photo">
+                            <img id="profile-photo" src="/assets/images/placeholders/dp-empty.png" alt="Profile Photo" class="profile-photo">
                             <i class="fas fa-camera edit-icon" id="profile-photo-edit"></i>
                             <input type="file" id="profile-photo-input" hidden accept="image/*">
                         </div>
@@ -341,21 +343,24 @@
 
             <!-- Basic Information -->
             <form id="profile-form">
+                <!-- Basic Information -->
                 <div class="form-section">
                     <div class="section-header">
                         <h2 class="section-title">Basic Information</h2>
                     </div>
                     <div class="form-group">
                         <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" value="Not set">
+                        <input type="text" id="fullname" name="full_name" value="Not set">
                     </div>
                     <div class="form-group">
                         <label for="title">Professional Title</label>
-                        <input type="text" id="title" value="Graphic & UX/UI Design">
+                        <input type="text" id="title" name="professional_title" value="Graphic & UX/UI Design">
                     </div>
                     <div class="form-group">
                         <label for="bio">Bio</label>
-                        <textarea id="bio" rows="4">Ravi Fernando is a seasoned designer specializing in graphic and UX/UI design...</textarea>
+                        <textarea id="bio" name="bio" rows="4">
+                            Ravi Fernando is a seasoned designer specializing in graphic and UX/UI design...
+                        </textarea>
                     </div>
                 </div>
 
@@ -367,19 +372,15 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" value="ravi.fernando@example.com">
+                            <input type="email" id="email" name="email" value="ravi.fernando@example.com">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone</label>
-                            <input type="tel" id="phone" value="+94123456789">
+                            <input type="tel" id="phone" name="phone" value="+94123456789">
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" id="website" value="https://ravifernando.com">
-                        </div> -->
                         <div class="form-group">
                             <label for="location">Location</label>
-                            <input type="text" id="location" value="Colombo, Sri Lanka">
+                            <input type="text" id="location" name="location" value="Colombo, Sri Lanka">
                         </div>
                     </div>
                 </div>
@@ -391,11 +392,11 @@
                     </div>
                     <div class="form-group">
                         <label for="specialties">Specialties</label>
-                        <input type="text" id="specialties" value="Graphic Design, UX/UI Design, Branding">
+                        <input type="text" id="specialties" name="specialties" value="Graphic Design, UX/UI Design, Branding">
                     </div>
                     <div class="form-group">
                         <label for="tools">Tools Used</label>
-                        <input type="text" id="tools" value="Adobe Photoshop, Sketch, Figma">
+                        <input type="text" id="tools" name="tools" value="Adobe Photoshop, Sketch, Figma">
                     </div>
                 </div>
 
@@ -404,7 +405,9 @@
                     <div class="section-header">
                         <h2 class="section-title">Social Media Links</h2>
                     </div>
-                    <div id="social-media-container"></div>
+                    <div id="social-media-container">
+                        <!-- Dynamically added social media fields should use name="social_links[]" -->
+                    </div>
                     <button type="button" id="add-social-media" class="add-button">
                         <i class="fas fa-plus"></i>
                         Add Social Media Link
@@ -416,7 +419,9 @@
                     <div class="section-header">
                         <h2 class="section-title">Portfolio Projects</h2>
                     </div>
-                    <div id="portfolio-container"></div>
+                    <div id="portfolio-container">
+                        <!-- Dynamically added portfolio fields should use name="portfolio_projects[]" -->
+                    </div>
                     <button type="button" id="add-portfolio" class="add-button">
                         <i class="fas fa-plus"></i>
                         Add Portfolio Project
@@ -428,81 +433,34 @@
                     <button type="submit" class="save-button">Update Profile</button>
                 </div>
             </form>
+
         </div>
     </div>
 
     <script>
-        async function handleSubmit(event) {
-            event.preventDefault();
-
-                try {
-                    const formData = new FormData(this.form);
-                    
-                    // formData.append('test0', document.getElementById('gigTitle').value);
-                    formData.append('test1', "Kavinda Fernando");
-                    formData.append('test2', "Isuranga Fernando");
-                    
-
-                    // Log the data to be sent to the backend for debugging
-                    // console.log('Data to be sent to the backend:', {
-                    //     title: document.getElementById('gigTitle').value,
-                    //     description: document.getElementById('gigDescription').value,
-                    //     serviceType: document.getElementById('serviceType').value,
-                    // });
-
-                    // Make API call to update gig
-                    const response = await fetch(`/api/update-user`, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to update gig');
-                    }
-
-                    // setTimeout(() => {
-                    //     window.location.href = '/designer/my-gigs';
-                    // }, 1500);
-
-                } catch (error) {
-                    console.error('Error updating gig:', error);
-                }
-            }
-
-
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Fetch user data from the server
             fetch('/api/user/me')
                 .then(response => response.json())
                 .then(data => {
-                    // Populate the form with user data
                     populateForm(data);
                     console.log(data);
                 })
                 .catch(error => console.error('Error fetching user data:', error));
 
-
-            // Populate edit profile form
-            function populateForm(userData){
-
+            function populateForm(userData) {
                 document.getElementById('cover-photo').src = userData.cover_picture;
                 document.getElementById('profile-photo').src = userData.profile_picture;
-
                 document.getElementById('fullname').value = userData.name;
                 document.getElementById('title').value = userData.professional_title || "Not set";
                 document.getElementById('bio').value = userData.bio;
-
                 document.getElementById('email').value = userData.email;
                 document.getElementById('phone').value = userData.phone || "Not set";
-                // document.getElementById('website').value = userData.website;
                 document.getElementById('location').value = userData.location || "Not set";
-                
                 document.getElementById('specialties').value = userData.specialties || "Not set";
                 document.getElementById('tools').value = userData.tools || "Not set";
             }
 
-            // Image upload functionality
             function setupImageUpload(inputId, imgId, editId) {
                 const input = document.getElementById(inputId);
                 const img = document.getElementById(imgId);
@@ -522,7 +480,6 @@
             setupImageUpload('cover-photo-input', 'cover-photo', 'cover-photo-edit');
             setupImageUpload('profile-photo-input', 'profile-photo', 'profile-photo-edit');
 
-            // Social Media functionality
             let socialMediaCounter = 0;
             document.getElementById('add-social-media').addEventListener('click', function() {
                 const container = document.getElementById('social-media-container');
@@ -538,20 +495,19 @@
                         <label for="social-media-${socialMediaCounter}-name">Social Media Name</label>
                         <input type="text" id="social-media-${socialMediaCounter}-name">
                     </div>
-                    <div class="form-group
+                    <div class="form-group">
                         <label for="social-media-${socialMediaCounter}-url">Social Media URL</label>
                         <input type="url" id="social-media-${socialMediaCounter}-url">
                     </div>
                 `;
                 container.appendChild(socialMediaGroup);
-                
+
                 socialMediaGroup.querySelector('.remove-btn').addEventListener('click', function() {
                     socialMediaGroup.remove();
                     socialMediaCounter--;
                 });
             });
 
-            // Portfolio functionality
             let portfolioCounter = 0;
             document.getElementById('add-portfolio').addEventListener('click', function() {
                 const container = document.getElementById('portfolio-container');
@@ -567,13 +523,9 @@
                         <label for="portfolio-${portfolioCounter}-title">Project Title</label>
                         <input type="text" id="portfolio-${portfolioCounter}-title">
                     </div>
-                    <div class="form-group
+                    <div class="form-group">
                         <label for="portfolio-${portfolioCounter}-description">Project Description</label>
-                        <textarea id="portfolio-${portfolioCounter}-description" rows="4"></textarea>
-                    </div>
-                    <div class="form-group
-                        <label for="portfolio-${portfolioCounter}-url">Project URL</label>
-                        <input type="url" id="portfolio-${portfolioCounter}-url">
+                        <textarea id="portfolio-${portfolioCounter}-description" rows="3"></textarea>
                     </div>
                 `;
                 container.appendChild(portfolioGroup);
@@ -584,34 +536,29 @@
                 });
             });
 
-            
+            // Optional: handle form submission
+            document.getElementById('profile-form').addEventListener('submit', async function(event) {
+                event.preventDefault();
 
-            // Form submission
-            document.getElementById('profile-form').addEventListener('submit', function(e) {
-                // e.preventDefault();
-                // const formData = new FormData(this);
-                // console.log(Object.fromEntries(formData));
+                const formData = new FormData(this);
 
-                // const test = "Kavinda Fernando";
+                try {
+                    const response = await fetch('/api/update-user', {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                // fetch('/api/update-user', {
-                //     method: 'POST',
-                //     body: test
-                // })
-                //     .then(response => response.json())
-                //     .then(result => {
-                //         // statusMsg.textContent = result.message;
-                //     })
-                //     .catch(error => {
-                //         console.error('Error updating profile:', error);
-                //         // statusMsg.textContent = 'Failed to update profile.';
-                //     });
+                    if (!response.ok) throw new Error('Failed to update profile');
 
-                handleSubmit(e);
+                    alert('Profile updated successfully!');
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating profile.');
+                }
             });
+
         });
     </script>
-
-
 </body>
+
 </html>

@@ -122,10 +122,16 @@ class UserController extends BaseController
             'user_id'         => $user['user_id'],
             'name'            => $user['name'],
             'email'           => $user['email'],
+            'phone'           => $user['phone'],
             'role'            => $user['role'],
             'profile_picture' => $user['profile_picture'],
             'cover_picture'   => $user['cover_picture'],
-            'bio'             => $user['bio']
+            'bio'             => $user['bio'],
+            'professional_title' => $user['professional_title'],
+            'specialties' => $user['specialties'],
+            'tools' => $user['tools'],
+            'location' => $user['location'],
+
         ];
 
         // Fetch additional data based on user role
@@ -241,11 +247,13 @@ class UserController extends BaseController
      */
     public function updateUserProfile($request, $response): void {
 
-        $reqData = $request->getParsedBody();
-        error_log(print_r($reqData, true)); // Log the request data for debugging
+        // error_log('Update User Profile Called'); // Log for debugging
+
+        // $reqData = $request->getParsedBody();
+        // error_log(print_r($reqData, true)); // Log the request data for debugging
         // error_log('Request Data: ' , $reqData); // Log the request data for debugging
 
-        exit;
+        // exit;
 
         if(!AuthHelper::isLoggedIn()){
             $response->sendError('Unauthorized', 401);
@@ -259,7 +267,8 @@ class UserController extends BaseController
         }
 
         $data = $request->getParsedBody();
-        $userId = $data['user_id'] ?? null;
+        // $userId = $data['user_id'] ?? null;
+        $userId = AuthHelper::getCurrentUser()['user_id'] ?? null;
 
         if (empty($userId)) {
             $response->sendError('User ID is required.', 400);
@@ -284,11 +293,16 @@ class UserController extends BaseController
 
         // Update basic user details
         $updatedUser = [
-            'name' => $data['name'] ?? $user['name'],
+            'name' => $data['full_name'] ?? $user['name'],
             'email' => $data['email'] ?? $user['email'],
-            'profile_picture' => $data['profile_picture'] ?? $user['profile_picture'],
-            'cover_picture' => $data['cover_picture'] ?? $user['cover_picture'],
-            'bio' => $data['bio'] ?? $user['bio']
+            'phone' => $data['phone'] ?? $user['phone'],
+            'bio' => $data['bio'] ?? $user['bio'],
+            'professional_title' => $data['professional_title'] ?? $user['professional_title'],
+            'specialties' => $data['specialties'] ?? $user['specialties'],
+            'tools' => $data['tools'] ?? $user['tools'],
+            'location' => $data['location'] ?? $user['location'],
+            // 'profile_picture' => $data['profile_picture'] ?? $user['profile_picture'],
+            // 'cover_picture' => $data['cover_picture'] ?? $user['cover_picture'],
         ];
 
         if (!$userModel->updateUserById($userId, $updatedUser)) {
