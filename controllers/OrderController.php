@@ -169,6 +169,126 @@ class OrderController extends BaseController {
 
 
     /**
+     * Fetch a list of orders for the currently logged-in seller.
+     *
+     * @param Request $request  The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with the list of orders.
+     */
+    public function getSellerOrders($request, $response): void {
+        try {
+            // Initialize models
+            $orderModel = new Orders();
+            $orderPromiseModel = new OrderPromises();
+            $serviceModel = new Service();
+            $userModel = new User();
+            
+            // Get current logged-in user (seller)
+            $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+            $sellerRole  = AuthHelper::getCurrentUser()['role'];
+            error_log("Seller ID: " . ($sellerId ?? 'null'));
+            error_log("Seller role: " . ($sellerRole ?? 'null'));
+            
+            if (!$sellerId) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Unauthorized access: user not authenticated.'
+                ], 401);
+                return;
+            }
+            
+            // Parse request parameters
+            // $queryParams = $request->getQueryParams();
+            // $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+            // $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+            // $search = $queryParams['search'] ?? '';
+            
+            // Calculate offset for pagination
+            // $offset = ($page - 1) * $limit;
+            
+            // Get orders directly by seller_id
+            $orders = $orderModel->getOrdersBySellerId($sellerId);
+            // $totalOrders = $orderModel->countOrdersBySellerId($sellerId);
+            
+            error_log("Found " . count($orders) . " orders for seller ID " . $sellerId);
+            
+            if (empty($orders)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'No orders found for your account.',
+                    'data' => [],
+                    // 'pagination' => [
+                    //     'total' => 0,
+                    //     'page' => $page,
+                    //     'limit' => $limit,
+                    //     'pages' => 0
+                    // ]
+                ]);
+                return;
+            }
+            
+            $orderList = [];
+            
+            // Enhance orders with additional information
+            foreach ($orders as $order) {
+                // Get promise data
+                $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
+                
+                // Get service data
+                $service = $serviceModel->getServiceById($order['service_id']);
+                
+                // Get customer data
+                $customer = $userModel->getUserById($order['customer_id']);
+                
+                // Calculate due date based on order creation and delivery days
+                $dueDate = null;
+                if ($promise && isset($promise['delivery_days']) && isset($order['created_at'])) {
+                    $createdDate = new \DateTime($order['created_at']);
+                    $dueDate = $createdDate->modify("+{$promise['delivery_days']} days");
+                    $dueDate = $dueDate->format('Y-m-d');
+                }
+                
+                // Format order data for frontend
+                $orderList[] = [
+                    'order_id' => $order['order_id'],
+                    'buyer' => $customer ? ($customer['name']) : 'Unknown',
+                    'buyer_id' => $order['customer_id'],
+                    'gig' => $service ? $service['title'] : 'Unknown Service',
+                    'service_id' => $order['service_id'],
+                    'dueOn' => $order['order_status'] === 'completed' ? 'Delivered' : ($dueDate ?? 'N/A'),
+                    'total' => $promise ? ('LKR ' . number_format($promise['price'], 2)) : 'N/A',
+                    'status' => ucfirst($order['order_status'] ?? 'Pending'),
+                    'seller_role' => $sellerRole
+                ];
+            }
+            
+            // Return the response
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Seller orders retrieved successfully.',
+                'data' => $orderList,
+                // 'pagination' => [
+                //     'total' => $totalOrders,
+                //     'page' => $page,
+                //     'limit' => $limit,
+                //     'pages' => ceil($totalOrders / $limit)
+                // ]
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Error in getSellerOrders: " . $e->getMessage());
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+    /**
      * Create a new order API endpoint.
      *
      * @param Request $request  The incoming request object.
@@ -239,6 +359,7 @@ class OrderController extends BaseController {
         // Prepare order data
         $orderData = [
             'customer_id' => $customerId,
+            'seller_id' => $serviceData['user_id'],	 // Assuming the service has a user_id field
             'service_id' => $serviceId,
             'package_id' => $packageId,
             'custom_package_id' => $customPackageId,
