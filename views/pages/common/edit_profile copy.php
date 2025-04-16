@@ -804,7 +804,7 @@
                 if (user.social_accounts && Array.isArray(user.social_accounts) && user.social_accounts.length > 0) {
                     user.social_accounts.forEach(account => {
                         socialMediaCounter++;
-                        const item = createSocialMediaItem(socialMediaCounter, account);
+                        const item = createSocialMediaItem(socialMediaCounter);
 
                         // Populate the item with data
                         const platformInput = item.querySelector(`.social-platform`);
@@ -881,15 +881,10 @@
             }
         }
 
-        function createSocialMediaItem(counter, accountData = {}) {
+        function createSocialMediaItem(counter) {
             const group = document.createElement('div');
             group.classList.add('social-media-item');
             group.dataset.id = counter;
-
-            // Store account_id if it exists (for existing accounts)
-            if (accountData.account_id) {
-                group.dataset.accountId = accountData.account_id;
-            }
 
             group.innerHTML = `
             <div class="item-header">
@@ -898,35 +893,19 @@
             </div>
             <div class="form-group">
                 <label for="social-platform-${counter}">Platform</label>
-                <input type="text" id="social-platform-${counter}" name="social_platform_${counter}" class="social-platform" value="${accountData.platform || ''}">
+                <input type="text" id="social-platform-${counter}" name="social_platform_${counter}" class="social-platform">
             </div>
             <div class="form-group">
                 <label for="social-username-${counter}">Social Media Username</label>
-                <input type="text" id="social-username-${counter}" name="social_username_${counter}" class="social-username" value="${accountData.username || ''}">
+                <input type="text" id="social-username-${counter}" name="social_username_${counter}" class="social-username">
             </div>
             <div class="form-group">
                 <label for="social-url-${counter}">URL for profile</label>
-                <input type="url" id="social-url-${counter}" name="social_url_${counter}" class="social-url" value="${accountData.url || accountData.link || ''}">
+                <input type="url" id="social-url-${counter}" name="social_url_${counter}" class="social-url">
             </div>
             `;
 
-            // Set up remove button with special handling for existing accounts
-            const removeBtn = group.querySelector('.remove-btn');
-            removeBtn.addEventListener('click', () => {
-                // If this is an existing account (has account_id), mark it for deletion
-                if (group.dataset.accountId) {
-                    // Create a hidden field to track deleted accounts
-                    const deletedAccountInput = document.createElement('input');
-                    deletedAccountInput.type = 'hidden';
-                    deletedAccountInput.name = `deleted_social_account_${group.dataset.accountId}`;
-                    deletedAccountInput.value = group.dataset.accountId;
-                    form.appendChild(deletedAccountInput);
-                }
-
-                // Remove the item from the DOM
-                group.remove();
-            });
-
+            group.querySelector('.remove-btn').addEventListener('click', () => group.remove());
             return group;
         }
 
@@ -1001,22 +980,8 @@
             // Set up image upload functionality
             setupPortfolioImageUploads(group);
 
-            // Set up remove button with special handling for existing projects
-            const removeBtn = group.querySelector('.remove-btn');
-            removeBtn.addEventListener('click', () => {
-                // If this is an existing project (has project_id), mark it for deletion
-                if (group.dataset.projectId) {
-                    // Create a hidden field to track deleted projects
-                    const deletedProjectInput = document.createElement('input');
-                    deletedProjectInput.type = 'hidden';
-                    deletedProjectInput.name = `deleted_project_${group.dataset.projectId}`;
-                    deletedProjectInput.value = group.dataset.projectId;
-                    form.appendChild(deletedProjectInput);
-                }
-
-                // Remove the item from the DOM
-                group.remove();
-            });
+            // Set up remove button
+            group.querySelector('.remove-btn').addEventListener('click', () => group.remove());
 
             return group;
         }
@@ -1049,21 +1014,6 @@
             if (userRole === 'influencer') {
                 const socialMediaItems = document.querySelectorAll('.social-media-item');
                 const socialMediaAccounts = [];
-
-                // Collect deleted account IDs
-                const deletedAccountInputs = document.querySelectorAll('input[name^="deleted_social_account_"]');
-                const deletedAccounts = Array.from(deletedAccountInputs).map(input => {
-                    return {
-                        account_id: input.value,
-                        delete: true
-                    };
-                });
-
-                // Add deleted accounts to the accounts array
-                socialMediaAccounts.push(...deletedAccounts);
-
-                // Remove the hidden inputs from the form to keep it clean
-                deletedAccountInputs.forEach(input => input.remove());
 
                 socialMediaItems.forEach(item => {
                     const itemId = item.dataset.id;
@@ -1101,21 +1051,6 @@
             if (userRole === 'designer') {
                 const portfolioItems = document.querySelectorAll('.portfolio-item');
                 const portfolioProjects = [];
-
-                // Collect deleted project IDs
-                const deletedProjectInputs = document.querySelectorAll('input[name^="deleted_project_"]');
-                const deletedProjects = Array.from(deletedProjectInputs).map(input => {
-                    return {
-                        project_id: input.value,
-                        delete: true
-                    };
-                });
-
-                // Add deleted projects to the projects array
-                portfolioProjects.push(...deletedProjects);
-
-                // Remove the hidden inputs from the form to keep it clean
-                deletedProjectInputs.forEach(input => input.remove());
 
                 portfolioItems.forEach(item => {
                     const itemId = item.dataset.id;

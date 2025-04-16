@@ -237,10 +237,12 @@
                 <i class="fas fa-lock"></i>
                 Change Password
             </a>
-            <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" class="sidebar-link">
-                <i class="fas fa-credit-card"></i>
-                Payout Methods
-            </a>
+            <?php if ($_SESSION['user']['role'] !== 'businessman'): ?>
+                <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" class="sidebar-link">
+                    <i class="fas fa-credit-card"></i>
+                    Payout Methods
+                </a>
+            <?php endif; ?>
         </div>
 
         <!-- Main Content -->
