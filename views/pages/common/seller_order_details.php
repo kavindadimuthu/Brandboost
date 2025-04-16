@@ -293,7 +293,7 @@
             color: #b91c1c !important;
         }
 
-        /* Deliverables Section */
+        /* Deliverables Section - Redesigned as Table */
         .deliverables-section {
             margin-top: 24px;
             background-color: #ffffff;
@@ -318,153 +318,244 @@
             margin: 0;
         }
 
-        .deliverables-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .deliverables-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        .deliverable-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.2s;
+        .deliverables-table th,
+        .deliverables-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .deliverable-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .deliverable-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .deliverable-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #f3f4f6;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 16px;
-        }
-
-        .deliverable-icon i {
-            color: #4f46e5;
-            font-size: 1.2em;
-        }
-
-        .deliverable-title {
-            flex: 1;
-        }
-
-        .deliverable-title h4 {
-            margin: 0 0 4px 0;
-            font-size: 1.1em;
+        .deliverables-table th {
+            background-color: #f9fafb;
             font-weight: 600;
-            color: #111827;
         }
 
-        .deliverable-title p {
-            margin: 0;
-            font-size: 0.85em;
-            color: #6b7280;
-        }
-
-        .deliverable-status {
-            font-size: 0.75em;
-            padding: 4px 8px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
+        .deliverables-table tr:hover {
+            background-color: #f9fafb;
+            cursor: pointer;
         }
 
         .status-delivered {
-            background-color: #d1fae5;
             color: #065f46;
+            background-color: #d1fae5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
         }
 
-        .deliverable-content {
-            margin-top: 16px;
+        .status-revision {
+            color: #92400e;
+            background-color: #fef3c7;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
         }
 
-        .deliverable-link {
+        .delivery-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 90%;
+            z-index: 1000;
+        }
+
+        .delivery-popup.active {
+            display: block;
+        }
+
+        .popup-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            background-color: #f9fafb;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .deliverable-link i {
-            color: #4f46e5;
-            margin-right: 12px;
-            font-size: 1.1em;
-        }
-
-        .deliverable-link a {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 500;
-            word-break: break-all;
-        }
-
-        .deliverable-link a:hover {
-            text-decoration: underline;
-        }
-
-        .deliverable-screenshots {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .screenshot-item {
+        .popup-media {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            margin-bottom: 20px;
             border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-            height: 120px;
-            position: relative;
         }
 
-        .screenshot-item img {
+        .revision-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .revision-item {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: all 0.3s;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
 
-        .screenshot-item:hover img {
-            transform: scale(1.05);
+        .backdrop.active {
+            display: block;
         }
 
-        .screenshot-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 6px 10px;
-            font-size: 0.8em;
-            text-align: center;
-        }
-
-        .deliverable-date {
-            font-size: 0.8em;
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
             color: #6b7280;
-            text-align: right;
-            margin-top: 12px;
+        }
+
+        .file-list {
+            margin-top: 10px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .file-item i {
+            margin-right: 10px;
+            color: #4f46e5;
+        }
+
+        /* Popups */
+        .popup,
+        .cancel-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .popup.active,
+        .cancel-popup.active {
+            display: block;
+        }
+
+        .popup h4,
+        .cancel-popup h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #111827;
+        }
+
+        .popup p,
+        .cancel-popup p {
+            font-size: 0.95em;
+            color: #4b5563;
+            margin-bottom: 20px;
+        }
+
+        .popup button,
+        .cancel-popup button {
+            background-color: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .popup button:hover,
+        .cancel-popup button:hover {
+            background-color: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .popup .close-btn,
+        .cancel-popup .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 1.2em;
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            transition: all 0.2s;
+        }
+
+        .popup .close-btn:hover,
+        .cancel-popup .close-btn:hover {
+            color: #374151;
+            transform: none;
+        }
+
+        .stars {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stars i {
+            font-size: 1.8em;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stars i:hover {
+            transform: scale(1.1);
+        }
+
+        .stars i.active {
+            color: #fbbf24;
+        }
+
+        .cancel-popup textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            border-radius: 8px;
+            resize: none;
+            font-size: 0.95em;
+            font-family: inherit;
+            margin-bottom: 20px;
+            min-height: 120px;
+        }
+
+        .cancel-popup textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
         }
 
         /* Delivery Form */
@@ -640,148 +731,6 @@
             background-color: #f3f4f6;
         }
 
-        /* Popups */
-        .popup,
-        .cancel-popup,
-        .delivery-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
-            padding: 28px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            width: 100%;
-            max-width: 420px;
-        }
-
-        .delivery-popup {
-            max-width: 720px;
-        }
-
-        .popup.active,
-        .cancel-popup.active,
-        .delivery-popup.active {
-            display: block;
-        }
-
-        .popup h4,
-        .cancel-popup h4,
-        .delivery-popup h4 {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #111827;
-        }
-
-        .popup p,
-        .cancel-popup p,
-        .delivery-popup p {
-            font-size: 0.95em;
-            color: #4b5563;
-            margin-bottom: 20px;
-        }
-
-        .popup button,
-        .cancel-popup button,
-        .delivery-popup button {
-            background-color: #4f46e5;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 18px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .popup button:hover,
-        .cancel-popup button:hover,
-        .delivery-popup button:hover {
-            background-color: #4338ca;
-            transform: translateY(-1px);
-        }
-
-        .popup .close-btn,
-        .cancel-popup .close-btn,
-        .delivery-popup .close-btn {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            font-size: 1.2em;
-            background: none;
-            border: none;
-            color: #6b7280;
-            cursor: pointer;
-            padding: 4px;
-            transition: all 0.2s;
-        }
-
-        .popup .close-btn:hover,
-        .cancel-popup .close-btn:hover,
-        .delivery-popup .close-btn:hover {
-            color: #374151;
-            transform: none;
-        }
-
-        .stars {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .stars i {
-            font-size: 1.8em;
-            color: #e5e7eb;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .stars i:hover {
-            transform: scale(1.1);
-        }
-
-        .stars i.active {
-            color: #fbbf24;
-        }
-
-        .cancel-popup textarea {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            padding: 12px;
-            border-radius: 8px;
-            resize: none;
-            font-size: 0.95em;
-            font-family: inherit;
-            margin-bottom: 20px;
-            min-height: 120px;
-        }
-
-        .cancel-popup textarea:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-        }
-
-        /* Backdrop overlay */
-        .backdrop {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .backdrop.active {
-            display: block;
-        }
-
         /* Image preview modal */
         .image-preview-modal {
             display: none;
@@ -876,7 +825,7 @@
                                 <div class="timer-bar" id="progressBar"></div>
                             </div>
                         </div>
-                        <div id="countdown"></div>
+                        <!-- <div id="countdown"></div> -->
                         <button id="deliverNow">Deliver Now</button>
                         <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
                     </div>
@@ -896,15 +845,54 @@
                 </div>
             </div>
 
-            <!-- Modified Deliverables Section -->
+            <!-- Redesigned Deliverables Section -->
             <div class="deliverables-section">
                 <div class="deliverables-header">
                     <h3>Deliverables</h3>
                     <span id="deliverableCount">2 items</span>
                 </div>
-                <div class="deliverables-list" id="deliverablesList">
-                    <!-- Deliverables will be populated dynamically -->
-                </div>
+                <table class="deliverables-table">
+                    <thead>
+                        <tr>
+                            <th>Delivery #</th>
+                            <th>Delivery Note</th>
+                            <th>Delivered Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="delivery-row" data-delivery='{
+                            "number": 1,
+                            "note": "Initial delivery with product showcase",
+                            "time": "2024-03-15 14:30",
+                            "status": "Delivered",
+                            "media": ["https://example.com/image1.jpg"],
+                            "revisions": [{
+                                "note": "Please include close-up shots",
+                                "files": ["https://example.com/revision1.pdf"],
+                                "date": "2024-03-16 10:00"
+                            }]
+                        }'>
+                            <td>1</td>
+                            <td>Initial delivery with product showcase</td>
+                            <td>2024-03-15 14:30</td>
+                            <td><span class="status-delivered">Delivered</span></td>
+                        </tr>
+                        <tr class="delivery-row" data-delivery='{
+                            "number": 2,
+                            "note": "Revised delivery with close-ups",
+                            "time": "2024-03-17 09:45",
+                            "status": "Revision Requested",
+                            "media": ["https://example.com/image2.jpg"],
+                            "revisions": []
+                        }'>
+                            <td>2</td>
+                            <td>Revised delivery with close-ups</td>
+                            <td>2024-03-17 09:45</td>
+                            <td><span class="status-revision">Revision Requested</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -966,6 +954,25 @@
         </div>
     </div>
 
+    <!-- Delivery Details Popup -->
+    <div class="delivery-popup" id="deliveryDetailsPopup">
+        <div class="popup-header">
+            <h3>Delivery Details</h3>
+            <button class="close-btn" id="closeDetailsPopup">&times;</button>
+        </div>
+        <img class="popup-media" id="popupMedia" src="" alt="Delivery Media">
+        <div class="delivery-details">
+            <p><strong>Delivery Number:</strong> <span id="popupNumber"></span></p>
+            <p><strong>Delivery Note:</strong> <span id="popupNote"></span></p>
+            <p><strong>Delivered Time:</strong> <span id="popupTime"></span></p>
+            <p><strong>Status:</strong> <span id="popupStatus"></span></p>
+        </div>
+        <div class="revision-section" id="revisionSection">
+            <h4>Revision Requests</h4>
+            <div id="revisionList"></div>
+        </div>
+    </div>
+
     <!-- Image Preview Modal -->
     <div class="image-preview-modal" id="imagePreviewModal">
         <button class="close-preview" id="closeImagePreview">&times;</button>
@@ -976,483 +983,418 @@
     <div class="backdrop" id="backdrop"></div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const username = document.getElementById('username');
-        const chatBox = document.getElementById('chatBox');
-        const orderedBy = document.getElementById('orderedBy');
-        const orderDate = document.getElementById('orderDate');
-        const orderDue = document.getElementById('orderDue');
-        const countdown = document.getElementById('countdown');
-        const reviewPopup = document.getElementById('reviewPopup');
-        const cancelPopup = document.getElementById('cancelPopup');
-        const deliveryPopup = document.getElementById('deliveryPopup');
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        const progressBar = document.getElementById('progressBar');
-        const deliverablesList = document.getElementById('deliverablesList');
-        const deliverableCount = document.getElementById('deliverableCount');
-        const backdrop = document.getElementById('backdrop');
-        const imagePreviewModal = document.getElementById('imagePreviewModal');
-        const previewImage = document.getElementById('previewImage');
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = document.getElementById('username');
+            const chatBox = document.getElementById('chatBox');
+            const orderedBy = document.getElementById('orderedBy');
+            const orderDate = document.getElementById('orderDate');
+            const orderDue = document.getElementById('orderDue');
+            const countdown = document.getElementById('countdown');
+            const reviewPopup = document.getElementById('reviewPopup');
+            const cancelPopup = document.getElementById('cancelPopup');
+            const deliveryPopup = document.getElementById('deliveryPopup');
+            const deliveryDetailsPopup = document.getElementById('deliveryDetailsPopup');
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const progressBar = document.getElementById('progressBar');
+            const deliverableCount = document.getElementById('deliverableCount');
+            const backdrop = document.getElementById('backdrop');
+            const imagePreviewModal = document.getElementById('imagePreviewModal');
+            const previewImage = document.getElementById('previewImage');
 
-        // Extract orderId from the URL
-        const pathSegments = window.location.pathname.split('/');
-        const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment of the URL
+            // Extract orderId from the URL
+            const pathSegments = window.location.pathname.split('/');
+            const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment of the URL
 
-        // Mock deliverables data (replace with real backend data)
-        const mockDeliverables = [
-            {
-                id: 1,
-                type: 'instagram',
-                title: 'Instagram Post',
-                description: 'Product feature on feed with caption',
-                status: 'delivered',
-                date: '2024-11-28',
-                link: 'https://instagram.com/p/ExamplePost123',
-                screenshots: [
-                    {
-                        id: 1,
-                        url: '/api/placeholder/400/320',
-                        title: 'Engagement Stats'
-                    },
-                    {
-                        id: 2,
-                        url: '/api/placeholder/400/320',
-                        title: 'Reach & Impressions'
-                    }
-                ]
-            },
-            {
-                id: 2,
-                type: 'tiktok',
-                title: 'TikTok Video',
-                description: '15-second product showcase',
-                status: 'delivered',
-                date: '2024-12-01',
-                link: 'https://tiktok.com/@username/video/1234567890',
-                screenshots: [
-                    {
-                        id: 3,
-                        url: '/api/placeholder/400/320',
-                        title: 'Views & Likes'
-                    },
-                    {
-                        id: 4,
-                        url: '/api/placeholder/400/320',
-                        title: 'Audience Demographics'
-                    }
-                ]
-            }
-        ];
-
-        // Render deliverables with links and screenshots
-        function renderDeliverables(deliverables) {
-            deliverablesList.innerHTML = '';
-            deliverableCount.textContent = `${deliverables.length} items`;
-            
-            deliverables.forEach(item => {
-                let icon = 'fa-link';
-                if (item.type === 'instagram') icon = 'fa-instagram';
-                if (item.type === 'tiktok') icon = 'fa-music';
-                if (item.type === 'youtube') icon = 'fa-youtube';
-                if (item.type === 'facebook') icon = 'fa-facebook';
-                if (item.type === 'twitter') icon = 'fa-twitter';
-                
-                const deliverableEl = document.createElement('div');
-                deliverableEl.className = 'deliverable-item';
-                
-                let screenshotsHTML = '';
-                if (item.screenshots && item.screenshots.length > 0) {
-                    screenshotsHTML = `
-                        <div class="deliverable-screenshots">
-                            ${item.screenshots.map(screenshot => `
-                                <div class="screenshot-item" data-id="${screenshot.id}" data-url="${screenshot.url}">
-                                    <img src="${screenshot.url}" alt="${screenshot.title}">
-                                    <div class="screenshot-overlay">${screenshot.title}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
+            // Mock deliverables data (replace with real backend data)
+            const mockDeliverables = [
+                {
+                    id: 1,
+                    type: 'instagram',
+                    title: 'Instagram Post',
+                    description: 'Product feature on feed with caption',
+                    status: 'delivered',
+                    date: '2024-11-28',
+                    link: 'https://instagram.com/p/ExamplePost123',
+                    screenshots: [
+                        {
+                            id: 1,
+                            url: '/api/placeholder/400/320',
+                            title: 'Engagement Stats'
+                        },
+                        {
+                            id: 2,
+                            url: '/api/placeholder/400/320',
+                            title: 'Reach & Impressions'
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: 'tiktok',
+                    title: 'TikTok Video',
+                    description: '15-second product showcase',
+                    status: 'delivered',
+                    date: '2024-12-01',
+                    link: 'https://tiktok.com/@username/video/1234567890',
+                    screenshots: [
+                        {
+                            id: 3,
+                            url: '/api/placeholder/400/320',
+                            title: 'Views & Likes'
+                        },
+                        {
+                            id: 4,
+                            url: '/api/placeholder/400/320',
+                            title: 'Audience Demographics'
+                        }
+                    ]
                 }
-                
-                deliverableEl.innerHTML = `
-                    <div class="deliverable-header">
-                        <div class="deliverable-icon">
-                            <i class="fab ${icon}"></i>
-                        </div>
-                        <div class="deliverable-title">
-                            <h4>${item.title}</h4>
-                            <p>${item.description}</p>
-                        </div>
-                        <span class="deliverable-status status-${item.status === 'delivered' ? 'delivered' : 'pending'}">
-                            ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                        </span>
-                    </div>
-                    <div class="deliverable-content">
-                        <div class="deliverable-link">
-                            <i class="fas fa-external-link-alt"></i>
-                            <a href="${item.link}" target="_blank">${item.link}</a>
-                        </div>
-                        ${screenshotsHTML}
-                        <div class="deliverable-date">
-                            Delivered on ${new Date(item.date).toLocaleDateString()}
-                        </div>
-                    </div>
-                `;
-                
-                deliverablesList.appendChild(deliverableEl);
-            });
-            
-            // Add event listeners to screenshots for preview
-            document.querySelectorAll('.screenshot-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const imgUrl = this.dataset.url;
-                    showImagePreview(imgUrl);
+            ];
+
+            // Delivery row click handler
+            document.querySelectorAll('.delivery-row').forEach(row => {
+                row.addEventListener('click', function() {
+                    const deliveryData = JSON.parse(this.dataset.delivery);
+                    showDeliveryDetails(deliveryData);
                 });
             });
-        }
-        
-        // Show image preview modal
-        function showImagePreview(imgUrl) {
-            previewImage.src = imgUrl;
-            imagePreviewModal.classList.add('active');
-            backdrop.classList.add('active');
-        }
-        
-        // Close image preview
-        document.getElementById('closeImagePreview').addEventListener('click', function() {
-            imagePreviewModal.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
 
-        // Fetch order details
-        async function fetchOrderDetails() {
-            try {
-                const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
+            function showDeliveryDetails(data) {
+                // Populate main details
+                document.getElementById('popupNumber').textContent = data.number;
+                document.getElementById('popupNote').textContent = data.note;
+                document.getElementById('popupTime').textContent = data.time;
+                document.getElementById('popupStatus').textContent = data.status;
 
-                console.log('Order details:', result);
-
-                // Render order details
-                username.textContent = result.data.user.name;
-                orderedBy.textContent = result.data.user.name;
-                orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
-
-                // Calculate due date
-                const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
-                const deliveryDays = result.data.promise.delivery_days;
-                const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
-                orderDue.textContent = dueDate.toLocaleString();
-
-                // Start countdown
-                startCountdown(dueDate, createdDate);
-
-                // Render chat messages (if applicable)
-                if (result.data.messages) {
-                    result.data.messages.forEach(message => {
-                        const messageElement = document.createElement('div');
-                        messageElement.classList.add('message', message.type);
-                        messageElement.textContent = message.text;
-                        chatBox.appendChild(messageElement);
-                    });
-                }
-
-                // For demo purposes, also fetch deliverables here
-                // In production, replace with real API call
-                renderDeliverables(mockDeliverables);
-
-            } catch (error) {
-                console.error('Error fetching order details:', error);
-                // For demo purposes, show mock deliverables even if API fails
-                renderDeliverables(mockDeliverables);
-            }
-        }
-
-        function startCountdown(dueDate, createdDate) {
-            const countdownElement = document.getElementById('countdown');
-            const totalDuration = dueDate - createdDate;
-            
-            const interval = setInterval(() => {
-                const now = new Date().getTime();
-                const timeLeft = dueDate - now;
-                
-                // Update progress bar
-                const progressPercentage = 100 - Math.min(100, Math.max(0, (timeLeft / totalDuration) * 100));
-                progressBar.style.width = `${progressPercentage}%`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    countdownElement.innerText = 'Delivery Time Reached!';
-                    document.getElementById('deliverNow').disabled = false;
-                    
-                    daysEl.textContent = '0';
-                    hoursEl.textContent = '0';
-                    minutesEl.textContent = '0';
-                    secondsEl.textContent = '0';
+                // Handle media display
+                const mediaElement = document.getElementById('popupMedia');
+                if (data.media && data.media.length > 0) {
+                    mediaElement.src = data.media[0];
+                    mediaElement.style.display = 'block';
                 } else {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                    // Update timer values
-                    daysEl.textContent = days;
-                    hoursEl.textContent = hours;
-                    minutesEl.textContent = minutes;
-                    secondsEl.textContent = seconds;
-                    
-                    countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                    mediaElement.style.display = 'none';
                 }
-            }, 1000);
-        }
 
-        // Event listeners for review and cancel popups
-        document.getElementById('reviewOrder').addEventListener('click', () => {
-            reviewPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('closePopup').addEventListener('click', () => {
-            reviewPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('cancelOrder').addEventListener('click', () => {
-            cancelPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('closeCancelPopup').addEventListener('click', () => {
-            cancelPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Star rating functionality
-        const stars = document.querySelectorAll('.stars i');
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = star.getAttribute('data-rating');
-                stars.forEach(s => {
-                    if (s.getAttribute('data-rating') <= rating) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            });
-        });
-
-        // Submit review
-        document.getElementById('submitReview').addEventListener('click', () => {
-            const stars = document.querySelectorAll('.stars .fa-star.active');
-            const rating = stars.length;
-            // Send rating to the server
-            console.log('Rating submitted:', rating);
-            reviewPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Request cancellation
-        document.getElementById('requestCancel').addEventListener('click', () => {
-            const cancelReason = document.getElementById('cancelReason').value;
-            // Send cancellation request to the server
-            console.log('Cancellation reason:', cancelReason);
-            cancelPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Deliver Now button
-        document.getElementById('deliverNow').addEventListener('click', () => {
-            deliveryPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        // Close delivery popup
-        document.getElementById('closeDeliveryPopup').addEventListener('click', () => {
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('cancelDelivery').addEventListener('click', () => {
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // File upload area
-        const uploadArea = document.getElementById('uploadArea');
-        const fileUpload = document.getElementById('fileUpload');
-        const previewContainer = document.getElementById('previewContainer');
-        
-        uploadArea.addEventListener('click', () => {
-            fileUpload.click();
-        });
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#4f46e5';
-            uploadArea.style.backgroundColor = '#f5f5ff';
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = '#f9fafb';
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = '#f9fafb';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files);
-            }
-        });
-
-        fileUpload.addEventListener('change', () => {
-            if (fileUpload.files.length > 0) {
-                handleFiles(fileUpload.files);
-            }
-        });
-
-        function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        const previewDiv = document.createElement('div');
-                        previewDiv.className = 'preview-image';
-                        
-                        previewDiv.innerHTML = `
-                            <img src="${e.target.result}" alt="Screenshot preview">
-                            <button class="remove-btn">&times;</button>
+                // Handle revisions
+                const revisionList = document.getElementById('revisionList');
+                revisionList.innerHTML = '';
+                
+                if (data.revisions.length > 0) {
+                    data.revisions.forEach(rev => {
+                        const revDiv = document.createElement('div');
+                        revDiv.className = 'revision-item';
+                        revDiv.innerHTML = `
+                            <p><strong>Revision Note:</strong> ${rev.note}</p>
+                            <p><strong>Request Date:</strong> ${rev.date}</p>
+                            <div class="file-list">
+                                ${rev.files.map(file => `
+                                    <div class="file-item">
+                                        <i class="fas fa-file-pdf"></i>
+                                        <a href="${file}" target="_blank">View File</a>
+                                    </div>
+                                `).join('')}
+                            </div>
                         `;
-                        
-                        previewContainer.appendChild(previewDiv);
-                        
-                        // Add event listener to remove button
-                        previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
-                            previewDiv.remove();
+                        revisionList.appendChild(revDiv);
+                    });
+                    document.getElementById('revisionSection').style.display = 'block';
+                } else {
+                    document.getElementById('revisionSection').style.display = 'none';
+                }
+
+                deliveryDetailsPopup.classList.add('active');
+                backdrop.classList.add('active');
+            }
+
+            // Close delivery details popup
+            document.getElementById('closeDetailsPopup').addEventListener('click', () => {
+                deliveryDetailsPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Fetch order details
+            async function fetchOrderDetails() {
+                try {
+                    const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const result = await response.json();
+
+                    console.log('Order details:', result);
+
+                    // Render order details
+                    username.textContent = result.data.user.name;
+                    orderedBy.textContent = result.data.user.name;
+                    orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
+
+                    // Calculate due date
+                    const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
+                    const deliveryDays = result.data.promise.delivery_days;
+                    const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
+                    orderDue.textContent = dueDate.toLocaleString();
+
+                    // Start countdown
+                    startCountdown(dueDate, createdDate);
+
+                    // Render chat messages (if applicable)
+                    if (result.data.messages) {
+                        result.data.messages.forEach(message => {
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('message', message.type);
+                            messageElement.textContent = message.text;
+                            chatBox.appendChild(messageElement);
                         });
                     }
-                    
-                    reader.readAsDataURL(files[i]);
+
+                } catch (error) {
+                    console.error('Error fetching order details:', error);
                 }
             }
-        }
 
-        // Submit delivery
-        document.getElementById('submitDelivery').addEventListener('click', () => {
-            const contentLink = document.getElementById('contentLink').value;
-            const deliveryNotes = document.getElementById('deliveryNotes').value;
-            
-            // Validate form
-            if (!contentLink) {
-                alert('Please provide a content link');
-                return;
+            function startCountdown(dueDate, createdDate) {
+                const countdownElement = document.getElementById('countdown');
+                const totalDuration = dueDate - createdDate;
+                
+                const interval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const timeLeft = dueDate - now;
+                    
+                    // Update progress bar
+                    const progressPercentage = 100 - Math.min(100, Math.max(0, (timeLeft / totalDuration) * 100));
+                    progressBar.style.width = `${progressPercentage}%`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        countdownElement.innerText = 'Delivery Time Reached!';
+                        document.getElementById('deliverNow').disabled = false;
+                        
+                        daysEl.textContent = '0';
+                        hoursEl.textContent = '0';
+                        minutesEl.textContent = '0';
+                        secondsEl.textContent = '0';
+                    } else {
+                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                        // Update timer values
+                        daysEl.textContent = days;
+                        hoursEl.textContent = hours;
+                        minutesEl.textContent = minutes;
+                        secondsEl.textContent = seconds;
+                        
+                        countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                    }
+                }, 1000);
             }
+
+            // Event listeners for review and cancel popups
+            document.getElementById('reviewOrder').addEventListener('click', () => {
+                reviewPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
+
+            document.getElementById('closePopup').addEventListener('click', () => {
+                reviewPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            document.getElementById('cancelOrder').addEventListener('click', () => {
+                cancelPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
+
+            document.getElementById('closeCancelPopup').addEventListener('click', () => {
+                cancelPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Star rating functionality
+            const stars = document.querySelectorAll('.stars i');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = star.getAttribute('data-rating');
+                    stars.forEach(s => {
+                        if (s.getAttribute('data-rating') <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Submit review
+            document.getElementById('submitReview').addEventListener('click', () => {
+                const stars = document.querySelectorAll('.stars .fa-star.active');
+                const rating = stars.length;
+                // Send rating to the server
+                console.log('Rating submitted:', rating);
+                reviewPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Request cancellation
+            document.getElementById('requestCancel').addEventListener('click', () => {
+                const cancelReason = document.getElementById('cancelReason').value;
+                // Send cancellation request to the server
+                console.log('Cancellation reason:', cancelReason);
+                cancelPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Deliver Now button
+            document.getElementById('deliverNow').addEventListener('click', () => {
+                deliveryPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
+
+            // Close delivery popup
+            document.getElementById('closeDeliveryPopup').addEventListener('click', () => {
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            document.getElementById('cancelDelivery').addEventListener('click', () => {
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // File upload area
+            const uploadArea = document.getElementById('uploadArea');
+            const fileUpload = document.getElementById('fileUpload');
+            const previewContainer = document.getElementById('previewContainer');
             
-            // Get all preview images (would be uploaded to server in production)
-            const screenshots = Array.from(previewContainer.querySelectorAll('.preview-image img')).map(img => img.src);
-            
-            if (screenshots.length === 0) {
-                alert('Please upload at least one screenshot as proof');
-                return;
+            uploadArea.addEventListener('click', () => {
+                fileUpload.click();
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#4f46e5';
+                uploadArea.style.backgroundColor = '#f5f5ff';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.style.backgroundColor = '#f9fafb';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.style.backgroundColor = '#f9fafb';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            fileUpload.addEventListener('change', () => {
+                if (fileUpload.files.length > 0) {
+                    handleFiles(fileUpload.files);
+                }
+            });
+
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const previewDiv = document.createElement('div');
+                            previewDiv.className = 'preview-image';
+                            
+                            previewDiv.innerHTML = `
+                                <img src="${e.target.result}" alt="Screenshot preview">
+                                <button class="remove-btn">&times;</button>
+                            `;
+                            
+                            previewContainer.appendChild(previewDiv);
+                            
+                            // Add event listener to remove button
+                            previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
+                                previewDiv.remove();
+                            });
+                        }
+                        
+                        reader.readAsDataURL(files[i]);
+                    }
+                }
             }
-            
-            // Create submission object
-            const deliveryData = {
-                orderId,
-                contentLink,
-                deliveryNotes,
-                screenshots
-            };
-            
-            // In a real application, send this data to the server
-            console.log('Delivery submitted:', deliveryData);
-            
-            // For demo purposes, add to deliverables immediately
-            const newDeliverable = {
-                id: mockDeliverables.length + 1,
-                type: determineContentType(contentLink),
-                title: determineContentTitle(contentLink),
-                description: deliveryNotes || 'Content as requested',
-                status: 'delivered',
-                date: new Date().toISOString().split('T')[0],
-                link: contentLink,
-                screenshots: screenshots.map((src, index) => ({
-                    id: 1000 + index,
-                    url: src,
-                    title: `Analytics Screenshot ${index + 1}`
-                }))
-            };
-            
-            mockDeliverables.push(newDeliverable);
-            renderDeliverables(mockDeliverables);
-            
-            // Close popup
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-            
-            // Reset form
-            document.getElementById('contentLink').value = '';
-            document.getElementById('deliveryNotes').value = '';
-            previewContainer.innerHTML = '';
-            
-            // Show success message
-            alert('Delivery submitted successfully!');
+
+            // Submit delivery
+            document.getElementById('submitDelivery').addEventListener('click', () => {
+                const contentLink = document.getElementById('contentLink').value;
+                const deliveryNotes = document.getElementById('deliveryNotes').value;
+                
+                // Validate form
+                if (!contentLink) {
+                    alert('Please provide a content link');
+                    return;
+                }
+                
+                // Get all preview images (would be uploaded to server in production)
+                const screenshots = Array.from(previewContainer.querySelectorAll('.preview-image img')).map(img => img.src);
+                
+                if (screenshots.length === 0) {
+                    alert('Please upload at least one screenshot as proof');
+                    return;
+                }
+                
+                // Create submission object
+                const deliveryData = {
+                    orderId,
+                    contentLink,
+                    deliveryNotes,
+                    screenshots
+                };
+                
+                // In a real application, send this data to the server
+                console.log('Delivery submitted:', deliveryData);
+                
+                // Close popup
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+                
+                // Reset form
+                document.getElementById('contentLink').value = '';
+                document.getElementById('deliveryNotes').value = '';
+                previewContainer.innerHTML = '';
+                
+                // Show success message
+                alert('Delivery submitted successfully!');
+            });
+
+            // Send message functionality
+            document.getElementById('sendMessage').addEventListener('click', () => {
+                const messageInput = document.getElementById('messageInput');
+                const message = messageInput.value.trim();
+                
+                if (message) {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', 'sent');
+                    messageElement.textContent = message;
+                    chatBox.appendChild(messageElement);
+                    
+                    // Clear input
+                    messageInput.value = '';
+                    
+                    // Scroll to bottom of chat
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    
+                    // Here you would also send the message to your backend
+                }
+            });
+
+            // Initialize
+            fetchOrderDetails();
         });
-
-        // Helper function to determine content type from link
-        function determineContentType(link) {
-            if (link.includes('instagram.com')) return 'instagram';
-            if (link.includes('tiktok.com')) return 'tiktok';
-            if (link.includes('youtube.com') || link.includes('youtu.be')) return 'youtube';
-            if (link.includes('facebook.com')) return 'facebook';
-            if (link.includes('twitter.com')) return 'twitter';
-            return 'link';
-        }
-
-        // Helper function to determine content title from link
-        function determineContentTitle(link) {
-            if (link.includes('instagram.com')) return 'Instagram Post';
-            if (link.includes('tiktok.com')) return 'TikTok Video';
-            if (link.includes('youtube.com') || link.includes('youtu.be')) return 'YouTube Video';
-            if (link.includes('facebook.com')) return 'Facebook Post';
-            if (link.includes('twitter.com')) return 'Twitter Post';
-            return 'Content Delivery';
-        }
-
-        // Send message functionality
-        document.getElementById('sendMessage').addEventListener('click', () => {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-            
-            if (message) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', 'sent');
-                messageElement.textContent = message;
-                chatBox.appendChild(messageElement);
-                
-                // Clear input
-                messageInput.value = '';
-                
-                // Scroll to bottom of chat
-                chatBox.scrollTop = chatBox.scrollHeight;
-                
-                // Here you would also send the message to your backend
-            }
-        });
-
-        // Initialize
-        fetchOrderDetails();
-    });
     </script>
 </body>
-
 </html>

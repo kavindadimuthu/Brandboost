@@ -493,4 +493,338 @@ class OrderController extends BaseController {
             'updated_fields' => $updateFields
         ]);
     }
-}
+    
+    /**
+     * Add new delivery for an order
+     * 
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function addDelivery($request, $response): void {
+        // Initialize models
+        $orderModel = new Orders();
+        $deliveryModel = $this->model('Deliveries');
+    
+        // Get current user
+        $currentUser = AuthHelper::getCurrentUser();
+        if (!$currentUser) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+            return;
+        }
+    
+        // Get request data
+        $data = $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+    
+        // Validate required fields
+        if (empty($data['order_id']) || empty($data['delivery_note'])) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Missing required fields'
+            ], 400);
+            return;
+        }
+    
+        // Check order existence
+        $order = $orderModel->getOrderById($data['order_id']);
+        if (!$order) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Order not found'
+            ], 404);
+            return;
+        }
+    
+        // Handle file uploads
+        $deliveryFiles = [];
+        if (!empty($files['delivery_files'])) {
+            $fileHandler = new FileHandler();
+            $uploadPath = __DIR__ . '/../uploads/deliveries/' . $data['order_id'];
+            
+            foreach ($files['delivery_files'] as $file) {
+                if ($file->getError() === UPLOAD_ERR_OK) {
+                    $filename = $fileHandler->uploadFile($file, $uploadPath);
+                    $deliveryFiles[] = $filename;
+                }
+            }
+        }
+    
+        // Create delivery data
+        $deliveryData = [
+            'order_id' => $data['order_id'],
+            'delivery_note' => $data['delivery_note'],
+            'deliveries' => json_encode($deliveryFiles),
+            'status' => 'delivered',
+            'delivered_at' => date('Y-m-d H:i:s')
+        ];
+    
+        // Create delivery
+        if ($deliveryModel->createDelivery($deliveryData)) {
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Delivery created successfully',
+                'delivery_id' => $deliveryModel->getLastInsertId()
+            ]);
+        } else {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to create delivery'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Get all deliveries for an order
+     * 
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function getOrderDeliveries($request, $response): void {
+        $deliveryModel = $this->model('OrderRevision');
+        $revisionModel = $this->model('Orders\OrderRevision');
+        
+        $orderId = $request->getQueryParams()['order_id'] ?? null;
+        
+        if (!$orderId) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Order ID required'
+            ], 400);
+            return;
+        }
+    
+        $deliveries = $deliveryModel->getDeliveriesByOrder($orderId);
+    
+        // Process deliveries
+        $result = [];
+        foreach ($deliveries as $delivery) {
+            // Get revisions for this delivery
+            $revisions = $revisionModel->getRevisionsByOrderId($orderId, [
+                'where' => ['delivery_id' => $delivery['delivery_id']]
+            ]);
+            
+            $result[] = [
+                'delivery_id' => $delivery['delivery_id'],
+                'order_id' => $delivery['order_id'],
+                'delivery_note' => $delivery['delivery_note'],
+                'deliveries' => json_decode($delivery['deliveries'], true),
+                'status' => $delivery['status'],
+                'delivered_at' => $delivery['delivered_at'],
+                'revisions' => $this->formatRevisions($revisions)
+            ];
+        }
+    
+        $response->sendJson([
+            'success' => true,
+            'data' => $result
+        ]);
+    }
+    
+    /**
+     * Add revision to a delivery
+     * 
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function addRevision($request, $response): void {
+        $deliveryModel = $this->model('Deliveries');
+        $revisionModel = $this->model('Orders\OrderRevision');
+        $data = $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+    
+        // Validate input
+        if (empty($data['delivery_id']) || empty($data['revision_notes'])) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Missing required fields'
+            ], 400);
+            return;
+        }
+    
+        // Check delivery exists
+        $delivery = $deliveryModel->getDeliveryById($data['delivery_id']);
+        if (!$delivery) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Delivery not found'
+            ], 404);
+            return;
+        }
+    
+        // Handle revision files
+        $revisionFiles = [];
+        if (!empty($files['revision_files'])) {
+            $fileHandler = new FileHandler();
+            $uploadPath = __DIR__ . '/../uploads/revisions/' . $delivery['order_id'];
+            
+            foreach ($files['revision_files'] as $file) {
+                if ($file->getError() === UPLOAD_ERR_OK) {
+                    $filename = $fileHandler->uploadFile($file, $uploadPath);
+                    $revisionFiles[] = $filename;
+                }
+            }
+        }
+    
+        // Count existing revisions to determine revision number
+        $existingRevisions = $revisionModel->getRevisionsByOrderId($delivery['order_id'], [
+            'where' => ['delivery_id' => $data['delivery_id']]
+        ]);
+        $revisionNumber = count($existingRevisions) + 1;
+    
+        // Create new revision
+        $revisionData = [
+            'order_id' => $delivery['order_id'],
+            'delivery_id' => $data['delivery_id'],
+            'revision_number' => $revisionNumber,
+            'revision_notes' => $data['revision_notes'],
+            'deliveries' => json_encode($revisionFiles),
+            'status' => 'pending',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+    
+        // Update delivery status
+        $deliveryModel->updateDelivery($data['delivery_id'], ['status' => 'in_revision']);
+    
+        if ($revisionModel->createRevision($revisionData)) {
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Revision added successfully'
+            ]);
+        } else {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to add revision'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Update delivery status
+     * 
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function updateDeliveryStatus($request, $response): void {
+        $deliveryModel = $this->model('Deliveries');
+        $data = $request->getParsedBody();
+    
+        // Validate input
+        if (empty($data['delivery_id']) || empty($data['status'])) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Missing required fields'
+            ], 400);
+            return;
+        }
+    
+        $validStatuses = ['delivered', 'in_revision', 'accepted', 'rejected'];
+        if (!in_array($data['status'], $validStatuses)) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Invalid status'
+            ], 400);
+            return;
+        }
+    
+        if ($deliveryModel->updateDelivery($data['delivery_id'], ['status' => $data['status']])) {
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Status updated successfully'
+            ]);
+        } else {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to update status'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Get single delivery with revisions
+     * 
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function getDeliveryDetails($request, $response): void {
+        $deliveryModel = $this->model('Deliveries');
+        $revisionModel = $this->model('Orders\OrderRevision');
+        $deliveryId = $request->getQueryParams()['delivery_id'] ?? null;
+    
+        if (!$deliveryId) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Delivery ID required'
+            ], 400);
+            return;
+        }
+    
+        $delivery = $deliveryModel->getDeliveryById($deliveryId);
+        if (!$delivery) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Delivery not found'
+            ], 404);
+            return;
+        }
+    
+        // Get revisions for this delivery
+        $revisions = $revisionModel->read(['delivery_id' => $deliveryId]);
+    
+        $responseData = [
+            'delivery_id' => $delivery['delivery_id'],
+            'order_id' => $delivery['order_id'],
+            'delivery_note' => $delivery['delivery_note'],
+            'deliveries' => json_decode($delivery['deliveries'], true),
+            'status' => $delivery['status'],
+            'delivered_at' => $delivery['delivered_at'],
+            'revisions' => $this->formatRevisions($revisions)
+        ];
+    
+        $response->sendJson([
+            'success' => true,
+            'data' => $responseData
+        ]);
+    }
+    
+    /**
+     * Helper method to format revisions
+     * 
+     * @param array $revisions The revisions to format
+     * @return array Formatted revisions
+     */
+    private function formatRevisions($revisions) {
+        if (empty($revisions)) {
+            return [
+                'count' => 0,
+                'items' => []
+            ];
+        }
+    
+        $formattedRevisions = [];
+        foreach ($revisions as $revision) {
+            $formattedRevisions[] = [
+                'revision_id' => $revision['revision_id'],
+                'revision_number' => $revision['revision_number'],
+                'notes' => $revision['revision_notes'],
+                'files' => json_decode($revision['deliveries'], true),
+                'status' => $revision['status'],
+                'created_at' => $revision['created_at'],
+                'delivered_at' => $revision['delivered_at'] ?? null
+            ];
+        }
+    
+        return [
+            'count' => count($revisions),
+            'items' => $formattedRevisions
+        ];
+    }
+    }
+
