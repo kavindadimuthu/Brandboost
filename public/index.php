@@ -130,6 +130,7 @@ $app->router->get('/api/users', 'UserController@getUserList'); // Get Users list
 $app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
 $app->router->post('/api/register', 'UserController@createUser'); // Register/Create User
 $app->router->post('/api/update-user', 'UserController@updateUserProfile'); // Update User Profile
+$app->router->post('/api/change-password', 'AuthController@changePassword'); // Change Password
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
 
