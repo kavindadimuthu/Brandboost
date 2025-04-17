@@ -158,7 +158,13 @@ $app->router->post('/api/create-order', 'OrderController@createOrder'); // Creat
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
 
-
+// ==================================
+// Payment API routes
+// ==================================
+$app->router->post('/api/payments/process-releases', 'PaymentController@processScheduledReleases');
+$app->router->post('/api/payments/create-transaction', 'PaymentController@createTransaction');
+$app->router->post('/api/payments/release-funds', 'PaymentController@releaseFunds');
+$app->router->get('/api/payments/transaction-details', 'PaymentController@getTransactionDetails');
 
 //test routes
 $app->router->get('/test', 'TestController@test');

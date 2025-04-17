@@ -95,17 +95,20 @@
             color: #4b5563;
         }
 
-        textarea {
+        textarea, input[type="text"], input[type="email"], input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #e5e7eb;
             border-radius: 6px;
-            min-height: 120px;
-            resize: vertical;
             transition: border-color 0.3s;
         }
 
-        textarea:focus {
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea:focus, input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -213,6 +216,8 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .modal-content {
@@ -221,7 +226,10 @@
             border-radius: 10px;
             width: 90%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
             animation: modalSlideIn 0.3s ease-out;
+            margin: auto;
         }
 
         @keyframes modalSlideIn {
@@ -271,6 +279,8 @@
 
             .modal-content {
                 padding: 15px;
+                width: 95%;
+                max-height: 85vh;
             }
         }
         /* Add to CSS */
@@ -294,6 +304,65 @@
             margin-left: -10px;
             margin-top: -10px;
         }
+
+        /* Radio button styles */
+        .radio-group {
+            margin: 15px 0;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            display: inline;
+            cursor: pointer;
+        }
+
+        .payment-form {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .payment-form h4 {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Show/hide payment forms based on selection */
+        .payment-form {
+            display: none;
+        }
+
+        .payment-form.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -306,12 +375,54 @@
             </div>
             <div class="form-group">
                 <label>Payment Method</label>
-                <select class="payment-method-select" id="paymentMethod">
-                    <option value="paypal">PayPal</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="stripe">Stripe</option>
-                </select>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="paypal" name="paymentMethod" value="paypal" checked>
+                        <label for="paypal">PayPal</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="creditCard" name="paymentMethod" value="credit_card">
+                        <label for="creditCard">Credit Card</label>
+                    </div>
+                </div>
             </div>
+
+            <!-- PayPal Form -->
+            <div id="paypalForm" class="payment-form active">
+                <h4>PayPal Details</h4>
+                <div class="form-group">
+                    <label for="paypalEmail">PayPal Email</label>
+                    <input type="email" id="paypalEmail" placeholder="Enter your PayPal email" required>
+                </div>
+            </div>
+
+            <!-- Credit Card Form -->
+            <div id="creditCardForm" class="payment-form">
+                <h4>Credit Card Details</h4>
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" placeholder="Enter name as shown on card" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="number" id="cvv" placeholder="123" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="billingZip">Billing Zip Code</label>
+                    <input type="text" id="billingZip" placeholder="Enter billing zip code" required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Total Amount</label>
                 <div class="feature-value price" id="modalTotalAmount" style="font-size: 1.5rem; margin: 10px 0;">$0</div>
@@ -509,11 +620,39 @@
         function showPaymentModal() {
             document.getElementById('modalTotalAmount').textContent = `$${currentPackageDetails.price}`;
             document.getElementById('paymentModal').style.display = 'flex';
+            
+            // Reset scroll position when opening modal
+            document.querySelector('.modal-content').scrollTop = 0;
         }
 
         function closePaymentModal() {
             document.getElementById('paymentModal').style.display = 'none';
         }
+
+        // Toggle payment forms based on selected option
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Hide all payment forms
+                document.querySelectorAll('.payment-form').forEach(form => {
+                    form.classList.remove('active');
+                });
+                
+                // Show the selected payment form
+                if (this.value === 'paypal') {
+                    document.getElementById('paypalForm').classList.add('active');
+                } else if (this.value === 'credit_card') {
+                    document.getElementById('creditCardForm').classList.add('active');
+                }
+                
+                // Ensure modal content is properly positioned
+                setTimeout(() => {
+                    const modalContent = document.querySelector('.modal-content');
+                    if (modalContent.scrollHeight > modalContent.clientHeight) {
+                        modalContent.scrollTop = 0;
+                    }
+                }, 10);
+            });
+        });
 
         async function proceedToPayment() {
             const paymentButton = document.getElementById('paymentButton');
@@ -521,7 +660,7 @@
             paymentButton.disabled = true;
             
             try {
-                const paymentMethod = document.getElementById('paymentMethod').value;
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
                 
                 const formData = new FormData();
                 formData.append('requirements', document.getElementById('requirements').value);
@@ -532,6 +671,18 @@
                 formData.append('service_id', serviceId);
                 formData.append('package_id', packageId);
                 formData.append('payment_type', paymentMethod);
+                
+                // Add payment details based on selected method
+                if (paymentMethod === 'paypal') {
+                    formData.append('paypal_email', document.getElementById('paypalEmail').value);
+                } else if (paymentMethod === 'credit_card') {
+                    formData.append('card_name', document.getElementById('cardName').value);
+                    formData.append('card_number', document.getElementById('cardNumber').value);
+                    formData.append('card_expiry', document.getElementById('expiryDate').value);
+                    formData.append('card_cvv', document.getElementById('cvv').value);
+                    formData.append('billing_zip', document.getElementById('billingZip').value);
+                }
+                
                 formData.append('promises', JSON.stringify({
                     accepted_service: ['business_plan'],
                     delivery_days: currentPackageDetails.delivery_days,
@@ -551,7 +702,7 @@
                     const data = JSON.parse(responseText);
                     if (data.success) {
                         alert('Order placed successfully!');
-                        window.location.href = '/dashboard/orders';
+                        window.location.href = '/services';
                     } else {
                         alert(`Failed to place order: ${data.message || 'Unknown error'}`);
                     }

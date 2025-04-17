@@ -112,12 +112,11 @@ class PaymentController extends BaseController {
             return;
         }
 
-        $this->db->beginTransaction();
-
         try {
             // Update transaction status
             if (!$transactionModel->updateTransactionById($transaction['transaction_id'], ['status' => 'released'])) {
-                throw new Exception('Failed to update transaction status');
+                $response->sendError('Failed to update transaction status', 500);
+                return;
             }
 
             // Update seller's wallet
@@ -127,22 +126,21 @@ class PaymentController extends BaseController {
 
             if (!$walletModel->walletExists($sellerId)) {
                 if (!$walletModel->createWallet($sellerId)) {
-                    throw new Exception('Failed to create wallet for seller');
+                    $response->sendError('Failed to create wallet for seller', 500);
+                    return;
                 }
             }
 
             if (!$walletModel->updateWalletBalance($sellerId, $amount)) {
-                throw new Exception('Failed to update wallet balance');
+                $response->sendError('Failed to update wallet balance', 500);
+                return;
             }
-
-            $this->db->commit();
 
             $response->sendJson([
                 'success' => true,
                 'message' => 'Funds released successfully'
             ]);
         } catch (Exception $e) {
-            $this->db->rollBack();
             error_log("Release funds error: " . $e->getMessage());
             $response->sendError('Failed to release funds: ' . $e->getMessage(), 500);
         }
@@ -172,20 +170,20 @@ class PaymentController extends BaseController {
         $errors = [];
 
         foreach ($transactions as $transaction) {
-            $this->db->beginTransaction();
-
             try {
                 // Fetch order to get seller_id
                 $order = $orderModel->getOrderById($transaction['order_id']);
                 if (!$order) {
-                    throw new \Exception('Order not found for transaction ' . $transaction['transaction_id']);
+                    $errors[] = "Order not found for transaction " . $transaction['transaction_id'];
+                    continue;
                 }
 
                 $sellerId = $order['seller_id'];
 
                 // Update original transaction status to released
                 if (!$transactionModel->updateTransactionById($transaction['transaction_id'], ['status' => 'released'])) {
-                    throw new \Exception('Failed to update transaction status');
+                    $errors[] = "Failed to update transaction status for transaction " . $transaction['transaction_id'];
+                    continue;
                 }
 
                 // Create new transaction (system -> seller)
@@ -199,30 +197,32 @@ class PaymentController extends BaseController {
                 ];
 
                 if (!$transactionModel->createTransaction($newTransactionData)) {
-                    throw new \Exception('Failed to create seller transaction');
+                    $errors[] = "Failed to create seller transaction for order " . $transaction['order_id'];
+                    continue;
                 }
 
                 // Ensure seller wallet exists
                 if (!$walletModel->walletExists($sellerId)) {
                     if (!$walletModel->createWallet($sellerId)) {
-                        throw new \Exception('Failed to create seller wallet');
+                        $errors[] = "Failed to create seller wallet for user " . $sellerId;
+                        continue;
                     }
                 }
 
                 // Deduct from system wallet
                 if (!$walletModel->updateWalletBalance(1, -$transaction['amount'])) {
-                    throw new \Exception('Failed to deduct from system wallet');
+                    $errors[] = "Failed to deduct from system wallet";
+                    continue;
                 }
 
                 // Add to seller wallet
                 if (!$walletModel->updateWalletBalance($sellerId, $transaction['amount'])) {
-                    throw new \Exception('Failed to update seller wallet balance');
+                    $errors[] = "Failed to update seller wallet balance for user " . $sellerId;
+                    continue;
                 }
 
-                $this->db->commit();
                 $successCount++;
             } catch (\Exception $e) {
-                $this->db->rollBack();
                 $errors[] = "Transaction {$transaction['transaction_id']}: " . $e->getMessage();
                 error_log("Scheduled release error: " . $e->getMessage());
             }
@@ -234,6 +234,7 @@ class PaymentController extends BaseController {
             'errors' => $errors
         ]);
     }
+    
     /**
      * Get seller wallet balance
      * 
@@ -287,8 +288,6 @@ class PaymentController extends BaseController {
         ]);
     }
 
-
-    
     /**
      * Get transaction details
      * 
