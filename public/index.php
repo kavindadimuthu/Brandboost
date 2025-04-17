@@ -120,7 +120,6 @@ $app->router->post('/auth/login', 'AuthController@login'); // Login
 $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 
 
-
 // ==================================
 // API routes
 // ==================================
