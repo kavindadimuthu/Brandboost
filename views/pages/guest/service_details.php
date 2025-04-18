@@ -621,7 +621,7 @@
         renderMediaPreview();
         renderAboutSection();
         renderPlatforms();
-        renderReviews();
+        renderReviews(result);
         renderTags();
         renderPricingContent('standard', serviceId, gigData.serviceType);
 
@@ -698,7 +698,7 @@
       document.querySelector('.format-grid').innerHTML = platformsHtml;
     }
 
-    function renderReviews() {
+    function renderReviews(result) {
       const { ratings, list } = gigData.gig.reviews;
 
       // Render ratings breakdown
@@ -707,6 +707,9 @@
         ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
         ratingBar.querySelector('span:last-child').textContent = `${percentage}%`;
       });
+
+      console.log("Ratings breakdown:", result.user);
+      // console.log(result.user);
 
       // Render review list
       const reviewsHtml = list.map(review => `

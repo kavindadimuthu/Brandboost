@@ -103,6 +103,7 @@
             border-radius: 8px;
             /* Add curvature */
             cursor: pointer;
+            margin-left: 8px;
         }
 
         .main-content table {
@@ -156,6 +157,8 @@
         .main-content .pagination button.active {
             font-weight: bold;
             color: #000;
+            background-color: #f0f0f0;
+            border-radius: 4px;
         }
 
         .badge {
@@ -170,17 +173,13 @@
             background-color: #28a745;
         }
 
-        .badge.blocked {
+        .badge.rejected {
             background-color: #dc3545;
         }
 
-        .badge.banned {
+        .badge.pending {
             background-color: #6c757d;
         }
-
-
-
-
 
         /* Action buttons Styles.......... */
         .action-buttons {
@@ -196,193 +195,334 @@
             color: #fff;
         }
 
-        .action-buttons .edit-btn {
-            background-color: #007bff;
+        .action-buttons .approve-btn {
+            background-color: #28a745;
         }
 
-        .action-buttons .delete-btn {
+        .action-buttons .reject-btn {
             background-color: #dc3545;
         }
 
-        /* ................................ */
+        .action-buttons .view-btn {
+            background-color: #007bff;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6a11cb;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error message */
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-            <div class="main-content">
-                <div class="header">
-                    <div class="breadcrumb">Sisyphus Ventures &gt; User management</div>
-                    <div class="user-info">
-                        <img alt="User  profile picture" height="30"
-                            src="https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-                            width="30" />
-                        <span><?php echo $_SESSION['user']['username']; ?></span>
-                    </div>
+        <div class="main-content">
+            <div class="header">
+                <div class="breadcrumb">Admin portal &gt; Verification requests</div>
+                <div class="user-info">
+                    <img alt="User profile picture" height="30"
+                        src="https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
+                        width="30" />
+                    <span><?php echo $_SESSION['user']['username']; ?></span>
                 </div>
-                <h2>Verifications</h2>
-                <p>Manage your team members and their account permissions here.</p>
-                <div class="search-bar">
-                    <input placeholder="Search" type="text" />
-                    <div>
-                        <button>Filters</button>
-                        <button>Search</button>
-                    </div>
+            </div>
+            <h2>Verifications</h2>
+            <p>Manage verification requests for businesses and influencers.</p>
+            <div class="search-bar">
+                <input id="searchInput" placeholder="Search by name or type..." type="text" />
+                <div>
+                    <button id="filterButton">Filters</button>
+                    <button id="searchButton">Search</button>
                 </div>
+            </div>
+            <div id="tableContainer">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            <div id="paginationContainer" class="pagination">
+                <!-- Pagination will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current state
+        let currentPage = 1;
+        let searchQuery = '';
+        let currentFilters = {};
+        
+        // Default profile image if none is available
+        const defaultProfileImage = "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg";
+        
+        // Main function to load verification data
+        function loadVerificationData() {
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.innerHTML = `<div class="loading"><div class="loading-spinner"></div></div>`;
+            
+            // Build the query parameters
+            let queryParams = `page=${currentPage}`;
+            if (searchQuery) {
+                queryParams += `&search=${encodeURIComponent(searchQuery)}`;
+            }
+            
+            // Add any filters
+            Object.keys(currentFilters).forEach(key => {
+                if (currentFilters[key]) {
+                    queryParams += `&${key}=${encodeURIComponent(currentFilters[key])}`;
+                }
+            });
+
+            console.log('Fetching verification data with query params:', queryParams);
+            
+            // Make the API request
+            fetch(`/api/verifications?${queryParams}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.error || 'Failed to fetch data');
+                    }
+                    
+                    renderVerificationTable(data.data);
+                    renderPagination(data.pagination);
+                })
+                .catch(error => {
+                    tableContainer.innerHTML = `<div class="error-message">
+                        <p>Failed to load verification requests: ${error.message}</p>
+                        <button onclick="loadVerificationData()">Try Again</button>
+                    </div>`;
+                    console.error('Error fetching verification data:', error);
+                });
+        }
+        
+        // Render the verification table with the data from API
+        function renderVerificationTable(verifications) {
+            const tableContainer = document.getElementById('tableContainer');
+            
+            if (!verifications || verifications.length === 0) {
+                tableContainer.innerHTML = '<p>No verification requests found.</p>';
+                return;
+            }
+            
+            const tableHTML = `
                 <table id="verificationTable">
                     <thead>
                         <tr>
                             <th>Verification Type</th>
-                            <th>User Name</th>
-                            <th>User Role</th>
+                            <th>User</th>
+                            <th>Business/Profile</th>
+                            <th>BR/Platform</th>
                             <th>Date Requested</th>
-                            <th>Verification Status</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        ${verifications.map(item => {
+                            // Format the created_at date
+                            const date = new Date(item.created_at);
+                            const formattedDate = date.toLocaleString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric', 
+                                year: 'numeric' 
+                            });
+                            
+                            // Determine the badge class based on status
+                            let badgeClass;
+                            if (item.status === 'verified') {
+                                badgeClass = 'verified';
+                            } else if (item.status === 'rejected') {
+                                badgeClass = 'rejected';
+                            } else {
+                                badgeClass = 'pending';
+                            }
+                            
+                            // Format the display type
+                            const displayType = item.type === 'business' ? 'Business Registration' : 'Social media profile';
+                            
+                            return `
+                                <tr data-id="${item.id}" data-type="${item.type}">
+                                    <td>${displayType}</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img alt="User profile picture" height="30" src="/${item.profile_picture}" width="30" />
+                                            <span>${item.name}</span>
+                                        </div>
+                                    </td>
+                                    <td>${item.display_name}</td>
+                                    <td>${item.platform ? item.platform : item.identifier}</td>
+                                    <td>${formattedDate}</td>
+                                    <td>
+                                        <span class="badge ${badgeClass}">
+                                            ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            ${item.status === 'pending' ? `
+                                                <button class="view-btn" onclick="viewDetails('${item.id}', '${item.type}')">View</button>
+                                            ` : `
+                                                <button class="view-btn" onclick="viewDetails('${item.id}', '${item.type}')">View</button>
+                                            `}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
                     </tbody>
                 </table>
-                <div class="pagination">
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-                    <button>5</button>
-                    <button>6</button>
-                </div>
-            </div>
-        
-    </div>
-
-    <script>
-        const verificationRequests = [
-            {
-                verificationType: "Businessman",
-                userName: "Ammar Foley",
-                userRole: "Businessman",
-                dateRequested: "Mar 2, 2024",
-                verificationStatus: "Pending",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Influencer",
-                userName: "Florence Shaw",
-                userRole: "Influencer",
-                dateRequested: "Mar 4, 2024",
-                verificationStatus: "Verified",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Designer",
-                userName: "Amélie Laurent",
-                userRole: "Designer",
-                dateRequested: "Mar 4, 2024",
-                verificationStatus: "Rejected",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Influencer",
-                userName: "Caitlyn King",
-                userRole: "Influencer",
-                dateRequested: "Mar 2, 2024",
-                verificationStatus: "Verified",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Designer",
-                userName: "Sienna Hewitt",
-                userRole: "Designer",
-                dateRequested: "Mar 2, 2024",
-                verificationStatus: "Pending",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Businessman",
-                userName: "Olly Shroeder",
-                userRole: "Businessman",
-                dateRequested: "Mar 6, 2024",
-                verificationStatus: "Rejected",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Influencer",
-                userName: "Mathilde Lewis",
-                userRole: "Influencer",
-                dateRequested: "Mar 6, 2024",
-                verificationStatus: "Verified",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            },
-            {
-                verificationType: "Designer",
-                userName: "Jaya Willis",
-                userRole: "Designer",
-                dateRequested: "Mar 6, 2024",
-                verificationStatus: "Pending",
-                imagePath: "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-            }
-        ];
-
-        function renderVerificationRequests(requests) {
-            var tableBody = document.querySelector('#verificationTable tbody');
-            tableBody.innerHTML = '';
-
-            requests.forEach(function (request) {
-                var row = document.createElement('tr');
-
-                var badgeStatus = null;
-                if (request.verificationStatus === "Verified") {
-                    badgeStatus = "Verified";
-                } else if (request.verificationStatus === "Pending") {
-                    badgeStatus = "Banned";
-                } else if (request.verificationStatus === "Rejected") {
-                    badgeStatus = "Blocked";
-                } else {
-                    badgeStatus = "Pending"; // Default case if none match
-                }
-
-                row.innerHTML = `
-                <tr>
-            <td>${request.verificationType}</td>
-            <td>
-                <div class="user-info">
-                    <img alt="User  profile picture" height="30" src="${request.imagePath}" width="30" />
-                    <span>${request.userName}</span>
-                </div>
-            </td>
-            <td>${request.userRole}</td>
-            <td>${request.dateRequested}</td>
-            <td>
-                <span class="badge ${badgeStatus.toLowerCase()}">
-                    ${request.verificationStatus}
-                </span>
-            </td>
+            `;
             
-                            <td>
-                                <center>...</center>
-                            </td>
-            </tr>
-        `;
-                tableBody.appendChild(row);
+            tableContainer.innerHTML = tableHTML;
+        }
+        
+        // Render pagination based on API response
+        function renderPagination(pagination) {
+            if (!pagination) return;
+            
+            const paginationContainer = document.getElementById('paginationContainer');
+            let paginationHTML = '';
+            
+            // Previous button
+            if (pagination.currentPage > 1) {
+                paginationHTML += `<button onclick="goToPage(${pagination.currentPage - 1})">Previous</button>`;
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= pagination.totalPages; i++) {
+                if (
+                    i === 1 || 
+                    i === pagination.totalPages || 
+                    (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)
+                ) {
+                    paginationHTML += `<button class="${i === pagination.currentPage ? 'active' : ''}" 
+                                       onclick="goToPage(${i})">${i}</button>`;
+                } else if (
+                    i === pagination.currentPage - 3 || 
+                    i === pagination.currentPage + 3
+                ) {
+                    paginationHTML += `<button>...</button>`;
+                }
+            }
+            
+            // Next button
+            if (pagination.currentPage < pagination.totalPages) {
+                paginationHTML += `<button onclick="goToPage(${pagination.currentPage + 1})">Next</button>`;
+            }
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+        
+        // Function to change page
+        function goToPage(page) {
+            currentPage = page;
+            loadVerificationData();
+        }
+        
+        // Function to update verification status
+        function updateStatus(id, type, status) {
+            // Show a loading indicator
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.innerHTML = `<div class="loading"><div class="loading-spinner"></div></div>`;
+            
+            fetch('/api/update-verification-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                    type: type,
+                    status: status
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Reload the data to show the updated status
+                    loadVerificationData();
+                } else {
+                    throw new Error(data.error || 'Failed to update status');
+                }
+            })
+            .catch(error => {
+                tableContainer.innerHTML = `<div class="error-message">
+                    <p>Failed to update status: ${error.message}</p>
+                    <button onclick="loadVerificationData()">Reload Data</button>
+                </div>`;
+                console.error('Error updating verification status:', error);
             });
         }
-        renderVerificationRequests(verificationRequests);
-
-
-        const tableBody = document.querySelector('#verificationTable tbody');
-
-        tableBody.addEventListener('click', function (event) {
-            const row = event.target.closest('tr');
-            if (row) {
-                // const verificationId = row.cells[0].textContent; // Assuming complainId is in the first cell
-                handleRowClick();
+        
+        // Function to view verification details
+        function viewDetails(id, type) {
+            window.location.href = `/admin/verification-details/${type}/${id}`;
+        }
+        
+        // Search functionality
+        document.getElementById('searchButton').addEventListener('click', function() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            currentPage = 1; // Reset to first page when searching
+            loadVerificationData();
+        });
+        
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                searchQuery = document.getElementById('searchInput').value.trim();
+                currentPage = 1;
+                loadVerificationData();
             }
         });
-
-        function handleRowClick() {
-            console.log('Row clicked, Verification ID:');
-            window.location.href = '/admin/verification-details/1';
-        }
+        
+        // Filter functionality (simplified for now)
+        document.getElementById('filterButton').addEventListener('click', function() {
+            const filterType = prompt('Filter by type (business/social_media):');
+            if (filterType) {
+                currentFilters.type = filterType;
+                currentPage = 1;
+                loadVerificationData();
+            }
+        });
+        
+        // Load verification data when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVerificationData();
+        });
     </script>
 </body>
 

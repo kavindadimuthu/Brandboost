@@ -93,7 +93,7 @@ $app->router->get('/admin/users-list', 'AdminController@usersList');
 $app->router->get('/admin/user-profile/{id}', 'AdminController@userProfile');
 // Verification management
 $app->router->get('/admin/verifications-list', 'AdminController@verificationsList');
-$app->router->get('/admin/verification-details/{id}', 'AdminController@verificationDetails');
+$app->router->get('/admin/verification-details/{type}/{id}', 'AdminController@verificationDetails');
 // Order management
 $app->router->get('/admin/orders-list', 'AdminController@ordersList');
 $app->router->get('/admin/order-details/{id}', 'AdminController@orderDetails');
@@ -130,6 +130,8 @@ $app->router->get('/api/users', 'UserController@getUserList'); // Get Users list
 $app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
 $app->router->post('/api/register', 'UserController@createUser'); // Register/Create User
 $app->router->post('/api/update-user', 'UserController@updateUserProfile'); // Update User Profile
+// updateUserAccountStatus
+$app->router->post('/api/update-user-account-status', 'UserController@updateUserAccountStatus'); // Update User account status
 $app->router->post('/api/change-password', 'AuthController@changePassword'); // Change Password
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
@@ -159,6 +161,13 @@ $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get 
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 
+// Verification Management
+$app->router->get('/api/verifications', 'VerificationController@getVerificationsList'); // Get Verification List
+$app->router->get('/api/verification/{type}/{id}', 'VerificationController@getVerificationDetails'); // Get Verification Profile
+$app->router->post('/api/update-verification-status', 'VerificationController@updateVerificationStatus'); // Update Verification Status
+
+// Admin actions
+$app->router->get('/api/actions', 'ActionController@getActionList'); // Get Actions List
 
 //test routes
 $app->router->get('/test', 'TestController@test');

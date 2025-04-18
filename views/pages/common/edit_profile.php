@@ -449,14 +449,14 @@
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="cover-photo-container">
-                    <img id="cover-photo" src="/assets/images/placeholders/cover-photo-empty.jpg" alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img id="cover-photo" src='https://placehold.co/1200x300?text=Cover+Photo' alt="Cover Photo" class="cover-photo" style="height: 100%; width: 100%; object-fit: cover;">
                     <i class="fas fa-camera edit-icon" id="cover-photo-edit"></i>
                     <input type="file" id="cover-photo-input" hidden accept="image/*">
                 </div>
                 <div class="profile-info-section">
                     <div class="profile-photo-wrapper">
                         <div class="profile-photo-container">
-                            <img id="profile-photo" src="/assets/images/placeholders/dp-empty.png" alt="Profile Photo" class="profile-photo">
+                            <img id="profile-photo" src='https://placehold.co/200x200?text=Profile' alt="Profile Photo" class="profile-photo">
                             <i class="fas fa-camera edit-icon" id="profile-photo-edit"></i>
                             <input type="file" id="profile-photo-input" hidden accept="image/*">
                         </div>

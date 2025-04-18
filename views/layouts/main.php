@@ -275,7 +275,7 @@ use app\core\Helpers\AuthHelper;
             top: 100%;
             right: 0;
             margin-top: 12px;
-            padding: 10px 0 15px;
+            padding: 10px 10px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -300,7 +300,7 @@ use app\core\Helpers\AuthHelper;
         .profile-dropdown-link {
             display: flex;
             align-items: center;
-            width: 90%;
+            width: 100%;
             text-align: center;
             padding: 8px 10px;
             border-radius: 15px;
@@ -473,8 +473,10 @@ use app\core\Helpers\AuthHelper;
                                 </span>
                                 <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span>
                             </div>
-                            <img src="<?php echo '/' . AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
-                                alt="User profile picture">
+                            <?php if (AuthHelper::getCurrentUser()['role'] != 'admin'): ?>
+                                <img src="<?php echo '/' . AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
+                                    alt="User profile picture">
+                            <?php endif; ?>
                         </div>
                         <div class="profile-dropdown" id="profile-menu">
                             

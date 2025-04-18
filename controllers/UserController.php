@@ -20,7 +20,7 @@ class UserController extends BaseController
             $response->sendError('Method Not Allowed');
             return;
         }
-
+    
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
         $searchTerm = $queryParams['search'] ?? null;
@@ -30,49 +30,79 @@ class UserController extends BaseController
         $offset = $queryParams['offset'] ?? 0;
         $sortBy = $queryParams['sort_by'] ?? 'name';
         $orderDir = $queryParams['order_dir'] ?? 'asc';
-
+    
         // Validate limit and offset
         if (!is_numeric($limit) || !is_numeric($offset)) {
             $response->sendError('Invalid pagination parameters.', 400);
             return;
         }
-
+    
         // Retrieve the User model
         $userModel = $this->model('Users\User');
-
+    
         // Build options for querying the user list
         $options = [
             'limit' => (int)$limit,
             'offset' => (int)$offset,
             'order' => $sortBy . ' ' . (strtolower($orderDir) === 'desc' ? 'desc' : 'asc'),
         ];
-
+    
         // Add filters to the query
         $filters = [];
-
+    
         if ($searchTerm) {
             $options['search'] = $searchTerm;
             $options['searchColumns'] = ['name', 'email'];
         }
-
+    
         if ($role) {
             $filters['role'] = $role;
         }
-
+    
         if ($status) {
             $filters['account_status'] = $status;
         }
-
-        // Fetch the user list
+    
+        // First, get the total count of users matching the filters (without pagination)
+        // $totalUsers = $userModel->countUsers($filters, [
+        //     'search' => $searchTerm ?? null,
+        //     'searchColumns' => ['name', 'email'],
+        // ]);
+        $totalUsers = $userModel->count($filters, [
+            'search' => $searchTerm ?? null,
+            'searchColumns' => ['name', 'email'],
+        ]);
+    
+        // Fetch the paginated user list
         $users = $userModel->read($filters, $options);
-
+    
         if ($users === false) {
             $response->sendError('Failed to fetch user list.', 500);
             return;
         }
+    
+        // Calculate pagination metadata
+        $totalPages = ceil($totalUsers / (int)$limit);
+        $currentPage = floor((int)$offset / (int)$limit) + 1;
 
-        // Send the response with user list
-        $response->sendJson(['users' => $users]);
+        error_log("All details on pagination");
+        error_log($totalUsers);
+        error_log($totalPages);
+        error_log($currentPage);
+        error_log((int)$limit);
+        error_log((int)$offset);
+    
+        // Send the response with user list and pagination metadata
+        $response->sendJson([
+            'users' => $users,
+            'pagination' => [
+                'total_users' => $totalUsers,
+                'total_pages' => $totalPages,
+                'current_page' => $currentPage,
+                'limit' => (int)$limit,
+                'offset' => (int)$offset
+            ]
+        ]);
     }
 
 
@@ -119,21 +149,22 @@ class UserController extends BaseController
             return;
         }
 
-        $userProfile = [
-            'user_id'         => $user['user_id'],
-            'name'            => $user['name'],
-            'email'           => $user['email'],
-            'phone'           => $user['phone'],
-            'role'            => $user['role'],
-            'profile_picture' => $user['profile_picture'],
-            'cover_picture'   => $user['cover_picture'],
-            'bio'             => $user['bio'],
-            'professional_title' => $user['professional_title'],
-            'specialties' => $user['specialties'],
-            'tools' => $user['tools'],
-            'location' => $user['location'],
+        // $userProfile = [
+        //     'user_id'         => $user['user_id'],
+        //     'name'            => $user['name'],
+        //     'email'           => $user['email'],
+        //     'phone'           => $user['phone'],
+        //     'role'            => $user['role'],
+        //     'profile_picture' => $user['profile_picture'],
+        //     'cover_picture'   => $user['cover_picture'],
+        //     'bio'             => $user['bio'],
+        //     'professional_title' => $user['professional_title'],
+        //     'specialties' => $user['specialties'],
+        //     'tools' => $user['tools'],
+        //     'location' => $user['location'],
 
-        ];
+        // ];
+        $userProfile = $user;
 
         // Fetch additional data based on user role
         switch ($user['role']) {
@@ -518,6 +549,65 @@ class UserController extends BaseController
     
         // Respond with success message
         $response->sendJson(['message' => 'User profile updated successfully.']);
+    }
+
+    /**
+     * Update user account status by admin.
+     * 
+     * @param object $request  Request object containing input data.
+     * @param object $response Response object to send back HTTP responses.
+     */
+    public function updateUserAccountStatus($request, $response) {
+        if (AuthHelper::getCurrentUser()['role'] != 'admin'){
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $userId = $request->getParam('id') ?? null;
+        $status = $request->getParam('status');
+
+        if (empty($userId)) {
+            $response->sendError('User ID is required.', 400);
+            return;
+        }
+
+        if (!in_array($status, ['active', 'inactive', 'blocked', 'banned'], true)) {
+            $response->sendError('Status is not valid', 400);
+            return;
+        }
+
+        $userModel = $this->model('Users\User');
+
+        if (!$userModel->update(['user_id'=> $userId], ['account_status'=> $status])){
+            $response->sendError('Failed to change user account status.', 500);
+            return;
+        }
+
+        $actionModel = $this->model('Actions\Action');
+        $actionData = [
+            'admin_id' => AuthHelper::getCurrentUser()['user_id'],
+            'user_id' => $userId,
+            'action_type' => 'user_' . $status,
+            // 'action_details' => json_encode([
+            //     'user_id' => $userId,
+            //     'status' => $status
+            // ]),
+            'action_note' => 'User account status changed to ' . $status,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        if (!$actionModel->createAction($actionData)) {
+            $response->sendError('Failed to log action.', 500);
+            return;
+        }
+
+        $response->sendJson(
+            [
+                'success' => true,
+                'message' => 'User account changed successfully.']
+        );
+
+
     }
 
     /**

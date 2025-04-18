@@ -117,7 +117,6 @@ class AuthController extends BaseController {
         // Retrieve the User model using baseController method
         $userModel = $this->model('Users\User');
         $userId = AuthHelper::getCurrentUser()['user_id'];
-        // Fetch the user by ID
         $user = $userModel->getUserById($userId);
 
         if (!$user || !password_verify($currentPassword, $user['password'])) {
@@ -127,7 +126,6 @@ class AuthController extends BaseController {
 
         // Update the password in the database
         if ($userModel->updateUserById($userId, ["password" => password_hash($newPassword, PASSWORD_DEFAULT)] )) {
-            // SessionHelper::setFlash('success', 'Password changed successfully.');
             // Send a success response
             $response->setStatusCode(200);
             $response->sendJson(['message' => 'Password changed successfully.']);

@@ -22,6 +22,7 @@ namespace app\core;
 use app\core\Database\Database;
 use PDO;
 use PDOException;
+use Exception;
 
 abstract class BaseModel
 {
@@ -54,6 +55,46 @@ abstract class BaseModel
 
         try {
             return $this->db->executeWithParams($sql, $data);
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
+        }
+    }
+
+    /**
+     * Counts records from the database based on conditions, search, and filtering.
+     * Particularly useful for pagination to determine total number of records.
+     * 
+     * @param array $conditions Key-value pairs for the WHERE clause.
+     * @param array $options Additional options like search and filters.
+     * @return int|false Number of matching records or false on failure.
+     */
+    public function count(array $conditions = [], array $options = [])
+    {
+        $whereClause = $this->buildWhereClause($conditions);
+        
+        // Add search conditions if provided
+        if (!empty($options['search']) && !empty($options['searchColumns'])) {
+            $searchConditions = array_map(fn($col) => "$col LIKE :search", $options['searchColumns']);
+            $whereClause .= ($whereClause ? " AND " : "WHERE ") . "(" . implode(" OR ", $searchConditions) . ")";
+            $conditions['search'] = "%" . $options['search'] . "%";
+        }
+        
+        // Add filter conditions if provided
+        if (!empty($options['filters'])) {
+            foreach ($options['filters'] as $filterCol => $filterValue) {
+                $whereClause .= ($whereClause ? " AND " : "WHERE ") . "$filterCol = :filter_$filterCol";
+                $conditions["filter_$filterCol"] = $filterValue;
+            }
+        }
+
+        // Use COUNT(*) for efficient counting
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} $whereClause";
+
+        try {
+            $stmt = $this->db->executeWithParams($sql, $conditions);
+            $result = $this->db->fetch(PDO::FETCH_ASSOC);
+            return (int) $result['total'];
         } catch (Exception $e) {
             $this->logError($e);
             return false;
@@ -94,6 +135,7 @@ abstract class BaseModel
             return false;
         }
     }
+
 
     /**
      * Retrieves a single record from the database based on conditions.
@@ -182,10 +224,10 @@ abstract class BaseModel
         return $order . $limit . $offset;
     }
 
-    protected function executeWithParams($sql, $params = [])
-    {
-        return $this->db->executeWithParams($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // protected function executeWithParams($sql, $params = [])
+    // {
+    //     return $this->db->executeWithParams($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
+    // }
 
     /**
      * Logs database errors.
@@ -202,4 +244,50 @@ abstract class BaseModel
     public function getLastInsertId(){
         return $this->db->lastInsertId();
     }
+
+        /**
+     * Executes a custom SQL query with optional parameters.
+     * 
+     * @param string $sql The SQL query to execute.
+     * @param array $params Parameters to bind to the SQL query.
+     * @param bool $fetchAll Whether to fetch all rows (true) or a single row (false).
+     * @return mixed Array of results, single result, or boolean success status.
+     */
+    public function executeCustomQuery($sql, $params = [], $fetchAll = true)
+    {
+        try {
+            // Execute the query first
+            $this->db->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $this->db->bind($key, $value);
+            }
+            
+            $this->db->execute();
+            
+            // Determine return type based on SQL statement and fetchAll parameter
+            $trimmedSql = preg_replace('/^\s*\(*\s*/', '', trim($sql));
+            if (stripos($trimmedSql, 'SELECT') === 0) {
+                if ($fetchAll) {
+                    // error_log("Executing fetchAll for query: " . substr($sql, 0, 50) . "...");
+                    return $this->db->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    // error_log("Executing fetch for query: " . substr($sql, 0, 50) . "...");
+                    return $this->db->fetch();
+                }
+            } else {
+                // error_log("Executing non-SELECT query: " . substr($sql, 0, 50) . "...");
+                // For INSERT, UPDATE, DELETE queries - already executed above
+                return true; // Return true instead of the execute result which was already called
+            }
+        } catch (PDOException $e) {
+            $this->logError($e);
+            return false;
+        } catch (Exception $e) {
+            $this->logError($e);
+            return false;
+        }
+    }
+
+
 }

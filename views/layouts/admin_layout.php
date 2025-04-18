@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
     <style>
         :root {
-            --sidebar-width: 300px;
+            --sidebar-width: 270px;
             --sidebar-collapsed-width: 80px;
             --primary-color: #4361ee;
             --hover-color: #3651d4;
@@ -29,11 +29,12 @@
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
-            background: var(--primary-color);
+            /* background: var(--primary-color); */
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
             position: fixed;
             left: 0;
             top: 0;
-            padding: 1rem;
+            padding: 0.5rem;
             transition: all var(--transition-speed) ease;
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
             display: flex;
@@ -207,7 +208,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/users-list" class="nav-link">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-user"></i>
                         <span class="link-text">User Management</span>
                         <span class="badge">23</span>
                     </a>

@@ -31,7 +31,7 @@ class OrderController extends BaseController {
 
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
-        $orderId = $queryParams['order_id'];
+        $orderId = $queryParams['id'];
         $includeUser = $queryParams['include_user'] ?? false;
 
         // Validate required parameter
@@ -102,70 +102,156 @@ class OrderController extends BaseController {
         $orderPromiseModel = new OrderPromises();
         $serviceModel = new Service();
         $userModel = new User();
-
+    
         // Parse request parameters
         $queryParams = $request->getQueryParams();
-        $includeCustomer = $queryParams['include_customer'] ?? false;
-        $includeSeller = $queryParams['include_seller'] ?? false;
-
-        error_log($includeCustomer);
-
+        $includeCustomer = filter_var($queryParams['include_customer'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $includeSeller = filter_var($queryParams['include_seller'] ?? false, FILTER_VALIDATE_BOOLEAN);
+    
         // Extract filter conditions from query parameters
         $conditions = [];
         if (!empty($queryParams['customer_id'])) {
             $conditions['customer_id'] = $queryParams['customer_id'];
         }
+        
+        if (!empty($queryParams['seller_id'])) {
+            $conditions['seller_id'] = $queryParams['seller_id'];
+        }
+        
         if (!empty($queryParams['order_status'])) {
             $conditions['order_status'] = $queryParams['order_status'];
         }
-        // if (!empty($queryParams['date_from'])) {
-        //     $conditions['date_from'] = $queryParams['date_from'];
-        // }
-        // if (!empty($queryParams['date_to'])) {
-        //     $conditions['date_to'] = $queryParams['date_to'];
-        // }
+        
+        if (!empty($queryParams['payment_type'])) {
+            $conditions['payment_type'] = $queryParams['payment_type'];
+        }
+    
+        // Set up pagination
+        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+        $offset = isset($queryParams['offset']) ? (int)$queryParams['offset'] : 0;
+        
+        // Set up sorting
+        $sortBy = $queryParams['sort_by'] ?? 'created_at';
+        // Validate sort column (allow only safe columns)
+        error_log("sortBy: ");
+        error_log($sortBy);
+        $orderDir = strtoupper($queryParams['order_dir'] ?? 'DESC');
+        
+        // Validate sort direction
+        if (!in_array($orderDir, ['ASC', 'DESC'])) {
+            $orderDir = 'DESC';
+        }
+        
+        // Validate sort column (allow only safe columns)
+        $allowedSortColumns = ['order_id', 'service_id', 'customer_id', 'seller_id', 'payment_type', 'delivered_date', 'order_status', 'created_at'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'created_at';
+        }
+        
+        // Handle date range filtering
+        if (!empty($queryParams['date_from']) && !empty($queryParams['date_to'])) {
+            $dateFrom = date('Y-m-d H:i:s', strtotime($queryParams['date_from']));
+            $dateTo = date('Y-m-d 23:59:59', strtotime($queryParams['date_to']));
+            
+            $sql = "SELECT * FROM orders WHERE created_at BETWEEN :date_from AND :date_to";
+            $params = [':date_from' => $dateFrom, ':date_to' => $dateTo];
+            
+            // Add other conditions if they exist
+            foreach ($conditions as $key => $value) {
+                $sql .= " AND $key = :$key";
+                $params[":$key"] = $value;
+            }
+            
+            // Add sorting
+            $sql .= " ORDER BY $sortBy $orderDir";
+            
+            // Add pagination
+            $sql .= " LIMIT $limit OFFSET $offset";
+            
+            $orders = $orderModel->executeCustomQuery($sql, $params);
+        } else {
+            // Prepare options for read method
+            $options = [
+                'order' => "$sortBy $orderDir",
+                'limit' => $limit,
+                'offset' => $offset
+            ];
+            
+            // Handle search parameter
+            if (!empty($queryParams['search'])) {
+                $options['search'] = $queryParams['search'];
+                $options['searchColumns'] = ['order_id']; // Add more searchable columns if needed
+            }
 
-        // Fetch orders based on conditions
-        $orders = $orderModel->read($conditions);
-
+            error_log("options: ");
+            error_log(print_r($options, 1));
+            
+            // Fetch orders based on conditions and options
+            $orders = $orderModel->read($conditions, $options);
+        }
+    
+        // Get total count for pagination metadata
+        $totalOrders = $orderModel->count($conditions);
+    
         if (empty($orders)) {
             $response->sendJson([
                 'success' => false,
-                'message' => 'No orders found matching the specified conditions.'
+                'message' => 'No orders found matching the specified conditions.',
+                'pagination' => [
+                    'total' => 0,
+                    'limit' => $limit,
+                    'offset' => $offset,
+                    'total_pages' => 0,
+                    'current_page' => 1
+                ]
             ]);
             return;
         }
-
+    
         $orderList = [];
-
+    
         // Fetch promises and customers for each order
         foreach ($orders as $order) {
             $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
             $order['promise'] = $promise;
-
+    
             if ($includeCustomer) {
-                error_log("entered into loop");
                 $customer = $userModel->getUserById($order['customer_id']);
                 $order['customer'] = $customer;
             }
-
-            if($includeSeller){
+    
+            if ($includeSeller) {
                 $service = $serviceModel->getServiceById($order['service_id']);
-                $seller = $userModel->getUserById($service['user_id']);
-                $order['seller'] = $seller;
+                if ($service) {
+                    $seller = $userModel->getUserById($service['user_id']);
+                    $order['seller'] = $seller;
+                }
             }
-
+    
             $orderList[] = $order;
         }
-        error_log(print_r($orderList, true));
-
+    
+        // Calculate pagination metadata
+        $totalPages = ceil($totalOrders / $limit);
+        $currentPage = floor($offset / $limit) + 1;
+    
         // Return the response
         $response->sendJson([
             'success' => true,
             'message' => 'Order list retrieved successfully.',
-            'data' => $orderList
+            'data' => $orderList,
+            'pagination' => [
+                'total_records' => $totalOrders,
+                'total_pages' => $totalPages,
+                'current_page' => $currentPage,
+                'limit' => $limit,
+                'offset' => $offset,
+                'has_next' => ($currentPage < $totalPages),
+                'has_prev' => ($currentPage > 1)
+            ]
         ]);
     }
+
 
 
     /**
@@ -335,7 +421,7 @@ class OrderController extends BaseController {
             $updateFields['remained_revisions'] = (int)$requestData['remained_revisions'];
         }
         if (!empty($requestData['order_status'])) {
-            $validStatuses = ['pending', 'in_progress', 'completed', 'canceled'];
+            $validStatuses = ['pending', 'in_progress', 'completed', 'canceled', 'disputed'];
             if (in_array($requestData['order_status'], $validStatuses, true)) {
                 $updateFields['order_status'] = $requestData['order_status'];
             } else {
