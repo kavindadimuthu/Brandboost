@@ -104,7 +104,7 @@
             background: white;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            /* overflow: hidden; */
+            overflow: hidden;
         }
 
         .card-header {
@@ -113,12 +113,38 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .card-body {
             padding: 1rem;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sort-select {
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            background-color: white;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sort-select:hover {
+            border-color: var(--primary-light);
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .filters-bar {
@@ -134,7 +160,7 @@
             display: flex;
             align-items: center;
             flex: 1;
-            max-width: 300px;
+            max-width: 400px;
             position: relative;
         }
 
@@ -160,68 +186,6 @@
             transform: translateY(-50%);
             color: var(--gray-600);
             font-size: 0.875rem;
-        }
-
-        /* Add these styles to the existing CSS */
-        .date-range-filter {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 8px 0;
-        }
-
-        .filter-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            margin-bottom: 2px;
-        }
-
-        .date-input {
-            padding: 6px 10px;
-            border: 1px solid var(--gray-300);
-            border-radius: var(--radius);
-            font-size: 0.875rem;
-            width: 100%;
-        }
-
-        .date-input:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-        }
-
-        .filter-presets {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 10px;
-        }
-
-        .preset-btn {
-            background-color: var(--gray-100);
-            border: 1px solid var(--gray-300);
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .preset-btn:hover {
-            background-color: var(--gray-200);
-            border-color: var(--gray-400);
-        }
-
-        .active-date-filter {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .filters-controls {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
         }
 
         .filters-bar .btn-group {
@@ -373,38 +337,13 @@
             color: var(--gray-600);
         }
 
-        .pagination-options {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .items-per-page {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-600);
-        }
-
-        .items-per-page select {
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--radius);
-            font-size: 0.875rem;
-            border: 1px solid var(--gray-300);
-            background: white;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
         .pagination-controls {
             display: flex;
             gap: 0.25rem;
         }
 
         .pagination-btn {
-            padding: 0.3rem 0.5rem;
+            padding: 0.5rem 0.75rem;
             border: 1px solid var(--gray-300);
             background: white;
             border-radius: 0.25rem;
@@ -464,20 +403,9 @@
             color: var(--primary-color);
         }
 
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-        }
-
         .dropdown {
             position: relative;
             display: inline-block;
-        }
-
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .dropdown-menu {
@@ -495,28 +423,8 @@
             display: none;
         }
 
-        .dropdown-menu-wide {
-            min-width: 15rem;
-        }
-
         .dropdown-menu.show {
             display: block;
-        }
-
-        .dropdown-header {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .dropdown-divider {
-            height: 0;
-            margin: 0.5rem 0;
-            overflow: hidden;
-            border-top: 1px solid var(--gray-200);
         }
 
         .dropdown-item {
@@ -541,31 +449,6 @@
         .dropdown-item i {
             width: 1rem;
             text-align: center;
-        }
-
-        .filter-options {
-            padding: 0 1rem;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .filter-option {
-            display: flex;
-            align-items: center;
-            padding: 0.35rem 0;
-            font-size: 0.875rem;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .filter-option input[type="checkbox"] {
-            margin: 0;
-        }
-
-        .filter-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 1rem;
         }
 
         .loading-overlay {
@@ -660,6 +543,22 @@
             visibility: visible;
             opacity: 1;
         }
+
+
+        @media (max-width: 768px) {
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .sort-controls {
+                order: 2;
+            }
+        }
     </style>
 </head>
 
@@ -671,7 +570,7 @@
                     <i class="fas fa-home"></i> Admin portal &gt; Complaints
                 </div>
                 <div class="user-info">
-                <img alt="User profile picture" src="/cdn_uploads/users/dp/admin-deafult.png" />
+                    <img alt="User profile picture" src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg" />
                     <span><?php echo isset($_SESSION['user']['username']) ? $_SESSION['user']['username'] : 'Admin User'; ?></span>
                 </div>
             </div>
@@ -692,72 +591,25 @@
                         <i class="fas fa-search icon"></i>
                         <input type="text" id="searchInput" placeholder="Search by ID, user, or complaint type...">
                     </div>
-                    <div class="filters-controls">
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle" id="filterDropdownBtn">
-                                <i class="fas fa-calendar-alt"></i> Date Range
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-wide" id="filterDropdown">
-                                <div class="dropdown-header">Select Date Range</div>
-                                <div class="filter-options">
-                                    <div class="date-range-filter">
-                                        <label class="filter-label">From Date:</label>
-                                        <input type="date" id="dateFrom" class="date-input" max="<?php echo date('Y-m-d'); ?>">
-
-                                        <label class="filter-label">To Date:</label>
-                                        <input type="date" id="dateTo" class="date-input" max="<?php echo date('Y-m-d'); ?>">
-                                    </div>
-
-                                    <div class="filter-presets">
-                                        <button class="preset-btn" data-days="7">Last 7 days</button>
-                                        <button class="preset-btn" data-days="30">Last 30 days</button>
-                                        <button class="preset-btn" data-days="90">Last 90 days</button>
-                                    </div>
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <div class="filter-actions">
-                                    <button class="btn btn-sm btn-primary" id="applyDateFilterBtn">Apply</button>
-                                    <button class="btn btn-sm btn-outline" id="resetDateFilterBtn">Reset</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle" id="sortDropdownBtn">
-                                <i class="fas fa-sort"></i> Sort: <span id="currentSort">Date</span>
-                            </button>
-                            <div class="dropdown-menu" id="sortDropdown">
-                                <button class="dropdown-item" data-sort="created_at" data-label="Date">
-                                    <i class="fas fa-calendar-alt"></i> Date
-                                </button>
-                                <button class="dropdown-item" data-sort="complaint_id" data-label="ID">
-                                    <i class="fas fa-hashtag"></i> ID
-                                </button>
-                                <button class="dropdown-item" data-sort="complaint_type" data-label="Type">
-                                    <i class="fas fa-tag"></i> Type
-                                </button>
-                                <button class="dropdown-item" data-sort="status" data-label="Status">
-                                    <i class="fas fa-tasks"></i> Status
-                                </button>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle" id="orderDropdownBtn">
-                                <i class="fas fa-arrow-down"></i> Order: <span id="currentOrder">Newest</span>
-                            </button>
-                            <div class="dropdown-menu" id="orderDropdown">
-                                <button class="dropdown-item" data-order="desc" data-label="Newest">
-                                    <i class="fas fa-arrow-down"></i> Newest
-                                </button>
-                                <button class="dropdown-item" data-order="asc" data-label="Oldest">
-                                    <i class="fas fa-arrow-up"></i> Oldest
-                                </button>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-primary" id="clearAllFiltersBtn">
-                                <i class="fas fa-times"></i> Clear All Filters
-                            </button>
-                        </div>
+                    <div class="sort-controls">
+                        <select id="sortColumn" class="sort-select">
+                            <option value="complaint_id">Sort by: ID</option>
+                            <option value="complaint_type">Sort by: Type</option>
+                            <option value="status">Sort by: Status</option>
+                            <option value="created_at" selected>Sort by: Date</option>
+                        </select>
+                        <select id="sortOrder" class="sort-select">
+                            <option value="desc" selected>Order: Newest First</option>
+                            <option value="asc">Order: Oldest First</option>
+                        </select>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline" id="filterBtn">
+                            <i class="fas fa-filter"></i> Filters
+                        </button>
+                        <button class="btn btn-primary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -793,20 +645,8 @@
                 <div class="pagination-info">
                     Showing <span id="itemsShowing">0</span> of <span id="totalItems">0</span> complaints
                 </div>
-                <div class="pagination-options">
-                    <div class="items-per-page">
-                        <label for="itemsPerPage">Items per page:</label>
-                        <select id="itemsPerPage">
-                            <!-- <option value="1">1</option> -->
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
-                    <div class="pagination-controls" id="paginationControls">
-                        <!-- Pagination controls will be populated by JavaScript -->
-                    </div>
+                <div class="pagination-controls" id="paginationControls">
+                    <!-- Pagination controls will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -820,22 +660,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             // App state
             const state = {
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 0,
-    totalPages: 0,
-    complaints: [],
-    filters: {
-        status: 'all',
-        search: '',
-        dateFrom: null,
-        dateTo: null
-    },
-    sort: {
-        field: 'created_at',
-        order: 'desc'
-    }
-};
+                currentPage: 1,
+                itemsPerPage: 10,
+                totalItems: 0,
+                totalPages: 0,
+                complaints: [],
+                filters: {
+                    status: 'all',
+                    search: '',
+                    sortBy: 'created_at',
+                    orderDir: 'desc'
+                }
+            };
 
             // DOM Elements
             const complaintsTable = document.getElementById('complaintsTable');
@@ -846,27 +682,11 @@
             const totalItems = document.getElementById('totalItems');
             const searchInput = document.getElementById('searchInput');
             const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+            const refreshBtn = document.getElementById('refreshBtn');
             const clearFiltersBtn = document.getElementById('clearFiltersBtn');
             const loadingOverlay = document.getElementById('loadingOverlay');
-            const itemsPerPageSelect = document.getElementById('itemsPerPage');
-            const sortDropdownBtn = document.getElementById('sortDropdownBtn');
-            const sortDropdown = document.getElementById('sortDropdown');
-            const orderDropdownBtn = document.getElementById('orderDropdownBtn');
-            const orderDropdown = document.getElementById('orderDropdown');
-            const filterDropdown = document.getElementById('filterDropdown');
-            // const applyFiltersBtn = document.getElementById('applyFiltersBtn');
-            // const resetFiltersBtn = document.getElementById('resetFiltersBtn');
-            const currentSort = document.getElementById('currentSort');
-            const currentOrder = document.getElementById('currentOrder');
-            const typeCheckboxes = document.querySelectorAll('input[name="type"]');
-
-            const dateFromInput = document.getElementById('dateFrom');
-const dateToInput = document.getElementById('dateTo');
-const applyDateFilterBtn = document.getElementById('applyDateFilterBtn');
-const resetDateFilterBtn = document.getElementById('resetDateFilterBtn');
-const clearAllFiltersBtn = document.getElementById('clearAllFiltersBtn');
-const presetButtons = document.querySelectorAll('.preset-btn');
-const filterDropdownBtn = document.getElementById('filterDropdownBtn');
+            const sortColumn = document.getElementById('sortColumn');
+            const sortOrder = document.getElementById('sortOrder');
 
             // Functions
             function showLoading() {
@@ -877,74 +697,53 @@ const filterDropdownBtn = document.getElementById('filterDropdownBtn');
                 loadingOverlay.classList.remove('show');
             }
 
-            function toggleDropdown(dropdown) {
-                // Close all other dropdowns first
-                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-                    if (menu !== dropdown) {
-                        menu.classList.remove('show');
-                    }
-                });
-
-                // Toggle the current dropdown
-                dropdown.classList.toggle('show');
-            }
-
             async function fetchComplaints() {
-    showLoading();
-    
-    try {
-        // Build query parameters
-        const queryParams = new URLSearchParams({
-            limit: state.itemsPerPage,
-            offset: (state.currentPage - 1) * state.itemsPerPage,
-            sort_by: state.sort.field,
-            order_dir: state.sort.order
-        });
+                showLoading();
 
-        if (state.filters.search) {
-            queryParams.append('search', state.filters.search);
-        }
+                try {
+                    // Build query parameters
+                    const queryParams = new URLSearchParams({
+                        limit: state.itemsPerPage,
+                        offset: (state.currentPage - 1) * state.itemsPerPage,
+                        sort_by: state.filters.sortBy,
+                        order_dir: state.filters.orderDir
+                    });
 
-        if (state.filters.status && state.filters.status !== 'all') {
-            queryParams.append('status', state.filters.status);
-        }
+                    if (state.filters.search) {
+                        queryParams.append('search', state.filters.search);
+                    }
 
-        if (state.filters.dateFrom) {
-            queryParams.append('date_from', state.filters.dateFrom);
-        }
+                    if (state.filters.status && state.filters.status !== 'all') {
+                        queryParams.append('status', state.filters.status);
+                    }
 
-        if (state.filters.dateTo) {
-            queryParams.append('date_to', state.filters.dateTo);
-        }
+                    const response = await fetch(`/api/complaints?${queryParams.toString()}`);
 
-        const response = await fetch(`/api/complaints?${queryParams.toString()}`);
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch complaints');
-        }
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch complaints');
+                    }
 
-        const data = await response.json();
-        console.log('Fetched complaints:', data);
-        
-        if (data.success) {
-            state.complaints = data.data;
-            state.totalItems = data.pagination.total_disputes;
-            state.totalPages = data.pagination.total_pages;
-            renderComplaints();
-            renderPagination();
-            updateCounter();
-            updateFilterIndicator();
-        } else {
-            throw new Error(data.error || 'Failed to fetch complaints');
-        }
-    } catch (error) {
-        console.error('Error fetching complaints:', error);
-        // For demo, use mock data if API call fails
-        useMockData();
-    } finally {
-        hideLoading();
-    }
-}
+                    const data = await response.json();
+                    console.log('Fetched complaints:', data);
+
+                    if (data.success) {
+                        state.complaints = data.data;
+                        state.totalItems = data.pagination.total_disputes;
+                        state.totalPages = data.pagination.total_pages;
+                        renderComplaints();
+                        renderPagination();
+                        updateCounter();
+                    } else {
+                        throw new Error(data.error || 'Failed to fetch complaints');
+                    }
+                } catch (error) {
+                    console.error('Error fetching complaints:', error);
+                    // For demo, use mock data if API call fails
+                    useMockData();
+                } finally {
+                    hideLoading();
+                }
+            }
 
             function useMockData() {
                 // Mock data for demo purposes when API is not available
@@ -1074,85 +873,16 @@ const filterDropdownBtn = document.getElementById('filterDropdownBtn');
                     }
                 ];
 
-                // Filter the mock data based on current filters
-                let filteredComplaints = [...mockComplaints];
-
-                if (state.filters.status !== 'all') {
-                    filteredComplaints = filteredComplaints.filter(c => c.status === state.filters.status);
-                }
-
-                if (state.filters.search) {
-                    const search = state.filters.search.toLowerCase();
-                    filteredComplaints = filteredComplaints.filter(c =>
-                        c.complaint_id.toString().includes(search) ||
-                        c.complaint_type.toLowerCase().includes(search) ||
-                        c.complainant.username.toLowerCase().includes(search) ||
-                        c.reported_user.username.toLowerCase().includes(search)
-                    );
-                }
-
-                if (state.filters.types.length > 0) {
-                    filteredComplaints = filteredComplaints.filter(c =>
-                        state.filters.types.includes(c.complaint_type)
-                    );
-                }
-
-                // Sort the mock data
-                filteredComplaints.sort((a, b) => {
-                    let aValue = a[state.sort.field];
-                    let bValue = b[state.sort.field];
-
-                    if (state.sort.field === 'created_at') {
-                        aValue = new Date(aValue).getTime();
-                        bValue = new Date(bValue).getTime();
-                    }
-
-                    if (state.sort.order === 'asc') {
-                        return aValue > bValue ? 1 : -1;
-                    } else {
-                        return aValue < bValue ? 1 : -1;
-                    }
-                });
-
-                // Paginate the results
-                const start = (state.currentPage - 1) * state.itemsPerPage;
-                const end = start + parseInt(state.itemsPerPage);
-
                 // Set mock data and pagination info
-                state.complaints = filteredComplaints.slice(start, end);
-                state.totalItems = filteredComplaints.length;
-                state.totalPages = Math.ceil(filteredComplaints.length / state.itemsPerPage);
+                state.complaints = mockComplaints;
+                state.totalItems = mockComplaints.length;
+                state.totalPages = Math.ceil(mockComplaints.length / state.itemsPerPage);
 
                 // Render the UI with mock data
                 renderComplaints();
                 renderPagination();
                 updateCounter();
             }
-
-            function updateFilterIndicator() {
-    if (state.filters.dateFrom || state.filters.dateTo) {
-        filterDropdownBtn.classList.add('active-date-filter');
-        
-        // Update the button text to show active date filter
-        let filterText = 'Date Range';
-        if (state.filters.dateFrom && state.filters.dateTo) {
-            const fromDate = new Date(state.filters.dateFrom);
-            const toDate = new Date(state.filters.dateTo);
-            filterText = `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
-        } else if (state.filters.dateFrom) {
-            const fromDate = new Date(state.filters.dateFrom);
-            filterText = `From: ${fromDate.toLocaleDateString()}`;
-        } else if (state.filters.dateTo) {
-            const toDate = new Date(state.filters.dateTo);
-            filterText = `To: ${toDate.toLocaleDateString()}`;
-        }
-        
-        filterDropdownBtn.innerHTML = `<i class="fas fa-calendar-alt"></i> ${filterText}`;
-    } else {
-        filterDropdownBtn.classList.remove('active-date-filter');
-        filterDropdownBtn.innerHTML = `<i class="fas fa-calendar-alt"></i> Date Range`;
-    }
-}
 
             function formatDate(dateString) {
                 const date = new Date(dateString);
@@ -1305,62 +1035,6 @@ const filterDropdownBtn = document.getElementById('filterDropdownBtn');
                 fetchComplaints();
             }, 500));
 
-            applyDateFilterBtn.addEventListener('click', function() {
-    state.filters.dateFrom = dateFromInput.value || null;
-    state.filters.dateTo = dateToInput.value || null;
-    
-    // Validate that from date isn't after to date
-    if (state.filters.dateFrom && state.filters.dateTo && state.filters.dateFrom > state.filters.dateTo) {
-        alert('From date cannot be after To date');
-        return;
-    }
-    
-    filterDropdown.classList.remove('show');
-    state.currentPage = 1;
-    fetchComplaints();
-});
-
-resetDateFilterBtn.addEventListener('click', function() {
-    dateFromInput.value = '';
-    dateToInput.value = '';
-    state.filters.dateFrom = null;
-    state.filters.dateTo = null;
-    updateFilterIndicator();
-});
-
-// Replace the refresh button functionality with clear all filters
-clearAllFiltersBtn.addEventListener('click', function() {
-    // Clear search
-    searchInput.value = '';
-    state.filters.search = '';
-    
-    // Clear date filters
-    dateFromInput.value = '';
-    dateToInput.value = '';
-    state.filters.dateFrom = null;
-    state.filters.dateTo = null;
-    
-    // Reset status to 'all'
-    statusFilterButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.status === 'all') {
-            btn.classList.add('active');
-        }
-    });
-    state.filters.status = 'all';
-    
-    // Reset sorting
-    state.sort.field = 'created_at';
-    state.sort.order = 'desc';
-    currentSort.textContent = 'Date';
-    currentOrder.textContent = 'Newest';
-    
-    // Reset to page 1 and fetch
-    state.currentPage = 1;
-    updateFilterIndicator();
-    fetchComplaints();
-});
-
             statusFilterButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     statusFilterButtons.forEach(btn => btn.classList.remove('active'));
@@ -1372,10 +1046,27 @@ clearAllFiltersBtn.addEventListener('click', function() {
                 });
             });
 
+            refreshBtn.addEventListener('click', function() {
+                fetchComplaints();
+            });
+
+            // Add sort handlers
+            sortColumn.addEventListener('change', function() {
+                state.filters.sortBy = this.value;
+                state.currentPage = 1;
+                fetchComplaints();
+            });
+
+            sortOrder.addEventListener('change', function() {
+                state.filters.orderDir = this.value;
+                state.currentPage = 1;
+                fetchComplaints();
+            });
+
+            // Modify the clearFiltersBtn handler to also reset sort options
             clearFiltersBtn.addEventListener('click', function() {
                 searchInput.value = '';
                 state.filters.search = '';
-                state.filters.types = [];
 
                 statusFilterButtons.forEach(btn => {
                     btn.classList.remove('active');
@@ -1384,14 +1075,11 @@ clearAllFiltersBtn.addEventListener('click', function() {
                     }
                 });
 
-                typeCheckboxes.forEach(checkbox => {
-                    checkbox.checked = false;
-                });
-
-                state.sort.field = 'created_at';
-                state.sort.order = 'desc';
-                currentSort.textContent = 'Date';
-                currentOrder.textContent = 'Newest';
+                // Reset sort options to defaults
+                sortColumn.value = 'created_at';
+                sortOrder.value = 'desc';
+                state.filters.sortBy = 'created_at';
+                state.filters.orderDir = 'desc';
 
                 state.filters.status = 'all';
                 state.currentPage = 1;
@@ -1408,84 +1096,6 @@ clearAllFiltersBtn.addEventListener('click', function() {
                 }
             });
 
-            // Dropdown event listeners
-            document.addEventListener('click', function(e) {
-                const isDropdownButton = e.target.closest('.dropdown-toggle');
-                const isDropdownMenu = e.target.closest('.dropdown-menu');
-
-                if (!isDropdownButton && !isDropdownMenu) {
-                    // Close all dropdowns if clicking outside
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        menu.classList.remove('show');
-                    });
-                }
-            });
-
-            sortDropdownBtn.addEventListener('click', function(e) {
-                toggleDropdown(sortDropdown);
-                e.stopPropagation();
-            });
-
-            orderDropdownBtn.addEventListener('click', function(e) {
-                toggleDropdown(orderDropdown);
-                e.stopPropagation();
-            });
-
-            filterDropdownBtn.addEventListener('click', function(e) {
-                toggleDropdown(filterDropdown);
-                e.stopPropagation();
-            });
-
-            // Sort dropdown items
-            sortDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const field = this.dataset.sort;
-                    const label = this.dataset.label;
-
-                    state.sort.field = field;
-                    currentSort.textContent = label;
-                    sortDropdown.classList.remove('show');
-                    state.currentPage = 1;
-                    fetchComplaints();
-                });
-            });
-
-            // Order dropdown items
-            orderDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const order = this.dataset.order;
-                    const label = this.dataset.label;
-
-                    state.sort.order = order;
-                    currentOrder.textContent = label;
-                    orderDropdown.classList.remove('show');
-                    state.currentPage = 1;
-                    fetchComplaints();
-                });
-            });
-
-
-            // Items per page select
-            itemsPerPageSelect.addEventListener('change', function() {
-                state.itemsPerPage = parseInt(this.value);
-                state.currentPage = 1;
-                fetchComplaints();
-            });
-
-            // Preset buttons
-            presetButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const days = parseInt(this.dataset.days);
-        const today = new Date();
-        const fromDate = new Date();
-        fromDate.setDate(today.getDate() - days);
-        
-        // Format dates as YYYY-MM-DD for input fields
-        dateToInput.value = today.toISOString().split('T')[0];
-        dateFromInput.value = fromDate.toISOString().split('T')[0];
-    });
-});
-
             // Helper function for debouncing search input
             function debounce(func, wait) {
                 let timeout;
@@ -1497,9 +1107,6 @@ clearAllFiltersBtn.addEventListener('click', function() {
 
             // Initialize
             fetchComplaints();
-            const today = new Date().toISOString().split('T')[0];
-            dateFromInput.setAttribute('max', today);
-            dateToInput.setAttribute('max', today);
         });
     </script>
 </body>

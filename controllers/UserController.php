@@ -23,18 +23,30 @@ class UserController extends BaseController
     
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
-        $searchTerm = $queryParams['search'] ?? null;
-        $role = $queryParams['role'] ?? null;
-        $status = $queryParams['status'] ?? null;
+        error_log("query params are:". print_r($queryParams, true));
+        // Pagination & sorting parameters
         $limit = $queryParams['limit'] ?? 10;
         $offset = $queryParams['offset'] ?? 0;
         $sortBy = $queryParams['sort_by'] ?? 'name';
         $orderDir = $queryParams['order_dir'] ?? 'asc';
+        // Search & filter parameters
+        $searchTerm = $queryParams['search'] ?? null;
     
         // Validate limit and offset
         if (!is_numeric($limit) || !is_numeric($offset)) {
             $response->sendError('Invalid pagination parameters.', 400);
             return;
+        }
+
+        // Build filter options for the model
+        $allowedFilters = ['user_id', 'name', 'email', 'phone', 'bio', 'role', 'professional_title', 'specialties', 'tools', 'location', 'account_status', 'verification_status'];
+
+        // Add filters to the query
+        $filters = [];
+        foreach ($allowedFilters as $filter) {
+            if (isset($queryParams[$filter]) && $queryParams[$filter] !== '') {
+                $filters[$filter] = $queryParams[$filter];
+            }
         }
     
         // Retrieve the User model
@@ -47,53 +59,34 @@ class UserController extends BaseController
             'order' => $sortBy . ' ' . (strtolower($orderDir) === 'desc' ? 'desc' : 'asc'),
         ];
     
-        // Add filters to the query
-        $filters = [];
-    
         if ($searchTerm) {
             $options['search'] = $searchTerm;
             $options['searchColumns'] = ['name', 'email'];
         }
-    
-        if ($role) {
-            $filters['role'] = $role;
+
+        if (!empty($filters)) {
+            $options['filters'] = $filters;
         }
     
-        if ($status) {
-            $filters['account_status'] = $status;
-        }
-    
-        // First, get the total count of users matching the filters (without pagination)
-        // $totalUsers = $userModel->countUsers($filters, [
-        //     'search' => $searchTerm ?? null,
-        //     'searchColumns' => ['name', 'email'],
-        // ]);
-        $totalUsers = $userModel->count($filters, [
-            'search' => $searchTerm ?? null,
-            'searchColumns' => ['name', 'email'],
-        ]);
-    
-        // Fetch the paginated user list
-        $users = $userModel->read($filters, $options);
+        $totalUsers = $userModel->count([], $options); // Count total users based on filters
+        $users = $userModel->read($filters, $options); // Fetch paginated user list based on filters and options 
     
         if ($users === false) {
             $response->sendError('Failed to fetch user list.', 500);
+            return;
+        }
+        if (empty($users)) {
+            $response->sendJson(['success' => true, 'users' => [], 'pagination' => []]);
             return;
         }
     
         // Calculate pagination metadata
         $totalPages = ceil($totalUsers / (int)$limit);
         $currentPage = floor((int)$offset / (int)$limit) + 1;
-
-        error_log("All details on pagination");
-        error_log($totalUsers);
-        error_log($totalPages);
-        error_log($currentPage);
-        error_log((int)$limit);
-        error_log((int)$offset);
     
         // Send the response with user list and pagination metadata
         $response->sendJson([
+            'success' => true,
             'users' => $users,
             'pagination' => [
                 'total_users' => $totalUsers,
@@ -149,21 +142,6 @@ class UserController extends BaseController
             return;
         }
 
-        // $userProfile = [
-        //     'user_id'         => $user['user_id'],
-        //     'name'            => $user['name'],
-        //     'email'           => $user['email'],
-        //     'phone'           => $user['phone'],
-        //     'role'            => $user['role'],
-        //     'profile_picture' => $user['profile_picture'],
-        //     'cover_picture'   => $user['cover_picture'],
-        //     'bio'             => $user['bio'],
-        //     'professional_title' => $user['professional_title'],
-        //     'specialties' => $user['specialties'],
-        //     'tools' => $user['tools'],
-        //     'location' => $user['location'],
-
-        // ];
         $userProfile = $user;
 
         // Fetch additional data based on user role

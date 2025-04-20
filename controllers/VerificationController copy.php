@@ -22,60 +22,12 @@ class VerificationController extends BaseController {
         if ($user['role'] !== 'admin') {
             return $response->sendJson(['error' => 'Unauthorized'], 403);
         }
-
         $queryParams = $request->getQueryParams();
         error_log('Query Params: '); // Log the query parameters for debugging
         error_log(print_r($queryParams, true)); // Log the query parameters for debugging
 
-        // Pagination & sorting parameters
-        $limit = $queryParams['limit'] ?? 10;
-        $offset = $queryParams['offset'] ?? 0;
-        $sortBy = $queryParams['sort_by'] ?? 'name';
-        $orderDir = $queryParams['order_dir'] ?? 'asc';
-        // Search & filter parameters
-        $searchTerm = $queryParams['search'] ?? null;
-
-        // Validate limit and offset
-        if (!is_numeric($limit) || !is_numeric($offset)) {
-            $response->sendError('Invalid pagination parameters.', 400);
-            return;
-        }
-
-        // Build filter options for the model
-        $allowedFilters = ['user_id', 'name', 'email', 'phone', 'bio', 'role', 'professional_title', 'specialties', 'tools', 'location', 'account_status', 'verification_status'];
-
-        // Add filters to the query
-        $filters = [];
-        foreach ($allowedFilters as $filter) {
-            if (isset($queryParams[$filter]) && $queryParams[$filter] !== '') {
-                $filters[$filter] = $queryParams[$filter];
-            }
-        }
-
-        // Retrieve the Verification model
-        $verificationModel = $this->model('Actions\Verification');
-
-        // Build options for querying the user list
-        $options = [
-            'limit' => (int)$limit,
-            'offset' => (int)$offset,
-            'order' => $sortBy . ' ' . (strtolower($orderDir) === 'desc' ? 'desc' : 'asc'),
-        ];
-
-        if ($searchTerm) {
-            $options['search'] = $searchTerm;
-            $options['searchColumns'] = ['name', 'email'];
-        }
-
-        if (!empty($filters)) {
-            $options['filters'] = $filters;
-        }
-        
-        $totalCount = $verificationModel->count([], $options);
+        $verificationModel = new Verification();
         $result = $verificationModel->getVerificationsList($queryParams);
-
-        $totalPages = $limit > 0 ? ceil($totalCount / $limit) : 1;
-        $currentPage = $limit > 0 ? floor($offset / $limit) + 1 : 1;
         
         if ($result === false) {
             return $response->sendJson(['error' => 'Failed to fetch verification requests'], 500);

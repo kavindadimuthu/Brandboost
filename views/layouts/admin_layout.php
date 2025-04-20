@@ -184,6 +184,12 @@
         main.expanded {
             margin-left: var(--sidebar-collapsed-width);
         }
+
+        /* Admin user profile view */
+        .profile-container {
+            padding: 0!important;
+            margin: 0 auto!important;
+        }
     </style>
 </head>
 <body>
@@ -209,7 +215,7 @@
                 <li class="nav-item">
                     <a href="/admin/users-list" class="nav-link">
                         <i class="fas fa-user"></i>
-                        <span class="link-text">User Management</span>
+                        <span class="link-text">Users</span>
                         <span class="badge">23</span>
                     </a>
                 </li>

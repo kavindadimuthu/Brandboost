@@ -10,9 +10,114 @@ use app\models\Orders\Orders;
 use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
-use app\models\Users\User;
 
 class OrderController extends BaseController {
+    /**
+     * Fetch a list of orders with requested conditions and associative promise data.
+     *
+     * @param Request $request  The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with the list of orders.
+     */
+    public function getOrderList($request, $response) {
+
+        // Parse request parameters
+        $queryParams = $request->getQueryParams();
+
+        // Pagination and sorting
+        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+        $offset = isset($queryParams['offset']) ? (int)$queryParams['offset'] : 0;
+        $sortBy = $queryParams['sort_by'] ?? 'orders.created_at';
+        $orderDir = strtoupper($queryParams['order_dir'] ?? 'DESC');
+        $allowedSortColumns = [
+            'orders.order_id', 'orders.service_id', 'orders.customer_id', 'orders.seller_id',
+            'orders.payment_type', 'orders.delivered_date', 'orders.order_status', 'orders.created_at'
+        ];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'orders.created_at';
+        }
+        if (!in_array($orderDir, ['ASC', 'DESC'])) {
+            $orderDir = 'DESC';
+        }
+
+        $options = [
+            'limit' => $limit,
+            'offset' => $offset,
+            'order' => $sortBy . ' ' . $orderDir,
+        ];
+
+        // Extract search query
+        if (!empty($queryParams['search'])) {
+            $options['search'] = $queryParams['search'];
+            $options['searchColumns'] = ['orders.order_id', 'service.title', 'customer.name', 'seller.name'];
+        }
+
+        // Extract filter conditions from query parameters
+        $filters = [];
+        if (!empty($queryParams['customer_id'])) {
+            $filters['orders.customer_id'] = $queryParams['customer_id'];
+        }
+        if (!empty($queryParams['seller_id'])) {
+            $filters['orders.seller_id'] = $queryParams['seller_id'];
+        }
+        if (!empty($queryParams['order_status'])) {
+            $filters['orders.order_status'] = $queryParams['order_status'];
+        }
+        if (!empty($queryParams['payment_type'])) {
+            $filters['orders.payment_type'] = $queryParams['payment_type'];
+        }
+
+        // Date range filtering
+        if (!empty($queryParams['date_from'])) {
+            $filters['orders.created_at >='] = $queryParams['date_from'];
+        }
+        if (!empty($queryParams['date_to'])) {
+            $filters['orders.created_at <='] = $queryParams['date_to'] . ' 23:59:59';
+        }
+
+        // Add filters to options if any
+        if (!empty($filters)) {
+            $options['filters'] = $filters;
+        }
+
+        // Initialize models
+        $orderModel = $this->model('Orders\Orders');
+
+        $orders = $orderModel->getOrdersWithDetails([], $options); // Fetch orders with joined details
+        if ($orders === false) {
+            return $response->sendError('Failed to retrieve orders.', 500);
+        }
+
+        $totalOrders = $orderModel->count([], $options); // Get total count for pagination
+        // Pagination metadata
+        $totalPages = ceil($totalOrders / $limit);
+        $currentPage = floor($offset / $limit) + 1;
+        $pagination = [
+            'total_records' => $totalOrders,
+            'total_pages' => $totalPages,
+            'current_page' => $currentPage,
+            'limit' => $limit,
+            'offset' => $offset,
+        ];
+
+        if (empty($orders)) {
+            return $response->sendJson([
+                'success' => true,
+                'message' => 'No orders found matching the specified conditions.',
+                'data' => [],
+                'pagination' => $pagination
+            ]);
+        }
+
+        return $response->sendJson([
+            'success' => true,
+            'message' => 'Order list retrieved successfully.',
+            'data' => $orders,
+            'pagination' => $pagination
+        ]);
+    }
+
+
     /**
      * Fetch order profile with all associative data.
      *
@@ -87,171 +192,6 @@ class OrderController extends BaseController {
             'data' => $orderProfile
         ]);
     }
-
-
-    /**
-     * Fetch a list of orders with requested conditions and associative promise data.
-     *
-     * @param Request $request  The incoming request object.
-     * @param Response $response The response object to return data.
-     * @return void JSON response with the list of orders.
-     */
-    public function getOrderList($request, $response): void {
-        // Initialize models
-        $orderModel = new Orders();
-        $orderPromiseModel = new OrderPromises();
-        $serviceModel = new Service();
-        $userModel = new User();
-    
-        // Parse request parameters
-        $queryParams = $request->getQueryParams();
-        $includeCustomer = filter_var($queryParams['include_customer'] ?? false, FILTER_VALIDATE_BOOLEAN);
-        $includeSeller = filter_var($queryParams['include_seller'] ?? false, FILTER_VALIDATE_BOOLEAN);
-    
-        // Extract filter conditions from query parameters
-        $conditions = [];
-        if (!empty($queryParams['customer_id'])) {
-            $conditions['customer_id'] = $queryParams['customer_id'];
-        }
-        
-        if (!empty($queryParams['seller_id'])) {
-            $conditions['seller_id'] = $queryParams['seller_id'];
-        }
-        
-        if (!empty($queryParams['order_status'])) {
-            $conditions['order_status'] = $queryParams['order_status'];
-        }
-        
-        if (!empty($queryParams['payment_type'])) {
-            $conditions['payment_type'] = $queryParams['payment_type'];
-        }
-    
-        // Set up pagination
-        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
-        $offset = isset($queryParams['offset']) ? (int)$queryParams['offset'] : 0;
-        
-        // Set up sorting
-        $sortBy = $queryParams['sort_by'] ?? 'created_at';
-        // Validate sort column (allow only safe columns)
-        error_log("sortBy: ");
-        error_log($sortBy);
-        $orderDir = strtoupper($queryParams['order_dir'] ?? 'DESC');
-        
-        // Validate sort direction
-        if (!in_array($orderDir, ['ASC', 'DESC'])) {
-            $orderDir = 'DESC';
-        }
-        
-        // Validate sort column (allow only safe columns)
-        $allowedSortColumns = ['order_id', 'service_id', 'customer_id', 'seller_id', 'payment_type', 'delivered_date', 'order_status', 'created_at'];
-        if (!in_array($sortBy, $allowedSortColumns)) {
-            $sortBy = 'created_at';
-        }
-        
-        // Handle date range filtering
-        if (!empty($queryParams['date_from']) && !empty($queryParams['date_to'])) {
-            $dateFrom = date('Y-m-d H:i:s', strtotime($queryParams['date_from']));
-            $dateTo = date('Y-m-d 23:59:59', strtotime($queryParams['date_to']));
-            
-            $sql = "SELECT * FROM orders WHERE created_at BETWEEN :date_from AND :date_to";
-            $params = [':date_from' => $dateFrom, ':date_to' => $dateTo];
-            
-            // Add other conditions if they exist
-            foreach ($conditions as $key => $value) {
-                $sql .= " AND $key = :$key";
-                $params[":$key"] = $value;
-            }
-            
-            // Add sorting
-            $sql .= " ORDER BY $sortBy $orderDir";
-            
-            // Add pagination
-            $sql .= " LIMIT $limit OFFSET $offset";
-            
-            $orders = $orderModel->executeCustomQuery($sql, $params);
-        } else {
-            // Prepare options for read method
-            $options = [
-                'order' => "$sortBy $orderDir",
-                'limit' => $limit,
-                'offset' => $offset
-            ];
-            
-            // Handle search parameter
-            if (!empty($queryParams['search'])) {
-                $options['search'] = $queryParams['search'];
-                $options['searchColumns'] = ['order_id']; // Add more searchable columns if needed
-            }
-
-            error_log("options: ");
-            error_log(print_r($options, 1));
-            
-            // Fetch orders based on conditions and options
-            $orders = $orderModel->read($conditions, $options);
-        }
-    
-        // Get total count for pagination metadata
-        $totalOrders = $orderModel->count($conditions);
-    
-        if (empty($orders)) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'No orders found matching the specified conditions.',
-                'pagination' => [
-                    'total' => 0,
-                    'limit' => $limit,
-                    'offset' => $offset,
-                    'total_pages' => 0,
-                    'current_page' => 1
-                ]
-            ]);
-            return;
-        }
-    
-        $orderList = [];
-    
-        // Fetch promises and customers for each order
-        foreach ($orders as $order) {
-            $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
-            $order['promise'] = $promise;
-    
-            if ($includeCustomer) {
-                $customer = $userModel->getUserById($order['customer_id']);
-                $order['customer'] = $customer;
-            }
-    
-            if ($includeSeller) {
-                $service = $serviceModel->getServiceById($order['service_id']);
-                if ($service) {
-                    $seller = $userModel->getUserById($service['user_id']);
-                    $order['seller'] = $seller;
-                }
-            }
-    
-            $orderList[] = $order;
-        }
-    
-        // Calculate pagination metadata
-        $totalPages = ceil($totalOrders / $limit);
-        $currentPage = floor($offset / $limit) + 1;
-    
-        // Return the response
-        $response->sendJson([
-            'success' => true,
-            'message' => 'Order list retrieved successfully.',
-            'data' => $orderList,
-            'pagination' => [
-                'total_records' => $totalOrders,
-                'total_pages' => $totalPages,
-                'current_page' => $currentPage,
-                'limit' => $limit,
-                'offset' => $offset,
-                'has_next' => ($currentPage < $totalPages),
-                'has_prev' => ($currentPage > 1)
-            ]
-        ]);
-    }
-
 
 
     /**

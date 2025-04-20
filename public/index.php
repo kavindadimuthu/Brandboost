@@ -166,6 +166,15 @@ $app->router->get('/api/verifications', 'VerificationController@getVerifications
 $app->router->get('/api/verification/{type}/{id}', 'VerificationController@getVerificationDetails'); // Get Verification Profile
 $app->router->post('/api/update-verification-status', 'VerificationController@updateVerificationStatus'); // Update Verification Status
 
+// Complaint Management
+$app->router->get('/api/complaints', 'DisputeController@getDisputeList'); // Get Complaint List
+$app->router->get('/api/complaint/{id}', 'DisputeController@getComplaintDetails'); // Get specific complaint details
+$app->router->post('/api/update-complaint-status', 'DisputeController@updateComplaintStatus'); // Update complaint status
+// $app->router->post('/api/respond-to-complaint', 'DisputeController@respondToComplaint'); // Send admin response
+// $app->router->post('/api/toggle-complaint-priority', 'DisputeController@toggleComplaintPriority'); // Toggle priority
+// $app->router->post('/api/take-action-against-user', 'DisputeController@takeActionAgainstUser'); // Take action against user
+
+
 // Admin actions
 $app->router->get('/api/actions', 'ActionController@getActionList'); // Get Actions List
 
