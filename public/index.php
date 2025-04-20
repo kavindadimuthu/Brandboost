@@ -120,6 +120,23 @@ $app->router->post('/auth/login', 'AuthController@login'); // Login
 $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 
 
+// ==================================
+// Additional Error Handling Routes
+// ==================================
+$app->router->get('/404', 'GuestController@error404'); // 404 Error Page
+$app->router->get('/403', 'GuestController@error403'); // 403 Error Page
+$app->router->get('/401', 'GuestController@error401'); // 401 Error Page
+$app->router->get('/500', 'GuestController@error500'); // 500 Error Page
+$app->router->get('/503', 'GuestController@error503'); // 503 Error Page
+
+// Payment Error or Success
+$app->router->get('/payment-error', 'GuestController@paymentError'); // Payment Error Page
+$app->router->get('/payment-success', 'GuestController@paymentSuccess'); // Payment Success Page
+
+// Account Suspended or Deactivated
+$app->router->get('/account-suspended', 'GuestController@accountSuspended'); // Account Suspended Page
+
+
 
 // ==================================
 // API routes

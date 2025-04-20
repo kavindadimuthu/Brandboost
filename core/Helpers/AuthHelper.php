@@ -14,7 +14,7 @@ class AuthHelper {
     public static function checkPermission($requiredRole) {
         $currentUser = self::getCurrentUser();
         if (!$currentUser || $currentUser['role'] !== $requiredRole) {
-            header("Location: /404.php");
+            header("Location: /404");
             exit;
         }
     }

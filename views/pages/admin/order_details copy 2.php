@@ -1,147 +1,79 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrandBoost Admin - Order Details</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <!-- Custom styles -->
+    <title>Order Details - BrandBoost Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Reset */
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --pending-color: #f97316;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f8fa;
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
         }
 
-        /* Layout */
         .container {
-            width: 100%;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            /* padding: 0 10px; */
+            padding: 0 1rem;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 20px;
-        }
-
-        @media (min-width: 992px) {
-            .grid {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-
-        /* Cards */
-        .card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            /* overflow: hidden; */
-        }
-
-        .card-header {
-            background-color: #f8f9fa;
-            padding: 15px 20px;
-            border-bottom: 1px solid #e3e6f0;
-            border-radius: 10px 10px 0 0;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        /* Typography */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            margin-bottom: 10px;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        p {
-            margin-bottom: 10px;
-        }
-
-        a {
-            color: #3a86ff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Utility */
-        .text-muted {
-            color: #6c757d;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mb-1 {
-            margin-bottom: 5px;
-        }
-
-        .mb-2 {
-            margin-bottom: 10px;
-        }
-
-        .mb-3 {
-            margin-bottom: 15px;
-        }
-
-        .mb-4 {
-            margin-bottom: 20px;
-        }
-
-        .mt-2 {
-            margin-top: 10px;
-        }
-
-        .mt-3 {
-            margin-top: 15px;
-        }
-
-        .mt-4 {
-            margin-top: 20px;
-        }
-
-        /* Header & Navigation */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--gray-600);
             list-style: none;
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            font-size: 0.875rem;
+            text-decoration: none;
+            color: var(--gray-600);
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
         }
 
         .breadcrumb li {
@@ -152,203 +84,352 @@
         .breadcrumb li:after {
             content: '>';
             margin-left: 5px;
-            color: #6c757d;
         }
 
         .breadcrumb li:last-child:after {
             content: '';
         }
 
-        /* Badge & Status */
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header .user-info img {
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header .user-info span {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .page-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
         .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
         }
 
-        .badge-warning {
-            background-color: #ffc107;
-            color: #212529;
-        }
-
-        .badge-success {
-            background-color: #28a745;
+        .badge-pending, .badge-warning {
+            background-color: var(--warning-color);
             color: white;
         }
 
-        .badge-danger {
-            background-color: #dc3545;
+        .badge-in-progress {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .badge-completed, .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-canceled, .badge-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .badge-disputed {
+            background-color: var(--danger-color);
             color: white;
         }
 
         .badge-info {
-            background-color: #17a2b8;
+            background-color: var(--info-color);
             color: white;
         }
 
         .badge-secondary {
-            background-color: #6c757d;
+            background-color: var(--gray-500);
             color: white;
         }
 
-        /* Alerts */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
         }
 
-        .alert-light {
-            background-color: #f8f9fa;
-            border: 1px solid #e3e6f0;
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .alert-danger {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
         }
 
-        .alert-success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--gray-50);
         }
 
-        /* Forms */
+        .card-header h2, .card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h2 i, .card-header h3 i {
+            color: var(--primary-color);
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            color: var(--gray-500);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .user-profile:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .user-avatar, .profile-img {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .user-details, .profile-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role, .profile-role {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            background-color: var(--gray-100);
+            border-radius: 9999px;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .user-id {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .description-content {
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            white-space: pre-line;
+            line-height: 1.6;
+            font-size: 0.875rem;
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 5px;
+            font-size: 0.875rem;
             font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
         }
 
         .form-control {
-            display: block;
             width: 100%;
-            padding: 8px 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
+            padding: 0.625rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
             transition: border-color 0.15s ease-in-out;
         }
 
         .form-control:focus {
-            border-color: #80bdff;
-            outline: 0;
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         select.form-control {
-            height: 38px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
         }
 
         textarea.form-control {
+            min-height: 120px;
             resize: vertical;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            font-weight: 500;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            user-select: none;
-            border: 1px solid transparent;
-            padding: 8px 16px;
-            font-size: 14px;
-            line-height: 1.5;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: color 0.15s, background-color 0.15s, border-color 0.15s;
-        }
-
-        .btn-primary {
-            color: #fff;
-            background-color: #3a86ff;
-            border-color: #3a86ff;
-        }
-
-        .btn-primary:hover {
-            background-color: #2971e6;
-            border-color: #2971e6;
-        }
-
-        .btn-success {
-            color: #fff;
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-        }
-
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-        .btn-warning {
-            color: #212529;
-            background-color: #ffc107;
-            border-color: #ffc107;
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
-        }
-
-        .btn-outline-primary {
-            color: #3a86ff;
-            background-color: transparent;
-            border-color: #3a86ff;
-        }
-
-        .btn-outline-primary:hover {
-            color: #fff;
-            background-color: #3a86ff;
-        }
-
-        .btn-outline-danger {
-            color: #dc3545;
-            background-color: transparent;
-            border-color: #dc3545;
-        }
-
-        .btn-outline-danger:hover {
-            color: #fff;
-            background-color: #dc3545;
-        }
-
-        .btn-sm {
-            padding: 5px 10px;
-            font-size: 12px;
         }
 
         .btn-group {
             display: flex;
-            gap: 5px;
+            gap: 0.75rem;
         }
 
-        /* Input groups */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #0b9668;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            color: white;
+            background-color: var(--primary-color);
+        }
+
+        .btn-outline-danger {
+            color: var(--danger-color);
+            background-color: transparent;
+            border: 1px solid var(--danger-color);
+        }
+
+        .btn-outline-danger:hover {
+            color: white;
+            background-color: var(--danger-color);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
         .input-group {
             display: flex;
             position: relative;
@@ -363,15 +444,14 @@
         .input-group-text {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 0.625rem;
+            font-size: 0.875rem;
             font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
+            color: var(--gray-700);
             text-align: center;
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 4px 0 0 4px;
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius) 0 0 var(--radius);
         }
 
         .input-group .btn {
@@ -379,180 +459,31 @@
             border-bottom-left-radius: 0;
         }
 
-        /* Grid Layout */
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -10px;
-            margin-left: -10px;
-        }
-
-        .col {
-            flex: 1 0 0%;
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-
-        .col-6 {
-            flex: 0 0 50%;
-            max-width: 50%;
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-
-        @media (max-width: 767px) {
-            .col-6 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-        }
-
-        /* Profile Card */
-        .profile-card {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .profile-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 15px;
-        }
-
-        .profile-details {
-            flex: 1;
-        }
-
-        .profile-role {
-            font-size: 0.8rem;
-            background-color: #e9ecef;
-            padding: 3px 8px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline:before {
-            content: '';
-            position: absolute;
-            left: 9px;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background-color: #e3e6f0;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: -30px;
-            top: 5px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #3a86ff;
-        }
-
-        .timeline-date {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        /* Chat Messages */
-        .message {
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            max-width: 80%;
-        }
-
-        .message-sender {
-            background-color: #e9ecef;
-            margin-right: auto;
-        }
-
-        .message-receiver {
-            background-color: #d4edda;
-            margin-left: auto;
-        }
-
-        .message-time {
-            font-size: 0.75rem;
-            color: #6c757d;
-            display: block;
-            text-align: right;
-        }
-
-        /* Admin Actions */
-        .admin-actions {
-            /* position: sticky; */
-            top: 20px;
-        }
-
-        /* Star Rating */
-        .star-rating {
-            color: #ffc107;
-        }
-
-        /* File Items */
-        .file-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 8px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
-
-        .file-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            color: #6c757d;
-        }
-
-        .file-name {
-            flex: 1;
-        }
-
         /* Tabs */
         .tabs {
             display: flex;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
         }
 
         .tab-link {
-            padding: 10px 15px;
+            padding: 0.75rem 1.25rem;
             cursor: pointer;
-            border: 1px solid transparent;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            margin-bottom: -1px;
             font-weight: 500;
+            color: var(--gray-600);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .tab-link:hover {
-            background-color: #f8f9fa;
+            color: var(--primary-color);
         }
 
         .tab-link.active {
-            color: #495057;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
         }
 
         .tab-content {
@@ -563,30 +494,158 @@
             display: block;
         }
 
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+            margin-top: 1rem;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--gray-200);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            z-index: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Chat Messages */
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message-sender {
+            background-color: var(--gray-100);
+            margin-right: auto;
+        }
+
+        .message-receiver {
+            background-color: #e8f0fe;
+            margin-left: auto;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            display: block;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        /* File Items */
+        .file-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            transition: background-color 0.15s;
+        }
+
+        .file-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        .file-icon {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            color: var(--gray-600);
+        }
+
+        .file-name {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+
+        /* Star Rating */
+        .star-rating {
+            color: #ffc107;
+        }
+
         /* Notification */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            background-color: white;
+            box-shadow: var(--shadow-md);
+            max-width: 24rem;
             z-index: 1000;
-        }
-
-        .notification.success {
-            background-color: #28a745;
-        }
-
-        .notification.error {
-            background-color: #dc3545;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
         }
 
         .notification.show {
-            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .notification-error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        table th,
+        table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        table th {
+            background-color: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        table tr:hover {
+            background-color: var(--gray-50);
         }
 
         /* Loading Spinner */
@@ -600,25 +659,35 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(0, 0, 0, 0.1);
+            border: 3px solid rgba(99, 102, 241, 0.2);
             border-radius: 50%;
-            border-left-color: #3a86ff;
-            animation: spin 1s linear infinite;
+            border-top-color: var(--primary-color);
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
+            to {
                 transform: rotate(360deg);
             }
         }
 
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+        }
+
+        .alert-light {
+            background-color: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        /* Responsive */
         @media (max-width: 767px) {
-            .admin-actions {
-                position: static;
+            .grid {
+                grid-template-columns: 1fr;
             }
 
             .tabs {
@@ -631,27 +700,38 @@
             }
         }
 
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+        /* Dropdown styling */
+        .dropdown {
+            position: relative;
         }
 
-        table th,
-        table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #dee2e6;
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 10;
+            min-width: 10rem;
+            padding: 0.5rem 0;
+            margin-top: 0.125rem;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            display: none;
         }
 
-        table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
+        .dropdown-item {
+            display: block;
+            padding: 0.5rem 1rem;
+            clear: both;
+            font-weight: 400;
+            color: var(--gray-700);
+            text-decoration: none;
         }
 
-        table tr:hover {
-            background-color: #f8f9fa;
+        .dropdown-item:hover {
+            background-color: var(--gray-50);
+            text-decoration: none;
         }
     </style>
 </head>
@@ -660,10 +740,14 @@
     <div class="container">
         <div class="header">
             <ul class="breadcrumb">
-                <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="/admin/orders">Orders</a></li>
                 <li>Order Details</li>
             </ul>
+            <div class="user-info">
+                <img alt="Admin" src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg" />
+                <span id="admin-name">Admin User</span>
+            </div>
         </div>
 
         <div id="loading" class="loading">
@@ -671,62 +755,61 @@
         </div>
 
         <div id="order-content" style="display: none;">
-            <div class="header">
-                <h2>Order Details</h2>
-                <div id="order-status-badge"></div>
-            </div>
+            <h1 class="page-title">
+                Order #<span id="order-id">Loading...</span>
+                <span id="order-status-badge" class="badge badge-pending">Loading...</span>
+            </h1>
 
             <div class="grid">
                 <!-- Main content column -->
                 <div>
                     <!-- Order Summary Card -->
-                    <div class="card mb-4">
+                    <div class="card">
                         <div class="card-header">
-                            <h3>🧾 Order Summary</h3>
-                            <span class="text-muted" id="order-id-span"></span>
+                            <h2><i class="fas fa-clipboard-list"></i> Order Summary</h2>
                         </div>
                         <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Order Title</p>
-                                    <p class="mb-1" id="order-title">Loading...</p>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Order Title</div>
+                                    <div class="info-value" id="order-title">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Service Type</p>
-                                    <p class="mb-1" id="service-type">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Service Type</div>
+                                    <div class="info-value" id="service-type">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Order Date</p>
-                                    <p class="mb-1" id="order-date">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Order Date</div>
+                                    <div class="info-value" id="order-date">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Delivery Date</p>
-                                    <p class="mb-1" id="delivery-date">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Delivery Date</div>
+                                    <div class="info-value" id="delivery-date">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Price</p>
-                                    <p class="mb-1" id="order-price">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Price</div>
+                                    <div class="info-value" id="order-price">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Payment Status</p>
-                                    <p class="mb-1" id="payment-status">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Payment Status</div>
+                                    <div class="info-value" id="payment-status">Loading...</div>
                                 </div>
                             </div>
 
-                            <div class="alert alert-light">
-                                <p class="mb-1 text-muted">Delivery Requirements</p>
-                                <p id="delivery-requirements">Loading...</p>
+                            <div class="alert alert-light mt-4">
+                                <div class="info-label">Delivery Requirements</div>
+                                <div id="delivery-requirements">Loading...</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tabs for different sections -->
                     <div class="tabs" id="orderDetailsTabs">
-                        <div class="tab-link active" data-tab="deliveries">Deliveries</div>
-                        <div class="tab-link" data-tab="conversation">Conversation</div>
-                        <div class="tab-link" data-tab="attachments">Attachments</div>
-                        <div class="tab-link" data-tab="timeline">Timeline</div>
-                        <div class="tab-link" data-tab="reviews">Reviews</div>
+                        <div class="tab-link active" data-tab="deliveries"><i class="fas fa-inbox"></i> Deliveries</div>
+                        <div class="tab-link" data-tab="conversation"><i class="fas fa-comments"></i> Conversation</div>
+                        <div class="tab-link" data-tab="attachments"><i class="fas fa-paperclip"></i> Attachments</div>
+                        <div class="tab-link" data-tab="timeline"><i class="fas fa-history"></i> Timeline</div>
+                        <div class="tab-link" data-tab="reviews"><i class="fas fa-star"></i> Reviews</div>
                     </div>
 
                     <!-- Tab content -->
@@ -735,11 +818,10 @@
                         <div id="deliveries" class="tab-content active">
                             <div class="card">
                                 <div class="card-body">
-                                    <p class="mb-3 text-muted">
-                                        Revisions Remaining:
+                                    <p class="mb-3">
+                                        <span class="info-label">Revisions Remaining:</span>
                                         <span class="badge badge-info" id="remaining-revisions">0</span>
                                     </p>
-
                                     <div id="deliveries-container">
                                         <div class="loading">
                                             <div class="spinner"></div>
@@ -806,9 +888,9 @@
                 <!-- Sidebar column for profiles and actions -->
                 <div>
                     <!-- Admin Actions Panel -->
-                    <div class="card admin-actions">
-                        <div class="card-header" style="background-color: #3a86ff; color: white;">
-                            <h3>🛠️ Admin Actions</h3>
+                    <div class="card" style="position: sticky; top: 1rem;">
+                        <div class="card-header" style="background-color: var(--primary-color); color: white;">
+                            <h2><i class="fas fa-tools"></i> Admin Actions</h2>
                         </div>
                         <div class="card-body">
                             <form id="adminActionsForm">
@@ -826,7 +908,7 @@
                                     </select>
                                 </div>
 
-                                <hr style="margin: 20px 0;">
+                                <hr style="margin: 20px 0; border-top: 1px solid var(--gray-200);">
 
                                 <div class="form-group">
                                     <label for="refundAmount" class="form-label">Issue Refund</label>
@@ -840,51 +922,55 @@
 
                                 <div style="margin-top: 20px;">
                                     <div id="dispute-action-container" style="margin-bottom: 10px; display: none;">
-                                        <button type="button" class="btn btn-success" id="resolveDisputeBtn" style="width: 100%;">Mark Dispute as Resolved</button>
+                                        <button type="button" class="btn btn-success btn-block" id="resolveDisputeBtn">
+                                            <i class="fas fa-check-circle"></i> Mark Dispute as Resolved
+                                        </button>
                                     </div>
 
                                     <div class="btn-group" style="display: flex; margin-bottom: 10px;">
-                                        <div class="dropdown" style="flex: 1; margin-right: 5px; position: relative;">
+                                        <div class="dropdown" style="flex: 1; margin-right: 5px;">
                                             <button type="button" class="btn btn-outline-danger" id="actOnBuyerBtn" style="width: 100%;">
-                                                Act on Buyer <i class="fas fa-caret-down"></i>
+                                                <i class="fas fa-user-slash"></i> Act on Buyer
                                             </button>
-                                            <div class="dropdown-menu" id="buyerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid #dee2e6; border-radius: 4px; width: 100%; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                                                <a href="#" class="dropdown-item buyer-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: #333;">
+                                            <div class="dropdown-menu" id="buyerActionMenu">
+                                                <a href="#" class="dropdown-item buyer-action" data-action="blocked">
                                                     <i class="fas fa-ban text-warning"></i> Block Buyer
                                                 </a>
-                                                <a href="#" class="dropdown-item buyer-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: #333; border-top: 1px solid #dee2e6;">
+                                                <a href="#" class="dropdown-item buyer-action" data-action="banned">
                                                     <i class="fas fa-user-slash text-danger"></i> Ban Buyer
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="dropdown" style="flex: 1; margin-left: 5px; position: relative;">
+                                        <div class="dropdown" style="flex: 1; margin-left: 5px;">
                                             <button type="button" class="btn btn-outline-danger" id="actOnSellerBtn" style="width: 100%;">
-                                                Act on Seller <i class="fas fa-caret-down"></i>
+                                                <i class="fas fa-user-slash"></i> Act on Seller
                                             </button>
-                                            <div class="dropdown-menu" id="sellerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid #dee2e6; border-radius: 4px; width: 100%; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                                                <a href="#" class="dropdown-item seller-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: #333;">
+                                            <div class="dropdown-menu" id="sellerActionMenu">
+                                                <a href="#" class="dropdown-item seller-action" data-action="blocked">
                                                     <i class="fas fa-ban text-warning"></i> Block Seller
                                                 </a>
-                                                <a href="#" class="dropdown-item seller-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: #333; border-top: 1px solid #dee2e6;">
+                                                <a href="#" class="dropdown-item seller-action" data-action="banned">
                                                     <i class="fas fa-user-slash text-danger"></i> Ban Seller
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary" id="saveChangesBtn" style="width: 100%;">Save Changes</button>
+                                    <button type="submit" class="btn btn-primary btn-block" id="saveChangesBtn">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
 
                     <!-- Buyer Profile Card -->
-                    <div class="card mt-4">
+                    <div class="card">
                         <div class="card-header">
-                            <h3>👤 Buyer Profile</h3>
+                            <h2><i class="fas fa-user-check"></i> Buyer Profile</h2>
                         </div>
                         <div class="card-body">
-                            <div class="profile-card" id="buyer-profile">
+                            <div class="user-profile" id="buyer-profile">
                                 <div class="loading">
                                     <div class="spinner"></div>
                                 </div>
@@ -893,12 +979,12 @@
                     </div>
 
                     <!-- Seller Profile Card -->
-                    <div class="card mt-4">
+                    <div class="card">
                         <div class="card-header">
-                            <h3>👤 Seller Profile</h3>
+                            <h2><i class="fas fa-user-tie"></i> Seller Profile</h2>
                         </div>
                         <div class="card-body">
-                            <div class="profile-card" id="seller-profile">
+                            <div class="user-profile" id="seller-profile">
                                 <div class="loading">
                                     <div class="spinner"></div>
                                 </div>
@@ -911,12 +997,20 @@
     </div>
 
     <div id="notification" class="notification">
-        <span id="notification-message"></span>
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="notification-message">
+                <div class="notification-title">Success</div>
+                <div class="notification-text" id="notification-message">Operation completed successfully</div>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the gig ID from the URL path
+            // Get the order ID from the URL path
             const pathSegments = window.location.pathname.split('/');
             const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment
 
@@ -984,18 +1078,18 @@
             const requestedService = JSON.parse(promise.requested_service || '{}');
 
             // Set order ID
-            document.getElementById('order-id-span').textContent = `Order #${order.order_id}`;
+            document.getElementById('order-id').textContent = order.order_id;
 
             // Set order status
             const statusElement = document.getElementById('order-status-badge');
-            statusElement.className = `badge ${getStatusBadgeClass(order.order_status)}`;
+            statusElement.className = `badge badge-${order.order_status.replace('_', '-')}`;
             statusElement.textContent = capitalizeFirstLetter(order.order_status);
 
             // Set order summary details
             document.getElementById('order-title').textContent = acceptedService.title || 'N/A';
             document.getElementById('service-type').textContent = capitalizeFirstLetter(acceptedService.service_type || 'Unknown');
             document.getElementById('order-date').textContent = formatDate(order.created_at);
-            document.getElementById('delivery-date').textContent = formatDate(order.delivered_date);
+            document.getElementById('delivery-date').textContent = formatDate(order.delivered_date) || 'Not delivered yet';
             document.getElementById('order-price').textContent = formatPrice(promise.price || 0);
 
             // Set payment status
@@ -1276,10 +1370,10 @@
             mockTimeline.forEach(event => {
                 html += `
                     <div class="timeline-item">
-                        <div style="font-weight: 600;">${event.event}</div>
                         <div class="timeline-date">
                             ${formatDateTime(event.timestamp)}
                         </div>
+                        <div class="timeline-title">${event.event}</div>
                     </div>
                 `;
             });
@@ -1322,7 +1416,7 @@
                 html += `
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h4 style="margin: 0;">Buyer's Review</h4>
+                            <h3><i class="fas fa-comment-alt"></i> Buyer's Review</h3>
                         </div>
                         <div class="card-body">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -1345,7 +1439,7 @@
                 html += `
                     <div class="card">
                         <div class="card-header">
-                            <h4 style="margin: 0;">Seller's Review</h4>
+                            <h3><i class="fas fa-comment-alt"></i> Seller's Review</h3>
                         </div>
                         <div class="card-body">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -1375,12 +1469,14 @@
                 .then(buyer => {
                     if (buyer) {
                         container.innerHTML = `
-                            <img src="/${buyer.profile_picture}" alt="Buyer profile" class="profile-img">
-                            <div class="profile-details">
-                                <h4 style="margin: 0 0 5px 0;">${buyer.name || 'Unknown'}</h4>
-                                <span class="profile-role">Business</span>
-                                <p style="margin: 10px 0; font-size: 14px;">Member since: ${buyer.created_at ? formatDate(buyer.created_at) : 'N/A'}</p>
-                                <a href="/admin/user-profile/${buyer.user_id}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                            <img src="/${buyer.profile_picture}" alt="Buyer profile" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">${buyer.name || 'Unknown'}</div>
+                                <div class="user-role">Business</div>
+                                <div class="user-id">Member since: ${buyer.created_at ? formatDate(buyer.created_at) : 'N/A'}</div>
+                                <a href="/admin/user-profile/${buyer.user_id}" class="btn btn-outline-primary btn-sm mt-2">
+                                    <i class="fas fa-user"></i> View Profile
+                                </a>
                             </div>
                         `;
                     } else {
@@ -1394,362 +1490,12 @@
 
         async function fetchBuyerProfile(userId) {
             try {
-                const response = await fetch(`/api/user/${userId}`);
+                const response = await fetch(`/// filepath: c:\Users\ASUS TUF\Desktop\Brandboost\views\pages\admin\order_details.php`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch buyer profile');
                 }
-                const user = await response.json();
-                return user;
-            } catch (error) {
-                console.error('Error fetching buyer profile:', error);
-                return null;
-            }
-        }
 
-        // Load seller profile
-        function loadSellerProfile(data) {
-            const container = document.getElementById('seller-profile');
-            const order = data.order;
-            const promise = data.promise || {};
 
-            // Extract service type
-            const acceptedService = JSON.parse(promise.accepted_service || '{}');
-            const serviceType = acceptedService.serviceType || 'Unknown';
-
-            fetchSellerProfile(order.seller_id)
-                .then(seller => {
-                    if (seller) {
-                        container.innerHTML = `
-                            <img src="/${seller.profile_picture}" alt="Seller profile" class="profile-img">
-                            <div class="profile-details">
-                                <h4 style="margin: 0 0 5px 0;">${seller.name}</h4>
-                                <span class="profile-role">${serviceType === 'promotion' ? 'Influencer' : 'Designer'}</span>
-                                <p style="margin: 10px 0; font-size: 14px;">Member since: ${formatDate(seller.created_at)}</p>
-                                <a href="/admin/user-profile/${seller.user_id}" class="btn btn-outline-primary btn-sm">View Profile</a>
-                            </div>
-                        `;
-                    } else {
-                        container.innerHTML = `
-                        <p class="text-muted text-center">Seller information not available</p>
-                    `;
-                    }
-                });
-
-        }
-
-        async function fetchSellerProfile(userId) {
-            try {
-                const response = await fetch(`/api/user/${userId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch seller profile');
-                }
-                const seller = await response.json();
-                return seller;
-            } catch (error) {
-                console.error('Error fetching seller profile:', error);
-                return null;
-            }
-        }
-
-        // Setup tab switching functionality
-        function setupTabs() {
-            const tabLinks = document.querySelectorAll('.tab-link');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabLinks.forEach(tabLink => {
-                tabLink.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabLinks.forEach(tab => tab.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-
-                    // Add active class to current tab
-                    this.classList.add('active');
-                    document.getElementById(this.dataset.tab).classList.add('active');
-                });
-            });
-        }
-
-        // Setup form handlers
-        function setupFormHandlers() {
-            // Form submission handler
-            document.getElementById('adminActionsForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const data = {};
-
-                formData.forEach((value, key) => {
-                    if (value) data[key] = value;
-                });
-
-                // Send API request to update order
-                updateOrder(data);
-            });
-
-            // Refund button handler
-            document.getElementById('refundBtn').addEventListener('click', function() {
-                const amount = document.getElementById('refundAmount').value;
-                if (!amount || amount <= 0) {
-                    showNotification('Please enter a valid refund amount', 'error');
-                    return;
-                }
-
-                if (confirm(`Are you sure you want to issue a refund of $${amount}?`)) {
-                    // In a real implementation, this would call a refund API
-                    showNotification(`Refund of $${amount} processed successfully`, 'success');
-                }
-            });
-
-            // Dispute resolution handler
-            const resolveDisputeBtn = document.getElementById('resolveDisputeBtn');
-            if (resolveDisputeBtn) {
-                resolveDisputeBtn.addEventListener('click', function() {
-                    if (confirm('Are you sure you want to mark this dispute as resolved?')) {
-                        // Update order status to completed
-                        const data = {
-                            order_id: document.getElementById('form-order-id').value,
-                            order_status: 'completed'
-                        };
-
-                        updateOrder(data, 'Dispute marked as resolved');
-                    }
-                });
-            }
-
-            // Toggle dropdown menus for buyer and seller actions
-            document.getElementById('actOnBuyerBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('buyerActionMenu').style.display =
-                    document.getElementById('buyerActionMenu').style.display === 'none' ? 'block' : 'none';
-                // Hide the other dropdown if open
-                document.getElementById('sellerActionMenu').style.display = 'none';
-            });
-
-            document.getElementById('actOnSellerBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('sellerActionMenu').style.display =
-                    document.getElementById('sellerActionMenu').style.display === 'none' ? 'block' : 'none';
-                // Hide the other dropdown if open
-                document.getElementById('buyerActionMenu').style.display = 'none';
-            });
-
-            // Hide dropdowns when clicking elsewhere
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('#actOnBuyerBtn') && !e.target.closest('#buyerActionMenu')) {
-                    document.getElementById('buyerActionMenu').style.display = 'none';
-                }
-                if (!e.target.closest('#actOnSellerBtn') && !e.target.closest('#sellerActionMenu')) {
-                    document.getElementById('sellerActionMenu').style.display = 'none';
-                }
-            });
-
-            // Handle buyer action menu clicks
-            const buyerActions = document.querySelectorAll('.buyer-action');
-            buyerActions.forEach(action => {
-                action.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const actionType = this.dataset.action;
-                    const buyerId = orderData.order.customer_id;
-
-                    if (confirm(`Are you sure you want to ${actionType} this buyer?`)) {
-                        updateUserAccountStatus(buyerId, actionType);
-                    }
-
-                    // Close the dropdown
-                    document.getElementById('buyerActionMenu').style.display = 'none';
-                });
-            });
-
-            // Handle seller action menu clicks
-            const sellerActions = document.querySelectorAll('.seller-action');
-            sellerActions.forEach(action => {
-                action.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const actionType = this.dataset.action;
-                    const sellerId = orderData.order.seller_id;
-
-                    if (confirm(`Are you sure you want to ${actionType} this seller?`)) {
-                        updateUserAccountStatus(sellerId, actionType);
-                    }
-
-                    // Close the dropdown
-                    document.getElementById('sellerActionMenu').style.display = 'none';
-                });
-            });
-        }
-
-        // Update order via API
-        function updateOrder(data, successMessage = 'Order updated successfully') {
-            fetch('/api/update-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update order');
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        showNotification(successMessage, 'success');
-
-                        // Refresh order data
-                        fetchOrderDetails(data.order_id);
-                    } else {
-                        showNotification('Error: ' + result.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Error updating order', 'error');
-                });
-        }
-
-        // Function to update user account status
-        function updateUserAccountStatus(userId, status) {
-            fetch(`/api/update-user-account-status?id=${userId}&status=${status}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update user account status');
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        showNotification(`User has been ${status} successfully`, 'success');
-                    } else {
-                        showNotification('Error: ' + result.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Error updating user account status', 'error');
-                });
-        }
-
-        // Add admin note (mock implementation)
-        function addAdminNote(noteText) {
-            const container = document.getElementById('admin-notes-container');
-            const noNotesMessage = container.querySelector('.text-muted.text-center');
-
-            if (noNotesMessage) {
-                noNotesMessage.remove();
-            }
-
-            const now = new Date();
-            const formattedDate = formatDateTime(now.toISOString());
-
-            const noteElement = document.createElement('div');
-            noteElement.style.padding = '15px';
-            noteElement.style.marginBottom = '15px';
-            noteElement.style.backgroundColor = '#f8f9fa';
-            noteElement.style.borderRadius = '5px';
-
-            noteElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="font-weight: 600;">Admin User</span>
-                    <small class="text-muted">${formattedDate}</small>
-                </div>
-                <p style="margin: 0;">${noteText}</p>
-            `;
-
-            container.insertBefore(noteElement, container.firstChild);
-            document.getElementById('adminNote').value = '';
-
-            showNotification('Note added successfully', 'success');
-        }
-
-        // Generate star rating HTML
-        function generateStarRating(rating) {
-            let html = '';
-
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    html += '<i class="fas fa-star"></i>';
-                } else if (i <= rating + 0.5) {
-                    html += '<i class="fas fa-star-half-alt"></i>';
-                } else {
-                    html += '<i class="far fa-star"></i>';
-                }
-            }
-
-            return html;
-        }
-
-        // Helper Functions
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-
-        function formatDateTime(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-        }
-
-        function formatPrice(price) {
-            return '$' + parseFloat(price).toFixed(2);
-        }
-
-        function capitalizeFirstLetter(string) {
-            if (!string) return '';
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
-        function getStatusBadgeClass(status) {
-            switch (status.toLowerCase()) {
-                case 'pending':
-                    return 'badge-warning';
-                case 'in_progress':
-                    return 'badge-info';
-                case 'completed':
-                    return 'badge-success';
-                case 'canceled':
-                    return 'badge-danger';
-                case 'disputed':
-                    return 'badge-danger';
-                default:
-                    return 'badge-secondary';
-            }
-        }
-
-        // Show notification
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            const notificationMessage = document.getElementById('notification-message');
-
-            notification.className = `notification ${type}`;
-            notificationMessage.textContent = message;
-
-            notification.classList.add('show');
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-    </script>
+    </script>  
 </body>
-
 </html>

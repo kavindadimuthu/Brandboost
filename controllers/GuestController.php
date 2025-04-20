@@ -133,4 +133,43 @@ class GuestController extends BaseController
         $this->renderPage('pages/guest/reset_password');
     }
 
+
+    // error pages
+    public function error404($req, $res)
+    {
+        $this->renderPage('pages/error_pages/404');
+    }
+    public function error403($req, $res)
+    {
+        $this->renderPage('pages/error_pages/403');
+    }
+    public function error401($req, $res)
+    {
+        $this->renderPage('pages/error_pages/401');
+    }
+    public function error500($req, $res)
+    {
+        $this->renderPage('pages/error_pages/500');
+    }
+    public function error503($req, $res)
+    {
+        $this->renderPage('pages/error_pages/503');
+    }
+
+    // payment error or success
+    public function paymentError($req, $res)
+    {
+        $this->renderPage('pages/error_pages/payment_error');
+    }
+    public function paymentSuccess($req, $res)
+    {
+        $this->renderPage('pages/error_pages/payment_success');
+    }
+
+    // account suspended or deactivated
+    public function accountSuspended($req, $res)
+    {
+        $this->renderPage('pages/error_pages/account_suspended');
+    }
+
 }

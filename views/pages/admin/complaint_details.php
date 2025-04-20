@@ -346,6 +346,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 0.5rem;
             padding: 0.625rem 1.25rem;
             font-size: 0.875rem;
             font-weight: 500;
@@ -778,16 +779,6 @@
                     <div class="card-body">
                         <form id="admin-actions-form">
                             <div class="form-group">
-                                <label for="assign-admin" class="form-label">Assign to Admin</label>
-                                <select id="assign-admin" class="form-control">
-                                    <option value="">Select Admin</option>
-                                    <option value="1">John Smith</option>
-                                    <option value="2">Jane Doe</option>
-                                    <option value="3">Robert Brown</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="complaint-status" class="form-label">Change Status</label>
                                 <select id="complaint-status" class="form-control">
                                     <option value="open">Open</option>
@@ -1092,7 +1083,6 @@
             
             // Save all changes to the complaint
             async function saveChanges() {
-                const assignedAdmin = document.getElementById('assign-admin').value;
                 const status = document.getElementById('complaint-status').value;
                 const resolutionNotes = document.getElementById('resolution-notes').value;
                 

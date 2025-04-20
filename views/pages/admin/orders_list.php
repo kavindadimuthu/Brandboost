@@ -1294,8 +1294,8 @@
                     const createdDate = formatDate(order.created_at);
                     
                     // Default profile picture if none is set
-                    const customerPic = (order.customer && order.customer.profile_picture) || 'cdn_uploads/users/dp/dp-empty.png';
-                    const sellerPic = (order.seller && order.seller.profile_picture) || 'cdn_uploads/users/dp/dp-empty.png';
+                    const customerPic = (order.customer_profile_picture && order.customer_profile_picture) || 'cdn_uploads/users/dp/dp-empty.png';
+                    const sellerPic = (order.seller_profile_picture && order.seller_profile_picture) || 'cdn_uploads/users/dp/dp-empty.png';
 
                     row.innerHTML = `
                         <td><strong>${orderNumber}</strong></td>

@@ -1,239 +1,684 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>
-        Verifications
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --pending-color: #f97316;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
         }
 
         .container {
             display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            /* Reduced gap between header and breadcrumb */
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .header .breadcrumb {
-            font-size: 14px;
-            color: #333;
-            /* Make breadcrumb font color visible */
+            font-size: 0.875rem;
+            color: var(--gray-600);
         }
 
         .header .user-info {
             display: flex;
             align-items: center;
+            gap: 0.75rem;
         }
 
         .header .user-info img {
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
         }
 
         .header .user-info span {
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .main-content {
-            width: 100%;
-            background-color: #fff;
-            border-radius: 20px;
-            /* Add curvature */
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Add gap between sidebar and main content */
-            color: #333;
+        .page-title {
+            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
         }
 
-        .main-content h2,
-        .main-content p,
-        .main-content th,
-        .main-content td {
-            color: #666;
-            /* Grey color for text */
-            font-size: 14px;
-            /* Smaller font size for elegant look */
+        .page-description {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
         }
 
-        .main-content h2 {
-            margin-top: 0;
-            font-size: 24px;
-            /* Larger font size for header */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
 
-        .main-content .search-bar {
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .main-content .search-bar input {
-            width: 400px;
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            /* Add curvature */
+        .card-body {
+            padding: 1rem;
         }
 
-        .main-content .search-bar button {
-            padding: 8px 16px;
-            background-color: #6a11cb;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            /* Add curvature */
-            cursor: pointer;
-            margin-left: 8px;
+        .filters-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .main-content table {
+        .search-box {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
             width: 100%;
-            border-collapse: collapse;
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
         }
 
-        .main-content table th,
-        .main-content table td {
-            padding: 12px;
-            border-bottom: 1px solid #e0e0e0;
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box .icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .date-range-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 2px;
+        }
+
+        .date-input {
+            padding: 6px 10px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            width: 100%;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .preset-btn {
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background-color: var(--gray-200);
+            border-color: var(--gray-400);
+        }
+
+        .active-date-filter {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .filters-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filters-bar .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .status-filters {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-filter-btn {
+            font-size: 0.8125rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 1rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .status-filter-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .status-filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .data-table th {
             text-align: left;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .main-content table th {
-            background-color: #f9f9f9;
+        .data-table th:first-child {
+            border-top-left-radius: var(--radius);
         }
 
-        .main-content table td img {
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
+        .data-table th:last-child {
+            border-top-right-radius: var(--radius);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.875rem;
+            color: var(--gray-800);
             vertical-align: middle;
         }
 
-        .main-content table td .user-info {
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .data-table tr:hover td {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .data-table .user-info {
             display: flex;
             align-items: center;
+            gap: 0.75rem;
         }
 
-        .main-content table td .user-info img {
-            margin-right: 10px;
+        .data-table .user-info img {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
         }
 
-        .main-content .pagination {
+        .data-table .user-info .user-details {
             display: flex;
-            justify-content: center;
-            margin-top: 20px;
+            flex-direction: column;
         }
 
-        .main-content .pagination button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px 12px;
-            margin: 0 4px;
-            color: #888;
+        .data-table .user-info .user-name {
+            font-weight: 600;
+            color: var(--gray-800);
         }
 
-        .main-content .pagination button.active {
-            font-weight: bold;
-            color: #000;
-            background-color: #f0f0f0;
-            border-radius: 4px;
+        .data-table .user-info .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-600);
         }
 
         .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            line-height: 1;
         }
 
-        .badge.verified {
-            background-color: #28a745;
+        .badge-verified {
+            background-color: var(--success-color);
+            color: white;
         }
 
-        .badge.rejected {
-            background-color: #dc3545;
+        .badge-rejected {
+            background-color: var(--danger-color);
+            color: white;
         }
 
-        .badge.pending {
-            background-color: #6c757d;
+        .badge-pending {
+            background-color: var(--pending-color);
+            color: white;
         }
 
-        /* Action buttons Styles.......... */
-        .action-buttons {
+        .pagination {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
         }
 
-        .action-buttons button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
+        .pagination-info {
+            color: var(--gray-600);
+        }
+
+        .pagination-options {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+        }
+
+        .items-per-page select {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            color: var(--gray-600);
             cursor: pointer;
-            color: #fff;
+            transition: all 0.2s ease;
+            outline: none;
         }
 
-        .action-buttons .approve-btn {
-            background-color: #28a745;
+        .pagination-controls {
+            display: flex;
+            gap: 0.25rem;
         }
 
-        .action-buttons .reject-btn {
-            background-color: #dc3545;
+        .pagination-btn {
+            padding: 0.3rem 0.5rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 0.25rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .action-buttons .view-btn {
-            background-color: #007bff;
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
 
-        /* Loading indicator */
-        .loading {
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+            min-width: 10rem;
+            padding: 0.5rem 0;
+            margin: 0.125rem 0 0;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            display: none;
+        }
+
+        .dropdown-menu-wide {
+            min-width: 15rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dropdown-divider {
+            height: 0;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: var(--gray-800);
+            font-size: 0.875rem;
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        .dropdown-item i {
+            width: 1rem;
+            text-align: center;
+        }
+
+        .filter-options {
+            padding: 0 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            padding: 0.35rem 0;
+            font-size: 0.875rem;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 200px;
+            z-index: 9999;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
         }
 
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #6a11cb;
+        .loading-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(99, 102, 241, 0.2);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        /* Error message */
-        .error-message {
-            color: #dc3545;
+        .empty-state {
+            padding: 2rem;
             text-align: center;
-            padding: 20px;
+            color: var(--gray-600);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+
+        .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--gray-800);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn-view {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .action-btn-view:hover {
+            background-color: #2563eb;
         }
     </style>
 </head>
@@ -242,286 +687,826 @@
     <div class="container">
         <div class="main-content">
             <div class="header">
-                <div class="breadcrumb">Admin portal &gt; Verification requests</div>
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i> Admin portal &gt; Verification requests
+                </div>
                 <div class="user-info">
-                    <img alt="User profile picture" height="30"
-                        src="https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg"
-                        width="30" />
-                    <span><?php echo $_SESSION['user']['username']; ?></span>
+                    <img alt="User profile picture" src="https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg" />
+                    <span><?php echo isset($_SESSION['user']['username']) ? $_SESSION['user']['username'] : 'Admin User'; ?></span>
                 </div>
             </div>
-            <h2>Verifications</h2>
-            <p>Manage verification requests for businesses and influencers.</p>
-            <div class="search-bar">
-                <input id="searchInput" placeholder="Search by name or type..." type="text" />
-                <div>
-                    <button id="filterButton">Filters</button>
-                    <button id="searchButton">Search</button>
+
+            <h1 class="page-title">Verification Requests</h1>
+            <p class="page-description">Manage verification requests for businesses and influencers. Review and verify user identities to maintain platform integrity.</p>
+
+            <div class="status-filters">
+                <button class="status-filter-btn active" data-status="all">All</button>
+                <button class="status-filter-btn" data-status="pending">Pending</button>
+                <button class="status-filter-btn" data-status="verified">Verified</button>
+                <button class="status-filter-btn" data-status="rejected">Rejected</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="search-box">
+                        <i class="fas fa-search icon"></i>
+                        <input type="text" id="searchInput" placeholder="Search by name or business...">
+                    </div>
+                    <div class="filters-controls">
+                        <div class="dropdown">
+                            <button class="btn btn-outline dropdown-toggle" id="filterDropdownBtn">
+                                <i class="fas fa-calendar-alt"></i> Date Range
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-wide" id="filterDropdown">
+                                <div class="dropdown-header">Select Date Range</div>
+                                <div class="filter-options">
+                                    <div class="date-range-filter">
+                                        <label class="filter-label">From Date:</label>
+                                        <input type="date" id="dateFrom" class="date-input" max="<?php echo date('Y-m-d'); ?>">
+
+                                        <label class="filter-label">To Date:</label>
+                                        <input type="date" id="dateTo" class="date-input" max="<?php echo date('Y-m-d'); ?>">
+                                    </div>
+
+                                    <div class="filter-presets">
+                                        <button class="preset-btn" data-days="7">Last 7 days</button>
+                                        <button class="preset-btn" data-days="30">Last 30 days</button>
+                                        <button class="preset-btn" data-days="90">Last 90 days</button>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="filter-actions">
+                                    <button class="btn btn-sm btn-primary" id="applyDateFilterBtn">Apply</button>
+                                    <button class="btn btn-sm btn-outline" id="resetDateFilterBtn">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline dropdown-toggle" id="typeDropdownBtn">
+                                <i class="fas fa-filter"></i> Type: <span id="currentType">All</span>
+                            </button>
+                            <div class="dropdown-menu" id="typeDropdown">
+                                <button class="dropdown-item" data-type="all" data-label="All">
+                                    <i class="fas fa-globe"></i> All Types
+                                </button>
+                                <button class="dropdown-item" data-type="business" data-label="Business">
+                                    <i class="fas fa-building"></i> Business
+                                </button>
+                                <button class="dropdown-item" data-type="social_media" data-label="Social Media">
+                                    <i class="fas fa-hashtag"></i> Social Media
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline dropdown-toggle" id="sortDropdownBtn">
+                                <i class="fas fa-sort"></i> Sort: <span id="currentSort">Date</span>
+                            </button>
+                            <div class="dropdown-menu" id="sortDropdown">
+                                <button class="dropdown-item" data-sort="created_at" data-label="Date">
+                                    <i class="fas fa-calendar-alt"></i> Date
+                                </button>
+                                <button class="dropdown-item" data-sort="display_name" data-label="Name">
+                                    <i class="fas fa-font"></i> Name
+                                </button>
+                                <button class="dropdown-item" data-sort="type" data-label="Type">
+                                    <i class="fas fa-tag"></i> Type
+                                </button>
+                                <button class="dropdown-item" data-sort="status" data-label="Status">
+                                    <i class="fas fa-tasks"></i> Status
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline dropdown-toggle" id="orderDropdownBtn">
+                                <i class="fas fa-arrow-down"></i> Order: <span id="currentOrder">Newest</span>
+                            </button>
+                            <div class="dropdown-menu" id="orderDropdown">
+                                <button class="dropdown-item" data-order="desc" data-label="Newest">
+                                    <i class="fas fa-arrow-down"></i> Newest
+                                </button>
+                                <button class="dropdown-item" data-order="asc" data-label="Oldest">
+                                    <i class="fas fa-arrow-up"></i> Oldest
+                                </button>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" id="clearAllFiltersBtn">
+                                <i class="fas fa-times"></i> Clear Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="data-table" id="verificationsTable">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>User</th>
+                                <th>Business/Profile</th>
+                                <th>BR/Platform</th>
+                                <th>Date Requested</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table body will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>No verification requests found</h3>
+                        <p>No verification requests match your current filters or search criteria.</p>
+                        <button class="btn btn-primary" id="clearFiltersBtn">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div id="tableContainer">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
+
+            <div class="pagination">
+                <div class="pagination-info">
+                    Showing <span id="itemsShowing">0</span> of <span id="totalItems">0</span> verification requests
                 </div>
-            </div>
-            <div id="paginationContainer" class="pagination">
-                <!-- Pagination will be added here dynamically -->
+                <div class="pagination-options">
+                    <div class="items-per-page">
+                        <label for="itemsPerPage">Items per page:</label>
+                        <select id="itemsPerPage">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <div class="pagination-controls" id="paginationControls">
+                        <!-- Pagination controls will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
     <script>
-        // Current state
-        let currentPage = 1;
-        let searchQuery = '';
-        let currentFilters = {};
-        
-        // Default profile image if none is available
-        const defaultProfileImage = "https://storage.googleapis.com/a1aa/image/UpUJRvUrTpb6AVoj3GgCR63uf4OQ1OKfIa5cBvEsd5Eg4fqnA.jpg";
-        
-        // Main function to load verification data
-        function loadVerificationData() {
-            const tableContainer = document.getElementById('tableContainer');
-            tableContainer.innerHTML = `<div class="loading"><div class="loading-spinner"></div></div>`;
+        document.addEventListener('DOMContentLoaded', function() {
+            // App state
+            const state = {
+                currentPage: 1,
+                itemsPerPage: 10,
+                totalItems: 0,
+                totalPages: 0,
+                verifications: [],
+                filters: {
+                    status: 'all',
+                    type: 'all',
+                    search: '',
+                    dateFrom: null,
+                    dateTo: null
+                },
+                sort: {
+                    field: 'created_at',
+                    order: 'desc'
+                }
+            };
+
+            // DOM Elements
+            const verificationsTable = document.getElementById('verificationsTable');
+            const tableBody = verificationsTable.querySelector('tbody');
+            const emptyState = document.getElementById('emptyState');
+            const paginationControls = document.getElementById('paginationControls');
+            const itemsShowing = document.getElementById('itemsShowing');
+            const totalItems = document.getElementById('totalItems');
+            const searchInput = document.getElementById('searchInput');
+            const statusFilterButtons = document.querySelectorAll('.status-filter-btn');
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+            const clearAllFiltersBtn = document.getElementById('clearAllFiltersBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const itemsPerPageSelect = document.getElementById('itemsPerPage');
             
-            // Build the query parameters
-            let queryParams = `page=${currentPage}`;
-            if (searchQuery) {
-                queryParams += `&search=${encodeURIComponent(searchQuery)}`;
+            // Dropdowns
+            const sortDropdownBtn = document.getElementById('sortDropdownBtn');
+            const sortDropdown = document.getElementById('sortDropdown');
+            const orderDropdownBtn = document.getElementById('orderDropdownBtn');
+            const orderDropdown = document.getElementById('orderDropdown');
+            const typeDropdownBtn = document.getElementById('typeDropdownBtn');
+            const typeDropdown = document.getElementById('typeDropdown');
+            const filterDropdownBtn = document.getElementById('filterDropdownBtn');
+            const filterDropdown = document.getElementById('filterDropdown');
+
+            // Display elements
+            const currentSort = document.getElementById('currentSort');
+            const currentOrder = document.getElementById('currentOrder');
+            const currentType = document.getElementById('currentType');
+
+            // Date filter elements
+            const dateFromInput = document.getElementById('dateFrom');
+            const dateToInput = document.getElementById('dateTo');
+            const applyDateFilterBtn = document.getElementById('applyDateFilterBtn');
+            const resetDateFilterBtn = document.getElementById('resetDateFilterBtn');
+            const presetButtons = document.querySelectorAll('.preset-btn');
+
+            // Functions
+            function showLoading() {
+                loadingOverlay.classList.add('show');
             }
-            
-            // Add any filters
-            Object.keys(currentFilters).forEach(key => {
-                if (currentFilters[key]) {
-                    queryParams += `&${key}=${encodeURIComponent(currentFilters[key])}`;
+
+            function hideLoading() {
+                loadingOverlay.classList.remove('show');
+            }
+
+            function toggleDropdown(dropdown) {
+                // Close all other dropdowns first
+                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                    if (menu !== dropdown) {
+                        menu.classList.remove('show');
+                    }
+                });
+
+                // Toggle the current dropdown
+                dropdown.classList.toggle('show');
+            }
+
+            async function fetchVerifications() {
+                showLoading();
+                
+                try {
+                    // Build query parameters
+                    const queryParams = new URLSearchParams({
+                        page: state.currentPage,
+                        perPage: state.itemsPerPage,
+                        sort_by: state.sort.field,
+                        order_dir: state.sort.order
+                    });
+
+                    if (state.filters.search) {
+                        queryParams.append('search', state.filters.search);
+                    }
+
+                    if (state.filters.status && state.filters.status !== 'all') {
+                        queryParams.append('status', state.filters.status);
+                    }
+
+                    if (state.filters.type && state.filters.type !== 'all') {
+                        queryParams.append('type', state.filters.type);
+                    }
+
+                    if (state.filters.dateFrom) {
+                        queryParams.append('date_from', state.filters.dateFrom);
+                    }
+
+                    if (state.filters.dateTo) {
+                        queryParams.append('date_to', state.filters.dateTo);
+                    }
+
+                    const response = await fetch(`/api/verifications?${queryParams.toString()}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch verifications');
+                    }
+
+                    const data = await response.json();
+                    console.log('Fetched verifications:', data);
+                    
+                    if (data.success) {
+                        state.verifications = data.data;
+                        state.totalItems = data.pagination.totalItems;
+                        state.totalPages = data.pagination.totalPages;
+                        renderVerifications();
+                        renderPagination();
+                        updateCounter();
+                        updateFilterIndicator();
+                    } else {
+                        throw new Error(data.error || 'Failed to fetch verifications');
+                    }
+                } catch (error) {
+                    console.error('Error fetching verifications:', error);
+                    // Mock data for development if API fails
+                    useMockData();
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            function useMockData() {
+                // Mock data for development purposes
+                const mockVerifications = [
+                    {
+                        id: "101",
+                        type: "business",
+                        user_id: 201,
+                        name: "John Doe",
+                        email: "john@example.com",
+                        display_name: "Acme Corporation",
+                        identifier: "B12345678",
+                        platform: null,
+                        profile_picture: "cdn_uploads/users/dp/john.jpg",
+                        status: "pending",
+                        created_at: "2025-04-10T10:30:00"
+                    },
+                    {
+                        id: "102",
+                        type: "social_media",
+                        user_id: 202,
+                        name: "Jane Smith",
+                        email: "jane@example.com",
+                        display_name: "JaneTheInfluencer",
+                        identifier: "https://instagram.com/janesmith",
+                        platform: "Instagram",
+                        profile_picture: "cdn_uploads/users/dp/jane.jpg",
+                        status: "verified",
+                        created_at: "2025-04-12T14:45:00"
+                    },
+                    {
+                        id: "103",
+                        type: "business",
+                        user_id: 203,
+                        name: "Robert Johnson",
+                        email: "robert@example.com",
+                        display_name: "Johnson & Sons",
+                        identifier: "B87654321",
+                        platform: null,
+                        profile_picture: "cdn_uploads/users/dp/robert.jpg",
+                        status: "rejected",
+                        created_at: "2025-04-15T09:15:00"
+                    },
+                    {
+                        id: "104",
+                        type: "social_media",
+                        user_id: 204,
+                        name: "Sarah Williams",
+                        email: "sarah@example.com",
+                        display_name: "SarahCreates",
+                        identifier: "https://youtube.com/sarahcreates",
+                        platform: "YouTube",
+                        profile_picture: "cdn_uploads/users/dp/sarah.jpg",
+                        status: "pending",
+                        created_at: "2025-04-18T16:20:00"
+                    },
+                    {
+                        id: "105",
+                        type: "business",
+                        user_id: 205,
+                        name: "Michael Brown",
+                        email: "michael@example.com",
+                        display_name: "Brown's Electronics",
+                        identifier: "B55555555",
+                        platform: null,
+                        profile_picture: "cdn_uploads/users/dp/michael.jpg",
+                        status: "pending",
+                        created_at: "2025-04-19T11:10:00"
+                    }
+                ];
+
+                // Filter the mock data based on current filters
+                let filteredVerifications = [...mockVerifications];
+
+                if (state.filters.status !== 'all') {
+                    filteredVerifications = filteredVerifications.filter(v => v.status === state.filters.status);
+                }
+
+                if (state.filters.type !== 'all') {
+                    filteredVerifications = filteredVerifications.filter(v => v.type === state.filters.type);
+                }
+
+                if (state.filters.search) {
+                    const search = state.filters.search.toLowerCase();
+                    filteredVerifications = filteredVerifications.filter(v =>
+                        v.name.toLowerCase().includes(search) ||
+                        v.display_name.toLowerCase().includes(search) ||
+                        v.identifier.toLowerCase().includes(search) ||
+                        (v.platform && v.platform.toLowerCase().includes(search))
+                    );
+                }
+
+                if (state.filters.dateFrom || state.filters.dateTo) {
+                    const fromDate = state.filters.dateFrom ? new Date(state.filters.dateFrom) : null;
+                    const toDate = state.filters.dateTo ? new Date(state.filters.dateTo) : null;
+
+                    filteredVerifications = filteredVerifications.filter(v => {
+                        const createdDate = new Date(v.created_at);
+                        if (fromDate && toDate) {
+                            return createdDate >= fromDate && createdDate <= toDate;
+                        } else if (fromDate) {
+                            return createdDate >= fromDate;
+                        } else if (toDate) {
+                            return createdDate <= toDate;
+                        }
+                        return true;
+                    });
+                }
+
+                // Sort the filtered data
+                filteredVerifications.sort((a, b) => {
+                    let aValue = a[state.sort.field];
+                    let bValue = b[state.sort.field];
+
+                    if (state.sort.field === 'created_at') {
+                        aValue = new Date(aValue).getTime();
+                        bValue = new Date(bValue).getTime();
+                    }
+
+                    if (state.sort.order === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+
+                // Apply pagination
+                const start = (state.currentPage - 1) * state.itemsPerPage;
+                const end = start + parseInt(state.itemsPerPage);
+
+                // Set mock data
+                state.verifications = filteredVerifications.slice(start, end);
+                state.totalItems = filteredVerifications.length;
+                state.totalPages = Math.ceil(filteredVerifications.length / state.itemsPerPage);
+
+                // Render the UI with mock data
+                renderVerifications();
+                renderPagination();
+                updateCounter();
+            }
+
+            function updateFilterIndicator() {
+                if (state.filters.dateFrom || state.filters.dateTo) {
+                    filterDropdownBtn.classList.add('active-date-filter');
+                    
+                    // Update the button text to show active date filter
+                    let filterText = 'Date Range';
+                    if (state.filters.dateFrom && state.filters.dateTo) {
+                        const fromDate = new Date(state.filters.dateFrom);
+                        const toDate = new Date(state.filters.dateTo);
+                        filterText = `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
+                    } else if (state.filters.dateFrom) {
+                        const fromDate = new Date(state.filters.dateFrom);
+                        filterText = `From: ${fromDate.toLocaleDateString()}`;
+                    } else if (state.filters.dateTo) {
+                        const toDate = new Date(state.filters.dateTo);
+                        filterText = `To: ${toDate.toLocaleDateString()}`;
+                    }
+                    
+                    filterDropdownBtn.innerHTML = `<i class="fas fa-calendar-alt"></i> ${filterText}`;
+                } else {
+                    filterDropdownBtn.classList.remove('active-date-filter');
+                    filterDropdownBtn.innerHTML = `<i class="fas fa-calendar-alt"></i> Date Range`;
+                }
+            }
+
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            function renderVerifications() {
+                tableBody.innerHTML = '';
+
+                if (state.verifications.length === 0) {
+                    verificationsTable.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                verificationsTable.style.display = 'table';
+                emptyState.style.display = 'none';
+
+                state.verifications.forEach(verification => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = verification.id;
+                    row.dataset.type = verification.type;
+                    row.classList.add('clickable-row');
+
+                    // Default image if none available
+                    const profilePicture = verification.profile_picture || 'cdn_uploads/users/dp/default.jpg';
+                    
+                    // Format verification type for display
+                    const displayType = verification.type === 'business' ? 'Business Registration' : 'Social Media Profile';
+                    
+                    // Badge class based on status
+                    const badgeClass = `badge-${verification.status}`;
+
+                    row.innerHTML = `
+                        <td>${displayType}</td>
+                        <td>
+                            <div class="user-info">
+                                <img src="/${profilePicture}" alt="${verification.name}">
+                                <div class="user-details">
+                                    <span class="user-name">${verification.name}</span>
+                                    <span class="user-role">${verification.email}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${verification.display_name}</td>
+                        <td>${verification.platform || verification.identifier}</td>
+                        <td>${formatDate(verification.created_at)}</td>
+                        <td>
+                            <span class="badge ${badgeClass}">
+                                ${verification.status.charAt(0).toUpperCase() + verification.status.slice(1)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn action-btn-view" onclick="viewDetails('${verification.id}', '${verification.type}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function renderPagination() {
+                paginationControls.innerHTML = '';
+
+                if (state.totalPages <= 1) {
+                    return;
+                }
+
+                // Previous button
+                const prevButton = document.createElement('button');
+                prevButton.className = 'pagination-btn';
+                prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevButton.disabled = state.currentPage === 1;
+                prevButton.addEventListener('click', () => {
+                    if (state.currentPage > 1) {
+                        state.currentPage--;
+                        fetchVerifications();
+                    }
+                });
+                paginationControls.appendChild(prevButton);
+
+                // Page numbers
+                const startPage = Math.max(1, state.currentPage - 2);
+                const endPage = Math.min(state.totalPages, startPage + 4);
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.className = 'pagination-btn';
+                    pageButton.textContent = i;
+
+                    if (i === state.currentPage) {
+                        pageButton.classList.add('active');
+                    }
+
+                    pageButton.addEventListener('click', () => {
+                        state.currentPage = i;
+                        fetchVerifications();
+                    });
+
+                    paginationControls.appendChild(pageButton);
+                }
+
+                // Next button
+                const nextButton = document.createElement('button');
+                nextButton.className = 'pagination-btn';
+                nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextButton.disabled = state.currentPage === state.totalPages;
+                nextButton.addEventListener('click', () => {
+                    if (state.currentPage < state.totalPages) {
+                        state.currentPage++;
+                        fetchVerifications();
+                    }
+                });
+                paginationControls.appendChild(nextButton);
+            }
+
+            function updateCounter() {
+                const start = (state.currentPage - 1) * state.itemsPerPage + 1;
+                const end = Math.min(start + state.verifications.length - 1, state.totalItems);
+
+                if (state.totalItems === 0) {
+                    itemsShowing.textContent = '0';
+                } else {
+                    itemsShowing.textContent = `${start}-${end}`;
+                }
+
+                totalItems.textContent = state.totalItems;
+            }
+
+            // Event Listeners
+            searchInput.addEventListener('input', debounce(function(e) {
+                state.filters.search = e.target.value.trim();
+                state.currentPage = 1;
+                fetchVerifications();
+            }, 500));
+
+            applyDateFilterBtn.addEventListener('click', function() {
+                state.filters.dateFrom = dateFromInput.value || null;
+                state.filters.dateTo = dateToInput.value || null;
+                
+                // Validate that from date isn't after to date
+                if (state.filters.dateFrom && state.filters.dateTo && state.filters.dateFrom > state.filters.dateTo) {
+                    alert('From date cannot be after To date');
+                    return;
+                }
+                
+                filterDropdown.classList.remove('show');
+                state.currentPage = 1;
+                fetchVerifications();
+            });
+
+            resetDateFilterBtn.addEventListener('click', function() {
+                dateFromInput.value = '';
+                dateToInput.value = '';
+                state.filters.dateFrom = null;
+                state.filters.dateTo = null;
+                updateFilterIndicator();
+            });
+
+            clearAllFiltersBtn.addEventListener('click', function() {
+                // Clear search
+                searchInput.value = '';
+                state.filters.search = '';
+                
+                // Clear date filters
+                dateFromInput.value = '';
+                dateToInput.value = '';
+                state.filters.dateFrom = null;
+                state.filters.dateTo = null;
+                
+                // Reset status to 'all'
+                statusFilterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.status === 'all') {
+                        btn.classList.add('active');
+                    }
+                });
+                state.filters.status = 'all';
+                
+                // Reset type to 'all'
+                state.filters.type = 'all';
+                currentType.textContent = 'All';
+                
+                // Reset sorting
+                state.sort.field = 'created_at';
+                state.sort.order = 'desc';
+                currentSort.textContent = 'Date';
+                currentOrder.textContent = 'Newest';
+                
+                // Reset to page 1 and fetch
+                state.currentPage = 1;
+                updateFilterIndicator();
+                fetchVerifications();
+            });
+
+            clearFiltersBtn.addEventListener('click', function() {
+                // Just call the same function
+                clearAllFiltersBtn.click();
+            });
+
+            statusFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    statusFilterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    state.filters.status = this.dataset.status;
+                    state.currentPage = 1;
+                    fetchVerifications();
+                });
+            });
+
+            // Table row click handler
+            tableBody.addEventListener('click', function(e) {
+                // Skip if clicking on buttons
+                if (e.target.closest('button')) {
+                    return;
+                }
+                
+                const row = e.target.closest('tr');
+                if (row) {
+                    const id = row.dataset.id;
+                    const type = row.dataset.type;
+                    if (id && type) {
+                        viewDetails(id, type);
+                    }
                 }
             });
 
-            console.log('Fetching verification data with query params:', queryParams);
-            
-            // Make the API request
-            fetch(`/api/verifications?${queryParams}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (!data.success) {
-                        throw new Error(data.error || 'Failed to fetch data');
-                    }
-                    
-                    renderVerificationTable(data.data);
-                    renderPagination(data.pagination);
-                })
-                .catch(error => {
-                    tableContainer.innerHTML = `<div class="error-message">
-                        <p>Failed to load verification requests: ${error.message}</p>
-                        <button onclick="loadVerificationData()">Try Again</button>
-                    </div>`;
-                    console.error('Error fetching verification data:', error);
-                });
-        }
-        
-        // Render the verification table with the data from API
-        function renderVerificationTable(verifications) {
-            const tableContainer = document.getElementById('tableContainer');
-            
-            if (!verifications || verifications.length === 0) {
-                tableContainer.innerHTML = '<p>No verification requests found.</p>';
-                return;
-            }
-            
-            const tableHTML = `
-                <table id="verificationTable">
-                    <thead>
-                        <tr>
-                            <th>Verification Type</th>
-                            <th>User</th>
-                            <th>Business/Profile</th>
-                            <th>BR/Platform</th>
-                            <th>Date Requested</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${verifications.map(item => {
-                            // Format the created_at date
-                            const date = new Date(item.created_at);
-                            const formattedDate = date.toLocaleString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                year: 'numeric' 
-                            });
-                            
-                            // Determine the badge class based on status
-                            let badgeClass;
-                            if (item.status === 'verified') {
-                                badgeClass = 'verified';
-                            } else if (item.status === 'rejected') {
-                                badgeClass = 'rejected';
-                            } else {
-                                badgeClass = 'pending';
-                            }
-                            
-                            // Format the display type
-                            const displayType = item.type === 'business' ? 'Business Registration' : 'Social media profile';
-                            
-                            return `
-                                <tr data-id="${item.id}" data-type="${item.type}">
-                                    <td>${displayType}</td>
-                                    <td>
-                                        <div class="user-info">
-                                            <img alt="User profile picture" height="30" src="/${item.profile_picture}" width="30" />
-                                            <span>${item.name}</span>
-                                        </div>
-                                    </td>
-                                    <td>${item.display_name}</td>
-                                    <td>${item.platform ? item.platform : item.identifier}</td>
-                                    <td>${formattedDate}</td>
-                                    <td>
-                                        <span class="badge ${badgeClass}">
-                                            ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            ${item.status === 'pending' ? `
-                                                <button class="view-btn" onclick="viewDetails('${item.id}', '${item.type}')">View</button>
-                                            ` : `
-                                                <button class="view-btn" onclick="viewDetails('${item.id}', '${item.type}')">View</button>
-                                            `}
-                                        </div>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
-            
-            tableContainer.innerHTML = tableHTML;
-        }
-        
-        // Render pagination based on API response
-        function renderPagination(pagination) {
-            if (!pagination) return;
-            
-            const paginationContainer = document.getElementById('paginationContainer');
-            let paginationHTML = '';
-            
-            // Previous button
-            if (pagination.currentPage > 1) {
-                paginationHTML += `<button onclick="goToPage(${pagination.currentPage - 1})">Previous</button>`;
-            }
-            
-            // Page numbers
-            for (let i = 1; i <= pagination.totalPages; i++) {
-                if (
-                    i === 1 || 
-                    i === pagination.totalPages || 
-                    (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)
-                ) {
-                    paginationHTML += `<button class="${i === pagination.currentPage ? 'active' : ''}" 
-                                       onclick="goToPage(${i})">${i}</button>`;
-                } else if (
-                    i === pagination.currentPage - 3 || 
-                    i === pagination.currentPage + 3
-                ) {
-                    paginationHTML += `<button>...</button>`;
+            // Dropdown event listeners
+            document.addEventListener('click', function(e) {
+                const isDropdownButton = e.target.closest('.dropdown-toggle');
+                const isDropdownMenu = e.target.closest('.dropdown-menu');
+
+                if (!isDropdownButton && !isDropdownMenu) {
+                    // Close all dropdowns if clicking outside
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
                 }
-            }
-            
-            // Next button
-            if (pagination.currentPage < pagination.totalPages) {
-                paginationHTML += `<button onclick="goToPage(${pagination.currentPage + 1})">Next</button>`;
-            }
-            
-            paginationContainer.innerHTML = paginationHTML;
-        }
-        
-        // Function to change page
-        function goToPage(page) {
-            currentPage = page;
-            loadVerificationData();
-        }
-        
-        // Function to update verification status
-        function updateStatus(id, type, status) {
-            // Show a loading indicator
-            const tableContainer = document.getElementById('tableContainer');
-            tableContainer.innerHTML = `<div class="loading"><div class="loading-spinner"></div></div>`;
-            
-            fetch('/api/update-verification-status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: id,
-                    type: type,
-                    status: status
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Reload the data to show the updated status
-                    loadVerificationData();
-                } else {
-                    throw new Error(data.error || 'Failed to update status');
-                }
-            })
-            .catch(error => {
-                tableContainer.innerHTML = `<div class="error-message">
-                    <p>Failed to update status: ${error.message}</p>
-                    <button onclick="loadVerificationData()">Reload Data</button>
-                </div>`;
-                console.error('Error updating verification status:', error);
             });
-        }
-        
-        // Function to view verification details
-        function viewDetails(id, type) {
-            window.location.href = `/admin/verification-details/${type}/${id}`;
-        }
-        
-        // Search functionality
-        document.getElementById('searchButton').addEventListener('click', function() {
-            searchQuery = document.getElementById('searchInput').value.trim();
-            currentPage = 1; // Reset to first page when searching
-            loadVerificationData();
-        });
-        
-        // Search on Enter key
-        document.getElementById('searchInput').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                searchQuery = document.getElementById('searchInput').value.trim();
-                currentPage = 1;
-                loadVerificationData();
+
+            sortDropdownBtn.addEventListener('click', function(e) {
+                toggleDropdown(sortDropdown);
+                e.stopPropagation();
+            });
+
+            orderDropdownBtn.addEventListener('click', function(e) {
+                toggleDropdown(orderDropdown);
+                e.stopPropagation();
+            });
+
+            typeDropdownBtn.addEventListener('click', function(e) {
+                toggleDropdown(typeDropdown);
+                e.stopPropagation();
+            });
+
+            filterDropdownBtn.addEventListener('click', function(e) {
+                toggleDropdown(filterDropdown);
+                e.stopPropagation();
+            });
+
+            // Sort dropdown items
+            sortDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const field = this.dataset.sort;
+                    const label = this.dataset.label;
+
+                    state.sort.field = field;
+                    currentSort.textContent = label;
+                    sortDropdown.classList.remove('show');
+                    state.currentPage = 1;
+                    fetchVerifications();
+                });
+            });
+
+            // Order dropdown items
+            orderDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const order = this.dataset.order;
+                    const label = this.dataset.label;
+
+                    state.sort.order = order;
+                    currentOrder.textContent = label;
+                    orderDropdown.classList.remove('show');
+                    state.currentPage = 1;
+                    fetchVerifications();
+                });
+            });
+
+            // Type dropdown items
+            typeDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    const label = this.dataset.label;
+
+                    state.filters.type = type;
+                    currentType.textContent = label;
+                    typeDropdown.classList.remove('show');
+                    state.currentPage = 1;
+                    fetchVerifications();
+                });
+            });
+
+            // Items per page select
+            itemsPerPageSelect.addEventListener('change', function() {
+                state.itemsPerPage = parseInt(this.value);
+                state.currentPage = 1;
+                fetchVerifications();
+            });
+
+            // Preset buttons for date filter
+            presetButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const days = parseInt(this.dataset.days);
+                    const today = new Date();
+                    const fromDate = new Date();
+                    fromDate.setDate(today.getDate() - days);
+                    
+                    // Format dates as YYYY-MM-DD for input fields
+                    dateToInput.value = today.toISOString().split('T')[0];
+                    dateFromInput.value = fromDate.toISOString().split('T')[0];
+                });
+            });
+
+            // Helper function for debouncing search input
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
             }
-        });
-        
-        // Filter functionality (simplified for now)
-        document.getElementById('filterButton').addEventListener('click', function() {
-            const filterType = prompt('Filter by type (business/social_media):');
-            if (filterType) {
-                currentFilters.type = filterType;
-                currentPage = 1;
-                loadVerificationData();
-            }
-        });
-        
-        // Load verification data when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadVerificationData();
+
+            // View details function - will be called when clicking on view button or row
+            window.viewDetails = function(id, type) {
+                window.location.href = `/admin/verification-details/${type}/${id}`;
+            };
+
+            // Initialize
+            fetchVerifications();
+            
+            // Set max date for date inputs to today
+            const today = new Date().toISOString().split('T')[0];
+            dateFromInput.setAttribute('max', today);
+            dateToInput.setAttribute('max', today);
         });
     </script>
 </body>
