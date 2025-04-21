@@ -415,7 +415,7 @@ class OrderController extends BaseController {
                 'receiver_id' => 1, // System user_id
                 'amount' => $packageData['price'] ?? 0.00,
                 'status' => 'hold',
-                'hold_until' => date('Y-m-d H:i:s', strtotime('+14 days'))
+                'hold_until' => date('Y-m-d H:i:s', strtotime('+1 minute'))
             ];
 
             if (!$transactionModel->createTransaction($transactionData)) {

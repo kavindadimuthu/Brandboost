@@ -179,6 +179,7 @@ class PaymentController extends BaseController {
                 }
 
                 $sellerId = $order['seller_id'];
+                error_log("Debug - Seller ID: " . $sellerId);
 
                 // Update original transaction status to released
                 if (!$transactionModel->updateTransactionById($transaction['transaction_id'], ['status' => 'released'])) {
@@ -261,6 +262,113 @@ class PaymentController extends BaseController {
     }
 
     /**
+     * Get hold balance for seller (funds in hold status)
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getSellerHoldBalance($request, $response): void
+    {
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        try {
+            $transactionModel = new Transaction();
+            $allTransactions = $transactionModel->getTransactionsByReceiverId($sellerId);
+            
+            $holdAmount = 0;
+            $holdTransactions = [];
+            
+            foreach ($allTransactions as $transaction) {
+                if ($transaction['status'] === 'hold') {
+                    $holdAmount += (float)$transaction['amount'];
+                    $holdTransactions[] = $transaction;
+                }
+            }
+
+            $response->sendJson([
+                'success' => true,
+                'hold_balance' => number_format($holdAmount, 2, '.', ''),
+                // 'currency' => 'USD',
+                'transactions_count' => count($holdTransactions)
+            ]);
+        } catch (\Exception $e) {
+            error_log("Error getting seller hold balance: " . $e->getMessage());
+            $response->sendError('Failed to retrieve hold balance', 500);
+        }
+    }
+
+    /**
+     * Get seller's released earnings within a specific time period
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getPeriodEarnings($request, $response): void
+    {
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $queryParams = $request->getQueryParams();
+        $startDate = $queryParams['start'] ?? null;
+        $endDate = $queryParams['end'] ?? null;
+
+        if (!$startDate || !$endDate) {
+            $response->sendError('Start and end dates are required', 400);
+            return;
+        }
+
+        // Validate date format
+        if (!strtotime($startDate) || !strtotime($endDate)) {
+            $response->sendError('Invalid date format', 400);
+            return;
+        }
+
+        try {
+            $transactionModel = new Transaction();
+            $transactions = $transactionModel->getTransactionsByReceiverId($sellerId);
+            
+            $totalEarnings = 0;
+            $releasedTransactions = [];
+            
+            foreach ($transactions as $transaction) {
+                $transactionDate = strtotime($transaction['updated_at'] ?? $transaction['created_at']);
+                $startTimestamp = strtotime($startDate);
+                $endTimestamp = strtotime($endDate . ' 23:59:59');
+                
+                if ($transaction['status'] === 'released' && 
+                    $transactionDate >= $startTimestamp && 
+                    $transactionDate <= $endTimestamp) {
+                    $totalEarnings += (float)$transaction['amount'];
+                    $releasedTransactions[] = $transaction;
+                }
+            }
+
+            $response->sendJson([
+                'success' => true,
+                'total_earnings' => number_format($totalEarnings, 2, '.', ''),
+                'currency' => 'USD',
+                'period' => [
+                    'start' => $startDate,
+                    'end' => $endDate
+                ],
+                'transactions_count' => count($releasedTransactions)
+            ]);
+        } catch (\Exception $e) {
+            error_log("Error getting period earnings: " . $e->getMessage());
+            $response->sendError('Failed to retrieve period earnings', 500);
+        }
+    }
+
+    /**
      * Mark transaction as failed
      * 
      * @param Request $request
@@ -318,6 +426,53 @@ class PaymentController extends BaseController {
         $response->sendJson([
             'success' => true,
             'data' => $transaction
+        ]);
+    }
+
+    /**
+     * Get transactions for the current seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getSellerTransactions($request, $response): void
+    {
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        error_log("Debug - Seller ID: " . $sellerId);
+
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        // $queryParams = $request->getQueryParams();
+        // $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        // $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+        // $status = $queryParams['status'] ?? null;
+
+        // Ensure reasonable limits
+        // if ($limit > 50) $limit = 50;
+        // if ($page < 1) $page = 1;
+        // $offset = ($page - 1) * $limit;
+
+        $transactionModel = new Transaction();
+        $transactions = $transactionModel->getTransactionsByReceiverId($sellerId);
+        // $totalCount = $transactionModel->countTransactionsByReceiverId($sellerId, $status);
+        // Debug: Log transaction data
+        error_log("Seller Transactions for seller ID $sellerId: " . print_r($transactions, true));
+
+        // You can also add this to view structured data in browser console if needed
+        header('X-Debug-Transactions: ' . json_encode($transactions));
+
+        $response->sendJson([
+            'success' => true,
+            'data' => $transactions,
+            // 'pagination' => [
+            //     'page' => $page,
+            //     'limit' => $limit,
+            //     'total' => $totalCount,
+            //     'pages' => ceil($totalCount / $limit)
+            // ]
         ]);
     }
 

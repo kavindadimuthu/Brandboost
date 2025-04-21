@@ -161,10 +161,15 @@ $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
 // ==================================
 // Payment API routes
 // ==================================
-$app->router->post('/api/payments/process-releases', 'PaymentController@processScheduledReleases');
+$app->router->get('/api/payments/process-releases', 'PaymentController@processScheduledReleases');
 $app->router->post('/api/payments/create-transaction', 'PaymentController@createTransaction');
 $app->router->post('/api/payments/release-funds', 'PaymentController@releaseFunds');
 $app->router->get('/api/payments/transaction-details', 'PaymentController@getTransactionDetails');
+
+$app->router->get('/api/payments/seller-balance', 'PaymentController@getSellerBalance');
+$app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHoldBalance');
+$app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
+$app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
 
 //test routes
 $app->router->get('/test', 'TestController@test');

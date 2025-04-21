@@ -99,6 +99,20 @@
             transition: 0.3s;
         }
 
+        #filter-earnings-btn{
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #filter-earnings-btn:hover {
+            background: linear-gradient(135deg,rgba(137, 43, 226, 0.8),rgba(65, 105, 225, 0.8));
+        }
+
         #withdraw-btn:enabled {
             cursor: pointer;
             opacity: 1;
@@ -207,9 +221,9 @@
                     <h2>Available Funds</h2>
                     <div class="card">
                         <p class="label">Balance available for use</p>
-                        <p class="value" id="balance-available">$0.00</p>
+                        <p class="value" id="balance-available">Loading...</p>
                         <p class="small-text">Withdrawn to date:</p>
-                        <p class="value-small" id="withdrawn-to-date">$0.00</p>
+                        <p class="value-small" id="withdrawn-to-date">Loading...</p>
                         <button id="withdraw-btn" disabled>Withdraw balance</button>
                         <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" id="manage-payout">Manage payout methods</a>
                     </div>
@@ -218,23 +232,33 @@
                     <h2>Future Payments</h2>
                     <div class="card">
                         <p class="label">Payments being cleared</p>
-                        <p class="value" id="payments-clearing">$0.00</p>
+                        <p class="value" id="payments-clearing">Loading...</p>
                         <p class="small-text">Payments for active orders</p>
-                        <p class="value-small" id="active-orders">$0.00</p>
+                        <p class="value-small" id="active-orders">Loading...</p>
                     </div>
                 </div>
                 <div class="section">
-                    <h2>Earnings & Expenses</h2>
+                    <h2>Earnings by Period</h2>
                     <div class="card">
-                        <p class="label">Earnings to date</p>
-                        <p class="value" id="earnings-to-date">$0.00</p>
-                        <p class="small-text">Your earnings since joining.</p>
-                        <p class="small-text">Expenses to date</p>
-                        <p class="value-small" id="expenses-to-date">$0.00</p>
+                        <p class="label">Select Date Range</p>
+                        <div class="date-range-container">
+                            <div>
+                                <p class="small-text">From</p>
+                                <input type="date" id="start-date" class="date-input">
+                            </div>
+                            <div>
+                                <p class="small-text">To</p>
+                                <input type="date" id="end-date" class="date-input">
+                            </div>
+                        </div>
+                        <button id="filter-earnings-btn" class="filter-btn">View Earnings</button>
+                        <p class="label">Total Earnings</p>
+                        <p class="value" id="period-earnings">LKR 0.00</p>
+                        <p class="small-text">Select a date range to view your earnings for that period.</p>
                     </div>
                 </div>
             </div>
-            
+
             <div class="transaction-container">
                 <div class="header-row">
                     <h2>Transaction History</h2>
@@ -243,13 +267,15 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Activity</th>
-                            <th>From</th>
+                            <th>Status</th>
+                            <!-- <th>From</th> -->
                             <th>Order</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="transactionTableBody"></tbody>
+                    <tbody id="transactionTableBody">
+                        <tr><td colspan="5">Loading transactions...</td></tr>
+                    </tbody>
                 </table>
                 <div class="pagination">
                     <button>&lt;</button>
@@ -263,91 +289,139 @@
     </div>
 
     <script>
-        const transactions = [
-            {
-                date: "12/01/2024",
-                activity: "Clearing",
-                from: "Global Marketplace",
-                order: "FO60A75801",
-                amount: "LKR 4,000.00"
-            },
-            {
-                date: "11/29/2024",
-                activity: "Clearing",
-                from: "E-commerce Platform",
-                order: "FO1660A701",
-                amount: "LKR 12,000.00"
-            },
-            {
-                date: "11/25/2024",
-                activity: "Clearing",
-                from: "Online Seller Network",
-                order: "FO3235A0E41",
-                amount: "LKR 19,000.00"
-            },
-            {
-                date: "11/20/2024",
-                activity: "Withdrawal",
-                from: "Payment Gateway",
-                order: "-",
-                amount: "-LKR 14,000.00"
-            },
-            {
-                date: "11/18/2024",
-                activity: "Earning",
-                from: "Freelance Platform",
-                order: "FO82C8C9196",
-                amount: "LKR 2,000.00"
-            },
-            {
-                date: "11/15/2024",
-                activity: "Earning",
-                from: "Digital Marketplace",
-                order: "FO88C9193C6",
-                amount: "LKR 9,000.00"
+        document.addEventListener('DOMContentLoaded', function () {
+            const balanceAvailable = document.getElementById('balance-available');
+            const withdrawnToDate = document.getElementById('withdrawn-to-date');
+            const paymentsClearing = document.getElementById('payments-clearing');
+            const activeOrders = document.getElementById('active-orders');
+            const earningsToDate = document.getElementById('earnings-to-date');
+            const expensesToDate = document.getElementById('expenses-to-date');
+            const transactionTableBody = document.getElementById('transactionTableBody');
+
+            // Fetch balance and transaction data
+            async function fetchSellerBalance() {
+                try {
+                    const response = await fetch('http://localhost:8000/api/payments/seller-balance');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Balance data:', result.balance);
+
+                    // Render financial data
+                    balanceAvailable.textContent = `LKR ${result.balance}`;
+                    // withdrawnToDate.textContent = `LKR ${result.availableFunds.withdrawnToDate}`;
+                    // paymentsClearing.textContent = `LKR ${result.futurePayments.paymentsBeingCleared}`;
+                    // activeOrders.textContent = `LKR ${result.futurePayments.paymentsForActiveOrders}`;
+                    // earningsToDate.textContent = `LKR ${result.earningsAndExpenses.earningsToDate}`;
+                    // expensesToDate.textContent = `LKR ${result.earningsAndExpenses.expensesToDate}`;
+                    
+                } catch (error) {
+                    console.error('Error fetching dashboard data:', error);
+                    balanceAvailable.textContent = 'Error loading data';
+                }
             }
-        ];
 
-        const dashboardData = {
-            availableFunds: {
-                balanceAvailable: "0.00",
-                withdrawnToDate: "2,707.70"
-            },
-            futurePayments: {
-                paymentsBeingCleared: "26,000.00",
-                paymentsForActiveOrders: "13,500.00"
-            },
-            earningsAndExpenses: {
-                earningsToDate: "100,000.80",
-                expensesToDate: "19,000.00"
+            async function fetchHoldBalance() {
+                try {
+                    const response = await fetch('/api/payments/seller-holds');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Hold balance:', result);
+
+                    // Render hold balance data
+                   paymentsClearing.textContent = `LKR ${result.hold_balance}`;
+                    
+                } catch (error) {
+                    console.error('Error fetching hold balance:', error);
+                }
             }
-        };
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update dashboard data
-            document.getElementById('balance-available').textContent = `LKR ${dashboardData.availableFunds.balanceAvailable}`;
-            document.getElementById('withdrawn-to-date').textContent = `LKR ${dashboardData.availableFunds.withdrawnToDate}`;
-            document.getElementById('payments-clearing').textContent = `LKR ${dashboardData.futurePayments.paymentsBeingCleared}`;
-            document.getElementById('active-orders').textContent = `LKR ${dashboardData.futurePayments.paymentsForActiveOrders}`;
-            document.getElementById('earnings-to-date').textContent = `LKR ${dashboardData.earningsAndExpenses.earningsToDate}`;
-            document.getElementById('expenses-to-date').textContent = `LKR ${dashboardData.earningsAndExpenses.expensesToDate}`;
+            async function fetchPeriodEarnings() {
+                try {
+                    const startDate = document.getElementById('start-date').value;
+                    const endDate = document.getElementById('end-date').value;
+                    const periodEarnings = document.getElementById('period-earnings');
+                    
+                    // Validate dates
+                    if (!startDate || !endDate) {
+                        alert('Please select both start and end dates');
+                        return;
+                    }
+                    
+                    if (new Date(startDate) > new Date(endDate)) {
+                        alert('Start date cannot be after end date');
+                        return;
+                    }
+                    
+                    // Update UI to show loading state
+                    periodEarnings.textContent = 'Loading...';
+                    
+                    // Make API request with date parameters
+                    const response = await fetch(`/api/payments/period-earnings?start=${startDate}&end=${endDate}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const result = await response.json();
+                    console.log('Period earnings data:', result);
+                    
+                    // Update the display with the earnings amount
+                    periodEarnings.textContent = `LKR ${result.total_earnings || '0.00'}`;
+                    
+                } catch (error) {
+                    console.error('Error fetching period earnings:', error);
+                    document.getElementById('period-earnings').textContent = 'Error loading data';
+                }
+            }
 
-            // Load transaction data
-            const tableBody = document.getElementById('transactionTableBody');
-            const sortedTransactions = transactions.sort((a, b) => 
-                new Date(b.date.split('/').reverse().join('/')) - new Date(a.date.split('/').reverse().join('/'))
-            );
+            // Add event listener to the filter button
+            document.getElementById('filter-earnings-btn').addEventListener('click', fetchPeriodEarnings);
 
-            tableBody.innerHTML = sortedTransactions.map(transaction => `
-                <tr>
-                    <td>${transaction.date}</td>
-                    <td>${transaction.activity}</td>
-                    <td>${transaction.from}</td>
-                    <td>${transaction.order}</td>
-                    <td>${transaction.amount}</td>
-                </tr>
-            `).join('');
+            async function fetchTransactionData() {
+                try {
+                    const response = await fetch('/api/payments/seller-transactions');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Transaction data:', result);
+
+                    // Use correct key to access the data
+                    const transactions = result.data || [];
+                    if (transactions.length === 0) {
+                        transactionTableBody.innerHTML = '<tr><td colspan="5">No transactions found</td></tr>';
+                        return;
+                    }
+
+                    transactionTableBody.innerHTML = transactions.map(tx => `
+                        <tr>
+                            <td>${tx.created_at}</td>
+                            <td>${tx.status}</td>
+                            <td>${tx.order_id}</td>
+                            <td>${tx.amount}</td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching transaction data:', error);
+                }
+            }
+
+
+            // Initialize
+            fetchSellerBalance();
+            fetchHoldBalance();
+            fetchPeriodEarnings();
+            fetchTransactionData();
         });
     </script>
 </body>
+
+
 </html>
