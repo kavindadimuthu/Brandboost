@@ -358,53 +358,154 @@
         }
 
         .delivery-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 700px;
-            width: 90%;
-            z-index: 1000;
-        }
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        max-width: 700px;
+        width: 90%;
+        z-index: 1000;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
 
-        .delivery-popup.active {
-            display: block;
-        }
+    .delivery-popup.active {
+        display: block;
+        animation: popIn 0.3s forwards;
+    }
 
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e5e7eb;
-        }
+    @keyframes popIn {
+        0% { opacity: 0; transform: translate(-50%, -48%); }
+        100% { opacity: 1; transform: translate(-50%, -50%); }
+    }
 
-        .popup-media {
-            width: 100%;
-            max-height: 400px;
-            object-fit: contain;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
+    .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+    }
 
-        .revision-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-        }
+    .popup-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+    }
 
-        .revision-item {
-            background-color: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+    }
+
+    .close-btn:hover {
+        color: #111827;
+        background-color: #f3f4f6;
+    }
+
+    .popup-content {
+        padding: 24px;
+    }
+
+    .popup-media {
+        width: 100%;
+        max-height: 100px;
+        object-fit: contain;
+        margin-bottom: 24px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+    }
+
+    .delivery-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: #111827;
+    }
+
+    .revision-section {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .revision-section h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+
+    .revision-item {
+        background-color: #f9fafb;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        border-left: 3px solid #4f46e5;
+    }
+
+    .revision-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .status-delivered {
+        color: #065f46;
+        background-color: #d1fae5;
+    }
+
+    .status-revision {
+        color: #92400e;
+        background-color: #fef3c7;
+    }
+
+    .status-pending {
+        color: #1e40af;
+        background-color: #dbeafe;
+    }
 
         .backdrop {
             display: none;
@@ -861,36 +962,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="delivery-row" data-delivery='{
-                            "number": 1,
-                            "note": "Initial delivery with product showcase",
-                            "time": "2024-03-15 14:30",
-                            "status": "Delivered",
-                            "media": ["https://example.com/image1.jpg"],
-                            "revisions": [{
-                                "note": "Please include close-up shots",
-                                "files": ["https://example.com/revision1.pdf"],
-                                "date": "2024-03-16 10:00"
-                            }]
-                        }'>
-                            <td>1</td>
-                            <td>Initial delivery with product showcase</td>
-                            <td>2024-03-15 14:30</td>
-                            <td><span class="status-delivered">Delivered</span></td>
-                        </tr>
-                        <tr class="delivery-row" data-delivery='{
-                            "number": 2,
-                            "note": "Revised delivery with close-ups",
-                            "time": "2024-03-17 09:45",
-                            "status": "Revision Requested",
-                            "media": ["https://example.com/image2.jpg"],
-                            "revisions": []
-                        }'>
-                            <td>2</td>
-                            <td>Revised delivery with close-ups</td>
-                            <td>2024-03-17 09:45</td>
-                            <td><span class="status-revision">Revision Requested</span></td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -955,23 +1027,64 @@
     </div>
 
     <!-- Delivery Details Popup -->
-    <div class="delivery-popup" id="deliveryDetailsPopup">
-        <div class="popup-header">
-            <h3>Delivery Details</h3>
-            <button class="close-btn" id="closeDetailsPopup">&times;</button>
+        <div class="delivery-popup" id="deliveryDetailsPopup">
+            <div class="popup-header">
+                <h3>Delivery Details</h3>
+                <button class="close-btn" id="closeDetailsPopup">&times;</button>
+            </div>
+            <div class="popup-content">
+                <img class="popup-media" id="popupMedia" src="" alt="Delivery Media">
+                
+                <div class="delivery-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Delivery Number</div>
+                        <div class="detail-value" id="popupNumber">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value">
+                            <span class="status-badge" id="popupStatusBadge">
+                                <span id="popupStatus">-</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Delivered Time</div>
+                        <div class="detail-value" id="popupTime">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Content Link</div>
+                        <div class="detail-value" id="popupLink">-</div>
+                    </div>
+                </div>
+                
+                <div class="detail-item" style="grid-column: 1 / span 2;">
+                    <div class="detail-label">Delivery Note</div>
+                    <div class="detail-value" id="popupNote">-</div>
+                </div>
+                
+                <div class="revision-section" id="revisionSection">
+                    <h4>Revision Requests</h4>
+                    <img class="popup-media" id="popupRevisionMedia" src="" alt="Delivery Media">
+                    <div id="revisionList">
+                        <div class="revision-item">
+                            <div class="detail-item">
+                                <div class="detail-label">Revision Number</div>
+                                <div class="detail-value" id="popupRevisionNumber">-</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Requested On</div>
+                                <div class="detail-value" id="popupRevisionTime">-</div>
+                            </div>
+                            <div class="detail-item" style="margin-top: 12px;">
+                                <div class="detail-label">Revision Note</div>
+                                <div class="detail-value" id="popupRevisionNote">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <img class="popup-media" id="popupMedia" src="" alt="Delivery Media">
-        <div class="delivery-details">
-            <p><strong>Delivery Number:</strong> <span id="popupNumber"></span></p>
-            <p><strong>Delivery Note:</strong> <span id="popupNote"></span></p>
-            <p><strong>Delivered Time:</strong> <span id="popupTime"></span></p>
-            <p><strong>Status:</strong> <span id="popupStatus"></span></p>
-        </div>
-        <div class="revision-section" id="revisionSection">
-            <h4>Revision Requests</h4>
-            <div id="revisionList"></div>
-        </div>
-    </div>
 
     <!-- Image Preview Modal -->
     <div class="image-preview-modal" id="imagePreviewModal">
@@ -1008,105 +1121,214 @@
             const pathSegments = window.location.pathname.split('/');
             const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment of the URL
 
-            // Mock deliverables data (replace with real backend data)
-            const mockDeliverables = [
-                {
-                    id: 1,
-                    type: 'instagram',
-                    title: 'Instagram Post',
-                    description: 'Product feature on feed with caption',
-                    status: 'delivered',
-                    date: '2024-11-28',
-                    link: 'https://instagram.com/p/ExamplePost123',
-                    screenshots: [
-                        {
-                            id: 1,
-                            url: '/api/placeholder/400/320',
-                            title: 'Engagement Stats'
-                        },
-                        {
-                            id: 2,
-                            url: '/api/placeholder/400/320',
-                            title: 'Reach & Impressions'
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    type: 'tiktok',
-                    title: 'TikTok Video',
-                    description: '15-second product showcase',
-                    status: 'delivered',
-                    date: '2024-12-01',
-                    link: 'https://tiktok.com/@username/video/1234567890',
-                    screenshots: [
-                        {
-                            id: 3,
-                            url: '/api/placeholder/400/320',
-                            title: 'Views & Likes'
-                        },
-                        {
-                            id: 4,
-                            url: '/api/placeholder/400/320',
-                            title: 'Audience Demographics'
-                        }
-                    ]
+            async function fetchdeliveryDetails() {
+                try {
+                    const response = await fetch(`/api/delivery/${orderId}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const delivery = await response.json();
+
+                    console.log('delivery details:', delivery);
                 }
-            ];
+                catch (error) {
+                    console.error('Error fetching delivery details:', error);
+                }
+            }
+
+            // Function to load delivery data and set up the table
+async function loadDeliveryData() {
+  try {
+    const url = `/api/delivery/${orderId}`;
+    console.log('Fetching delivery data from:', url);
+    
+    const response = await fetch(url);
+    console.log('Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API error response:', errorText);
+      throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+    }
+    
+    let data = await response.json();
+    console.log('Delivery data received:', data);
+    
+    // Handle different response formats
+    let deliveries = Array.isArray(data) ? data : (data.data || []);
+    
+    const tbody = document.querySelector(".deliverables-table tbody");
+    tbody.innerHTML = ''; // Clear existing rows
+    
+    if (deliveries.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = '<td colspan="4">No deliveries found</td>';
+      tbody.appendChild(tr);
+      
+      // Update the deliverable count
+      document.getElementById('deliverableCount').textContent = '0 items';
+      return;
+    }
+    
+    deliveries.forEach((delivery, index) => {
+      const tr = document.createElement("tr");
+      tr.className = "delivery-row";
+      tr.dataset.delivery = JSON.stringify(delivery);
+      
+      tr.innerHTML = `
+        <td>${delivery.delivery_id || delivery['Delivery #'] || index + 1}</td>
+        <td>${delivery.delivery_note || delivery.description || delivery['Delivery Note'] || 'No note provided'}</td>
+        <td>${delivery.delivered_at || delivery.deliveredTime || delivery['Delivered Time'] || 'N/A'}</td>
+        <td>
+          <span class="${delivery.status === 'Delivered' ? 'status-delivered' : 'status-revision'}">
+            ${delivery.status || 'Pending'}
+          </span>
+        </td>
+      `;
+      
+      // Add event listener for showing delivery details
+      tr.addEventListener('click', function() {
+        const deliveryData = JSON.parse(this.dataset.delivery);
+        showDeliveryDetails(deliveryData);
+        
+        // Make sure to show the popup and backdrop
+        document.getElementById('deliveryDetailsPopup').classList.add('active');
+        document.getElementById('backdrop').classList.add('active');
+      });
+      
+      tbody.appendChild(tr);
+    });
+    
+    // Update the deliverable count
+    document.getElementById('deliverableCount').textContent = `${deliveries.length} item${deliveries.length !== 1 ? 's' : ''}`;
+
+  } catch (error) {
+    console.error('Fetch error:', error);
+    
+    // Show more user-friendly error message in the table
+    const tbody = document.querySelector(".deliverables-table tbody");
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="4">Error loading deliveries: ${error.message}</td></tr>`;
+    }
+  }
+}
+
+        // Function to display delivery details in the popup
+        function showDeliveryDetails(data) {
+        console.log('Showing delivery details:', data);
+        
+        // Populate main details with fallbacks for missing data
+        document.getElementById('popupNumber').textContent = data.delivery_id || 'N/A';
+        document.getElementById('popupNote').textContent = data.delivery_note || 'No notes provided';
+        document.getElementById('popupTime').textContent = data.delivered_at || 'N/A';
+        
+        // Set status and appropriate class
+        const statusElement = document.getElementById('popupStatus');
+        const statusBadge = document.getElementById('popupStatusBadge');
+        const status = data.status || 'Pending';
+        
+        statusElement.textContent = status;
+        
+        // Remove all existing status classes and add the appropriate one
+        statusBadge.className = 'status-badge';
+        if (status.toLowerCase() === 'delivered') {
+            statusBadge.classList.add('status-delivered');
+        } else if (status.toLowerCase().includes('revision')) {
+            statusBadge.classList.add('status-revision');
+        } else {
+            statusBadge.classList.add('status-pending');
+        }
+        
+        // Set content link if available
+        const linkElement = document.getElementById('popupLink');
+        if (data.content_link) {
+            linkElement.innerHTML = `<a href="${data.content_link}" target="_blank">${data.content_link}</a>`;
+        } else {
+            linkElement.textContent = 'Not provided';
+        }
+
+        // Handle media display
+        // const mediaElement = document.getElementById('popupMedia');
+        // if (data.screenshots && data.screenshots.length > 0) {
+        //     mediaElement.src = data.screenshots[0];
+        //     mediaElement.style.display = 'block';
+        // } else if (data.media_url) {
+        //     mediaElement.src = data.media_url;
+        //     mediaElement.style.display = 'block';
+        // } else if (data.content_link) {
+        //     // For content links, you might want to show a placeholder
+        //     mediaElement.src = '/placeholder-image.jpg';
+        //     mediaElement.style.display = 'block';
+        // } else {
+        //     mediaElement.style.display = 'none';
+        // }
+
+        
+
+        // Handle revisions
+        const revisionSection = document.getElementById('revisionSection');
+        
+        if (data.revisions && data.revisions.length > 0) {
+            revisionSection.style.display = 'block';
+            document.getElementById('popupRevisionNumber').textContent = data.revisions[0].revision_id || '1';
+            document.getElementById('popupRevisionNote').textContent = data.revisions[0].revision_note || 'No notes provided';
+            document.getElementById('popupRevisionTime').textContent = data.revisions[0].created_at || 'N/A';
+        } else {
+            // Hide revision section if no revisions exist
+            revisionSection.style.display = 'none';
+        }
+
+        // Make sure the popup and backdrop are visible
+        const deliveryDetailsPopup = document.getElementById('deliveryDetailsPopup');
+        const backdrop = document.getElementById('backdrop');
+        
+        deliveryDetailsPopup.classList.add('active');
+        backdrop.classList.add('active');
+    }
 
             // Delivery row click handler
             document.querySelectorAll('.delivery-row').forEach(row => {
                 row.addEventListener('click', function() {
-                    const deliveryData = JSON.parse(this.dataset.delivery);
+                    const deliveryData = JSON.parse(this.dataset.deliveries);
                     showDeliveryDetails(deliveryData);
                 });
             });
 
             function showDeliveryDetails(data) {
-                // Populate main details
-                document.getElementById('popupNumber').textContent = data.number;
-                document.getElementById('popupNote').textContent = data.note;
-                document.getElementById('popupTime').textContent = data.time;
-                document.getElementById('popupStatus').textContent = data.status;
+                // Populate main details with fallbacks for missing data
+                document.getElementById('popupNumber').textContent = data.delivery_id;
+                document.getElementById('popupNote').textContent = data.delivery_note|| 'No notes provided';
+                document.getElementById('popupTime').textContent = data.delivered_at || 'N/A';
+                document.getElementById('popupStatus').textContent = data.status || 'Pending';
 
                 // Handle media display
                 const mediaElement = document.getElementById('popupMedia');
-                if (data.media && data.media.length > 0) {
-                    mediaElement.src = data.media[0];
+                if (data.deliveries && data.deliveries.length > 0) {
+                    mediaElement.src = "/" + data.deliveries;
+                    mediaElement.style.display = 'block';
+                } else if (data.screenshots && data.screenshots.length > 0) {
+                    mediaElement.src = data.screenshots[0];
                     mediaElement.style.display = 'block';
                 } else {
                     mediaElement.style.display = 'none';
                 }
 
                 // Handle revisions
-                const revisionList = document.getElementById('revisionList');
-                revisionList.innerHTML = '';
-                
-                if (data.revisions.length > 0) {
-                    data.revisions.forEach(rev => {
-                        const revDiv = document.createElement('div');
-                        revDiv.className = 'revision-item';
-                        revDiv.innerHTML = `
-                            <p><strong>Revision Note:</strong> ${rev.note}</p>
-                            <p><strong>Request Date:</strong> ${rev.date}</p>
-                            <div class="file-list">
-                                ${rev.files.map(file => `
-                                    <div class="file-item">
-                                        <i class="fas fa-file-pdf"></i>
-                                        <a href="${file}" target="_blank">View File</a>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `;
-                        revisionList.appendChild(revDiv);
-                    });
-                    document.getElementById('revisionSection').style.display = 'block';
+                document.getElementById('popupRevisionNumber').textContent = data.revision_number;
+                document.getElementById('popupRevisionNote').textContent = data.revision_note|| 'No notes provided';
+                document.getElementById('popupRevisionTime').textContent = data.delivered_at || 'N/A';
+
+                const revisionMediaElement = document.getElementById('popupRevisionMedia');
+                if (data.revision_files && data.revision_files.length > 0) {
+                    revisionMediaElement.src = "/" + data.revision_files;
+                    revisionMediaElement.style.display = 'block';
+                } else if (data.screenshots && data.screenshots.length > 0) {
+                    revisionMediaElement.src = data.screenshots[0];
+                    revisionMediaElement.style.display = 'block';
                 } else {
-                    document.getElementById('revisionSection').style.display = 'none';
+                    revisionMediaElement.style.display = 'none';
                 }
 
-                deliveryDetailsPopup.classList.add('active');
-                backdrop.classList.add('active');
             }
 
             // Close delivery details popup
@@ -1329,7 +1551,7 @@
             }
 
             // Submit delivery
-            document.getElementById('submitDelivery').addEventListener('click', () => {
+            document.getElementById('submitDelivery').addEventListener('click', async () => {
                 const contentLink = document.getElementById('contentLink').value;
                 const deliveryNotes = document.getElementById('deliveryNotes').value;
                 
@@ -1339,7 +1561,7 @@
                     return;
                 }
                 
-                // Get all preview images (would be uploaded to server in production)
+                // Get all preview images
                 const screenshots = Array.from(previewContainer.querySelectorAll('.preview-image img')).map(img => img.src);
                 
                 if (screenshots.length === 0) {
@@ -1347,28 +1569,63 @@
                     return;
                 }
                 
-                // Create submission object
-                const deliveryData = {
-                    orderId,
-                    contentLink,
-                    deliveryNotes,
-                    screenshots
-                };
-                
-                // In a real application, send this data to the server
-                console.log('Delivery submitted:', deliveryData);
-                
-                // Close popup
-                deliveryPopup.classList.remove('active');
-                backdrop.classList.remove('active');
-                
-                // Reset form
-                document.getElementById('contentLink').value = '';
-                document.getElementById('deliveryNotes').value = '';
-                previewContainer.innerHTML = '';
-                
-                // Show success message
-                alert('Delivery submitted successfully!');
+                try {
+                    // Show loading state
+                    const submitBtn = document.getElementById('submitDelivery');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Submitting...';
+                    submitBtn.disabled = true;
+                    
+                    // Create FormData for file uploads
+                    const formData = new FormData();
+                    formData.append('order_id', orderId);
+                    formData.append('content_link', contentLink);
+                    formData.append('delivery_note', deliveryNotes);
+                    
+                    // Convert base64 screenshots to files and append them
+                    for (let i = 0; i < screenshots.length; i++) {
+                        // Skip the data URL prefix to get just the base64 data
+                        const base64Data = screenshots[i].split(',')[1];
+                        const blob = await fetch(screenshots[i]).then(r => r.blob());
+                        formData.append('screenshots[]', blob, `screenshot_${i+1}.png`);
+                    }
+                    
+                    // Send data to the server
+                    const response = await fetch('/api/create-delivery', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Close popup
+                    deliveryPopup.classList.remove('active');
+                    backdrop.classList.remove('active');
+                    
+                    // Reset form
+                    document.getElementById('contentLink').value = '';
+                    document.getElementById('deliveryNotes').value = '';
+                    previewContainer.innerHTML = '';
+                    
+                    // Show success message
+                    alert('Delivery submitted successfully!');
+                    
+                    // Refresh delivery data to show the new submission
+                    await loadDeliveryData();
+                    
+                } catch (error) {
+                    console.error('Error submitting delivery:', error);
+                    alert(`Failed to submit delivery. Please try again. Error: ${error.message}`);
+                } finally {
+                    // Reset button state
+                    const submitBtn = document.getElementById('submitDelivery');
+                    submitBtn.textContent = 'Submit Delivery';
+                    submitBtn.disabled = false;
+                }
             });
 
             // Send message functionality
@@ -1394,7 +1651,10 @@
 
             // Initialize
             fetchOrderDetails();
-        });
-    </script>
-</body>
+            fetchdeliveryDetails();
+            loadDeliveryData();
+
+            });
+        </script>
+    </body>
 </html>

@@ -158,8 +158,8 @@ $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get 
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
-
-
+$app->router->get('/api/delivery/{id}', 'OrderController@getOrderDeliveries');
+$app->router->get('/api/create-delivery', 'OrderController@createDelivery');
 
 //test routes
 $app->router->get('/test', 'TestController@test');
