@@ -8,6 +8,7 @@ use app\models\Orders\Orders;
 use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
 use app\models\Users\User;
+use app\models\Payments\BankAccount;
 
 class PaymentController extends BaseController {
     /**
@@ -483,5 +484,192 @@ class PaymentController extends BaseController {
     {
         $holdDays = 14;
         return date('Y-m-d H:i:s', strtotime("+$holdDays days"));
+    }
+
+
+
+    /**
+     * Add bank account for seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function addBankAccount($request, $response): void
+    {
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $data = $request->getParsedBody();
+        $requiredFields = ['bank_name', 'branch', 'account_number', 'name_on_card'];
+        $missingFields = array_diff($requiredFields, array_keys($data));
+
+        if (!empty($missingFields)) {
+            $response->sendError('Missing required fields: ' . implode(', ', $missingFields), 400);
+            return;
+        }
+
+        // Add seller ID to the bank account data
+        $data['user_id'] = $sellerId;
+        
+        try {
+            $bankAccountModel = new BankAccount();
+            // Check if the bank account already exists for the seller  
+            if ($bankAccountModel->addBankAccount($data)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Bank account added successfully'
+                ]);
+            } else {
+                $response->sendError('Failed to add bank account', 500);
+            }
+        } catch (\Exception $e) {
+            error_log("Error adding bank account: " . $e->getMessage());
+            $response->sendError('Failed to add bank account: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get bank accounts for the current seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getSellerBankAccounts($request, $response): void
+    {
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+        
+        try {
+            $bankAccountModel = new BankAccount();
+            $bankAccounts = $bankAccountModel->getUserBankAccounts($sellerId);
+            
+            $response->sendJson([
+                'success' => true,
+                'data' => $bankAccounts
+            ]);
+        } catch (\Exception $e) {
+            error_log("Error retrieving bank accounts: " . $e->getMessage());
+            $response->sendError('Failed to retrieve bank accounts', 500);
+        }
+    }
+
+    /**
+     * Update bank account for seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function updateBankAccount($request, $response): void
+    {
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $data = $request->getParsedBody();
+        if (!isset($data['id'])) {
+            $response->sendError('Bank account ID is required', 400);
+            return;
+        }
+
+        $bankAccountId = $data['id'];
+        
+        try {
+            $bankAccountModel = new BankAccount();
+            // Verify the bank account belongs to this user
+            $existingAccount = $bankAccountModel->getBankAccountById($bankAccountId);
+            
+            if (!$existingAccount || $existingAccount['user_id'] != $sellerId) {
+                $response->sendError('Bank account not found or access denied', 403);
+                return;
+            }
+            
+            // Remove the ID from the data to be updated
+            unset($data['id']);
+            
+            if ($bankAccountModel->updateBankAccount($bankAccountId, $data)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Bank account updated successfully'
+                ]);
+            } else {
+                $response->sendError('Failed to update bank account', 500);
+            }
+        } catch (\Exception $e) {
+            error_log("Error updating bank account: " . $e->getMessage());
+            $response->sendError('Failed to update bank account: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Delete bank account for seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function deleteBankAccount($request, $response): void
+    {
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $data = $request->getParsedBody();
+        if (!isset($data['id'])) {
+            $response->sendError('Bank account ID is required', 400);
+            return;
+        }
+
+        $bankAccountId = $data['id'];
+        
+        try {
+            $bankAccountModel = new BankAccount();
+            // Verify the bank account belongs to this user
+            $existingAccount = $bankAccountModel->getBankAccountById($bankAccountId);
+            
+            if (!$existingAccount || $existingAccount['user_id'] != $sellerId) {
+                $response->sendError('Bank account not found or access denied', 403);
+                return;
+            }
+            
+            if ($bankAccountModel->deleteBankAccount($bankAccountId)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Bank account deleted successfully'
+                ]);
+            } else {
+                $response->sendError('Failed to delete bank account', 500);
+            }
+        } catch (\Exception $e) {
+            error_log("Error deleting bank account: " . $e->getMessage());
+            $response->sendError('Failed to delete bank account: ' . $e->getMessage(), 500);
+        }
     }
 }

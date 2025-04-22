@@ -171,6 +171,11 @@ $app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHold
 $app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
 $app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
 
+$app->router->post('/api/payments/add-bank', 'PaymentController@addBankAccount'); // Get transaction history
+$app->router->get('/api/payments/get-seller-bank', 'PaymentController@getSellerBankAccounts');
+$app->router->post('/api/payments/update-bank', 'PaymentController@updateBankAccount'); // Update bank account
+$app->router->get('/api/payments/delete-bank', 'PaymentController@deleteBankAccount'); 
+
 //test routes
 $app->router->get('/test', 'TestController@test');
 

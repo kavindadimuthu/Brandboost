@@ -286,159 +286,281 @@
                 <p>Manage your payout methods and preferences</p>
             </div>
 
-            <!-- Existing Payment Methods -->
-            <div class="payment-method-card">
-                <div class="payment-method-info">
-                    <div class="payment-icon">
-                        <i class="fas fa-university"></i>
-                    </div>
-                    <div class="payment-details">
-                        <h3>Bank Account</h3>
-                        <p>****6789 • Bank of America</p>
-                    </div>
-                </div>
-                <div class="payment-actions">
-                    <button class="action-button" onclick="editPaymentMethod('bank')">
-                        <i class="fas fa-pencil"></i>
-                    </button>
-                    <button class="action-button" onclick="deletePaymentMethod('bank')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
+            <div id="notification" class="notification" style="display: none;"></div>
 
-            <div class="payment-method-card">
-                <div class="payment-method-info">
-                    <div class="payment-icon">
-                        <i class="fab fa-paypal"></i>
-                    </div>
-                    <div class="payment-details">
-                        <h3>PayPal</h3>
-                        <p>ravi.fernando@example.com</p>
-                    </div>
-                </div>
-                <div class="payment-actions">
-                    <button class="action-button" onclick="editPaymentMethod('paypal')">
-                        <i class="fas fa-pencil"></i>
-                    </button>
-                    <button class="action-button" onclick="deletePaymentMethod('paypal')">
-                        <i class="fas fa-trash"></i>
-                    </button>
+            <!-- Bank Account Section -->
+            <div class="payment-methods-section">
+                <h2>Bank Accounts</h2>
+                <div id="bank-accounts-container">
+                    <!-- Bank accounts will be loaded here dynamically -->
+                    <div class="loading-spinner">Loading your bank accounts...</div>
                 </div>
             </div>
 
             <button class="add-button" onclick="openAddPaymentModal()">
                 <i class="fas fa-plus"></i>
-                Add Payout Method
+                Add Bank Account
             </button>
         </div>
     </div>
 
-    <!-- Add/Edit Payment Method Modal -->
+    <!-- Add/Edit Bank Account Modal -->
     <div id="payment-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">Add Payout Method</h2>
+                <h2 id="modal-title">Add Bank Account</h2>
                 <button class="close-modal" onclick="closeModal()">×</button>
             </div>
-            <form id="payment-form">
+            <form id="bank-account-form">
+                <input type="hidden" id="bank-account-id">
+                
                 <div class="form-group">
-                    <label for="payment-type">Payment Method Type</label>
-                    <select id="payment-type" required>
-                        <option value="">Select payment method</option>
-                        <option value="bank">Bank Account</option>
-                        <option value="paypal">PayPal</option>
-                        <option value="wise">Wise</option>
-                    </select>
+                    <label for="bank-name">Bank Name</label>
+                    <input type="text" id="bank-name" name="bank_name" placeholder="Enter bank name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <input type="text" id="branch" name="branch" placeholder="Enter branch name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="account-number">Account Number</label>
+                    <input type="text" id="account-number" name="account_number" placeholder="Enter account number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name-on-card">Name on Account</label>
+                    <input type="text" id="name-on-card" name="name_on_card" placeholder="Enter name on account" required>
                 </div>
 
-                <!-- Bank Account Fields -->
-                <div id="bank-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="bank-name">Bank Name</label>
-                        <input type="text" id="bank-name" placeholder="Enter bank name">
-                    </div>
-                    <div class="form-group">
-                        <label for="account-number">Account Number</label>
-                        <input type="text" id="account-number" placeholder="Enter account number">
-                    </div>
-                    <div class="form-group">
-                        <label for="routing-number">Routing Number</label>
-                        <input type="text" id="routing-number" placeholder="Enter routing number">
-                    </div>
-                </div>
-
-                <!-- PayPal Fields -->
-                <div id="paypal-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="paypal-email">PayPal Email</label>
-                        <input type="email" id="paypal-email" placeholder="Enter PayPal email">
-                    </div>
-                </div>
-
-                <!-- Wise Fields -->
-                <div id="wise-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="wise-email">Wise Email</label>
-                        <input type="email" id="wise-email" placeholder="Enter Wise email">
-                    </div>
-                </div>
-
-                <button type="submit" class="save-button">Save Payment Method</button>
+                <button type="submit" class="save-button">Save Bank Account</button>
             </form>
         </div>
     </div>
 
-    <script>
-        // Show/hide payment method fields based on selection
-        document.getElementById('payment-type').addEventListener('change', function() {
-            document.getElementById('bank-fields').style.display = 'none';
-            document.getElementById('paypal-fields').style.display = 'none';
-            document.getElementById('wise-fields').style.display = 'none';
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button class="close-modal" onclick="closeDeleteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this bank account?</p>
+                <input type="hidden" id="delete-bank-id">
+                <div class="modal-actions">
+                    <button class="cancel-button" onclick="closeDeleteModal()">Cancel</button>
+                    <button class="delete-button" onclick="confirmDeleteBankAccount()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            const selectedType = this.value;
-            if (selectedType) {
-                document.getElementById(`${selectedType}-fields`).style.display = 'block';
-            }
+    <script>
+        // Global variables
+        let bankAccounts = [];
+        let currentAction = 'add'; // 'add' or 'edit'
+
+        // Load bank accounts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBankAccounts();
         });
+
+        // Load bank accounts from the server
+        function loadBankAccounts() {
+            fetch('/api/payments/get-seller-bank')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        bankAccounts = data.data;
+                        renderBankAccounts();
+                    } else {
+                        showNotification('Failed to load bank accounts: ' + (data.message || 'Unknown error'), 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading bank accounts:', error);
+                    showNotification('Failed to load bank accounts. Please try again later.', 'error');
+                })
+                .finally(() => {
+                    // Hide loading spinner
+                    document.querySelector('.loading-spinner').style.display = 'none';
+                });
+        }
+
+        // Render bank accounts in the UI
+        function renderBankAccounts() {
+            const container = document.getElementById('bank-accounts-container');
+            
+            // Clear previous content
+            container.innerHTML = '';
+            
+            if (bankAccounts.length === 0) {
+                container.innerHTML = '<p class="no-accounts">No bank accounts found. Add one to receive payments.</p>';
+                return;
+            }
+            
+            // Create HTML for each bank account
+            bankAccounts.forEach(account => {
+                const accountCard = document.createElement('div');
+                accountCard.className = 'payment-method-card';
+                accountCard.innerHTML = `
+                    <div class="payment-method-info">
+                        <div class="payment-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h3>${account.bank_name}</h3>
+                            <p>****${account.account_number.slice(-4)} • ${account.branch}</p>
+                            <p class="account-name">${account.name_on_card}</p>
+                        </div>
+                    </div>
+                    <div class="payment-actions">
+                        <button class="action-button" onclick="editBankAccount(${account.id})">
+                            <i class="fas fa-pencil"></i>
+                        </button>
+                        <button class="action-button" onclick="deleteBankAccount(${account.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(accountCard);
+            });
+        }
 
         // Modal functions
         function openAddPaymentModal() {
-            document.getElementById('modal-title').textContent = 'Add Payout Method';
+            currentAction = 'add';
+            document.getElementById('modal-title').textContent = 'Add Bank Account';
+            document.getElementById('bank-account-form').reset();
+            document.getElementById('bank-account-id').value = '';
             document.getElementById('payment-modal').style.display = 'block';
         }
 
-        function editPaymentMethod(type) {
-            document.getElementById('modal-title').textContent = 'Edit Payout Method';
+        function editBankAccount(id) {
+            currentAction = 'edit';
+            document.getElementById('modal-title').textContent = 'Edit Bank Account';
+            
+            // Find the bank account by ID
+            const account = bankAccounts.find(acc => acc.id == id);
+            if (!account) return;
+            
+            // Fill the form with account data
+            document.getElementById('bank-account-id').value = account.id;
+            document.getElementById('bank-name').value = account.bank_name;
+            document.getElementById('branch').value = account.branch;
+            document.getElementById('account-number').value = account.account_number;
+            document.getElementById('name-on-card').value = account.name_on_card;
+            
             document.getElementById('payment-modal').style.display = 'block';
-            document.getElementById('payment-type').value = type;
-            document.getElementById('payment-type').dispatchEvent(new Event('change'));
         }
 
         function closeModal() {
             document.getElementById('payment-modal').style.display = 'none';
-            document.getElementById('payment-form').reset();
         }
 
-        function deletePaymentMethod(type) {
-            if (confirm('Are you sure you want to delete this payment method?')) {
-                console.log(`Deleting payment method: ${type}`);
-                // Add deletion logic here
-            }
+        function deleteBankAccount(id) {
+            document.getElementById('delete-bank-id').value = id;
+            document.getElementById('delete-modal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').style.display = 'none';
+        }
+
+        function confirmDeleteBankAccount() {
+            const bankId = document.getElementById('delete-bank-id').value;
+            
+            const formData = new FormData();
+            formData.append('id', bankId);
+            
+            fetch('/api/payments/delete-bank', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Bank account deleted successfully', 'success');
+                    loadBankAccounts(); // Reload the list
+                } else {
+                    showNotification('Failed to delete bank account: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting bank account:', error);
+                showNotification('Failed to delete bank account. Please try again later.', 'error');
+            })
+            .finally(() => {
+                closeDeleteModal();
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
         }
 
         // Form submission
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
+        document.getElementById('bank-account-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Add form submission logic here
-            console.log('Saving payment method...');
-            closeModal();
+            
+            const formData = new FormData();
+            formData.append('bank_name', document.getElementById('bank-name').value);
+            formData.append('branch', document.getElementById('branch').value);
+            formData.append('account_number', document.getElementById('account-number').value);
+            formData.append('name_on_card', document.getElementById('name-on-card').value);
+            
+            let url = '/api/payments/add-bank';
+            
+            // If editing, include the ID and change the URL
+            if (currentAction === 'edit') {
+                const bankId = document.getElementById('bank-account-id').value;
+                formData.append('id', bankId);
+                url = '/api/payments/update-bank';
+            }
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(
+                        currentAction === 'add' 
+                            ? 'Bank account added successfully' 
+                            : 'Bank account updated successfully',
+                        'success'
+                    );
+                    loadBankAccounts(); // Reload the list
+                    closeModal();
+                } else {
+                    showNotification('Failed: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving bank account:', error);
+                showNotification('Failed to save bank account. Please try again later.', 'error');
+            });
         });
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target == document.getElementById('payment-modal')) {
                 closeModal();
+            }
+            if (event.target == document.getElementById('delete-modal')) {
+                closeDeleteModal();
             }
         }
     </script>

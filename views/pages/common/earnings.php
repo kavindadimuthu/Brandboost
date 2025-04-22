@@ -85,15 +85,12 @@
         }
 
         #withdraw-btn {
-            /* background-color: #007bff; */
-            
             background: linear-gradient(135deg, #8A2BE2, #4169E1);
             color: #fff;
             border: none;
             padding: 10px 20px;
             font-size: 1em;
             border-radius: 5px;
-            cursor: not-allowed;
             opacity: 0.7;
             margin-top: 15px;
             transition: 0.3s;
@@ -122,7 +119,6 @@
             display: block;
             margin-top: 10px;
             font-size: 0.9em;
-            /* color: #007bff; */
             color: #4169E1;
             text-decoration: none;
         }
@@ -170,7 +166,6 @@
         }
 
         .transaction-table tr:hover td {
-            /* color: #007bff; */
             color: #4169E1;
         }
 
@@ -190,15 +185,179 @@
         }
 
         .pagination button:hover {
-            /* background: #0056b3; */
             background: linear-gradient(135deg,rgba(137, 43, 226, 1),rgba(65, 105, 225, 1));
             color: white;
         }
 
         .pagination button.active {
-            /* background: #a29bfe; */
             background: linear-gradient(135deg,rgba(137, 43, 226, 0.8),rgba(65, 105, 225, 0.8));
             color: white;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .withdraw-modal {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .withdraw-modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #4169E1;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #4169E1;
+            outline: none;
+        }
+
+        .balance-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .balance-info .label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .balance-info .value {
+            font-size: 1em;
+        }
+
+        .withdraw-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .withdraw-actions button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-cancel {
+            background-color: #f1f1f1;
+            color: #666;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e5e5e5;
+        }
+
+        .btn-withdraw {
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
+            color: white;
+        }
+
+        .btn-withdraw:hover {
+            background: linear-gradient(135deg,rgba(137, 43, 226, 0.9),rgba(65, 105, 225, 0.9));
+        }
+
+        .btn-withdraw:disabled {
+            background: linear-gradient(135deg,rgba(137, 43, 226, 0.5),rgba(65, 105, 225, 0.5));
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -209,6 +368,11 @@
             .section {
                 width: 100%;
                 margin-bottom: 20px;
+            }
+
+            .withdraw-modal {
+                width: 95%;
+                padding: 20px;
             }
         }
     </style>
@@ -224,7 +388,7 @@
                         <p class="value" id="balance-available">Loading...</p>
                         <p class="small-text">Withdrawn to date:</p>
                         <p class="value-small" id="withdrawn-to-date">Loading...</p>
-                        <button id="withdraw-btn" disabled>Withdraw balance</button>
+                        <button id="withdraw-btn">Withdraw balance</button>
                         <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" id="manage-payout">Manage payout methods</a>
                     </div>
                 </div>
@@ -268,7 +432,6 @@
                         <tr>
                             <th>Date</th>
                             <th>Status</th>
-                            <!-- <th>From</th> -->
                             <th>Order</th>
                             <th>Amount</th>
                         </tr>
@@ -288,15 +451,66 @@
         </div>
     </div>
 
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdraw-modal-overlay">
+        <div class="withdraw-modal">
+            <div class="modal-header">
+                <h3>Withdraw Funds</h3>
+                <button class="close-modal" id="close-withdraw-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-message" id="withdraw-success-message">
+                    Your withdrawal request has been submitted successfully. You will be notified once processed.
+                </div>
+                
+                <div class="balance-info">
+                    <span class="label">Available Balance:</span>
+                    <span class="value" id="modal-available-balance">LKR 0.00</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="withdraw-amount">Amount to Withdraw</label>
+                    <input type="number" id="withdraw-amount" placeholder="Enter amount" min="0" step="0.01">
+                    <p class="error-message" id="amount-error">Please enter a valid amount that doesn't exceed your available balance.</p>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bank-account">Select Bank Account</label>
+                    <select id="bank-account">
+                        <option value="" disabled selected>Select a bank account</option>
+                        <!-- Bank accounts will be populated dynamically -->
+                    </select>
+                    <p class="error-message" id="bank-error">Please select a bank account.</p>
+                </div>
+            </div>
+            <div class="withdraw-actions">
+                <button class="btn-cancel" id="cancel-withdraw">Cancel</button>
+                <button class="btn-withdraw" id="confirm-withdraw">Withdraw</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const balanceAvailable = document.getElementById('balance-available');
             const withdrawnToDate = document.getElementById('withdrawn-to-date');
             const paymentsClearing = document.getElementById('payments-clearing');
             const activeOrders = document.getElementById('active-orders');
-            const earningsToDate = document.getElementById('earnings-to-date');
-            const expensesToDate = document.getElementById('expenses-to-date');
             const transactionTableBody = document.getElementById('transactionTableBody');
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            const modalOverlay = document.getElementById('withdraw-modal-overlay');
+            const closeModalBtn = document.getElementById('close-withdraw-modal');
+            const cancelWithdrawBtn = document.getElementById('cancel-withdraw');
+            const confirmWithdrawBtn = document.getElementById('confirm-withdraw');
+            const withdrawAmount = document.getElementById('withdraw-amount');
+            const bankAccountSelect = document.getElementById('bank-account');
+            const modalAvailableBalance = document.getElementById('modal-available-balance');
+            const amountError = document.getElementById('amount-error');
+            const bankError = document.getElementById('bank-error');
+            const successMessage = document.getElementById('withdraw-success-message');
+            
+            let currentBalance = 0;
+            let bankAccounts = [];
 
             // Fetch balance and transaction data
             async function fetchSellerBalance() {
@@ -310,16 +524,40 @@
                     console.log('Balance data:', result.balance);
 
                     // Render financial data
+                    currentBalance = parseFloat(result.balance);
                     balanceAvailable.textContent = `LKR ${result.balance}`;
-                    // withdrawnToDate.textContent = `LKR ${result.availableFunds.withdrawnToDate}`;
-                    // paymentsClearing.textContent = `LKR ${result.futurePayments.paymentsBeingCleared}`;
-                    // activeOrders.textContent = `LKR ${result.futurePayments.paymentsForActiveOrders}`;
-                    // earningsToDate.textContent = `LKR ${result.earningsAndExpenses.earningsToDate}`;
-                    // expensesToDate.textContent = `LKR ${result.earningsAndExpenses.expensesToDate}`;
+                    modalAvailableBalance.textContent = `LKR ${result.balance}`;
+                    
+                    // Enable withdraw button if balance is available
+                    if (currentBalance > 0) {
+                        withdrawBtn.disabled = false;
+                        withdrawBtn.style.opacity = "1";
+                        withdrawBtn.style.cursor = "pointer";
+                    } else {
+                        withdrawBtn.disabled = true;
+                        withdrawBtn.style.opacity = "0.7";
+                        withdrawBtn.style.cursor = "not-allowed";
+                    }
                     
                 } catch (error) {
                     console.error('Error fetching dashboard data:', error);
                     balanceAvailable.textContent = 'Error loading data';
+                }
+            }
+
+            async function fetchWithdrawnToDate() {
+                try {
+                    const response = await fetch('/api/payments/withdrawn-to-date');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    withdrawnToDate.textContent = `LKR ${result.withdrawn_amount || '0.00'}`;
+                    
+                } catch (error) {
+                    console.error('Error fetching withdrawn amount:', error);
+                    withdrawnToDate.textContent = 'Error loading data';
                 }
             }
 
@@ -334,10 +572,27 @@
                     console.log('Hold balance:', result);
 
                     // Render hold balance data
-                   paymentsClearing.textContent = `LKR ${result.hold_balance}`;
+                    paymentsClearing.textContent = `LKR ${result.hold_balance}`;
                     
                 } catch (error) {
                     console.error('Error fetching hold balance:', error);
+                    paymentsClearing.textContent = 'Error loading data';
+                }
+            }
+
+            async function fetchActiveOrdersAmount() {
+                try {
+                    const response = await fetch('/api/payments/active-orders-amount');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    activeOrders.textContent = `LKR ${result.active_orders_amount || '0.00'}`;
+                    
+                } catch (error) {
+                    console.error('Error fetching active orders amount:', error);
+                    activeOrders.textContent = 'Error loading data';
                 }
             }
 
@@ -380,9 +635,6 @@
                 }
             }
 
-            // Add event listener to the filter button
-            document.getElementById('filter-earnings-btn').addEventListener('click', fetchPeriodEarnings);
-
             async function fetchTransactionData() {
                 try {
                     const response = await fetch('/api/payments/seller-transactions');
@@ -413,15 +665,187 @@
                 }
             }
 
+            async function fetchBankAccounts() {
+                try {
+                    const response = await fetch('/api/payments/payout-methods');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Bank accounts:', result);
+
+                    // Store the bank accounts
+                    bankAccounts = result.data || [];
+                    
+                    // Clear existing options
+                    bankAccountSelect.innerHTML = '<option value="" disabled selected>Select a bank account</option>';
+                    
+                    // Populate the select with bank accounts
+                    if (bankAccounts.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = "";
+                        option.disabled = true;
+                        option.textContent = "No bank accounts found";
+                        bankAccountSelect.appendChild(option);
+                    } else {
+                        bankAccounts.forEach(account => {
+                            const option = document.createElement('option');
+                            option.value = account.id;
+                            option.textContent = `${account.bank_name} - ${account.account_number.slice(-4).padStart(account.account_number.length, '*')}`;
+                            bankAccountSelect.appendChild(option);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching bank accounts:', error);
+                    bankAccountSelect.innerHTML = '<option value="" disabled selected>Error loading bank accounts</option>';
+                }
+            }
+
+            async function processWithdrawal() {
+                try {
+                    const amount = parseFloat(withdrawAmount.value);
+                    const bankId = bankAccountSelect.value;
+                    
+                    // Validate inputs
+                    let isValid = true;
+                    
+                    if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
+                        amountError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        amountError.style.display = 'none';
+                    }
+                    
+                    if (!bankId) {
+                        bankError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        bankError.style.display = 'none';
+                    }
+                    
+                    if (!isValid) return;
+                    
+                    // Disable buttons during processing
+                    confirmWithdrawBtn.disabled = true;
+                    confirmWithdrawBtn.textContent = 'Processing...';
+                    
+                    // Send withdrawal request
+                    const response = await fetch('/api/payments/withdraw', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            amount: amount,
+                            bank_account_id: bankId
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to process withdrawal');
+                    }
+                    
+                    const result = await response.json();
+                    console.log('Withdrawal result:', result);
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form
+                    withdrawAmount.value = '';
+                    bankAccountSelect.selectedIndex = 0;
+                    
+                    // Refresh the balance data
+                    setTimeout(() => {
+                        fetchSellerBalance();
+                        fetchWithdrawnToDate();
+                        fetchTransactionData();
+                        
+                        // Close modal after 3 seconds
+                        setTimeout(() => {
+                            closeModal();
+                        }, 3000);
+                    }, 1000);
+                    
+                } catch (error) {
+                    console.error('Error processing withdrawal:', error);
+                    alert('Failed to process withdrawal. Please try again later.');
+                } finally {
+                    confirmWithdrawBtn.disabled = false;
+                    confirmWithdrawBtn.textContent = 'Withdraw';
+                }
+            }
+
+            // Modal functions
+            function openModal() {
+                modalOverlay.classList.add('active');
+                fetchBankAccounts();
+                modalAvailableBalance.textContent = balanceAvailable.textContent;
+                
+                // Reset form
+                withdrawAmount.value = '';
+                bankAccountSelect.selectedIndex = 0;
+                amountError.style.display = 'none';
+                bankError.style.display = 'none';
+                successMessage.style.display = 'none';
+            }
+            
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+            }
+            
+            // Event listeners
+            withdrawBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelWithdrawBtn.addEventListener('click', closeModal);
+            confirmWithdrawBtn.addEventListener('click', processWithdrawal);
+            
+            // Close modal if clicked outside
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // Validate withdraw amount as user types
+            withdrawAmount.addEventListener('input', function() {
+                const amount = parseFloat(this.value);
+                if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
+                    amountError.style.display = 'block';
+                    confirmWithdrawBtn.disabled = true;
+                } else {
+                    amountError.style.display = 'none';
+                    if (bankAccountSelect.value) {
+                        confirmWithdrawBtn.disabled = false;
+                    }
+                }
+            });
+            
+            // Validate bank selection
+            bankAccountSelect.addEventListener('change', function() {
+                if (!this.value) {
+                    bankError.style.display = 'block';
+                    confirmWithdrawBtn.disabled = true;
+                } else {
+                    bankError.style.display = 'none';
+                    const amount = parseFloat(withdrawAmount.value);
+                    if (!isNaN(amount) && amount > 0 && amount <= currentBalance) {
+                        confirmWithdrawBtn.disabled = false;
+                    }
+                }
+            });
 
             // Initialize
             fetchSellerBalance();
+            fetchWithdrawnToDate();
             fetchHoldBalance();
-            fetchPeriodEarnings();
+            fetchActiveOrdersAmount();
             fetchTransactionData();
+
+            // Add event listener to the filter button
+            document.getElementById('filter-earnings-btn').addEventListener('click', fetchPeriodEarnings);
         });
     </script>
 </body>
-
-
 </html>
