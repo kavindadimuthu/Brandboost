@@ -122,4 +122,5 @@ class OrderDeliveries extends BaseModel
     {
         return $this->read(['delivery_note IS NOT' => null], $options);
     }
+
 }
