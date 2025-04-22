@@ -912,7 +912,7 @@ class OrderController extends BaseController {
             }
 
             // Initialize models
-            $deliveryModel = $this->model('Orders\Delivery');
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
             $orderModel = $this->model('Orders\Orders');
 
             // Check if order exists and has revisions left
@@ -1030,7 +1030,7 @@ class OrderController extends BaseController {
             }
 
             // Initialize models
-            $deliveryModel = $this->model('Orders\Delivery');
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
 
             // Get the delivery
             $deliveryData = $deliveryModel->getDeliveryById($requestData['delivery_id']);
@@ -1096,7 +1096,7 @@ class OrderController extends BaseController {
         }
 
         // Initialize models
-        $deliveryModel = $this->model('Orders\Delivery');
+        $deliveryModel = $this->model('Orders\OrderDeliveries');
 
         // Fetch latest delivery
         $latestDelivery = $deliveryModel->getLatestDelivery($orderId);
@@ -1143,7 +1143,7 @@ class OrderController extends BaseController {
         }
 
         // Initialize models
-        $deliveryModel = $this->model('Orders\Delivery');
+        $deliveryModel = $this->model('Orders\orderDeliveries');
 
         // Fetch revisions
         $revisions = $deliveryModel->getRevisionsByDeliveryId($deliveryId);

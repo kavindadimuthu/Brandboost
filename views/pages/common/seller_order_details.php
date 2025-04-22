@@ -1296,171 +1296,9 @@ async function loadDeliveryData() {
     }
 }
 
-        // Function to display delivery details in the table
-        function showDeliveryDetails(data) {
-            console.log('Showing delivery details:', data);
-            
-            // Populate main details with fallbacks for missing data
-            document.getElementById('popupNumber').textContent = data.delivery_id || 'N/A';
-            document.getElementById('popupNote').textContent = data.delivery_note || 'No notes provided';
-            document.getElementById('popupTime').textContent = data.delivered_at || 'N/A';
-            
-            // Set status and appropriate class
-            const statusElement = document.getElementById('popupStatus');
-            const statusBadge = document.getElementById('popupStatusBadge');
-            const status = data.status || 'Pending';
-            
-            statusElement.textContent = status;
-            
-            // Remove all existing status classes and add the appropriate one
-            statusBadge.className = 'status-badge';
-            if (status.toLowerCase() === 'delivered') {
-                statusBadge.classList.add('status-delivered');
-            } else if (status.toLowerCase().includes('revision')) {
-                statusBadge.classList.add('status-revision');
-            } else {
-                statusBadge.classList.add('status-pending');
-            }
-            
-            // Set content link if available
-            const linkElement = document.getElementById('popupLink');
-            if (data.content_link) {
-                linkElement.innerHTML = `<a href="${data.content_link}" target="_blank">${data.content_link}</a>`;
-            } else {
-                linkElement.textContent = 'Not provided';
-            }
-            
-            // Handle file display
-            const mediaElement = document.getElementById('popupMedia');
-            
-            try {
-                // Check if we have decoded files from the controller
-                if (data.files && Array.isArray(data.files) && data.files.length > 0) {
-                    // If we have already decoded files array from the controller
-                    mediaElement.src = data.files[0].path || data.files[0].url || '';
-                    mediaElement.style.display = 'block';
-                    console.log('Displaying file from decoded files array');
-                }
-                // Check if we have deliveries as a string that might need parsing
-                else if (data.deliveries) {
-                    let deliveryFiles;
-                    
-                    // If it's a string that looks like JSON, try to parse it
-                    if (typeof data.deliveries === 'string' && 
-                        (data.deliveries.startsWith('[') || data.deliveries.startsWith('{'))) {
-                        try {
-                            deliveryFiles = JSON.parse(data.deliveries);
-                            console.log('Successfully parsed deliveries JSON', deliveryFiles);
-                        } catch (e) {
-                            console.error('Failed to parse deliveries JSON:', e);
-                            // Treat as a single file path
-                            deliveryFiles = data.deliveries;
-                        }
-                    } else {
-                        // It's just a string path
-                        deliveryFiles = data.deliveries;
-                    }
-                    
-                    if (Array.isArray(deliveryFiles) && deliveryFiles.length > 0) {
-                        // Display the first file from the array
-                        const filePath = deliveryFiles[0].path || deliveryFiles[0];
-                        mediaElement.src = filePath.startsWith('/') ? filePath : '/' + filePath;
-                        mediaElement.style.display = 'block';
-                        console.log('Displaying first file from array:', filePath);
-                    } else if (typeof deliveryFiles === 'string') {
-                        // Display the single file path
-                        mediaElement.src = deliveryFiles.startsWith('/') ? deliveryFiles : '/' + deliveryFiles;
-                        mediaElement.style.display = 'block';
-                        console.log('Displaying file from string path:', deliveryFiles);
-                    } else {
-                        mediaElement.style.display = 'none';
-                        console.log('No valid file to display');
-                    }
-                }
-                // Fallback to screenshots if available
-                else if (data.screenshots && data.screenshots.length > 0) {
-                    mediaElement.src = data.screenshots[0];
-                    mediaElement.style.display = 'block';
-                    console.log('Displaying screenshot:', data.screenshots[0]);
-                } else {
-                    mediaElement.style.display = 'none';
-                    console.log('No media found to display');
-                }
-            } catch (error) {
-                console.error('Error handling media display:', error);
-                mediaElement.style.display = 'none';
-            }
-
-            // Handle revisions
-            const revisionSection = document.getElementById('revisionSection');
-            
-            if (data.revisions && data.revisions.length > 0) {
-                revisionSection.style.display = 'block';
-                document.getElementById('popupRevisionNumber').textContent = data.revisions[0].revision_id || '1';
-                document.getElementById('popupRevisionNote').textContent = data.revisions[0].revision_note || 'No notes provided';
-                document.getElementById('popupRevisionTime').textContent = data.revisions[0].created_at || 'N/A';
-                
-                // Handle revision media
-                const revisionMediaElement = document.getElementById('popupRevisionMedia');
-                
-                try {
-                    if (data.revisions[0].revision_files) {
-                        let revisionFiles;
-                        
-                        // Parse revision files if needed
-                        if (typeof data.revisions[0].revision_files === 'string' && 
-                            (data.revisions[0].revision_files.startsWith('[') || 
-                            data.revisions[0].revision_files.startsWith('{'))) {
-                            try {
-                                revisionFiles = JSON.parse(data.revisions[0].revision_files);
-                            } catch (e) {
-                                revisionFiles = data.revisions[0].revision_files;
-                            }
-                        } else {
-                            revisionFiles = data.revisions[0].revision_files;
-                        }
-                        
-                        if (Array.isArray(revisionFiles) && revisionFiles.length > 0) {
-                            const filePath = revisionFiles[0].path || revisionFiles[0];
-                            revisionMediaElement.src = filePath.startsWith('/') ? filePath : '/' + filePath;
-                            revisionMediaElement.style.display = 'block';
-                        } else if (typeof revisionFiles === 'string') {
-                            revisionMediaElement.src = revisionFiles.startsWith('/') ? revisionFiles : '/' + revisionFiles;
-                            revisionMediaElement.style.display = 'block';
-                        } else {
-                            revisionMediaElement.style.display = 'none';
-                        }
-                    } else {
-                        revisionMediaElement.style.display = 'none';
-                    }
-                } catch (error) {
-                    console.error('Error handling revision media:', error);
-                    revisionMediaElement.style.display = 'none';
-                }
-            } else {
-                // Hide revision section if no revisions exist
-                revisionSection.style.display = 'none';
-            }
-
-            // Make sure the popup and backdrop are visible
-            const deliveryDetailsPopup = document.getElementById('deliveryDetailsPopup');
-            const backdrop = document.getElementById('backdrop');
-            
-            deliveryDetailsPopup.classList.add('active');
-            backdrop.classList.add('active');
-        }
-
-            // Delivery row click handler
-            document.querySelectorAll('.delivery-row').forEach(row => {
-                row.addEventListener('click', function() {
-                    const deliveryData = JSON.parse(this.dataset.deliveries);
-                    showDeliveryDetails(deliveryData);
-                });
-            });
-
-
             //Delivery details on popup
-            function showDeliveryDetails(data) {
+            // Replace the existing showDeliveryDetails function with this improved version
+function showDeliveryDetails(data) {
     console.log('Showing delivery details:', data);
     
     // Populate main details with fallbacks for missing data
@@ -1559,81 +1397,90 @@ async function loadDeliveryData() {
         console.error('Error handling media display:', error);
         mediaElement.style.display = 'none';
     }
+        
 
-    // Handle revisions
-    const revisionSection = document.getElementById('revisionSection');
-    
-    if (data.revisions && data.revisions.length > 0) {
-        revisionSection.style.display = 'block';
-        document.getElementById('popupRevisionNumber').textContent = data.revisions[0].revision_id || '1';
-        document.getElementById('popupRevisionNote').textContent = data.revisions[0].revision_note || 'No notes provided';
-        document.getElementById('popupRevisionTime').textContent = data.revisions[0].created_at || 'N/A';
-        
         // Handle revision media
-        const revisionMediaElement = document.getElementById('popupRevisionMedia');
+if(data.revision_note){
+        console.log('Showing revision details:', data);
+    
+    // Populate main details with fallbacks for missing data
+    document.getElementById('popupRevisionNumber').textContent = data.revision_number || 'N/A';
+    document.getElementById('popupRevisionNote').textContent = data.revision_note || 'No notes provided';
+    document.getElementById('popupRevisionTime').textContent = data.delivered_at || 'N/A';
+
+    
+    
+
+    // Handle revision file display
+    const revisionMediaElement = document.getElementById('popupRevisionMedia');
+    
+    try {
+        // Try to get files from data structure
+        let revisionFilePath = null;
         
-        try {
-            let revisionFilePath = null;
-            
-            // Try to get revision files
-            if (data.revisions[0].revision_files) {
-                if (typeof data.revisions[0].revision_files === 'string') {
-                    try {
-                        // Try to parse as JSON
-                        if (data.revisions[0].revision_files.startsWith('[') || 
-                            data.revisions[0].revision_files.startsWith('{')) {
-                            const parsedFiles = JSON.parse(data.revisions[0].revision_files);
-                            if (Array.isArray(parsedFiles) && parsedFiles.length > 0) {
-                                const fileObj = parsedFiles[0];
-                                revisionFilePath = fileObj.url || fileObj.path || parsedFiles[0];
-                            }
-                        } else {
-                            // Direct path
-                            revisionFilePath = data.revisions[0].revision_files;
-                        }
-                    } catch (e) {
-                        console.error('Failed to parse revision files JSON:', e);
-                        revisionFilePath = data.revisions[0].revision_files;
+        // Check if we have files property with array
+        if (data.revision_files && Array.isArray(data.revision_files) && data.revision_files.length > 0) {
+            const fileObj = data.revision_files[0];
+            revisionFilePath = fileObj.url || fileObj.path || null;
+            console.log('Found file in revision_files array:', revisionFilePath);
+        }
+        // Check if we have revision_files as JSON string that needs parsing
+        else if (typeof data.revision_files === 'string') {
+            try {
+                // First try to parse as JSON
+                if (data.revision_files.startsWith('[') || data.revision_files.startsWith('{')) {
+                    const parsedFiles = JSON.parse(data.revision_files);
+                    if (Array.isArray(parsedFiles) && parsedFiles.length > 0) {
+                        const fileObj = parsedFiles[0];
+                        revisionFilePath = fileObj.url || fileObj.path || parsedFiles[0];
+                        console.log('Parsed revision_files JSON successfully:', revisionFilePath);
                     }
-                } else if (Array.isArray(data.revisions[0].revision_files) && 
-                           data.revisions[0].revision_files.length > 0) {
-                    const fileObj = data.revisions[0].revision_files[0];
-                    revisionFilePath = fileObj.url || fileObj.path || fileObj;
-                }
-            }
-            
-            // If we found a revision file path, display it
-            if (revisionFilePath) {
-                // Format the path properly
-                if (revisionFilePath.startsWith('http://') || revisionFilePath.startsWith('https://')) {
-                    // External URL - use as is
-                    revisionMediaElement.src = revisionFilePath;
                 } else {
-                    // Internal path - ensure proper formatting
-                    if (!revisionFilePath.startsWith('/')) {
-                        revisionFilePath = '/' + revisionFilePath;
-                    }
-                    revisionMediaElement.src = revisionFilePath;
+                    // Treat as a direct file path
+                    revisionFilePath = data.revision_files;
+                    console.log('Using revision_files as direct path:', revisionFilePath);
                 }
+            } catch (e) {
+                console.error('Failed to parse revision_files JSON:', e);
+                // Use as a direct path
+                revisionFilePath = data.revision_files;
+            }
+        }
+        
+        // If we found a file path, display it
+        if (revisionFilePath) {
+            // Format the path properly
+            if (revisionFilePath.startsWith('http://') || revisionFilePath.startsWith('https://')) {
+                // External URL - use as is
+                revisionMediaElement.src = revisionFilePath;
+            } else {
+                // Internal path - ensure proper formatting
+                if (!revisionFilePath.startsWith('/')) {
+                    revisionFilePath = '/' + revisionFilePath;
+                }
+                revisionMediaElement.src = revisionFilePath;
+            }
+            revisionMediaElement.style.display = 'block';
+            console.log('Displaying revision file:', revisionMediaElement.src);
+        } else {
+            // Fallback to revision screenshots if available
+            if (data.revision_screenshots && data.revision_screenshots.length > 0) {
+                revisionMediaElement.src = data.revision_screenshots[0];
                 revisionMediaElement.style.display = 'block';
+                console.log('Displaying revision screenshot:', data.revision_screenshots[0]);
             } else {
                 revisionMediaElement.style.display = 'none';
+                console.log('No revision media found to display');
             }
-        } catch (error) {
-            console.error('Error handling revision media:', error);
-            revisionMediaElement.style.display = 'none';
         }
-    } else {
-        // Hide revision section if no revisions exist
-        revisionSection.style.display = 'none';
+    } catch (error) {
+        console.error('Error handling revision media display:', error);
+        revisionMediaElement.style.display = 'none';
     }
 
-    // Make sure the popup and backdrop are visible
-    const deliveryDetailsPopup = document.getElementById('deliveryDetailsPopup');
-    const backdrop = document.getElementById('backdrop');
-    
-    deliveryDetailsPopup.classList.add('active');
-    backdrop.classList.add('active');
+    }else{
+        document.getElementById('revisionSection').style.display = 'none';
+    }
 }
 
             // Close delivery details popup
