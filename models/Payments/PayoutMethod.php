@@ -4,9 +4,9 @@ namespace app\models\Payments;
 
 use app\core\BaseModel;
 
-class BankAccount extends BaseModel
+class PayoutMethod extends BaseModel
 {
-    protected $table = 'bank_details';
+    protected $table = 'payout_methods';
 
     /**
      * Add a new bank account
@@ -14,7 +14,7 @@ class BankAccount extends BaseModel
      * @param array $data Bank account data
      * @return bool Success or failure
      */
-    public function addBankAccount(array $data)
+    public function addPayoutMethod(array $data)
     {
         return $this->create($data);
     }
@@ -25,7 +25,7 @@ class BankAccount extends BaseModel
      * @param int $id Bank account ID
      * @return array|false Bank account data or false on failure
      */
-    public function getBankAccount(int $id)
+    public function getPayoutMethod(int $id)
     {
         return $this->readOne(['id' => $id]);
     }
@@ -36,7 +36,7 @@ class BankAccount extends BaseModel
      * @param int $userId User ID
      * @return array|false Bank accounts or false on failure
      */
-    public function getUserBankAccounts(int $userId)
+    public function getUserPayoutMethods(int $userId)
     {
         return $this->read(['user_id' => $userId]);
     }
@@ -48,7 +48,7 @@ class BankAccount extends BaseModel
      * @param array $data Updated bank account data
      * @return bool Success or failure
      */
-    public function updateBankAccount(int $id, array $data)
+    public function updatePayoutMethod(int $id, array $data)
     {
         return $this->update(['id' => $id], $data);
     }
@@ -59,7 +59,7 @@ class BankAccount extends BaseModel
      * @param int $id Bank account ID
      * @return bool Success or failure
      */
-    public function deleteBankAccount(int $id)
+    public function deletePayoutMethod(int $id)
     {
         return $this->delete(['id' => $id]);
     }

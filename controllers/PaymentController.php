@@ -8,7 +8,7 @@ use app\models\Orders\Orders;
 use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
 use app\models\Users\User;
-use app\models\Payments\BankAccount;
+use app\models\Payments\PayoutMethod;
 
 class PaymentController extends BaseController {
     /**
@@ -489,12 +489,12 @@ class PaymentController extends BaseController {
 
 
     /**
-     * Add bank account for seller
+     * Process a withdrawal request from a seller
      * 
      * @param Request $request
      * @param Response $response
      */
-    public function addBankAccount($request, $response): void
+    public function withdrawFunds($request, $response): void
     {
         if ($request->getMethod() !== 'POST') {
             $response->setStatusCode(405);
@@ -509,41 +509,158 @@ class PaymentController extends BaseController {
         }
 
         $data = $request->getParsedBody();
-        $requiredFields = ['bank_name', 'branch', 'account_number', 'name_on_card'];
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (!empty($missingFields)) {
-            $response->sendError('Missing required fields: ' . implode(', ', $missingFields), 400);
+        if (!isset($data['amount']) || !is_numeric($data['amount']) || $data['amount'] <= 0) {
+            $response->sendError('Valid withdrawal amount is required', 400);
             return;
         }
+        // Log the withdrawal amount
+        error_log("Withdrawal request received for amount: " . $data['amount'] . " from seller ID: " . $sellerId);
 
-        // Add seller ID to the bank account data
-        $data['user_id'] = $sellerId;
+        $amount = (float)$data['amount'];
+        $walletModel = new Wallet();
+        
+        // Get current wallet to check balance
+        $wallet = $walletModel->getWalletBySellerId($sellerId);
+        if (!$wallet) {
+            $response->sendError('Wallet not found', 404);
+            return;
+        }
+        
+        // Make sure the user has enough balance
+        if ($wallet['balance'] < $amount) {
+            $response->sendError('Insufficient funds for withdrawal', 400);
+            return;
+        }
+        
+        // Convert to negative amount for withdrawal
+        $withdrawalAmount = -1 * $amount;
         
         try {
-            $bankAccountModel = new BankAccount();
-            // Check if the bank account already exists for the seller  
-            if ($bankAccountModel->addBankAccount($data)) {
+            if ($walletModel->updateWalletBalance($sellerId, $withdrawalAmount)) {
+                // Record the withdrawal transaction
+                $transactionModel = new Transaction();
+                $transactionData = [
+                    'sender_id' => $sellerId,
+                    'receiver_id' => null, // System user ID
+                    'amount' => $amount,
+                    'status' => 'withdrawal',
+                    'order_id' => null // Not associated with an order
+                ];
+                
+                $transactionModel->createTransaction($transactionData);
+                
                 $response->sendJson([
                     'success' => true,
-                    'message' => 'Bank account added successfully'
+                    'message' => 'Withdrawal processed successfully',
+                    'withdrawn_amount' => $amount,
+                    'new_balance' => $wallet['balance'] + $withdrawalAmount
                 ]);
             } else {
-                $response->sendError('Failed to add bank account', 500);
+                $response->sendError('Failed to process withdrawal', 500);
             }
         } catch (\Exception $e) {
-            error_log("Error adding bank account: " . $e->getMessage());
-            $response->sendError('Failed to add bank account: ' . $e->getMessage(), 500);
+            error_log("Withdrawal error: " . $e->getMessage());
+            $response->sendError('Failed to process withdrawal: ' . $e->getMessage(), 500);
         }
     }
 
-    /**
-     * Get bank accounts for the current seller
+
+
+        /**
+     * Add payout method for seller
      * 
      * @param Request $request
      * @param Response $response
      */
-    public function getSellerBankAccounts($request, $response): void
+    public function addPayoutMethod($request, $response): void
+    {
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+        if (!$sellerId) {
+            $response->sendError('Unauthorized', 401);
+            return;
+        }
+
+        $data = $request->getParsedBody();
+        
+        // Check for payment_type
+        if (!isset($data['payment_type']) || empty($data['payment_type'])) {
+            $response->sendError('Payment type is required', 400);
+            return;
+        }
+        
+        $paymentType = strtolower($data['payment_type']);
+        
+        // Validate payment type
+        if (!in_array($paymentType, ['bank', 'paypal'])) {
+            $response->sendError('Invalid payment type. Must be "bank" or "paypal"', 400);
+            return;
+        }
+        
+        // Check if this is a bank account or PayPal submission
+        $isBankAccount = ($paymentType === 'bank');
+        $isPayPal = ($paymentType === 'paypal');
+        
+        // Validate based on the submission type
+        if ($isBankAccount) {
+            $requiredFields = ['bank_name', 'branch', 'account_number', 'name_on_card'];
+            $missingFields = array_diff($requiredFields, array_keys(array_filter($data)));
+            
+            if (!empty($missingFields)) {
+                $response->sendError('Missing required fields: ' . implode(', ', $missingFields), 400);
+                return;
+            }
+        } elseif ($isPayPal) {
+            $requiredFields = ['paypal_name'];
+            $missingFields = array_diff($requiredFields, array_keys(array_filter($data)));
+            
+            if (!empty($missingFields)) {
+                $response->sendError('Missing required fields: ' . implode(', ', $missingFields), 400);
+                return;
+            }
+            
+            // Check that at least email OR mobile number is provided
+            $hasEmail = !empty($data['paypal_email']);
+            $hasMobile = !empty($data['paypal_mobile_number']);
+            
+            if (!$hasEmail && !$hasMobile) {
+                $response->sendError('Either PayPal email or mobile number must be provided', 400);
+                return;
+            }
+        }
+        
+        // Add seller ID to the payout method data
+        $data['user_id'] = $sellerId;
+        
+        try {
+            $payoutMethodModel = new PayoutMethod();
+            // Add the payout method  
+            if ($payoutMethodModel->addPayoutMethod($data)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Payout method added successfully'
+                ]);
+            } else {
+                $response->sendError('Failed to add payout method', 500);
+            }
+        } catch (\Exception $e) {
+            error_log("Error adding payout method: " . $e->getMessage());
+            $response->sendError('Failed to add payout method: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get payout methods for the current seller
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getSellerPayoutMethods($request, $response): void
     {
         $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
         
@@ -553,26 +670,26 @@ class PaymentController extends BaseController {
         }
         
         try {
-            $bankAccountModel = new BankAccount();
-            $bankAccounts = $bankAccountModel->getUserBankAccounts($sellerId);
+            $payoutMethodModel = new PayoutMethod();
+            $payoutMethods = $payoutMethodModel->getUserPayoutMethods($sellerId);
             
             $response->sendJson([
                 'success' => true,
-                'data' => $bankAccounts
+                'data' => $payoutMethods
             ]);
         } catch (\Exception $e) {
-            error_log("Error retrieving bank accounts: " . $e->getMessage());
-            $response->sendError('Failed to retrieve bank accounts', 500);
+            error_log("Error retrieving payout methods: " . $e->getMessage());
+            $response->sendError('Failed to retrieve payout methods', 500);
         }
     }
 
     /**
-     * Update bank account for seller
+     * Update payout method for seller
      * 
      * @param Request $request
      * @param Response $response
      */
-    public function updateBankAccount($request, $response): void
+    public function updatePayoutMethod($request, $response): void
     {
         if ($request->getMethod() !== 'POST') {
             $response->setStatusCode(405);
@@ -588,46 +705,79 @@ class PaymentController extends BaseController {
 
         $data = $request->getParsedBody();
         if (!isset($data['id'])) {
-            $response->sendError('Bank account ID is required', 400);
+            $response->sendError('Payout method ID is required', 400);
             return;
         }
 
-        $bankAccountId = $data['id'];
+        $payoutMethodId = $data['id'];
         
         try {
-            $bankAccountModel = new BankAccount();
-            // Verify the bank account belongs to this user
-            $existingAccount = $bankAccountModel->getBankAccountById($bankAccountId);
+            $payoutMethodModel = new PayoutMethod();
+            // Verify the payout method belongs to this user
+            $existingMethod = $payoutMethodModel->getPayoutMethod($payoutMethodId);
             
-            if (!$existingAccount || $existingAccount['user_id'] != $sellerId) {
-                $response->sendError('Bank account not found or access denied', 403);
+            if (!$existingMethod || $existingMethod['user_id'] != $sellerId) {
+                $response->sendError('Payout method not found or access denied', 403);
                 return;
             }
             
             // Remove the ID from the data to be updated
             unset($data['id']);
             
-            if ($bankAccountModel->updateBankAccount($bankAccountId, $data)) {
+            // Validate if payment type is present and the required fields are provided
+            if (isset($data['payment_type'])) {
+                $paymentType = strtolower($data['payment_type']);
+                
+                if ($paymentType === 'bank') {
+                    $requiredFields = ['bank_name', 'branch', 'account_number', 'name_on_card'];
+                    $providedFields = array_filter($data, function($value, $key) use ($requiredFields) {
+                        return in_array($key, $requiredFields) && !empty($value);
+                    }, ARRAY_FILTER_USE_BOTH);
+                    
+                    if (count($providedFields) > 0 && count($providedFields) < count($requiredFields)) {
+                        $missingFields = array_diff($requiredFields, array_keys($providedFields));
+                        $response->sendError('Missing required fields: ' . implode(', ', $missingFields), 400);
+                        return;
+                    }
+                } elseif ($paymentType === 'paypal') {
+                    if (isset($data['paypal_name']) && empty($data['paypal_name'])) {
+                        $response->sendError('PayPal name is required', 400);
+                        return;
+                    }
+                    
+                    $hasEmail = !empty($data['paypal_email']);
+                    $hasMobile = !empty($data['paypal_mobile_number']);
+                    
+                    if (isset($data['paypal_email']) || isset($data['paypal_mobile_number'])) {
+                        if (!$hasEmail && !$hasMobile) {
+                            $response->sendError('Either PayPal email or mobile number must be provided', 400);
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            if ($payoutMethodModel->updatePayoutMethod($payoutMethodId, $data)) {
                 $response->sendJson([
                     'success' => true,
-                    'message' => 'Bank account updated successfully'
+                    'message' => 'Payout method updated successfully'
                 ]);
             } else {
-                $response->sendError('Failed to update bank account', 500);
+                $response->sendError('Failed to update payout method', 500);
             }
         } catch (\Exception $e) {
-            error_log("Error updating bank account: " . $e->getMessage());
-            $response->sendError('Failed to update bank account: ' . $e->getMessage(), 500);
+            error_log("Error updating payout method: " . $e->getMessage());
+            $response->sendError('Failed to update payout method: ' . $e->getMessage(), 500);
         }
     }
 
     /**
-     * Delete bank account for seller
+     * Delete payout method for seller
      * 
      * @param Request $request
      * @param Response $response
      */
-    public function deleteBankAccount($request, $response): void
+    public function deletePayoutMethod($request, $response): void
     {
         if ($request->getMethod() !== 'POST') {
             $response->setStatusCode(405);
@@ -643,33 +793,33 @@ class PaymentController extends BaseController {
 
         $data = $request->getParsedBody();
         if (!isset($data['id'])) {
-            $response->sendError('Bank account ID is required', 400);
+            $response->sendError('Payout method ID is required', 400);
             return;
         }
 
-        $bankAccountId = $data['id'];
+        $payoutMethodId = $data['id'];
         
         try {
-            $bankAccountModel = new BankAccount();
-            // Verify the bank account belongs to this user
-            $existingAccount = $bankAccountModel->getBankAccountById($bankAccountId);
+            $payoutMethodModel = new PayoutMethod();
+            // Verify the payout method belongs to this user
+            $existingMethod = $payoutMethodModel->getPayoutMethod($payoutMethodId);
             
-            if (!$existingAccount || $existingAccount['user_id'] != $sellerId) {
-                $response->sendError('Bank account not found or access denied', 403);
+            if (!$existingMethod || $existingMethod['user_id'] != $sellerId) {
+                $response->sendError('Payout method not found or access denied', 403);
                 return;
             }
             
-            if ($bankAccountModel->deleteBankAccount($bankAccountId)) {
+            if ($payoutMethodModel->deletePayoutMethod($payoutMethodId)) {
                 $response->sendJson([
                     'success' => true,
-                    'message' => 'Bank account deleted successfully'
+                    'message' => 'Payout method deleted successfully'
                 ]);
             } else {
-                $response->sendError('Failed to delete bank account', 500);
+                $response->sendError('Failed to delete payout method', 500);
             }
         } catch (\Exception $e) {
-            error_log("Error deleting bank account: " . $e->getMessage());
-            $response->sendError('Failed to delete bank account: ' . $e->getMessage(), 500);
+            error_log("Error deleting payout method: " . $e->getMessage());
+            $response->sendError('Failed to delete payout method: ' . $e->getMessage(), 500);
         }
     }
 }

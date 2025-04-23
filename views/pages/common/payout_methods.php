@@ -290,29 +290,36 @@
 
             <!-- Bank Account Section -->
             <div class="payment-methods-section">
-                <h2>Bank Accounts</h2>
-                <div id="bank-accounts-container">
-                    <!-- Bank accounts will be loaded here dynamically -->
-                    <div class="loading-spinner">Loading your bank accounts...</div>
+                <h2>Your Payout Methods</h2>
+                <div id="payout-methods-container">
+                    <!-- Payout methods will be loaded here dynamically -->
+                    <div class="loading-spinner">Loading your payout methods...</div>
                 </div>
             </div>
 
-            <button class="add-button" onclick="openAddPaymentModal()">
-                <i class="fas fa-plus"></i>
-                Add Bank Account
-            </button>
+            <div class="add-buttons">
+                <button class="add-button" onclick="openAddBankModal()">
+                    <i class="fas fa-university"></i>
+                    Add Bank Account
+                </button>
+                <button class="add-button" onclick="openAddPayPalModal()">
+                    <i class="fab fa-paypal"></i>
+                    Add PayPal
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Add/Edit Bank Account Modal -->
-    <div id="payment-modal" class="modal">
+    <div id="bank-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">Add Bank Account</h2>
-                <button class="close-modal" onclick="closeModal()">×</button>
+                <h2 id="bank-modal-title">Add Bank Account</h2>
+                <button class="close-modal" onclick="closeBankModal()">×</button>
             </div>
             <form id="bank-account-form">
                 <input type="hidden" id="bank-account-id">
+                <input type="hidden" name="payment_type" value="bank">
                 
                 <div class="form-group">
                     <label for="bank-name">Bank Name</label>
@@ -339,6 +346,39 @@
         </div>
     </div>
 
+    <!-- Add/Edit PayPal Modal -->
+    <div id="paypal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="paypal-modal-title">Add PayPal Account</h2>
+                <button class="close-modal" onclick="closePayPalModal()">×</button>
+            </div>
+            <form id="paypal-form">
+                <input type="hidden" id="paypal-id">
+                <input type="hidden" name="payment_type" value="paypal">
+                
+                <div class="form-group">
+                    <label for="paypal-name">Full Name</label>
+                    <input type="text" id="paypal-name" name="paypal_name" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paypal-email">PayPal Email</label>
+                    <input type="email" id="paypal-email" name="paypal_email" placeholder="Enter PayPal email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="paypal-mobile">PayPal Mobile Number</label>
+                    <input type="text" id="paypal-mobile" name="paypal_mobile_number" placeholder="Enter PayPal mobile number">
+                </div>
+                
+                <p class="form-note">* Either email or mobile number is required</p>
+
+                <button type="submit" class="save-button">Save PayPal Account</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="modal">
         <div class="modal-content">
@@ -347,11 +387,11 @@
                 <button class="close-modal" onclick="closeDeleteModal()">×</button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this bank account?</p>
-                <input type="hidden" id="delete-bank-id">
+                <p>Are you sure you want to delete this payout method?</p>
+                <input type="hidden" id="delete-method-id">
                 <div class="modal-actions">
                     <button class="cancel-button" onclick="closeDeleteModal()">Cancel</button>
-                    <button class="delete-button" onclick="confirmDeleteBankAccount()">Delete</button>
+                    <button class="delete-button" onclick="confirmDeletePayoutMethod()">Delete</button>
                 </div>
             </div>
         </div>
@@ -359,29 +399,29 @@
 
     <script>
         // Global variables
-        let bankAccounts = [];
+        let payoutMethods = [];
         let currentAction = 'add'; // 'add' or 'edit'
 
-        // Load bank accounts when the page loads
+        // Load payout methods when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            loadBankAccounts();
+            loadPayoutMethods();
         });
 
-        // Load bank accounts from the server
-        function loadBankAccounts() {
-            fetch('/api/payments/get-seller-bank')
+        // Load payout methods from the server
+        function loadPayoutMethods() {
+            fetch('/api/payments/get-seller-payoutmethod')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        bankAccounts = data.data;
-                        renderBankAccounts();
+                        payoutMethods = data.data;
+                        renderPayoutMethods();
                     } else {
-                        showNotification('Failed to load bank accounts: ' + (data.message || 'Unknown error'), 'error');
+                        showNotification('Failed to load payout methods: ' + (data.message || 'Unknown error'), 'error');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading bank accounts:', error);
-                    showNotification('Failed to load bank accounts. Please try again later.', 'error');
+                    console.error('Error loading payout methods:', error);
+                    showNotification('Failed to load payout methods. Please try again later.', 'error');
                 })
                 .finally(() => {
                     // Hide loading spinner
@@ -389,79 +429,150 @@
                 });
         }
 
-        // Render bank accounts in the UI
-        function renderBankAccounts() {
-            const container = document.getElementById('bank-accounts-container');
+        // Render payout methods in the UI
+        function renderPayoutMethods() {
+            const container = document.getElementById('payout-methods-container');
             
             // Clear previous content
             container.innerHTML = '';
             
-            if (bankAccounts.length === 0) {
-                container.innerHTML = '<p class="no-accounts">No bank accounts found. Add one to receive payments.</p>';
+            if (payoutMethods.length === 0) {
+                container.innerHTML = '<p class="no-accounts">No payout methods found. Add one to receive payments.</p>';
                 return;
             }
             
-            // Create HTML for each bank account
-            bankAccounts.forEach(account => {
-                const accountCard = document.createElement('div');
-                accountCard.className = 'payment-method-card';
-                accountCard.innerHTML = `
-                    <div class="payment-method-info">
-                        <div class="payment-icon">
-                            <i class="fas fa-university"></i>
+            // Create HTML for each payout method
+            payoutMethods.forEach(method => {
+                const methodCard = document.createElement('div');
+                methodCard.className = 'payment-method-card';
+                
+                // Check if this is a bank account or PayPal
+                if (method.bank_name) {
+                    // This is a bank account
+                    methodCard.innerHTML = `
+                        <div class="payment-method-info">
+                            <div class="payment-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="payment-details">
+                                <div class="payment-method-type">Bank Account</div>
+                                <h3>${method.bank_name}</h3>
+                                <p>****${method.account_number.slice(-4)} • ${method.branch}</p>
+                                <p class="account-name">${method.name_on_card}</p>
+                            </div>
                         </div>
-                        <div class="payment-details">
-                            <h3>${account.bank_name}</h3>
-                            <p>****${account.account_number.slice(-4)} • ${account.branch}</p>
-                            <p class="account-name">${account.name_on_card}</p>
+                        <div class="payment-actions">
+                            <button class="action-button" onclick="editBankAccount(${method.id})">
+                                <i class="fas fa-pencil"></i>
+                            </button>
+                            <button class="action-button" onclick="deletePayoutMethod(${method.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
-                    </div>
-                    <div class="payment-actions">
-                        <button class="action-button" onclick="editBankAccount(${account.id})">
-                            <i class="fas fa-pencil"></i>
-                        </button>
-                        <button class="action-button" onclick="deleteBankAccount(${account.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(accountCard);
+                    `;
+                } else if (method.paypal_name) {
+                    // This is a PayPal account
+                    let contactInfo = '';
+                    if (method.paypal_email) {
+                        contactInfo = method.paypal_email;
+                    } else if (method.paypal_mobile_number) {
+                        contactInfo = method.paypal_mobile_number;
+                    }
+                    
+                    methodCard.innerHTML = `
+                        <div class="payment-method-info">
+                            <div class="payment-icon">
+                                <i class="fab fa-paypal"></i>
+                            </div>
+                            <div class="payment-details">
+                                <div class="payment-method-type">PayPal</div>
+                                <h3>${method.paypal_name}</h3>
+                                <p>${contactInfo}</p>
+                            </div>
+                        </div>
+                        <div class="payment-actions">
+                            <button class="action-button" onclick="editPayPalAccount(${method.id})">
+                                <i class="fas fa-pencil"></i>
+                            </button>
+                            <button class="action-button" onclick="deletePayoutMethod(${method.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(methodCard);
             });
         }
 
         // Modal functions
-        function openAddPaymentModal() {
+        function openAddBankModal() {
             currentAction = 'add';
-            document.getElementById('modal-title').textContent = 'Add Bank Account';
+            document.getElementById('bank-modal-title').textContent = 'Add Bank Account';
             document.getElementById('bank-account-form').reset();
             document.getElementById('bank-account-id').value = '';
-            document.getElementById('payment-modal').style.display = 'block';
+            document.getElementById('bank-modal').style.display = 'block';
+        }
+
+        function openAddPayPalModal() {
+            currentAction = 'add';
+            document.getElementById('paypal-modal-title').textContent = 'Add PayPal Account';
+            document.getElementById('paypal-form').reset();
+            document.getElementById('paypal-id').value = '';
+            document.getElementById('paypal-modal').style.display = 'block';
         }
 
         function editBankAccount(id) {
             currentAction = 'edit';
-            document.getElementById('modal-title').textContent = 'Edit Bank Account';
+            document.getElementById('bank-modal-title').textContent = 'Edit Bank Account';
             
-            // Find the bank account by ID
-            const account = bankAccounts.find(acc => acc.id == id);
-            if (!account) return;
+            // Find the payout method by ID
+            const method = payoutMethods.find(m => m.id == id);
+            if (!method || !method.bank_name) return;
             
             // Fill the form with account data
-            document.getElementById('bank-account-id').value = account.id;
-            document.getElementById('bank-name').value = account.bank_name;
-            document.getElementById('branch').value = account.branch;
-            document.getElementById('account-number').value = account.account_number;
-            document.getElementById('name-on-card').value = account.name_on_card;
+            document.getElementById('bank-account-id').value = method.id;
+            document.getElementById('bank-name').value = method.bank_name;
+            document.getElementById('branch').value = method.branch;
+            document.getElementById('account-number').value = method.account_number;
+            document.getElementById('name-on-card').value = method.name_on_card;
             
-            document.getElementById('payment-modal').style.display = 'block';
+            document.getElementById('bank-modal').style.display = 'block';
         }
 
-        function closeModal() {
-            document.getElementById('payment-modal').style.display = 'none';
+        function editPayPalAccount(id) {
+            currentAction = 'edit';
+            document.getElementById('paypal-modal-title').textContent = 'Edit PayPal Account';
+            
+            // Find the payout method by ID
+            const method = payoutMethods.find(m => m.id == id);
+            if (!method || !method.paypal_name) return;
+            
+            // Fill the form with account data
+            document.getElementById('paypal-id').value = method.id;
+            document.getElementById('paypal-name').value = method.paypal_name;
+            
+            if (method.paypal_email) {
+                document.getElementById('paypal-email').value = method.paypal_email;
+            }
+            
+            if (method.paypal_mobile_number) {
+                document.getElementById('paypal-mobile').value = method.paypal_mobile_number;
+            }
+            
+            document.getElementById('paypal-modal').style.display = 'block';
         }
 
-        function deleteBankAccount(id) {
-            document.getElementById('delete-bank-id').value = id;
+        function closeBankModal() {
+            document.getElementById('bank-modal').style.display = 'none';
+        }
+
+        function closePayPalModal() {
+            document.getElementById('paypal-modal').style.display = 'none';
+        }
+
+        function deletePayoutMethod(id) {
+            document.getElementById('delete-method-id').value = id;
             document.getElementById('delete-modal').style.display = 'block';
         }
 
@@ -469,28 +580,28 @@
             document.getElementById('delete-modal').style.display = 'none';
         }
 
-        function confirmDeleteBankAccount() {
-            const bankId = document.getElementById('delete-bank-id').value;
+        function confirmDeletePayoutMethod() {
+            const methodId = document.getElementById('delete-method-id').value;
             
             const formData = new FormData();
-            formData.append('id', bankId);
+            formData.append('id', methodId);
             
-            fetch('/api/payments/delete-bank', {
+            fetch('/api/payments/delete-payoutmethod', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showNotification('Bank account deleted successfully', 'success');
-                    loadBankAccounts(); // Reload the list
+                    showNotification('Payout method deleted successfully', 'success');
+                    loadPayoutMethods(); // Reload the list
                 } else {
-                    showNotification('Failed to delete bank account: ' + (data.message || 'Unknown error'), 'error');
+                    showNotification('Failed to delete payout method: ' + (data.message || 'Unknown error'), 'error');
                 }
             })
             .catch(error => {
-                console.error('Error deleting bank account:', error);
-                showNotification('Failed to delete bank account. Please try again later.', 'error');
+                console.error('Error deleting payout method:', error);
+                showNotification('Failed to delete payout method. Please try again later.', 'error');
             })
             .finally(() => {
                 closeDeleteModal();
@@ -510,24 +621,21 @@
             }, 5000);
         }
 
-        // Form submission
+        // Bank account form submission
         document.getElementById('bank-account-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData();
-            formData.append('bank_name', document.getElementById('bank-name').value);
-            formData.append('branch', document.getElementById('branch').value);
-            formData.append('account_number', document.getElementById('account-number').value);
-            formData.append('name_on_card', document.getElementById('name-on-card').value);
+            const formData = new FormData(this);
             
-            let url = '/api/payments/add-bank';
-            
-            // If editing, include the ID and change the URL
+            // If editing, include the ID
             if (currentAction === 'edit') {
-                const bankId = document.getElementById('bank-account-id').value;
-                formData.append('id', bankId);
-                url = '/api/payments/update-bank';
+                const methodId = document.getElementById('bank-account-id').value;
+                formData.append('id', methodId);
             }
+            
+            const url = currentAction === 'add' 
+                ? '/api/payments/add-payoutmethod' 
+                : '/api/payments/update-payoutmethod';
             
             fetch(url, {
                 method: 'POST',
@@ -542,8 +650,8 @@
                             : 'Bank account updated successfully',
                         'success'
                     );
-                    loadBankAccounts(); // Reload the list
-                    closeModal();
+                    loadPayoutMethods(); // Reload the list
+                    closeBankModal();
                 } else {
                     showNotification('Failed: ' + (data.message || 'Unknown error'), 'error');
                 }
@@ -554,10 +662,63 @@
             });
         });
 
-        // Close modal when clicking outside
+        // PayPal form submission
+        document.getElementById('paypal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate that at least email or mobile is provided
+            const email = document.getElementById('paypal-email').value.trim();
+            const mobile = document.getElementById('paypal-mobile').value.trim();
+            
+            if (!email && !mobile) {
+                showNotification('Either PayPal email or mobile number is required', 'error');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            
+            // If editing, include the ID
+            if (currentAction === 'edit') {
+                const methodId = document.getElementById('paypal-id').value;
+                formData.append('id', methodId);
+            }
+            
+            const url = currentAction === 'add' 
+                ? '/api/payments/add-payoutmethod' 
+                : '/api/payments/update-payoutmethod';
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(
+                        currentAction === 'add' 
+                            ? 'PayPal account added successfully' 
+                            : 'PayPal account updated successfully',
+                        'success'
+                    );
+                    loadPayoutMethods(); // Reload the list
+                    closePayPalModal();
+                } else {
+                    showNotification('Failed: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving PayPal account:', error);
+                showNotification('Failed to save PayPal account. Please try again later.', 'error');
+            });
+        });
+
+        // Close modals when clicking outside
         window.onclick = function(event) {
-            if (event.target == document.getElementById('payment-modal')) {
-                closeModal();
+            if (event.target == document.getElementById('bank-modal')) {
+                closeBankModal();
+            }
+            if (event.target == document.getElementById('paypal-modal')) {
+                closePayPalModal();
             }
             if (event.target == document.getElementById('delete-modal')) {
                 closeDeleteModal();

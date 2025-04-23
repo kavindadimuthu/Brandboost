@@ -166,15 +166,17 @@ $app->router->post('/api/payments/create-transaction', 'PaymentController@create
 $app->router->post('/api/payments/release-funds', 'PaymentController@releaseFunds');
 $app->router->get('/api/payments/transaction-details', 'PaymentController@getTransactionDetails');
 
+$app->router->post('/api/payments/withdraw-funds', 'PaymentController@withdrawFunds'); // Get transaction history
+
 $app->router->get('/api/payments/seller-balance', 'PaymentController@getSellerBalance');
 $app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHoldBalance');
 $app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
 $app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
 
-$app->router->post('/api/payments/add-bank', 'PaymentController@addBankAccount'); // Get transaction history
-$app->router->get('/api/payments/get-seller-bank', 'PaymentController@getSellerBankAccounts');
-$app->router->post('/api/payments/update-bank', 'PaymentController@updateBankAccount'); // Update bank account
-$app->router->get('/api/payments/delete-bank', 'PaymentController@deleteBankAccount'); 
+$app->router->post('/api/payments/add-payoutmethod', 'PaymentController@addPayoutMethod');
+$app->router->get('/api/payments/get-seller-payoutmethod', 'PaymentController@getSellerPayoutMethods');
+$app->router->post('/api/payments/update-payoutmethod', 'PaymentController@updatePayoutMethod'); 
+$app->router->get('/api/payments/delete-payoutmethod', 'PaymentController@deletePayoutMethod'); 
 
 //test routes
 $app->router->get('/test', 'TestController@test');
