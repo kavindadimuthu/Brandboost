@@ -160,10 +160,11 @@ $app->router->post('/api/create-order', 'OrderController@createOrder'); // Creat
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
 
+ $app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
+ $app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
 
 
-//test routes
-$app->router->get('/test', 'TestController@test');
+
 
 // Run the application
 $app->run();
