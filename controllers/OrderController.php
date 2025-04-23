@@ -419,6 +419,14 @@ class OrderController extends BaseController {
             'message' => 'Order created successfully.',
             'order_id' => $orderId
         ]);
+        } catch (\Exception $e) {
+            // Handle exceptions and return error response
+            error_log("Error creating order: " . $e->getMessage());
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
     }
     
     /**
