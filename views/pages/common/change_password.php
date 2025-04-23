@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password - BrandBoost</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-    
+
     <style>
         * {
             margin: 0;
@@ -225,6 +226,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="settings-container">
         <!-- Sidebar Navigation -->
@@ -237,10 +239,12 @@
                 <i class="fas fa-lock"></i>
                 Change Password
             </a>
-            <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" class="sidebar-link">
-                <i class="fas fa-credit-card"></i>
-                Payout Methods
-            </a>
+            <?php if ($_SESSION['user']['role'] !== 'businessman'): ?>
+                <a href="/<?php echo $_SESSION['user']['role']; ?>/payout-methods" class="sidebar-link">
+                    <i class="fas fa-credit-card"></i>
+                    Payout Methods
+                </a>
+            <?php endif; ?>
         </div>
 
         <!-- Main Content -->
@@ -326,87 +330,159 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('password-form');
-            const newPasswordInput = document.getElementById('new-password');
-            const confirmPasswordInput = document.getElementById('confirm-password');
-            const submitButton = form.querySelector('.save-button');
-            const successAlert = document.getElementById('success-alert');
-            const errorAlert = document.getElementById('error-alert');
+            // Cache DOM elements
+            const elements = {
+                form: document.getElementById('password-form'),
+                currentPassword: document.getElementById('current-password'),
+                newPassword: document.getElementById('new-password'),
+                confirmPassword: document.getElementById('confirm-password'),
+                submitButton: document.querySelector('.save-button'),
+                successAlert: document.getElementById('success-alert'),
+                errorAlert: document.getElementById('error-alert'),
+                passwordToggles: document.querySelectorAll('.password-toggle')
+            };
+
+            // Initialize components
+            initPasswordToggles();
+            initPasswordValidation();
+            initFormSubmission();
 
             // Password toggle functionality
-            document.querySelectorAll('.password-toggle').forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-target');
-                    const input = document.getElementById(targetId);
-                    const icon = this.querySelector('i');
+            function initPasswordToggles() {
+                elements.passwordToggles.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+                        const input = document.getElementById(targetId);
+                        const icon = this.querySelector('i');
 
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        icon.classList.remove('fa-eye');
-                        icon.classList.add('fa-eye-slash');
-                    } else {
-                        input.type = 'password';
-                        icon.classList.remove('fa-eye-slash');
-                        icon.classList.add('fa-eye');
-                    }
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.replace('fa-eye', 'fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.replace('fa-eye-slash', 'fa-eye');
+                        }
+                    });
                 });
-            });
-
-            // Password validation
-            function validatePassword() {
-                const password = newPasswordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
-                let isValid = true;
-
-                const requirements = {
-                    length: password.length >= 8,
-                    uppercase: /[A-Z]/.test(password),
-                    lowercase: /[a-z]/.test(password),
-                    number: /[0-9]/.test(password),
-                    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-                    match: password === confirmPassword && password !== ''
-                };
-
-                // Update requirement items
-                Object.entries(requirements).forEach(([requirement, valid]) => {
-                    const item = document.querySelector(`[data-requirement="${requirement}"]`);
-                    const icon = item.querySelector('i');
-
-                    item.classList.toggle('valid', valid);
-                    item.classList.toggle('invalid', !valid);
-                    icon.classList.toggle('fa-check-circle', valid);
-                    icon.classList.toggle('fa-times-circle', !valid);
-
-                    if (!valid) isValid = false;
-                });
-
-                submitButton.disabled = !isValid;
             }
 
-            newPasswordInput.addEventListener('input', validatePassword);
-            confirmPasswordInput.addEventListener('input', validatePassword);
+            // Password validation
+            function initPasswordValidation() {
+                const validateRequirements = () => {
+                    const password = elements.newPassword.value;
+                    const confirmPassword = elements.confirmPassword.value;
+                    let isValid = true;
 
-            // Form submission
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Simulate API call
+                    const requirements = {
+                        length: password.length >= 8,
+                        uppercase: /[A-Z]/.test(password),
+                        lowercase: /[a-z]/.test(password),
+                        number: /[0-9]/.test(password),
+                        special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+                        match: password === confirmPassword && password !== ''
+                    };
+
+                    // Update requirement items in the UI
+                    Object.entries(requirements).forEach(([requirement, valid]) => {
+                        const item = document.querySelector(`[data-requirement="${requirement}"]`);
+                        const icon = item.querySelector('i');
+
+                        item.classList.toggle('valid', valid);
+                        item.classList.toggle('invalid', !valid);
+
+                        if (valid) {
+                            icon.classList.replace('fa-times-circle', 'fa-check-circle');
+                        } else {
+                            icon.classList.replace('fa-check-circle', 'fa-times-circle');
+                            isValid = false;
+                        }
+                    });
+
+                    elements.submitButton.disabled = !isValid;
+                    return isValid;
+                };
+
+                elements.newPassword.addEventListener('input', validateRequirements);
+                elements.confirmPassword.addEventListener('input', validateRequirements);
+            }
+
+            // Form submission handling
+            function initFormSubmission() {
+                elements.form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    if (elements.submitButton.disabled) {
+                        return;
+                    }
+
+                    changePassword()
+                        .then(handleSuccess)
+                        .catch(handleError);
+                });
+            }
+
+            // API call to change password
+            async function changePassword() {
+                const currentPassword = elements.currentPassword.value;
+                const newPassword = elements.newPassword.value;
+
+                const response = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+
+                // Handle specific error codes
+                if (response.status === 401) {
+                    throw new Error('Invalid current password');
+                } else if (response.status === 400) {
+                    throw new Error('Current password and new password are required');
+                } else if (!response.ok) {
+                    throw new Error('Failed to change password');
+                }
+
+                return response.json();
+            }
+
+            // Handle successful password change
+            function handleSuccess() {
+                showAlert(elements.successAlert, elements.errorAlert);
+                elements.form.reset();
+
+                // Reset validation visuals
+                document.querySelectorAll('.requirement-item').forEach(item => {
+                    item.classList.remove('valid');
+                    item.classList.add('invalid');
+                    const icon = item.querySelector('i');
+                    icon.classList.replace('fa-check-circle', 'fa-times-circle');
+                });
+
+                elements.submitButton.disabled = true;
+            }
+
+            // Handle error during password change
+            function handleError(error) {
+                console.error('Password change error:', error.message);
+                showAlert(elements.errorAlert, elements.successAlert);
+            }
+
+            // Helper function to show alert and hide the other
+            function showAlert(alertToShow, alertToHide) {
+                alertToShow.style.display = 'block';
+                alertToHide.style.display = 'none';
+
+                // Hide alert after timeout
                 setTimeout(() => {
-                    // Show success message
-                    successAlert.style.display = 'block';
-                    errorAlert.style.display = 'none';
-
-                    // Reset form
-                    form.reset();
-                    validatePassword();
-
-                    // Hide success message after 3 seconds
-                    setTimeout(() => {
-                        successAlert.style.display = 'none';
-                    }, 3000);
-                }, 1000);
-            });
+                    alertToShow.style.display = 'none';
+                }, 3000);
+            }
         });
     </script>
 </body>
+
 </html>

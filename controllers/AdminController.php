@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/UserController.php';
+require_once __DIR__ . '/ServiceController.php';
 
 use app\core\BaseController;
 
@@ -27,8 +29,41 @@ class AdminController extends BaseController
     }
 
     public function userProfile($req, $res){
-        $userId = $req->getParam('id') ?? null;
-        $this->renderLayout('admin_layout', 'pages/guest/user_profile');
+        // $userId = $req->getParam('id') ?? null;
+
+        $userController = new UserController();
+        $serviceController = new ServiceController();
+
+        // Fetch user profile data
+        $userData = $userController->getUserProfile($req, $res, true);
+
+        // Fetch service profile data
+        $serviceData = $serviceController->getServiceList($req, $res, true);
+
+        // Log the retrieved data for debugging
+        if ($userData) {
+            error_log('User Data: ' . print_r($userData, true));
+        } else {
+            error_log('User data is empty or invalid');
+        }
+
+        if ($serviceData) {
+            // error_log('Service Data: ' . print_r($serviceData, true));
+        } else {
+            error_log('Service data is empty or invalid');
+        }
+
+        // Combine both data into one array
+        $combinedData = [
+            'userData' => $userData,
+            'serviceData' => $serviceData,
+            'isAdminView' => true  // This flag indicates admin view
+        ];
+
+        // error_log('Combined Data: ' . print_r($combinedData, true));
+
+        // error_log("User ID: " . $userId); // Log the user ID for debugging
+        $this->renderLayout('admin_layout', 'pages/guest/user_profile', ['combinedData' => $combinedData]);
     }
 
     public function verificationsList($req, $res){
