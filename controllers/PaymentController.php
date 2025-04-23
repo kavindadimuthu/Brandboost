@@ -187,13 +187,16 @@ class PaymentController extends BaseController {
                     $errors[] = "Failed to update transaction status for transaction " . $transaction['transaction_id'];
                     continue;
                 }
+                
+                $amount_for_platform = $transaction['amount'] * 0.1; // 10% platform fee
+                $amount_for_seller = $transaction['amount'] - $amount_for_platform; // 90% goes to seller
 
                 // Create new transaction (system -> seller)
                 $newTransactionData = [
                     'order_id' => $transaction['order_id'],
                     'sender_id' => 1, // System user_id
                     'receiver_id' => $sellerId,
-                    'amount' => $transaction['amount'],
+                    'amount' => $amount_for_seller, // 90% goes to seller, 10% platform fee
                     'status' => 'released',
                     'hold_until' => null // Immediate release
                 ];
@@ -212,13 +215,13 @@ class PaymentController extends BaseController {
                 }
 
                 // Deduct from system wallet
-                if (!$walletModel->updateWalletBalance(1, -$transaction['amount'])) {
+                if (!$walletModel->updateWalletBalance(1, - $amount_for_seller)) {
                     $errors[] = "Failed to deduct from system wallet";
                     continue;
                 }
 
                 // Add to seller wallet
-                if (!$walletModel->updateWalletBalance($sellerId, $transaction['amount'])) {
+                if (!$walletModel->updateWalletBalance($sellerId,  $amount_for_seller)) {
                     $errors[] = "Failed to update seller wallet balance for user " . $sellerId;
                     continue;
                 }
