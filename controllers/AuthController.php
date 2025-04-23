@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\core\BaseController;
 use app\core\Helpers\AuthHelper;
 use app\core\Helpers\SessionHelper;
+use app\models\Users\UserSession;
 
 class AuthController extends BaseController {
     
@@ -69,6 +70,26 @@ class AuthController extends BaseController {
         // ];
         error_log(print_r($loggedUser, true));
         AuthHelper::logIn($loggedUser);
+
+        $token = AuthHelper::generateSessionToken();
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+30 days'));
+
+        // Create a new session for the user
+        $sessionModel = new UserSession();
+
+        // Save to DB
+        $sessionModel->createSession([
+            'user_id' => $loggedUser['user_id'], 
+            'session_token' => $token, 
+            'user_agent' => $userAgent, 
+            'ip_address' => $ipAddress, 
+            'expires_at' => $expiresAt
+        ]);
+
+        // Store in client (e.g. cookie)
+        setcookie('session_token', $token, time() + 60 * 60 * 24 * 30, '/', '', true, false); // HttpOnly
 
         // Redirect to appropriate dashboard based on user role
         $dashboardRoutes = [
