@@ -34,6 +34,7 @@ $app->router->get('/login', 'GuestController@login'); // Login
 $app->router->get('/forgot-password', 'GuestController@forgotPassword'); // Forgot Password
 $app->router->get('/reset-password', 'GuestController@resetPassword'); // Reset Password
 
+
 // ==================================
 // Businessman routes
 // ==================================
@@ -138,6 +139,7 @@ $app->router->get('/account-suspended', 'GuestController@accountSuspended'); // 
 
 
 
+
 // ==================================
 // API routes
 // ==================================
@@ -178,6 +180,7 @@ $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get 
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 
+
 // Verification Management
 $app->router->get('/api/verifications', 'VerificationController@getVerificationsList'); // Get Verification List
 $app->router->get('/api/verification/{type}/{id}', 'VerificationController@getVerificationDetails'); // Get Verification Profile
@@ -195,8 +198,38 @@ $app->router->post('/api/update-complaint-status', 'DisputeController@updateComp
 // Admin actions
 $app->router->get('/api/actions', 'ActionController@getActionList'); // Get Actions List
 
+$app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
+$app->router->get('/api/delivery/{id}', 'OrderController@getOrderDeliveries');
+$app->router->post('/api/createDelivery', 'OrderController@createDelivery');
+
+
 //test routes
 $app->router->get('/test', 'TestController@test');
+
+
+$app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
+$app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
+
+// ==================================
+// Payment API routes
+// ==================================
+$app->router->get('/api/payments/process-releases', 'PaymentController@processScheduledReleases');
+$app->router->post('/api/payments/create-transaction', 'PaymentController@createTransaction');
+$app->router->post('/api/payments/release-funds', 'PaymentController@releaseFunds');
+$app->router->get('/api/payments/transaction-details', 'PaymentController@getTransactionDetails');
+
+$app->router->post('/api/payments/withdraw-funds', 'PaymentController@withdrawFunds'); // Get transaction history
+
+$app->router->get('/api/payments/seller-balance', 'PaymentController@getSellerBalance');
+$app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHoldBalance');
+$app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
+$app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
+
+$app->router->post('/api/payments/add-payoutmethod', 'PaymentController@addPayoutMethod');
+$app->router->get('/api/payments/get-seller-payoutmethod', 'PaymentController@getSellerPayoutMethods');
+$app->router->post('/api/payments/update-payoutmethod', 'PaymentController@updatePayoutMethod'); 
+$app->router->get('/api/payments/delete-payoutmethod', 'PaymentController@deletePayoutMethod'); 
+
 
 // Run the application
 $app->run();

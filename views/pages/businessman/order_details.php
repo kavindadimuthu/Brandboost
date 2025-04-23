@@ -258,35 +258,17 @@
       background-color: #fee2e2;
       color: #991b1b;
     }
+
+    .badge-danger {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
     
     .ml-2 {
       margin-left: 8px;
     }
     
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin-top: 16px;
-    }
     
-    .pagination-btn {
-      background-color: #e5e7eb;
-      color: #4b5563;
-      padding: 4px 12px;
-      border-radius: 8px;
-      margin: 0 4px;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .pagination-btn:hover {
-      background-color: #d1d5db;
-    }
-    
-    .pagination-btn.active {
-      background-color: #2563eb;
-      color: white;
-    }
     
     /* Popups */
     .popup {
@@ -429,9 +411,9 @@
             <tr>
               <td>Promotional Video</td>
               <td>Kavindya Adhikari</td>
-              <td>2</td>
+              <td>3</td>
               <td>
-                video2.mp4
+                video3.mp4
                 <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
               </td>
               <td>
@@ -441,24 +423,29 @@
             <tr>
               <td>Promotional Video</td>
               <td>Kavindya Adhikari</td>
-              <td>1</td>
+              <td>2</td>
               <td>
-                video1.mp4
+                video2.mp4
                 <button class="btn btn-primary ml-2" onclick="downloadFile('video1.mp4')">Download</button>
               </td>
               <td>
                 <span class="badge badge-danger">Rejected</span>
               </td>
             </tr>
+            <tr>
+              <td>Promotional Video</td>
+              <td>Kavindya Adhikari</td>
+              <td>1</td>
+              <td>
+                video1.mp4
+                <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
+              </td>
+              <td>
+                <span class="badge badge-success">rejected</span>
+              </td>
+            </tr>
           </tbody>
         </table>
-        <div class="pagination">
-          <button class="pagination-btn">&lt;</button>
-          <button class="pagination-btn active">1</button>
-          <button class="pagination-btn">2</button>
-          <button class="pagination-btn">3</button>
-          <button class="pagination-btn">&gt;</button>
-        </div>
       </div>
     </div>
   </div>

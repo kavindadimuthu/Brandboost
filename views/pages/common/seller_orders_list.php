@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Orders</title>
+    <title>Seller Orders</title>
     <style>
         * {
             box-sizing: border-box;
@@ -103,6 +103,11 @@
             font-weight: 500;
         }
 
+        .status.pending {
+            color: #6c757d;
+            background: #f0f0f0;
+        }
+
         .status.in-progress {
             color: #b86e00;
             background: #fff3e5;
@@ -111,6 +116,11 @@
         .status.completed {
             color: #0a7c42;
             background: #e6f4ed;
+        }
+
+        .status.canceled {
+            color: #dc3545;
+            background: #fbe7e9;
         }
 
         .header-row {
@@ -139,14 +149,36 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            background: #f0f0f0;
         }
 
-        .pagination button:hover {
+        .pagination button:hover:not(:disabled) {
             background: #0056b3;
+            color: white;
         }
 
         .pagination button.active {
             background: #a29bfe;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 30px;
+            font-size: 16px;
+            color: #666;
         }
     </style>
 </head>
@@ -156,12 +188,12 @@
             <div class="main-content">
                 <div class="order-container">
                     <div class="search-box">
-                        <input type="text" placeholder="Search by Order ID or Username">
+                        <input type="text" id="searchInput" placeholder="Search by Order ID or Customer Name">
                     </div>
                 </div>
                 <div class="orders-container">
                     <div class="header-row">
-                        <h2>Customer Orders</h2>
+                        <h2>Your Orders</h2>
                     </div>
                     <table class="orders-table">
                         <thead>
@@ -174,63 +206,168 @@
                             </tr>
                         </thead>
                         <tbody id="ordersTableBody">
-                            <!-- Data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="5" class="loading">Loading orders...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>&gt;</button>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be generated dynamically -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const orders = [{
-            buyer: "Apple Asia",
-            gig: "Do Business Promotion through Tiktok and Youtube",
-            dueOn: "7 Days",
-            total: "LKR 25,000",
-            status: "Pending"
-        },
-        {
-            buyer: "Spa Ceylon",
-            gig: "Do Business Promotion through Facebook and Instagram",
-            dueOn: "Delivered",
-            total: "LKR 30,000",
-            status: "In Progress"
-        },
-        {
-            buyer: "CAMERA.LK",
-            gig: "Do Business Promotion through my 1M Youtube channel",
-            dueOn: "Delivered",
-            total: "LKR 40,000",
-            status: "Completed"
-        }];
+        // Global state
+        const state = {
+            // currentPage: 1,
+            // limit: 10,
+            // totalPages: 1,
+            // searchTerm: '',
+            orders: []
+        };
 
-        function loadOrdersData(data) {
+        // Fetch orders from API
+        async function fetchOrders() {
             const tableBody = document.getElementById('ordersTableBody');
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = '<tr><td colspan="5" class="loading">Loading orders...</td></tr>';
+            
+            try {
+                
+                const response = await fetch(`/api/orders/seller`, {
+                    method: 'GET'
+                });
+                console.log(response);
+                
+                const result = await response.json();
+                console.log(result);
+                
+                
+                if (result.success) {
+                    state.orders = result.data;
+                    // state.totalPages = result.pagination.pages;
+                    
+                    renderOrders();
+                    // renderPagination();
+                } else {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="no-orders">Error: ${result.message}</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                tableBody.innerHTML = '<tr><td colspan="5" class="no-orders">Failed to load orders. Please try again later.</td></tr>';
+            }
+        }
 
-            data.forEach(order => {
+        // Render orders to table
+        function renderOrders() {
+            const tableBody = document.getElementById('ordersTableBody');
+            if (state.orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="no-orders">No orders found</td></tr>';
+                return;
+            }
+            tableBody.innerHTML = '';
+            state.orders.forEach(order => {
+                if (!order.order_id) {
+                    console.error('Invalid order ID:', order);
+                    return;
+                }
+                console.log(order.seller_role);
+                
                 const row = document.createElement('tr');
                 const statusClass = order.status.toLowerCase().replace(' ', '-');
                 row.innerHTML = `
-                    <td onclick="window.location.href='/influencer/order-details/1'">${order.buyer}</td>
-                    <td onclick="window.location.href='/influencer/order-details/1'">${order.gig}</td>
-                    <td onclick="window.location.href='/influencer/order-details/1'">${order.dueOn}</td>
-                    <td onclick="window.location.href='/influencer/order-details/1'">${order.total}</td>
-                    <td onclick="window.location.href='/influencer/order-details/1'"><span class="status ${statusClass}">${order.status}</span></td>
+                    <td>${order.buyer}</td>
+                    <td>${order.gig}</td>
+                    <td>${order.dueOn}</td>
+                    <td>${order.total}</td>
+                    <td><span class="status ${statusClass}">${order.status}</span></td>
                 `;
+                row.addEventListener('click', () => navigateToOrderDetails(order.order_id, order.seller_role));
                 tableBody.appendChild(row);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => loadOrdersData(orders));
+        
+        // Navigate to order details page
+        function navigateToOrderDetails(orderId, sellerRole) {
+            if (sellerRole == 'designer'){
+                window.location.href = `/designer/order-details/${orderId}`;
+            } else if (sellerRole == 'influencer'){
+                window.location.href = `/influencer/order-details/${orderId}`;
+            }
+        }
+            
+        
+
+        // Generate pagination controls
+        // function renderPagination() {
+        //     const paginationContainer = document.getElementById('pagination');
+        //     paginationContainer.innerHTML = '';
+            
+        //     // Previous button
+        //     const prevButton = document.createElement('button');
+        //     prevButton.innerHTML = '&lt;';
+        //     prevButton.disabled = state.currentPage <= 1;
+        //     prevButton.addEventListener('click', () => {
+        //         if (state.currentPage > 1) {
+        //             state.currentPage--;
+        //             fetchOrders();
+        //         }
+        //     });
+        //     paginationContainer.appendChild(prevButton);
+            
+        //     // Page buttons
+        //     const startPage = Math.max(1, state.currentPage - 2);
+        //     const endPage = Math.min(state.totalPages, startPage + 4);
+            
+        //     for (let i = startPage; i <= endPage; i++) {
+        //         const pageButton = document.createElement('button');
+        //         pageButton.textContent = i;
+        //         pageButton.className = i === state.currentPage ? 'active' : '';
+        //         pageButton.addEventListener('click', () => {
+        //             state.currentPage = i;
+        //             fetchOrders();
+        //         });
+        //         paginationContainer.appendChild(pageButton);
+        //     }
+            
+        //     // Next button
+        //     const nextButton = document.createElement('button');
+        //     nextButton.innerHTML = '&gt;';
+        //     nextButton.disabled = state.currentPage >= state.totalPages;
+        //     nextButton.addEventListener('click', () => {
+        //         if (state.currentPage < state.totalPages) {
+        //             state.currentPage++;
+        //             fetchOrders();
+        //         }
+        //     });
+        //     paginationContainer.appendChild(nextButton);
+        // }
+
+
+        // Handle search input
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            let debounceTimeout;
+            
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimeout);
+                
+                debounceTimeout = setTimeout(() => {
+                    state.searchTerm = e.target.value.trim();
+                    state.currentPage = 1; // Reset to first page on new search
+                    fetchOrders();
+                }, 500); // Debounce for 500ms
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSearch();
+            fetchOrders();
+        });
     </script>
 </body>
 </html>

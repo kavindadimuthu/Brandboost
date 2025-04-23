@@ -235,7 +235,7 @@ class UserController extends BaseController
             'password' => $hashedPassword,
             'role' => $role,
             'profile_picture' => null,
-            'cover_picture' => null,
+            // 'cover_picture' => null,
             'bio' => null,
             'account_status' => 'active',
             'verification_status' => $verificationStatus

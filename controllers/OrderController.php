@@ -7,9 +7,14 @@ use app\core\Helpers\AuthHelper;
 use app\core\Helpers\DebugHelper;
 use app\core\Utils\FileHandler;
 use app\models\Orders\Orders;
+use app\models\Orders\orderDeliveries;
 use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
+
+use app\models\Users\User;
+use app\models\Payments\Transaction;
+use app\models\Payments\Wallet;
 
 class OrderController extends BaseController {
     /**
@@ -19,7 +24,7 @@ class OrderController extends BaseController {
      * @param Response $response The response object to return data.
      * @return void JSON response with the list of orders.
      */
-    public function getOrderList($request, $response) {
+    public function getOrderList1($request, $response) {
 
         // Parse request parameters
         $queryParams = $request->getQueryParams();
@@ -195,120 +200,318 @@ class OrderController extends BaseController {
 
 
     /**
-     * Create a new order API endpoint.
+
+     * Fetch a list of orders with requested conditions and associative promise data.
      *
      * @param Request $request  The incoming request object.
      * @param Response $response The response object to return data.
-     * @return void JSON response indicating success or failure.
+     * @return void JSON response with the list of orders.
      */
-    public function createOrder($request, $response): void {
-
+    public function getOrderList($request, $response): void {
         // Initialize models
         $orderModel = new Orders();
-        $orderPromisesModel = new OrderPromises();
+        $orderPromiseModel = new OrderPromises();
         $serviceModel = new Service();
-        $servicePackageModel = new ServicePackage();
+        $userModel = new User();
 
-        // Parse request body
+        // Parse request parameters
+        $queryParams = $request->getQueryParams();
+        $includeCustomer = $queryParams['include_customer'] ?? false;
+        $includeSeller = $queryParams['include_seller'] ?? false;
+
+        error_log($includeCustomer);
+
+        // Extract filter conditions from query parameters
+        $conditions = [];
+        if (!empty($queryParams['customer_id'])) {
+            $conditions['customer_id'] = $queryParams['customer_id'];
+        }
+        if (!empty($queryParams['order_status'])) {
+            $conditions['order_status'] = $queryParams['order_status'];
+        }
+        // if (!empty($queryParams['date_from'])) {
+        //     $conditions['date_from'] = $queryParams['date_from'];
+        // }
+        // if (!empty($queryParams['date_to'])) {
+        //     $conditions['date_to'] = $queryParams['date_to'];
+        // }
+
+        // Fetch orders based on conditions
+        $orders = $orderModel->read($conditions);
+
+        if (empty($orders)) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'No orders found matching the specified conditions.'
+            ]);
+            return;
+        }
+
+        $orderList = [];
+
+        // Fetch promises and customers for each order
+        foreach ($orders as $order) {
+            $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
+            $order['promise'] = $promise;
+
+            if ($includeCustomer) {
+                error_log("entered into loop");
+                $customer = $userModel->getUserById($order['customer_id']);
+                $order['customer'] = $customer;
+            }
+
+            if($includeSeller){
+                $service = $serviceModel->getServiceById($order['service_id']);
+                $seller = $userModel->getUserById($service['user_id']);
+                $order['seller'] = $seller;
+            }
+
+            $orderList[] = $order;
+        }
+        error_log(print_r($orderList, true));
+
+        // Return the response
+        $response->sendJson([
+            'success' => true,
+            'message' => 'Order list retrieved successfully.',
+            'data' => $orderList
+        ]);
+    }
+
+
+    /**
+     * Fetch a list of orders for the currently logged-in seller.
+     *
+     * @param Request $request  The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with the list of orders.
+     */
+    public function getSellerOrders($request, $response): void {
+        try {
+            // Initialize models
+            $orderModel = new Orders();
+            $orderPromiseModel = new OrderPromises();
+            $serviceModel = new Service();
+            $userModel = new User();
+            
+            // Get current logged-in user (seller)
+            $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+            $sellerRole  = AuthHelper::getCurrentUser()['role'];
+            error_log("Seller ID: " . ($sellerId ?? 'null'));
+            error_log("Seller role: " . ($sellerRole ?? 'null'));
+            
+            if (!$sellerId) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Unauthorized access: user not authenticated.'
+                ], 401);
+                return;
+            }
+            
+            // Parse request parameters
+            // $queryParams = $request->getQueryParams();
+            // $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+            // $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+            // $search = $queryParams['search'] ?? '';
+            
+            // Calculate offset for pagination
+            // $offset = ($page - 1) * $limit;
+            
+            // Get orders directly by seller_id
+            $orders = $orderModel->getOrdersBySellerId($sellerId);
+            // $totalOrders = $orderModel->countOrdersBySellerId($sellerId);
+            
+            error_log("Found " . count($orders) . " orders for seller ID " . $sellerId);
+            
+            if (empty($orders)) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'No orders found for your account.',
+                    'data' => [],
+                    // 'pagination' => [
+                    //     'total' => 0,
+                    //     'page' => $page,
+                    //     'limit' => $limit,
+                    //     'pages' => 0
+                    // ]
+                ]);
+                return;
+            }
+            
+            $orderList = [];
+            
+            // Enhance orders with additional information
+            foreach ($orders as $order) {
+                // Get promise data
+                $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
+                
+                // Get service data
+                $service = $serviceModel->getServiceById($order['service_id']);
+                
+                // Get customer data
+                $customer = $userModel->getUserById($order['customer_id']);
+                
+                // Calculate due date based on order creation and delivery days
+                $dueDate = null;
+                if ($promise && isset($promise['delivery_days']) && isset($order['created_at'])) {
+                    $createdDate = new \DateTime($order['created_at']);
+                    $dueDate = $createdDate->modify("+{$promise['delivery_days']} days");
+                    $dueDate = $dueDate->format('Y-m-d');
+                }
+                
+                // Format order data for frontend
+                $orderList[] = [
+                    'order_id' => $order['order_id'],
+                    'buyer' => $customer ? ($customer['name']) : 'Unknown',
+                    'buyer_id' => $order['customer_id'],
+                    'gig' => $service ? $service['title'] : 'Unknown Service',
+                    'service_id' => $order['service_id'],
+                    'dueOn' => $order['order_status'] === 'completed' ? 'Delivered' : ($dueDate ?? 'N/A'),
+                    'total' => $promise ? ('LKR ' . number_format($promise['price'], 2)) : 'N/A',
+                    'status' => ucfirst($order['order_status'] ?? 'Pending'),
+                    'seller_role' => $sellerRole
+                ];
+            }
+            
+            // Return the response
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Seller orders retrieved successfully.',
+                'data' => $orderList,
+                // 'pagination' => [
+                //     'total' => $totalOrders,
+                //     'page' => $page,
+                //     'limit' => $limit,
+                //     'pages' => ceil($totalOrders / $limit)
+                // ]
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Error in getSellerOrders: " . $e->getMessage());
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Create a new order API endpoint.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return Response JSON response indicating success or failure.
+     */
+    public function createOrder($request, $response) {
+        // Extract data from the request
         $requestData = $request->getParsedBody();
         DebugHelper::logArray($requestData);
-
+        
         // Validate required fields
         $requiredFields = ['service_id', 'payment_type'];
         $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
 
         if (!empty($missingFields)) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
-            ]);
-            return;
+            ], 400);
         }
 
-        // Extract data from the request
-        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? 1; // tempory user value is 1
-
+        // Check authentication
+        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
         if (!$customerId) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Unauthorized access: user not authenticated.'
             ], 401);
-            return;
         }
-
+        
+        // Initialize required models
+        $orderModel = new Orders();
+        $orderPromisesModel = new OrderPromises();
+        $serviceModel = new Service();
+        $servicePackageModel = new ServicePackage();
+        $transactionModel = new Transaction();
+        $walletModel = new Wallet();
+        
+        // Extract other data from the request
         $serviceId = $requestData['service_id'];
         $paymentType = $requestData['payment_type'];
         $packageId = $requestData['package_id'] ?? null;
         $customPackageId = $requestData['custom_package_id'] ?? null;
-        $promises = json_decode($requestData['promises'] ?? '[]', true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Invalid JSON format in promises.'
-            ]);
-            return;
+        
+        // Parse promises if provided
+        $promises = [];
+        if (!empty($requestData['promises'])) {
+            $promises = json_decode($requestData['promises'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return $response->sendJson([
+                    'success' => false,
+                    'message' => 'Invalid JSON format in promises.'
+                ], 400);
+            }
         }
-
+        
         // Fetch service and package data
         $serviceData = $serviceModel->getServiceById($serviceId);
         $packageData = $servicePackageModel->getPackageById($packageId);
 
         if (!$serviceData || !$packageData) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Invalid service or package ID.'
-            ]);
-            return;
+            ], 400);
         }
+        
+        try {
+            // Prepare order data
+            $orderData = [
+                'customer_id' => $customerId,
+                'seller_id' => $serviceData['user_id'],
+                'service_id' => $serviceId,
+                'package_id' => $packageId,
+                'custom_package_id' => $customPackageId,
+                'payment_type' => $paymentType,
+                'remained_revisions' => $packageData['revisions'] ?? 0,
+                'order_status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
 
-        // Prepare order data
-        $orderData = [
-            'customer_id' => $customerId,
-            'service_id' => $serviceId,
-            'package_id' => $packageId,
-            'custom_package_id' => $customPackageId,
-            'payment_type' => $paymentType,
-            'remained_revisions' => $packageData['revisions'] ?? 0, // Default value
-            'order_status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
+            // Create the order
+            if (!$orderModel->createOrder($orderData)) {
+                throw new \Exception('Failed to create order.');
+            }
 
-        // Create the order
-        if (!$orderModel->createOrder($orderData)) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Failed to create order.'
+            // Get the last inserted order ID
+            $orderId = $orderModel->getLastInsertId();
+
+            // Add service description and package benefits to promised data
+            $agreedData = json_encode([
+                'title' => $serviceData['title'],
+                'description' => $serviceData['description'],
+                'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
+                'benefits' => $packageData['benefits'] ?? 'No benefits available.',
+                'service_type' => $serviceData['service_type']
             ]);
-            return;
-        }
 
-        // Get the last inserted order ID
-        $orderId = $orderModel->getLastInsertId();
+            $buyerRequest = json_encode([
+                'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
+                'description' => $requestData['description'] ?? 'No description provided.'
+            ]);
 
-        // Add service description and package benefits to promised data
-        $agreedData = json_encode([
-            'title' => $serviceData['title'],
-            'description' => $serviceData['description'],
-            'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
-            'benefits' => $packageData['benefits'] ?? 'No benefits available.',
-            'service_type' => $serviceData['service_type'] 
-        ]);
-
-        $buyerRequest = json_encode([
-            'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
-            'description' => $requestData['description'] ?? 'No description provided.'
-        ]);
-
-        // Create promises associated with the order
-        $promiseData = [
-            'order_id' => $orderId,
-            'accepted_service' => $agreedData,
-            'requested_service' => $buyerRequest,
-            'delivery_days' => $packageData['delivery_days'] ?? 0,
-            'number_of_revisions' => $packageData['revisions'] ?? 0,
-            'price' => $packageData['price'] ?? 0.00
-        ];
+            // Create promises associated with the order
+            $promiseData = [
+                'order_id' => $orderId,
+                'accepted_service' => $agreedData,
+                'requested_service' => $buyerRequest,
+                'delivery_days' => $packageData['delivery_days'] ?? 0,
+                'number_of_revisions' => $packageData['revisions'] ?? 0,
+                'price' => $packageData['price'] ?? 0.00
+            ];
 
         if (!$orderPromisesModel->createPromise($promiseData)) {
             $response->sendJson([
@@ -324,9 +527,16 @@ class OrderController extends BaseController {
             'message' => 'Order created successfully.',
             'order_id' => $orderId
         ]);
+        } catch (\Exception $e) {
+            // Handle exceptions and return error response
+            error_log("Error creating order: " . $e->getMessage());
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
     }
-
-
+    
     /**
      * Update an existing order API endpoint.
      *
@@ -396,6 +606,680 @@ class OrderController extends BaseController {
             'success' => true,
             'message' => 'Order updated successfully.',
             'updated_fields' => $updateFields
+        ]);
+    }
+    
+    /**
+     * Fetch delivery by ID with all associated data.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with delivery details or error message.
+     */
+    // public function getDelivery($request, $response): void
+    // {
+    //     error_log("=== Starting getDelivery method ===");
+    //     try {
+    //         if ($request->getMethod() !== 'GET') {
+    //             $response->setStatusCode(405);
+    //             $response->sendError('Method Not Allowed');
+    //             return;
+    //         }
+
+    //         // Retrieve query parameters
+    //         $queryParams = $request->getQueryParams();
+    //         $deliveryId = $queryParams['delivery_id'] ?? null;
+    //         error_log("Retrieving delivery with ID: $deliveryId");
+
+    //         // Validate required parameter
+    //         if (empty($deliveryId)) {
+    //             error_log("Missing delivery_id parameter");
+    //             $response->sendError('Missing required parameter: delivery_id.', 400);
+    //             return;
+    //         }
+
+    //         // Initialize models
+    //         $deliveryModel = $this->model('Orders\OrderDeliveries');
+    //         $orderModel = $this->model('Orders\Orders');
+
+    //         // Fetch delivery data
+    //         error_log("Fetching delivery data from database");
+    //         $deliveryData = $deliveryModel->getDeliveryById($deliveryId);
+
+    //         if (!$deliveryData) {
+    //             error_log("No delivery found with ID: $deliveryId");
+    //             $response->sendError('Delivery not found.', 404);
+    //             return;
+    //         }
+
+    //         // Process file information
+    //         if (!empty($deliveryData['deliveries'])) {
+    //             try {
+    //                 $deliveryData['files'] = json_decode($deliveryData['deliveries'], true);
+    //                 // Keep original encoded data but provide decoded version
+    //                 $deliveryData['has_files'] = !empty($deliveryData['files']);
+    //                 $deliveryData['file_count'] = is_array($deliveryData['files']) ? count($deliveryData['files']) : 0;
+    //             } catch (\Exception $e) {
+    //                 error_log("Error decoding delivery files JSON: " . $e->getMessage());
+    //                 $deliveryData['files'] = [];
+    //                 $deliveryData['has_files'] = false;
+    //                 $deliveryData['file_count'] = 0;
+    //             }
+    //         } else {
+    //             $deliveryData['files'] = [];
+    //             $deliveryData['has_files'] = false;
+    //             $deliveryData['file_count'] = 0;
+    //         }
+
+    //         // Fetch order data related to this delivery
+    //         error_log("Fetching related order data for order ID: {$deliveryData['order_id']}");
+    //         $orderData = $orderModel->getOrderById($deliveryData['order_id']);
+
+    //         // Construct the response
+    //         $deliveryProfile = [
+    //             'delivery' => $deliveryData,
+    //             'order' => $orderData
+    //         ];
+
+    //         // Send the response with delivery profile data
+    //         $response->sendJson([
+    //             'success' => true,
+    //             'message' => 'Delivery retrieved successfully.',
+    //             'data' => $deliveryProfile
+    //         ]);
+            
+    //         error_log("=== Completed getDelivery successfully ===");
+    //     } catch (\Throwable $e) {
+    //         error_log("Error in getDelivery: " . $e->getMessage());
+    //         error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+    //         error_log("Stack trace: " . $e->getTraceAsString());
+            
+    //         $response->sendJson([
+    //             'success' => false,
+    //             'message' => 'Internal server error: ' . $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+    /**
+     * Fetch all deliveries for a specific order.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with deliveries list.
+     */
+    public function getOrderDeliveries($request, $response): void
+    {
+        error_log("=== Starting getOrderDeliveries method ===");
+        try {
+            if ($request->getMethod() !== 'GET') {
+                $response->setStatusCode(405);
+                $response->sendError('Method Not Allowed');
+                return;
+            }
+
+            // Retrieve query parameters
+            $queryParams = $request->getQueryParams();
+            $orderId = $queryParams['id'] ?? null;
+            error_log("Retrieving deliveries for order ID: $orderId");
+
+            // Validate required parameter
+            if (empty($orderId)) {
+                error_log("Missing order_id parameter");
+                $response->sendError('Missing required parameter: order_id.', 400);
+                return;
+            }
+
+            // Initialize models
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
+            
+            // Fetch deliveries for this order
+            error_log("Fetching deliveries from database for order: $orderId");
+            $deliveries = $deliveryModel->getDeliveriesByOrder($orderId);
+            
+            // Process deliveries to decode file information
+            if (!empty($deliveries)) {
+                foreach ($deliveries as &$delivery) {
+                    if (!empty($delivery['deliveries'])) {
+                        try {
+                            $delivery['files'] = json_decode($delivery['deliveries'], true);
+                            // Keep original encoded data but provide decoded version
+                            $delivery['has_files'] = !empty($delivery['files']);
+                            $delivery['file_count'] = is_array($delivery['files']) ? count($delivery['files']) : 0;
+                        } catch (\Exception $e) {
+                            error_log("Error decoding delivery files JSON: " . $e->getMessage());
+                            $delivery['files'] = [];
+                            $delivery['has_files'] = false;
+                            $delivery['file_count'] = 0;
+                        }
+                    } else {
+                        $delivery['files'] = [];
+                        $delivery['has_files'] = false;
+                        $delivery['file_count'] = 0;
+                    }
+                }
+                error_log("Successfully processed " . count($deliveries) . " deliveries");
+            } else {
+                error_log("No deliveries found for order: $orderId");
+            }
+
+            // Send the response with deliveries data
+            $response->sendJson([
+                'success' => true,
+                'message' => !empty($deliveries) ? 'Deliveries retrieved successfully.' : 'No deliveries found for this order.',
+                'data' => $deliveries ?? []
+            ]);
+            
+            error_log("=== Completed getOrderDeliveries successfully ===");
+        } catch (\Throwable $e) {
+            error_log("Error in getOrderDeliveries: " . $e->getMessage());
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create a new delivery for an order.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response indicating success or failure.
+     */
+    public function createDelivery($request, $response): void
+    {
+        error_log("=== Starting createDelivery method ===");
+        try {
+            // Parse request body
+            $requestData = $request->getParsedBody();
+            error_log("Request data received: " . json_encode(array_keys($requestData)));
+            
+            // Get uploaded files using $_FILES instead of the undefined method
+            $files = [];
+            if (isset($_FILES['deliveries'])) {
+                $files['deliveries'] = $_FILES['deliveries'];
+                error_log("Found " . count($_FILES['deliveries']['name']) . " files in the request");
+            } else {
+                error_log("No files found in the request under 'deliveries' key");
+            }
+            
+            // Validate required fields
+            $requiredFields = ['order_id', 'delivery_note'];
+            $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
+    
+            if (!empty($missingFields)) {
+                error_log("Validation failed - Missing fields: " . implode(', ', $missingFields));
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
+                ], 400);
+                return;
+            }
+     
+            // Initialize models - ensure consistent naming with uppercase O
+            error_log("Initializing models for delivery creation");
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
+            $orderModel = $this->model('Orders\Orders');
+     
+            // Check if order exists
+            $orderId = $requestData['order_id'];
+            error_log("Checking if order exists with ID: {$orderId}");
+            $orderData = $orderModel->getOrderById($orderId);
+            if (!$orderData) {
+                error_log("Order not found with ID: {$orderId}");
+                $response->sendError('Order not found.', 404);
+                return;
+            }
+            error_log("Order found: " . json_encode(['id' => $orderId, 'status' => $orderData['order_status']]));
+     
+            // Get current user (seller)
+            $currentUser = AuthHelper::getCurrentUser();
+            error_log("Current user ID: " . ($currentUser ? $currentUser['user_id'] : 'not authenticated'));
+             
+            if (!$currentUser) {
+                error_log("Authentication error: No current user found");
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Unauthorized: User not authenticated.'
+                ], 403);
+                return;
+            }
+             
+            if ($currentUser['user_id'] != $orderData['seller_id']) {
+                error_log("Authorization error: User {$currentUser['user_id']} is not the seller ({$orderData['seller_id']}) of order {$orderId}");
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Unauthorized: Only the seller of this order can create deliveries.'
+                ], 403);
+                return;
+            }
+     
+            // Handle file uploads if present
+            $uploadedFiles = [];
+            if (!empty($files['deliveries'])) {
+                error_log("Processing " . count($files['deliveries']['name']) . " uploaded files");
+                
+                try {
+                    // Manual file upload handling
+                    $uploadDir = 'cdn_uploads/services/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+                    
+                    for ($i = 0; $i < count($files['deliveries']['name']); $i++) {
+                        if ($files['deliveries']['error'][$i] === UPLOAD_ERR_OK) {
+                            $tempFile = $files['deliveries']['tmp_name'][$i];
+                            $originalName = $files['deliveries']['name'][$i];
+                            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                            $newFileName = uniqid('delivery_') . '.' . $extension;
+                            $targetPath = $uploadDir . '/' . $newFileName;
+                            
+                            if (move_uploaded_file($tempFile, $targetPath)) {
+                                $uploadedFiles[] = [
+                                    'name' => $originalName,
+                                    'path' => $targetPath,
+                                    'url' => 'cdn_uploads/services/' . $newFileName,
+                                    'size' => $files['deliveries']['size'][$i],
+                                    'type' => $files['deliveries']['type'][$i]
+                                ];
+                            }
+                        }
+                    }
+                    
+                    error_log("Files upload result: " . json_encode(['count' => count($uploadedFiles)]));
+                    
+                    if (empty($uploadedFiles)) {
+                        error_log("File upload failed: No files were successfully uploaded");
+                        $response->sendJson([
+                            'success' => false,
+                            'message' => 'Failed to upload delivery files.'
+                        ], 500);
+                        return;
+                    }
+                } catch (\Exception $fileEx) {
+                    error_log("File upload exception: " . $fileEx->getMessage());
+                    error_log("Stack trace: " . $fileEx->getTraceAsString());
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'File upload error: ' . $fileEx->getMessage()
+                    ], 500);
+                    return;
+                }
+            }
+     
+            // Prepare delivery data
+            $deliveryData = [
+                'order_id' => $requestData['order_id'],
+                'delivery_note' => $requestData['delivery_note'],
+                'deliveries' => !empty($uploadedFiles) ? json_encode($uploadedFiles) : null,
+                'status' => 'delivered',
+                'delivered_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+     
+            error_log("Prepared delivery data: " . json_encode(array_merge(
+                ['order_id' => $deliveryData['order_id']],
+                ['delivery_note_length' => strlen($deliveryData['delivery_note'])],
+                ['has_files' => !empty($uploadedFiles)],
+                ['status' => $deliveryData['status']],
+                ['timestamps' => [$deliveryData['delivered_at'], $deliveryData['created_at']]]
+            )));
+     
+            // Create the delivery with detailed error catching
+            try {
+                error_log("Attempting to create delivery record in database");
+                $created = $deliveryModel->createDelivery($deliveryData);
+                 
+                if (!$created) {
+                    error_log("Database operation failed: createDelivery returned false/null");
+                    $dbError = $deliveryModel->getLastError() ?? "Unknown database error";
+                    error_log("Database error details: " . $dbError);
+                     
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'Failed to create delivery. Database operation unsuccessful.'
+                    ], 500);
+                    return;
+                }
+                 
+                error_log("Delivery created successfully with ID: {$created}");
+            } catch (\Exception $dbEx) {
+                error_log("Database exception in createDelivery: " . $dbEx->getMessage());
+                error_log("Query error: " . ($deliveryModel->getLastQuery() ?? "No query information"));
+                error_log("Exception file: " . $dbEx->getFile() . " on line: " . $dbEx->getLine());
+                error_log("Stack trace: " . $dbEx->getTraceAsString());
+                 
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Database error: ' . $dbEx->getMessage()
+                ], 500);
+                return;
+            }
+     
+            // Update order status to indicate delivery
+            error_log("Updating order status to 'completed' for order ID: {$orderId}");
+            try {
+                $updateResult = $orderModel->updateOrderById($requestData['order_id'], [
+                    'order_status' => 'completed',
+                    'delivered_date' => date('Y-m-d H:i:s')
+                ]);
+                 
+                if (!$updateResult) {
+                    error_log("Warning: Failed to update order status, but delivery was created");
+                } else {
+                    error_log("Order status updated successfully");
+                }
+            } catch (\Exception $updateEx) {
+                // Log but don't fail the whole operation since delivery was created
+                error_log("Order status update exception: " . $updateEx->getMessage());
+                error_log("This is a non-critical error as delivery was created successfully");
+            }
+     
+            // Return success response
+            error_log("=== Completed createDelivery successfully ===");
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Delivery created successfully.',
+                'delivery_id' => $created
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Critical error in createDelivery: " . $e->getMessage());
+            error_log("Error type: " . get_class($e));
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
+             
+            if (isset($requestData)) {
+                error_log("Request data at time of error: " . json_encode(array_keys($requestData ?? [])));
+            }
+             
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create a revision for an existing delivery.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response indicating success or failure.
+     */
+    public function createRevision($request, $response): void
+    {
+        try {
+            // Parse request body
+            $requestData = $request->getParsedBody();
+            $files = $request->getUploadedFiles();
+
+            // Validate required fields
+            $requiredFields = ['order_id', 'revision_note'];
+            $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
+
+            if (!empty($missingFields)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
+                ], 400);
+                return;
+            }
+
+            // Initialize models
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
+            $orderModel = $this->model('Orders\Orders');
+
+            // Check if order exists and has revisions left
+            $orderData = $orderModel->getOrderById($requestData['order_id']);
+            if (!$orderData) {
+                $response->sendError('Order not found.', 404);
+                return;
+            }
+
+            if ($orderData['remained_revisions'] <= 0) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'No revisions left for this order.'
+                ], 400);
+                return;
+            }
+
+            // Get current user (buyer/customer)
+            $currentUser = AuthHelper::getCurrentUser();
+            if (!$currentUser || $currentUser['user_id'] != $orderData['customer_id']) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Unauthorized: Only the customer of this order can request revisions.'
+                ], 403);
+                return;
+            }
+
+            // Handle file uploads if present
+            $uploadedFiles = [];
+            if (!empty($files['revision_files'])) {
+                $fileHandler = new FileHandler();
+                $uploadedFiles = $fileHandler->handleMultipleUploads($files['revision_files'], 'revisions');
+                
+                if (empty($uploadedFiles)) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'Failed to upload revision files.'
+                    ], 500);
+                    return;
+                }
+            }
+
+            // Create the revision
+            $revisionData = [
+                'order_id' => $requestData['order_id'],
+                'revision_note' => $requestData['revision_note'],
+                'revision_files' => !empty($uploadedFiles) ? json_encode($uploadedFiles) : null,
+                'status' => 'revision_requested',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Create revision using the createRevision method
+            $created = $deliveryModel->createRevision($requestData['order_id'], $revisionData);
+            if (!$created) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to create revision request.'
+                ], 500);
+                return;
+            }
+
+            // Update order's remaining revisions count
+            $orderModel->updateOrderById($requestData['order_id'], [
+                'remained_revisions' => $orderData['remained_revisions'] - 1,
+                'order_status' => 'in_progress'
+            ]);
+
+            // Return success response
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Revision requested successfully.',
+                'delivery_id' => $created
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Error in createRevision: " . $e->getMessage());
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update delivery status.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response indicating success or failure.
+     */
+    public function updateDeliveryStatus($request, $response): void
+    {
+        try {
+            // Parse request body
+            $requestData = $request->getParsedBody();
+
+            // Validate required fields
+            if (empty($requestData['delivery_id']) || empty($requestData['status'])) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Missing required fields: delivery_id and status are required.'
+                ], 400);
+                return;
+            }
+
+            // Validate status value
+            $validStatuses = ['delivered', 'revision_requested', 'completed', 'rejected'];
+            if (!in_array($requestData['status'], $validStatuses)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Invalid status value. Allowed values: ' . implode(', ', $validStatuses)
+                ], 400);
+                return;
+            }
+
+            // Initialize models
+            $deliveryModel = $this->model('Orders\OrderDeliveries');
+
+            // Get the delivery
+            $deliveryData = $deliveryModel->getDeliveryById($requestData['delivery_id']);
+            if (!$deliveryData) {
+                $response->sendError('Delivery not found.', 404);
+                return;
+            }
+
+            // Update delivery status
+            $updated = $deliveryModel->updateDelivery($requestData['delivery_id'], [
+                'status' => $requestData['status'],
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+
+            if (!$updated) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to update delivery status.'
+                ], 500);
+                return;
+            }
+
+            // Return success response
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Delivery status updated successfully.',
+                'status' => $requestData['status']
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Error in updateDeliveryStatus: " . $e->getMessage());
+            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+            
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Internal server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get latest delivery for an order.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with the latest delivery data.
+     */
+    public function getLatestDelivery($request, $response): void
+    {
+        if ($request->getMethod() !== 'GET') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        // Retrieve query parameters
+        $queryParams = $request->getQueryParams();
+        $orderId = $queryParams['order_id'] ?? null;
+
+        // Validate required parameter
+        if (empty($orderId)) {
+            $response->sendError('Missing required parameter: order_id.', 400);
+            return;
+        }
+
+        // Initialize models
+        $deliveryModel = $this->model('Orders\OrderDeliveries');
+
+        // Fetch latest delivery
+        $latestDelivery = $deliveryModel->getLatestDelivery($orderId);
+
+        if (!$latestDelivery) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'No deliveries found for this order.'
+            ], 404);
+            return;
+        }
+
+        // Send the response with latest delivery data
+        $response->sendJson([
+            'success' => true,
+            'message' => 'Latest delivery retrieved successfully.',
+            'data' => $latestDelivery
+        ]);
+    }
+
+    /**
+     * Get all revisions for a delivery.
+     *
+     * @param Request $request The incoming request object.
+     * @param Response $response The response object to return data.
+     * @return void JSON response with revisions data.
+     */
+    public function getRevisions($request, $response): void
+    {
+        if ($request->getMethod() !== 'GET') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        // Retrieve query parameters
+        $queryParams = $request->getQueryParams();
+        $deliveryId = $queryParams['delivery_id'] ?? null;
+
+        // Validate required parameter
+        if (empty($deliveryId)) {
+            $response->sendError('Missing required parameter: delivery_id.', 400);
+            return;
+        }
+
+        // Initialize models
+        $deliveryModel = $this->model('Orders\orderDeliveries');
+
+        // Fetch revisions
+        $revisions = $deliveryModel->getRevisionsByDeliveryId($deliveryId);
+
+        if (empty($revisions)) {
+            $response->sendJson([
+                'success' => true,
+                'message' => 'No revisions found for this delivery.',
+                'data' => []
+            ]);
+            return;
+        }
+
+        // Send the response with revisions data
+        $response->sendJson([
+            'success' => true,
+            'message' => 'Revisions retrieved successfully.',
+            'data' => $revisions
         ]);
     }
 }
