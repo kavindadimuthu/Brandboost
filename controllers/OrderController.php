@@ -11,6 +11,8 @@ use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
 use app\models\Users\User;
+use app\models\Payments\Transaction;
+use app\models\Payments\Wallet;
 
 class OrderController extends BaseController {
     /**
@@ -287,141 +289,168 @@ class OrderController extends BaseController {
     }
 
 
-
     /**
      * Create a new order API endpoint.
      *
-     * @param Request $request  The incoming request object.
+     * @param Request $request The incoming request object.
      * @param Response $response The response object to return data.
-     * @return void JSON response indicating success or failure.
+     * @return Response JSON response indicating success or failure.
      */
-    public function createOrder($request, $response): void {
-
-        // Initialize models
-        $orderModel = new Orders();
-        $orderPromisesModel = new OrderPromises();
-        $serviceModel = new Service();
-        $servicePackageModel = new ServicePackage();
-
-        // Parse request body
+    public function createOrder($request, $response) {
+        // Extract data from the request
         $requestData = $request->getParsedBody();
         DebugHelper::logArray($requestData);
-
+        
         // Validate required fields
         $requiredFields = ['service_id', 'payment_type'];
         $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
 
         if (!empty($missingFields)) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
-            ]);
-            return;
+            ], 400);
         }
 
-        // Extract data from the request
-        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? 1; // tempory user value is 1
-
+        // Check authentication
+        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
         if (!$customerId) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Unauthorized access: user not authenticated.'
             ], 401);
-            return;
         }
-
+        
+        // Initialize required models
+        $orderModel = new Orders();
+        $orderPromisesModel = new OrderPromises();
+        $serviceModel = new Service();
+        $servicePackageModel = new ServicePackage();
+        $transactionModel = new Transaction();
+        $walletModel = new Wallet();
+        
+        // Extract other data from the request
         $serviceId = $requestData['service_id'];
         $paymentType = $requestData['payment_type'];
         $packageId = $requestData['package_id'] ?? null;
         $customPackageId = $requestData['custom_package_id'] ?? null;
-        $promises = json_decode($requestData['promises'] ?? '[]', true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Invalid JSON format in promises.'
-            ]);
-            return;
+        
+        // Parse promises if provided
+        $promises = [];
+        if (!empty($requestData['promises'])) {
+            $promises = json_decode($requestData['promises'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return $response->sendJson([
+                    'success' => false,
+                    'message' => 'Invalid JSON format in promises.'
+                ], 400);
+            }
         }
-
+        
         // Fetch service and package data
         $serviceData = $serviceModel->getServiceById($serviceId);
         $packageData = $servicePackageModel->getPackageById($packageId);
 
         if (!$serviceData || !$packageData) {
-            $response->sendJson([
+            return $response->sendJson([
                 'success' => false,
                 'message' => 'Invalid service or package ID.'
-            ]);
-            return;
+            ], 400);
         }
+        
+        try {
+            // Prepare order data
+            $orderData = [
+                'customer_id' => $customerId,
+                'seller_id' => $serviceData['user_id'],
+                'service_id' => $serviceId,
+                'package_id' => $packageId,
+                'custom_package_id' => $customPackageId,
+                'payment_type' => $paymentType,
+                'remained_revisions' => $packageData['revisions'] ?? 0,
+                'order_status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
 
-        // Prepare order data
-        $orderData = [
-            'customer_id' => $customerId,
-            'seller_id' => $serviceData['user_id'],	 // Assuming the service has a user_id field
-            'service_id' => $serviceId,
-            'package_id' => $packageId,
-            'custom_package_id' => $customPackageId,
-            'payment_type' => $paymentType,
-            'remained_revisions' => $packageData['revisions'] ?? 0, // Default value
-            'order_status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
+            // Create the order
+            if (!$orderModel->createOrder($orderData)) {
+                throw new \Exception('Failed to create order.');
+            }
 
-        // Create the order
-        if (!$orderModel->createOrder($orderData)) {
-            $response->sendJson([
+            // Get the last inserted order ID
+            $orderId = $orderModel->getLastInsertId();
+
+            // Add service description and package benefits to promised data
+            $agreedData = json_encode([
+                'title' => $serviceData['title'],
+                'description' => $serviceData['description'],
+                'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
+                'benefits' => $packageData['benefits'] ?? 'No benefits available.',
+                'service_type' => $serviceData['service_type']
+            ]);
+
+            $buyerRequest = json_encode([
+                'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
+                'description' => $requestData['description'] ?? 'No description provided.'
+            ]);
+
+            // Create promises associated with the order
+            $promiseData = [
+                'order_id' => $orderId,
+                'accepted_service' => $agreedData,
+                'requested_service' => $buyerRequest,
+                'delivery_days' => $packageData['delivery_days'] ?? 0,
+                'number_of_revisions' => $packageData['revisions'] ?? 0,
+                'price' => $packageData['price'] ?? 0.00
+            ];
+
+            if (!$orderPromisesModel->createPromise($promiseData)) {
+                throw new \Exception('Failed to create associated promises.');
+            }
+
+            // Create initial transaction (customer -> system)
+            $transactionData = [
+                'order_id' => $orderId,
+                'sender_id' => $customerId,
+                'receiver_id' => 1, // System user_id
+                'amount' => $packageData['price'] ?? 0.00,
+                'status' => 'hold',
+                'hold_until' => date('Y-m-d H:i:s', strtotime('+1 minute'))
+            ];
+
+            if (!$transactionModel->createTransaction($transactionData)) {
+                throw new \Exception('Failed to create transaction.');
+            }
+
+            // Ensure system wallet exists
+            if (!$walletModel->walletExists(1)) {
+                if (!$walletModel->createWallet(1)) {
+                    throw new \Exception('Failed to create system wallet.');
+                }
+            }
+
+            // Update system wallet balance
+            if (!$walletModel->updateWalletBalance(1, $transactionData['amount'])) {
+                throw new \Exception('Failed to update system wallet balance.');
+            }
+
+            // Return success response
+            return $response->sendJson([
+                'success' => true,
+                'message' => 'Order and transaction created successfully.',
+                'order_id' => $orderId,
+                'transaction_id' => $transactionModel->getLastInsertId()
+            ], 201);
+            
+        } catch (\Exception $e) {
+            error_log("Create order error: " . $e->getMessage());
+            return $response->sendJson([
                 'success' => false,
-                'message' => 'Failed to create order.'
-            ]);
-            return;
+                'message' => 'Failed to create order: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Get the last inserted order ID
-        $orderId = $orderModel->getLastInsertId();
-
-        // Add service description and package benefits to promised data
-        $agreedData = json_encode([
-            'title' => $serviceData['title'],
-            'description' => $serviceData['description'],
-            'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
-            'benefits' => $packageData['benefits'] ?? 'No benefits available.',
-            'service_type' => $serviceData['service_type'] 
-        ]);
-
-        $buyerRequest = json_encode([
-            'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
-            'description' => $requestData['description'] ?? 'No description provided.'
-        ]);
-
-        // Create promises associated with the order
-        $promiseData = [
-            'order_id' => $orderId,
-            'accepted_service' => $agreedData,
-            'requested_service' => $buyerRequest,
-            'delivery_days' => $packageData['delivery_days'] ?? 0,
-            'number_of_revisions' => $packageData['revisions'] ?? 0,
-            'price' => $packageData['price'] ?? 0.00
-        ];
-
-        if (!$orderPromisesModel->createPromise($promiseData)) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Failed to create associated promises.'
-            ]);
-            return;
-        }
-
-        // Return success response
-        $response->sendJson([
-            'success' => true,
-            'message' => 'Order created successfully.',
-            'order_id' => $orderId
-        ]);
     }
-
-
+    
     /**
      * Update an existing order API endpoint.
      *

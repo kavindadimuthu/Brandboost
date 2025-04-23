@@ -121,7 +121,6 @@ $app->router->post('/auth/login', 'AuthController@login'); // Login
 $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 
 
-
 // ==================================
 // API routes
 // ==================================
@@ -160,10 +159,29 @@ $app->router->post('/api/create-order', 'OrderController@createOrder'); // Creat
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
 
- $app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
- $app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
 
+$app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
+$app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
 
+// ==================================
+// Payment API routes
+// ==================================
+$app->router->get('/api/payments/process-releases', 'PaymentController@processScheduledReleases');
+$app->router->post('/api/payments/create-transaction', 'PaymentController@createTransaction');
+$app->router->post('/api/payments/release-funds', 'PaymentController@releaseFunds');
+$app->router->get('/api/payments/transaction-details', 'PaymentController@getTransactionDetails');
+
+$app->router->post('/api/payments/withdraw-funds', 'PaymentController@withdrawFunds'); // Get transaction history
+
+$app->router->get('/api/payments/seller-balance', 'PaymentController@getSellerBalance');
+$app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHoldBalance');
+$app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
+$app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
+
+$app->router->post('/api/payments/add-payoutmethod', 'PaymentController@addPayoutMethod');
+$app->router->get('/api/payments/get-seller-payoutmethod', 'PaymentController@getSellerPayoutMethods');
+$app->router->post('/api/payments/update-payoutmethod', 'PaymentController@updatePayoutMethod'); 
+$app->router->get('/api/payments/delete-payoutmethod', 'PaymentController@deletePayoutMethod'); 
 
 
 // Run the application
