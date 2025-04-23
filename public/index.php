@@ -34,6 +34,7 @@ $app->router->get('/login', 'GuestController@login'); // Login
 $app->router->get('/forgot-password', 'GuestController@forgotPassword'); // Forgot Password
 $app->router->get('/reset-password', 'GuestController@resetPassword'); // Reset Password
 
+
 // ==================================
 // Businessman routes
 // ==================================
@@ -158,6 +159,10 @@ $app->router->post('/api/create-order', 'OrderController@createOrder'); // Creat
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
 
+
+$app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
+$app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
+
 // ==================================
 // Payment API routes
 // ==================================
@@ -178,8 +183,6 @@ $app->router->get('/api/payments/get-seller-payoutmethod', 'PaymentController@ge
 $app->router->post('/api/payments/update-payoutmethod', 'PaymentController@updatePayoutMethod'); 
 $app->router->get('/api/payments/delete-payoutmethod', 'PaymentController@deletePayoutMethod'); 
 
-//test routes
-$app->router->get('/test', 'TestController@test');
 
 // Run the application
 $app->run();
