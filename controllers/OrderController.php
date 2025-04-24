@@ -7,7 +7,7 @@ use app\core\Helpers\AuthHelper;
 use app\core\Helpers\DebugHelper;
 use app\core\Utils\FileHandler;
 use app\models\Orders\Orders;
-use app\models\Orders\orderDeliveries;
+use app\models\Orders\OrderDeliveries;
 use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
@@ -437,6 +437,7 @@ class OrderController extends BaseController {
         $servicePackageModel = new ServicePackage();
         $transactionModel = new Transaction();
         $walletModel = new Wallet();
+        $orderDeliveriesModel = new OrderDeliveries();
         
         // Extract other data from the request
         $serviceId = $requestData['service_id'];
@@ -520,6 +521,40 @@ class OrderController extends BaseController {
             ]);
             return;
         }
+
+
+        // Handle media uploads
+        $mediaPaths = [];
+        for ($i = 0; $i < 4; $i++) {
+            $key = "additionalImage{$i}";
+            if (isset($uploadedFiles[$key]) && $uploadedFiles[$key]['error'] === UPLOAD_ERR_OK) {
+                $file = $uploadedFiles[$key];
+                $mediaPath = FileHandler::fileUploader($file, 'cdn_uploads/orders/order_attachments');
+                if ($mediaPath) {
+                    $mediaPaths[] = $mediaPath;
+                }
+            }
+        }
+
+        // Create the delivery record
+        $deliveryData = [
+            'order_id' => $orderId,
+            'revision_number' => 0,
+            'revision_note' => $requestData['requirements'],
+            'revision_files' => json_encode($mediaPaths),
+            'status' => 'pending',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        if (!$orderDeliveriesModel->createDelivery($deliveryData)) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to create associated delivery record.'
+            ]);
+            return;
+        }
+
+
 
         // Return success response
         $response->sendJson([
@@ -1281,5 +1316,17 @@ class OrderController extends BaseController {
             'message' => 'Revisions retrieved successfully.',
             'data' => $revisions
         ]);
+
+        $sql = "INSERT INTO order_revisions (order_id, revision_note, revision_files, status, created_at) VALUES (?, ?, ?, ?, ?)";
+
+        $params = [
+            $requestData['order_id'],
+            $requestData['revision_note'],
+            !empty($uploadedFiles) ? json_encode($uploadedFiles) : null,
+            'revision_requested',
+            date('Y-m-d H:i:s')
+        ];
+        
+        $deliveryModel->executeCustomQuery($sql, $params);
     }
 }
