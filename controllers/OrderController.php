@@ -1062,15 +1062,15 @@ class OrderController extends BaseController {
             $uploadedFiles = [];
             if (!empty($files['revision_files'])) {
                 $fileHandler = new FileHandler();
-                $uploadedFiles = $fileHandler->handleMultipleUploads($files['revision_files'], 'revisions');
+                // $uploadedFiles = $fileHandler->handleMultipleUploads($files['revision_files'], 'revisions');
                 
-                if (empty($uploadedFiles)) {
-                    $response->sendJson([
-                        'success' => false,
-                        'message' => 'Failed to upload revision files.'
-                    ], 500);
-                    return;
-                }
+                // if (empty($uploadedFiles)) {
+                //     $response->sendJson([
+                //         'success' => false,
+                //         'message' => 'Failed to upload revision files.'
+                //     ], 500);
+                //     return;
+                // }
             }
 
             // Create the revision
