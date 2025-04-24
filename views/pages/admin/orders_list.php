@@ -1117,7 +1117,7 @@
                         queryParams.append('date_to', state.filters.dateTo);
                     }
 
-                    const response = await fetch(`/api/orders?${queryParams.toString()}`);
+                    const response = await fetch(`/api/orders-admin?${queryParams.toString()}`);
                     
                     if (!response.ok) {
                         throw new Error('Failed to fetch orders');

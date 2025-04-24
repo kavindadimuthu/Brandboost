@@ -175,7 +175,8 @@ $app->router->post('/api/update-custom-package/{id}', 'CustomPackageController@u
 $app->router->get('/api/delete-custom-package/{id}', 'CustomPackageController@deleteCustomPackage'); // Delete Custom Package
 
 // Order Management
-$app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List
+$app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List by User
+$app->router->get('/api/orders-admin', 'OrderController@getOrderListByAdmin'); // Get Order List by Admin
 $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get Order Profile
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order

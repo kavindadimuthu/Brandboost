@@ -818,22 +818,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline dropdown-toggle" id="exportDropdownBtn">
-                                <i class="fas fa-download"></i> Export
-                            </button>
-                            <div class="dropdown-menu" id="exportDropdown">
-                                <button class="dropdown-item" id="exportCsv">
-                                    <i class="fas fa-file-csv"></i> CSV
-                                </button>
-                                <button class="dropdown-item" id="exportExcel">
-                                    <i class="fas fa-file-excel"></i> Excel
-                                </button>
-                                <button class="dropdown-item" id="exportPdf">
-                                    <i class="fas fa-file-pdf"></i> PDF
-                                </button>
-                            </div>
-                        </div>
                         <button class="btn btn-primary" id="clearAllFiltersBtn">
                             <i class="fas fa-times"></i> Clear All Filters
                         </button>
@@ -989,7 +973,6 @@
             const sortDropdown = document.getElementById('sortDropdown');
             const orderDropdownBtn = document.getElementById('orderDropdownBtn');
             const orderDropdown = document.getElementById('orderDropdown');
-            const exportDropdownBtn = document.getElementById('exportDropdownBtn');
             const exportDropdown = document.getElementById('exportDropdown');
             const filterDropdownBtn = document.getElementById('filterDropdownBtn');
             const filterDropdown = document.getElementById('filterDropdown');
@@ -1004,11 +987,6 @@
             const applyDateFilterBtn = document.getElementById('applyDateFilterBtn');
             const resetDateFilterBtn = document.getElementById('resetDateFilterBtn');
             const presetButtons = document.querySelectorAll('.preset-btn');
-            
-            // Export buttons
-            const exportCsv = document.getElementById('exportCsv');
-            const exportExcel = document.getElementById('exportExcel');
-            const exportPdf = document.getElementById('exportPdf');
             
             // Modal elements
             const actionDetailModal = document.getElementById('actionDetailModal');
@@ -1540,11 +1518,6 @@
                 e.stopPropagation();
             });
 
-            exportDropdownBtn.addEventListener('click', function(e) {
-                toggleDropdown(exportDropdown);
-                e.stopPropagation();
-            });
-
             filterDropdownBtn.addEventListener('click', function(e) {
                 toggleDropdown(filterDropdown);
                 e.stopPropagation();
@@ -1576,22 +1549,6 @@
                     state.currentPage = 1;
                     fetchActions();
                 });
-            });
-
-            // Export dropdown items
-            exportCsv.addEventListener('click', function() {
-                exportData('csv');
-                exportDropdown.classList.remove('show');
-            });
-
-            exportExcel.addEventListener('click', function() {
-                exportData('excel');
-                exportDropdown.classList.remove('show');
-            });
-
-            exportPdf.addEventListener('click', function() {
-                exportData('pdf');
-                exportDropdown.classList.remove('show');
             });
 
             // Table row click to view details

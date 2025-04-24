@@ -954,9 +954,6 @@
                                 <button class="btn btn-primary view-btn" data-id="${user.user_id}">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-danger delete-btn" data-id="${user.user_id}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             </div>
                         </td>
                     `;
@@ -977,16 +974,6 @@
                     });
                 });
 
-                // Delete button event handlers
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', event => {
-                        event.stopPropagation();
-                        const userId = button.dataset.id;
-                        if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                            deleteUser(userId);
-                        }
-                    });
-                });
             }
 
             async function deleteUser(userId) {
