@@ -62,6 +62,10 @@
         }
 
         /* Content Styles */
+        .settings-content{
+            min-height: 50vh;
+        }
+
         .payout-header {
             background: white;
             border-radius: 12px;
@@ -139,6 +143,12 @@
         .action-button:hover {
             background: #f5f7fb;
             color: #4169E1;
+        }
+
+        .add-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
         }
 
         .add-button {
@@ -290,7 +300,7 @@
 
             <!-- Bank Account Section -->
             <div class="payment-methods-section">
-                <h2>Your Payout Methods</h2>
+                <!-- <h2>Your Payout Methods</h2> -->
                 <div id="payout-methods-container">
                     <!-- Payout methods will be loaded here dynamically -->
                     <div class="loading-spinner">Loading your payout methods...</div>
