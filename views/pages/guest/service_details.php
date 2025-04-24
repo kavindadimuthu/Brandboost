@@ -631,6 +631,7 @@
         renderAboutSection();
         renderPlatforms();
         renderReviews(result);
+        renderReviews(result);
         renderTags();
         renderPricingContent('standard', serviceId, gigData.serviceType);
 
@@ -716,6 +717,10 @@
         ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
         ratingBar.querySelector('span:last-child').textContent = `${percentage}%`;
       });
+
+      console.log("Ratings breakdown:", result.user);
+      // console.log(result.user);
+
       
       const reviewList = result.reviews;
       console.log(reviewList);

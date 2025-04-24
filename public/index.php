@@ -94,7 +94,7 @@ $app->router->get('/admin/users-list', 'AdminController@usersList');
 $app->router->get('/admin/user-profile/{id}', 'AdminController@userProfile');
 // Verification management
 $app->router->get('/admin/verifications-list', 'AdminController@verificationsList');
-$app->router->get('/admin/verification-details/{id}', 'AdminController@verificationDetails');
+$app->router->get('/admin/verification-details/{type}/{id}', 'AdminController@verificationDetails');
 // Order management
 $app->router->get('/admin/orders-list', 'AdminController@ordersList');
 $app->router->get('/admin/order-details/{id}', 'AdminController@orderDetails');
@@ -122,6 +122,25 @@ $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 
 
 // ==================================
+// Additional Error Handling Routes
+// ==================================
+$app->router->get('/404', 'GuestController@error404'); // 404 Error Page
+$app->router->get('/403', 'GuestController@error403'); // 403 Error Page
+$app->router->get('/401', 'GuestController@error401'); // 401 Error Page
+$app->router->get('/500', 'GuestController@error500'); // 500 Error Page
+$app->router->get('/503', 'GuestController@error503'); // 503 Error Page
+
+// Payment Error or Success
+$app->router->get('/payment-error', 'GuestController@paymentError'); // Payment Error Page
+$app->router->get('/payment-success', 'GuestController@paymentSuccess'); // Payment Success Page
+
+// Account Suspended or Deactivated
+$app->router->get('/account-suspended', 'GuestController@accountSuspended'); // Account Suspended Page
+
+
+
+
+// ==================================
 // API routes
 // ==================================
 
@@ -129,7 +148,10 @@ $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 $app->router->get('/api/users', 'UserController@getUserList'); // Get Users list
 $app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
 $app->router->post('/api/register', 'UserController@createUser'); // Register/Create User
-$app->router->post('/update-user/{id}', 'UserController@updateUserProfile'); // Update User Profile
+$app->router->post('/api/update-user', 'UserController@updateUserProfile'); // Update User Profile
+// updateUserAccountStatus
+$app->router->post('/api/update-user-account-status', 'UserController@updateUserAccountStatus'); // Update User account status
+$app->router->post('/api/change-password', 'AuthController@changePassword'); // Change Password
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
 
@@ -153,11 +175,37 @@ $app->router->post('/api/update-custom-package/{id}', 'CustomPackageController@u
 $app->router->get('/api/delete-custom-package/{id}', 'CustomPackageController@deleteCustomPackage'); // Delete Custom Package
 
 // Order Management
-$app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List
+$app->router->get('/api/orders', 'OrderController@getOrderList'); // Get Order List by User
+$app->router->get('/api/orders-admin', 'OrderController@getOrderListByAdmin'); // Get Order List by Admin
 $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get Order Profile
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
+
+
+// Verification Management
+$app->router->get('/api/verifications', 'VerificationController@getVerificationsList'); // Get Verification List
+$app->router->get('/api/verification/{type}/{id}', 'VerificationController@getVerificationDetails'); // Get Verification Profile
+$app->router->post('/api/update-verification-status', 'VerificationController@updateVerificationStatus'); // Update Verification Status
+
+// Complaint Management
+$app->router->get('/api/complaints', 'DisputeController@getDisputeList'); // Get Complaint List
+$app->router->get('/api/complaint/{id}', 'DisputeController@getComplaintDetails'); // Get specific complaint details
+$app->router->post('/api/update-complaint-status', 'DisputeController@updateComplaintStatus'); // Update complaint status
+// $app->router->post('/api/respond-to-complaint', 'DisputeController@respondToComplaint'); // Send admin response
+// $app->router->post('/api/toggle-complaint-priority', 'DisputeController@toggleComplaintPriority'); // Toggle priority
+// $app->router->post('/api/take-action-against-user', 'DisputeController@takeActionAgainstUser'); // Take action against user
+
+
+// Admin actions
+$app->router->get('/api/actions', 'ActionController@getActionList'); // Get Actions List
+
 $app->router->get('/api/orders/seller', 'OrderController@getSellerOrders');
+$app->router->get('/api/delivery/{id}', 'OrderController@getOrderDeliveries');
+$app->router->post('/api/createDelivery', 'OrderController@createDelivery');
+
+
+//test routes
+$app->router->get('/test', 'TestController@test');
 
 
 $app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview

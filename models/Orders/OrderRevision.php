@@ -6,7 +6,7 @@ use app\core\BaseModel;
 
 class OrderRevision extends BaseModel
 {
-    protected $table = 'order_revision'; // Specify the database table
+    protected $table = 'order_deliveries'; // Specify the database table
 
     /**
      * Retrieve a revision by its ID.
@@ -16,7 +16,7 @@ class OrderRevision extends BaseModel
      */
     public function getRevisionById(int $revisionId)
     {
-        return $this->readOne(['revision_id' => $revisionId]);
+        return $this->readOne(['delivery_id' => $revisionId]);
     }
 
     /**

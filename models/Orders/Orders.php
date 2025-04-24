@@ -130,4 +130,63 @@ class Orders extends BaseModel
         return $this->read(['payment_type' => $paymentType], $options);
     }
 
+
+    /**
+     * Retrieve a list of orders with joined data from order_promises, service, and user tables.
+     *
+     * @param array $conditions Filtering conditions for the orders.
+     * @param array $options Additional options like order, limit, offset, search, filters.
+     * @return array|false List of orders with joined data or false on failure.
+     */
+    public function getOrdersWithDetails(array $conditions = [], array $options = [])
+    {
+        $joins = [
+            [
+                'type' => 'LEFT',
+                'table' => 'order_promises',
+                'on' => 'orders.order_id = order_promises.order_id'
+            ],
+            [
+                'type' => 'LEFT',
+                'table' => 'service',
+                'on' => 'orders.service_id = service.service_id'
+            ],
+            [
+                'type' => 'LEFT',
+                'table' => 'user AS customer',
+                'on' => 'orders.customer_id = customer.user_id'
+            ],
+            [
+                'type' => 'LEFT',
+                'table' => 'user AS seller',
+                'on' => 'orders.seller_id = seller.user_id'
+            ]
+        ];
+        $options['columns'] = [
+            'orders.*',
+            'order_promises.promise_id',
+            'order_promises.accepted_service',
+            'order_promises.requested_service',
+            'order_promises.delivery_days',
+            'order_promises.number_of_revisions',
+            'order_promises.price',
+            'service.title AS service_title',
+            'service.description AS service_description',
+            'service.cover_image AS service_cover_image',
+            'service.service_type',
+            'customer.name AS customer_name',
+            'customer.email AS customer_email',
+            'customer.profile_picture AS customer_profile_picture',
+            'customer.role AS customer_role',
+            'seller.name AS seller_name',
+            'seller.email AS seller_email',
+            'seller.profile_picture AS seller_profile_picture',
+            'seller.role AS seller_role'
+        ];
+        return $this->readWithJoin($joins, $conditions, $options);
+    }
+
 }
+
+
+
