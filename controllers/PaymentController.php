@@ -282,23 +282,34 @@ class PaymentController extends BaseController {
 
         try {
             $transactionModel = new Transaction();
-            $allTransactions = $transactionModel->getTransactionsByReceiverId($sellerId);
+            $orderModel = new Orders();
+            
+            // Get all transactions with 'hold' status
+            $holdTransactions = $transactionModel->read(['status' => 'hold']);
             
             $holdAmount = 0;
-            $holdTransactions = [];
+            $sellerHoldTransactions = [];
             
-            foreach ($allTransactions as $transaction) {
-                if ($transaction['status'] === 'hold') {
+            // Filter transactions by checking if the order belongs to the seller
+            foreach ($holdTransactions as $transaction) {
+                if (!isset($transaction['order_id'])) {
+                    continue;
+                }
+                
+                $order = $orderModel->getOrderById($transaction['order_id']);
+                
+                // Check if this order belongs to the current seller
+                if ($order && $order['seller_id'] == $sellerId) {
                     $holdAmount += (float)$transaction['amount'];
-                    $holdTransactions[] = $transaction;
+                    $sellerHoldTransactions[] = $transaction;
                 }
             }
 
             $response->sendJson([
                 'success' => true,
                 'hold_balance' => number_format($holdAmount, 2, '.', ''),
-                // 'currency' => 'USD',
-                'transactions_count' => count($holdTransactions)
+                'currency' => 'USD',
+                'transactions_count' => count($sellerHoldTransactions)
             ]);
         } catch (\Exception $e) {
             error_log("Error getting seller hold balance: " . $e->getMessage());
