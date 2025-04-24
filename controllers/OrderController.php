@@ -15,6 +15,7 @@ use app\models\Services\ServicePackage;
 use app\models\Users\User;
 use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
+use app\models\Actions\Complaint;
 
 class OrderController extends BaseController {
     /**
@@ -151,9 +152,9 @@ class OrderController extends BaseController {
         }
 
         // Retrieve the necessary models
-        $orderModel = $this->model('Orders\Orders');
-        $orderPromiseModel = $this->model('Orders\OrderPromises');
-        $userModel = $this->model('Users\User'); // Assuming a User model exists
+        $orderModel = new Orders();
+        $orderPromiseModel = new OrderPromises();
+        $userModel = new User(); // Assuming a User model exists
 
         error_log($orderId);
         // Fetch order data
@@ -180,7 +181,7 @@ class OrderController extends BaseController {
 
         // Include user details if requested
         if ($includeUser) {
-            $userId = $orderData['customer_id']; // Assuming the order data contains a user_id field
+            $userId = $orderData['seller_id']; // Assuming the order data contains a user_id field
             $user = $userModel->getUserById($userId);
 
             if ($user) {
@@ -1282,4 +1283,147 @@ class OrderController extends BaseController {
             'data' => $revisions
         ]);
     }
+
+
+    public function createReview($request, $response){
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+        
+        // Parse request body
+        $requestData = $request->getParsedBody(); 
+        if (empty($requestData['order_id']) || empty($requestData['review'])) {
+            $response->sendError('No data provided for review.');
+        }
+
+        error_log(print_r($requestData, 1));
+
+        $review = [
+            'order_id' => $requestData['order_id'], 
+            'service_id' => 136 , 
+            'user_id' => $_SESSION['user']['user_id'],
+            'review_type' => 'review',            
+            'content' => $requestData['reviewText'], 
+            'rating' => 3 ,
+            'created_at' => date('Y-m-d H:i:s')  
+
+        ];
+
+        $reviewModel = $this-> model('Orders\OrderReviewsFeedback');
+
+        if (!$reviewModel ->create($review)) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to update order.'
+            ]);
+            return;
+        }
+
+        $response->sendJson([
+            'success' => true,
+            'message' => 'Review Created successfully.',
+            ]);
+
+
+    }
+
+    public function submitComplaint($request, $response): void {
+        try {
+            if ($request->getMethod() != 'POST') {
+                $response->setStatusCode(405);
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Method Not Allowed'
+                ]);
+                return;
+            }
+    
+            $userId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+            
+            // For multipart/form-data, access directly from $_POST and $_FILES
+            $orderId = $_POST['order_id'] ?? null;
+            $content = $_POST['content'] ?? null;
+            $complaintType = $_POST['complaint_type'] ?? null;
+    
+            if (empty($orderId) || empty($content)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'No data provided for complaint.'
+                ]);
+                return;
+            }
+    
+            // Handle file uploads using FileHandler
+            $savedFiles = [];
+            $uploadDir = 'uploads/complaints/';
+            
+            if (isset($_FILES['proofs']) && is_array($_FILES['proofs']['name'])) {
+                // Create a temporary array for multiple file uploads
+                for ($i = 0; $i < count($_FILES['proofs']['name']); $i++) {
+                    if ($_FILES['proofs']['error'][$i] === UPLOAD_ERR_OK) {
+                        $tempFile = [
+                            'name' => $_FILES['proofs']['name'][$i],
+                            'type' => $_FILES['proofs']['type'][$i],
+                            'tmp_name' => $_FILES['proofs']['tmp_name'][$i],
+                            'error' => $_FILES['proofs']['error'][$i],
+                            'size' => $_FILES['proofs']['size'][$i]
+                        ];
+                        
+                        // Use FileHandler with proper namespace
+                        $filePath = FileHandler::fileUploader(
+                            $tempFile, 
+                            $uploadDir
+                        );
+                        
+                        if ($filePath) {
+                            $savedFiles[] = $filePath;
+                        }
+                    }
+                }
+            }
+
+            $orderModel = new Orders();
+            $returnedOrder = $orderModel->getOrderById($orderId);
+            $reportedUserId = $returnedOrder['seller_id'];
+    
+            // Save complaint in DB
+            $complaint = [
+                'order_id' => $orderId,
+                'complainant_user_id' => $userId ?? 0,
+                'reported_user_id' => $reportedUserId,
+                'complaint_type' => $complaintType,
+                'description' => $content,
+                'proofs' => json_encode($savedFiles), // Store as JSON array
+                'status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+    
+            $complaintModel = new Complaint();
+            if (!$complaintModel->createComplaint($complaint)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to submit complaint.'
+                ]);
+                return;
+            }
+    
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Complaint submitted successfully.'
+            ]);
+            
+        } catch (\Exception $e) {
+            // Log the error
+            error_log('Complaint submission error: ' . $e->getMessage());
+            
+            // Send a JSON response even for errors
+            $response->sendJson([
+                'success' => false,
+                'message' => 'An error occurred while processing your request: ' . $e->getMessage()
+            ]);
+        }
+    }
+
 }
