@@ -262,6 +262,7 @@ class Database
      */
     public function executeWithParams($sql, $params = [])
     {
+        error_log("Executing SQL: $sql with params: " . json_encode($params)); // Log the SQL and parameters
         $this->prepare($sql);
         foreach ($params as $key => $value) {
             $this->bind($key, $value);

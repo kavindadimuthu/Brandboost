@@ -155,6 +155,7 @@ class PaymentController extends BaseController {
      */
     public function processScheduledReleases($request, $response): void
     {
+        error_log("Scheduled release process started");
         $transactionModel = new Transaction();
         $walletModel = new Wallet();
         $orderModel = new Orders();
@@ -178,6 +179,9 @@ class PaymentController extends BaseController {
                     $errors[] = "Order not found for transaction " . $transaction['transaction_id'];
                     continue;
                 }
+                error_log("Debug - Order ID: " . $order['order_id']);
+                // error_log("Debug - Transaction ID: " . $transaction['transaction_id']);
+                error_log(print_r($order, true));
 
                 $sellerId = $order['seller_id'];
                 error_log("Debug - Seller ID: " . $sellerId);
@@ -194,7 +198,7 @@ class PaymentController extends BaseController {
                 // Create new transaction (system -> seller)
                 $newTransactionData = [
                     'order_id' => $transaction['order_id'],
-                    'sender_id' => 1, // System user_id
+                    'sender_id' => 100, // System user_id
                     'receiver_id' => $sellerId,
                     'amount' => $amount_for_seller, // 90% goes to seller, 10% platform fee
                     'status' => 'released',
@@ -215,16 +219,18 @@ class PaymentController extends BaseController {
                 }
 
                 // Deduct from system wallet
-                if (!$walletModel->updateWalletBalance(1, - $amount_for_seller)) {
+                if (!$walletModel->updateWalletBalance(100, - $amount_for_seller)) {
                     $errors[] = "Failed to deduct from system wallet";
                     continue;
                 }
+                error_log("Debug - Deducted from system wallet: " . $amount_for_seller);
 
                 // Add to seller wallet
                 if (!$walletModel->updateWalletBalance($sellerId,  $amount_for_seller)) {
                     $errors[] = "Failed to update seller wallet balance for user " . $sellerId;
                     continue;
                 }
+                error_log("Debug - Added to seller wallet: " . $amount_for_seller);
 
                 $successCount++;
             } catch (\Exception $e) {
