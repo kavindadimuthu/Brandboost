@@ -508,7 +508,9 @@
             <span></span>
           </div>
         </div>
-        <div class="reviews-list"></div>
+        <div class="reviews-list">
+
+        </div>
       </div>
 
       <!-- Tags Section -->
@@ -544,9 +546,10 @@
         const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
         const result = await response.json();
 
+        console.log(result);
         // console.log(result.service_type);
 
-        console.log(result.user);
+        // console.log(result.user);
         const serviceId = result.service_id;
 
         const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
@@ -590,6 +593,12 @@
                   avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop",
                   rating: 5,
                   text: "Amazing experience! The campaign brought in so much traffic to my site."
+                },
+                {
+                  name: "Nethsilu",
+                  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop",
+                  rating: 5,
+                  text: "Amazing experience! The campaign brought in so much traffic to my site."
                 }
               ]
             },
@@ -621,7 +630,7 @@
         renderMediaPreview();
         renderAboutSection();
         renderPlatforms();
-        renderReviews();
+        renderReviews(result);
         renderTags();
         renderPricingContent('standard', serviceId, gigData.serviceType);
 
@@ -698,7 +707,7 @@
       document.querySelector('.format-grid').innerHTML = platformsHtml;
     }
 
-    function renderReviews() {
+    function renderReviews(result) {
       const { ratings, list } = gigData.gig.reviews;
 
       // Render ratings breakdown
@@ -707,9 +716,11 @@
         ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
         ratingBar.querySelector('span:last-child').textContent = `${percentage}%`;
       });
-
+      
+      const reviewList = result.reviews;
+      console.log(reviewList);
       // Render review list
-      const reviewsHtml = list.map(review => `
+      const reviewsHtml = reviewList.map(review => `
                 <div class="review-card">
                     <div class="review-header">
                         <img src="${review.avatar}" alt="${review.name}" class="reviewer-avatar">
@@ -721,7 +732,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="review-text">${review.text}</div>
+                    <div class="review-text">${review.content}</div>
                 </div>
             `).join('');
       document.querySelector('.reviews-list').innerHTML = reviewsHtml;

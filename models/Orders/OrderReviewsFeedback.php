@@ -31,6 +31,10 @@ class OrderReviewsFeedback extends BaseModel
         return $this->read(['order_id' => $orderId], $options);
     }
 
+    public function getByServiceId(int $serviceId, array $options = [])
+    {
+        return $this->read(['service_id' => $serviceId], $options);
+    }
     /**
      * Retrieve reviews or feedback by user ID.
      *
@@ -129,4 +133,5 @@ class OrderReviewsFeedback extends BaseModel
     {
         return $this->read(['order_id' => $orderId], $options);
     }
+
 }
