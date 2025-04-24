@@ -3,253 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand Boost Dashboard</title>
-    <!-- Include Chart.js for graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <title>Brand Boost Seller Dashboard</title>
+    <!-- Include necessary libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
             background: linear-gradient(135deg, #e6d5ff 0%, #e5eaff 100%);
             min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.5;
         }
 
         .container {
-            /* display: flex; */
             max-width: 1200px;
             margin: 1rem auto;
             padding: 20px;
-            /* background: rgb(235, 235, 235) ; */
-            background:rgb(242, 237, 250);
-            border-radius: 10px;
+            background: rgb(250, 248, 254);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
 
-        
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 20px;
+        .page-title {
+            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
         }
 
+        .page-description {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
 
-        .stats-container {
+        /* Summary cards */
+        .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-title {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
+        .summary-card:hover {
+            transform: translateY(-5px);
         }
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
+        .summary-card.income {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
         }
 
-        .stat-change {
-            font-size: 12px;
-            margin-left: 10px;
+        .summary-card.sales {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         }
 
-        .positive {
-            color: #00b894;
+        .summary-card.clients {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
 
-        .negative {
-            color: #ff7675;
+        .summary-card.conversion {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
 
-        /* Charts Section */
-        .charts-section {
+        .card-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+
+        .card-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .trend-up {
+            color: #4ade80;
+        }
+
+        .trend-down {
+            color: #f87171;
+        }
+
+        /* Charts section */
+        .charts-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .chart-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .chart-card {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .chart-period {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .period-btn {
+            padding: 0.35rem 0.75rem;
+            border-radius: 2rem;
+            border: 1px solid var(--gray-300);
+            background-color: white;
+            color: var(--gray-600);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .period-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .period-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .chart-content {
+            min-height: 300px;
         }
 
         /* Table Styles */
         .table-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
-        table {
+        .data-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        th, td {
-            padding: 12px;
+        .data-table th {
             text-align: left;
-            border-bottom: 1px solid #eee;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
         }
 
+        .data-table th:first-child {
+            border-top-left-radius: var(--radius);
+        }
 
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #6c5ce7;
-            color: white;
+        .data-table th:last-child {
+            border-top-right-radius: var(--radius);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.875rem;
+            color: var(--gray-800);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            object-fit: cover;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-            <!-- Main Content -->
-            <div class="main-content">
 
-                <!-- Stats Cards -->
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Income</div>
-                        <div class="stat-value">$8,500<span class="stat-change positive">+4.85%</span></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-title">Total Sales</div>
-                        <div class="stat-value">3,500K<span class="stat-change negative">-5.52%</span></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-title">New Clients</div>
-                        <div class="stat-value">1,700K<span class="stat-change positive">+9.55%</span></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-title">Total Users</div>
-                        <div class="stat-value">14,800K<span class="stat-change negative">-10.30%</span></div>
-                    </div>
+        <h1 class="page-title"><?php echo ucfirst($_SESSION['user']['role']) ?> Dashboard</h1>
+        <p class="page-description">Welcome to your BrandBoost <?php echo $_SESSION['user']['role'] ?> dashboard. Monitor your performance and manage your orders.</p>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card income">
+                <div class="card-icon">
+                    <i class="fas fa-dollar-sign"></i>
                 </div>
-
-                <!-- Charts Section -->
-                <div class="charts-section">
-                    <div class="chart-container">
-                        <canvas id="statisticsChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Tables Section -->
-                <div class="table-container">
-                    <h3>Last Orders</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer Name</th>
-                                <th>Order No.</th>
-                                <th>Amount</th>
-                                <th>Payment Type</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <img src="/api/placeholder/32/32" alt="User" class="user-avatar">
-                                        Regina Cooper
-                                    </div>
-                                </td>
-                                <td>#730541</td>
-                                <td>$2,500</td>
-                                <td>Credit Card</td>
-                                <td>12.09.2019</td>
-                            </tr>
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                    </table>
+                <div class="card-label">Total Income</div>
+                <div class="card-value">$8,500</div>
+                <div class="card-trend trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>4.85% from last month</span>
                 </div>
             </div>
-        
+            
+            <div class="summary-card sales">
+                <div class="card-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="card-label">Total Sales</div>
+                <div class="card-value">3,500</div>
+                <div class="card-trend trend-down">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>5.52% from last month</span>
+                </div>
+            </div>
+            
+            <div class="summary-card clients">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-label">New Clients</div>
+                <div class="card-value">1,700</div>
+                <div class="card-trend trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>9.55% from last month</span>
+                </div>
+            </div>
+            
+            <div class="summary-card conversion">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-label">Conversion Rate</div>
+                <div class="card-value">14.8%</div>
+                <div class="card-trend trend-down">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>10.30% from last month</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Income vs Expenses</h2>
+                    <div class="chart-period">
+                        <button class="period-btn">Week</button>
+                        <button class="period-btn active">Month</button>
+                        <button class="period-btn">Year</button>
+                    </div>
+                </div>
+                <div id="statistics-chart" class="chart-content"></div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="chart-title">Sales Distribution</h2>
+                </div>
+                <div id="sales-chart" class="chart-content"></div>
+            </div>
+        </div>
+
+        <!-- Order History Table -->
+        <div class="table-container">
+            <div class="chart-header">
+                <h2 class="chart-title">Recent Orders</h2>
+                <a href="/<?php echo $_SESSION['user']['role'] ?>/orders-list" class="view-all" style="color: var(--primary-color); font-size: 0.875rem; text-decoration: none; font-weight: 500;">View All</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Order No.</th>
+                        <th>Amount</th>
+                        <th>Payment Type</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <img src="https://storage.googleapis.com/a1aa/image/placeholder_user.jpg" alt="User" class="user-avatar">
+                                <span>Regina Cooper</span>
+                            </div>
+                        </td>
+                        <td>#730541</td>
+                        <td>$2,500</td>
+                        <td>Credit Card</td>
+                        <td>12.09.2024</td>
+                        <td><span style="background-color: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <img src="https://storage.googleapis.com/a1aa/image/placeholder_user.jpg" alt="User" class="user-avatar">
+                                <span>John Miller</span>
+                            </div>
+                        </td>
+                        <td>#730542</td>
+                        <td>$1,800</td>
+                        <td>PayPal</td>
+                        <td>11.09.2024</td>
+                        <td><span style="background-color: var(--info-color); color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">In Progress</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <img src="https://storage.googleapis.com/a1aa/image/placeholder_user.jpg" alt="User" class="user-avatar">
+                                <span>Sarah Johnson</span>
+                            </div>
+                        </td>
+                        <td>#730543</td>
+                        <td>$3,200</td>
+                        <td>Credit Card</td>
+                        <td>10.09.2024</td>
+                        <td><span style="background-color: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <img src="https://storage.googleapis.com/a1aa/image/placeholder_user.jpg" alt="User" class="user-avatar">
+                                <span>Michael Brown</span>
+                            </div>
+                        </td>
+                        <td>#730544</td>
+                        <td>$950</td>
+                        <td>Bank Transfer</td>
+                        <td>09.09.2024</td>
+                        <td><span style="background-color: var(--warning-color); color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // Statistics Chart
-        const statisticsCtx = document.getElementById('statisticsChart').getContext('2d');
-        new Chart(statisticsCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Income',
-                    data: [3000, 3500, 4000, 3200, 3800, 2500, 3700],
-                    backgroundColor: '#6c5ce7',
+        document.addEventListener('DOMContentLoaded', function() {
+            // Statistics Chart (Income vs Expenses)
+            const statisticsOptions = {
+                series: [{
+                    name: 'Income',
+                    data: [3000, 3500, 4000, 3200, 3800, 2500, 3700, 4200, 3600, 3900, 4500, 4700]
                 }, {
-                    label: 'Expense',
-                    data: [2000, 2200, 3000, 2300, 2600, 1500, 2500],
-                    backgroundColor: '#ff7675',
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
+                    name: 'Expenses',
+                    data: [2000, 2200, 3000, 2300, 2600, 1500, 2500, 2800, 2200, 2400, 2700, 3000]
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#6366f1', '#ef4444'],
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.4,
+                        opacityTo: 0.1,
+                        stops: [0, 100]
+                    }
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                },
+                tooltip: {
                     y: {
-                        beginAtZero: true
+                        formatter: function (value) {
+                            return "$" + value.toLocaleString();
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: '#f1f1f1',
+                    padding: {
+                        bottom: 0
                     }
                 }
-            }
-        });
+            };
 
-        // Sales Chart
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        new Chart(salesCtx, {
-            type: 'doughnut',
-            data: {
+            const statisticsChart = new ApexCharts(document.getElementById("statistics-chart"), statisticsOptions);
+            statisticsChart.render();
+
+            // Sales Distribution Chart
+            const salesOptions = {
+                series: [55, 45],
+                chart: {
+                    type: 'donut',
+                    height: 350,
+                    fontFamily: 'Inter, sans-serif'
+                },
                 labels: ['Current Week', 'Last Week'],
-                datasets: [{
-                    data: [2500, 1000],
-                    backgroundColor: ['#6c5ce7', '#ff7675'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
+                colors: ['#6366f1', '#ef4444'],
+                legend: {
+                    position: 'bottom'
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '70%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    fontSize: '16px',
+                                    label: 'Total',
+                                    formatter: function (w) {
+                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-            }
+            };
+
+            const salesChart = new ApexCharts(document.getElementById("sales-chart"), salesOptions);
+            salesChart.render();
+            
+            // Period button functionality
+            const periodButtons = document.querySelectorAll('.period-btn');
+            periodButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    periodButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real implementation, this would trigger a data refresh
+                    // based on the selected period (week/month/year)
+                });
+            });
         });
     </script>
 </body>

@@ -171,6 +171,7 @@ class ServiceController extends BaseController
         $servicePackageModel = $this->model('Services\ServicePackage');
         $serviceAnalyticsModel = $this->model('Services\ServiceAnalytics');
         $serviceCustomPackageModel = $this->model('Services\ServiceCustomPackage');
+        $serviceReviewModel = $this->model('Orders\OrderReviewsFeedback');
 
         // Fetch the main service details
         $service = $serviceModel->getServiceById($serviceId);
@@ -185,6 +186,10 @@ class ServiceController extends BaseController
         // Fetch associated packages for the service
         $packages = $servicePackageModel->getPackagesByServiceId($serviceId);
         $service['packages'] = array_values($packages);
+
+        //fetch assiciated reviews for the service
+        $reviews = $serviceReviewModel->getByServiceId($serviceId);
+        $service['reviews'] = array_values($reviews);
 
         // Optionally include analytics data
         if ($includeAnalytics) {
