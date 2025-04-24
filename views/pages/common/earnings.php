@@ -781,89 +781,91 @@
                 }
 
                 async function processWithdrawal() {
-                    try {
-                        const amount = parseFloat(withdrawAmount.value);
-                        const selectedOption = paymentMethodSelect.options[paymentMethodSelect.selectedIndex];
-                        
-                        if (!selectedOption || selectedOption.disabled) {
-                            methodError.style.display = 'block';
-                            return;
-                        }
-                        
-                        const payoutMethodId = selectedOption.value;
-                        const methodType = selectedOption.dataset.type;
-                        
-                        // Validate inputs
-                        let isValid = true;
-                        
-                        if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
-                            amountError.style.display = 'block';
-                            isValid = false;
-                        } else {
-                            amountError.style.display = 'none';
-                        }
-                        
-                        if (!payoutMethodId || !methodType) {
-                            methodError.style.display = 'block';
-                            isValid = false;
-                        } else {
-                            methodError.style.display = 'none';
-                        }
-                        
-                        if (!isValid) return;
-                        
-                        // Disable buttons during processing
-                        confirmWithdrawBtn.disabled = true;
-                        confirmWithdrawBtn.textContent = 'Processing...';
-                        
-                        // Send withdrawal request
-                        const response = await fetch('/api/payments/withdraw-funds', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ 
-                                amount: amount,
-                                // payout_method_id: payoutMethodId,
-                                // payout_method_type: methodType
-                            })
-                        });
-                        
-                        if (!response.ok) {
-                            throw new Error('Failed to process withdrawal');
-                        }
-                        
-                        const result = await response.json();
-                        console.log('Withdrawal result:', result);
-                        
-                        // Show success message
-                        successMessage.style.display = 'block';
-                        
-                        // Reset form
-                        withdrawAmount.value = '';
-                        paymentMethodSelect.selectedIndex = 0;
-                        
-                        // Refresh the balance data
-                        setTimeout(() => {
-                            fetchSellerBalance();
-                            fetchWithdrawnToDate();
-                            fetchTransactionData(currentPage);
-                            
-                            // Close modal after 3 seconds
-                            setTimeout(() => {
-                                closeModal();
-                            }, 3000);
-                        }, 1000);
-                        
-                    } catch (error) {
-                        console.error('Error processing withdrawal:', error);
-                        showNotification('Failed to process withdrawal. Please try again later.', 'error');
-                    } finally {
-                        confirmWithdrawBtn.disabled = false;
-                        confirmWithdrawBtn.textContent = 'Withdraw';
+                try {
+                    const amount = parseFloat(withdrawAmount.value);
+                    const selectedOption = paymentMethodSelect.options[paymentMethodSelect.selectedIndex];
+                    
+                    if (!selectedOption || selectedOption.disabled) {
+                        methodError.style.display = 'block';
+                        return;
                     }
+                    
+                    const payoutMethodId = selectedOption.value;
+                    const methodType = selectedOption.dataset.type;
+                    
+                    // Validate inputs
+                    let isValid = true;
+                    
+                    if (isNaN(amount) || amount <= 0 || amount > currentBalance) {
+                        amountError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        amountError.style.display = 'none';
+                    }
+                    
+                    if (!payoutMethodId || !methodType) {
+                        methodError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        methodError.style.display = 'none';
+                    }
+                    
+                    if (!isValid) return;
+                    
+                    // Disable buttons during processing
+                    confirmWithdrawBtn.disabled = true;
+                    confirmWithdrawBtn.textContent = 'Processing...';
+                    
+                    // Send withdrawal request
+                    const response = await fetch('/api/payments/withdraw-funds', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            amount: amount,
+                            payout_method_id: payoutMethodId,
+                            payout_method_type: methodType
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(result.message || 'Failed to process withdrawal');
+                    }
+                    
+                    console.log('Withdrawal result:', result);
+                    
+                    // Update the current balance immediately
+                    currentBalance -= amount;
+                    balanceAvailable.textContent = `LKR ${currentBalance.toFixed(2)}`;
+                    modalAvailableBalance.textContent = `LKR ${currentBalance.toFixed(2)}`;
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form
+                    withdrawAmount.value = '';
+                    paymentMethodSelect.selectedIndex = 0;
+                    
+                    // Refresh the transaction data
+                    fetchTransactionData(currentPage);
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('Error processing withdrawal:', error);
+                    showNotification(error.message || 'Failed to process withdrawal. Please try again later.', 'error');
+                } finally {
+                    confirmWithdrawBtn.disabled = false;
+                    confirmWithdrawBtn.textContent = 'Withdraw';
                 }
-
+            }
+            
                 // Modal functions
                 function openModal() {
                     modalOverlay.classList.add('active');
