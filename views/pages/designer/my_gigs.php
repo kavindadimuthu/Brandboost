@@ -4,9 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Gigs</title>
+    <title>My Gigs | BrandBoost</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #5e72e4;
+            --primary-dark: #4454c3;
+            --secondary: #7c44f1;
+            --white: #ffffff;
+            --light-bg: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --danger: #f5365c;
+            --success: #2dce89;
+            --warning: #fb6340;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,30 +36,55 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--gray-700);
+            line-height: 1.5;
         }
 
         .hero {
-            background: linear-gradient(135deg, #4169E1, #8A2BE2);
-            color: white;
-            padding: 20px 20px;
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 40px 0;
             position: relative;
-            margin-bottom: 40px;
+            overflow: hidden;
         }
 
-        .hero-container{
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+            transform: rotate(-20deg);
+        }
+
+        .hero-container {
             max-width: 1200px;
             margin: auto;
-            /* display: flex;
+            padding: 0 20px;
+            position: relative;
+            display: flex;
             justify-content: space-between;
-            align-items: center; */
+            align-items: center;
+        }
+
+        .hero-content {
+            text-align: left;
         }
 
         .hero h1 {
-            font-size: 36px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
             margin-bottom: 20px;
         }
 
@@ -47,30 +94,64 @@
             padding: 0 20px;
         }
 
-        .packages-button {
-            background: white;
-            color: #4169E1;
-            border: none;
-            padding: 15px 35px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .page-content {
+            margin-top: -30px;
+            position: relative;
+            z-index: 1;
         }
 
-        .packages-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.9rem;
         }
 
         .orders-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             padding: 30px;
             margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .orders-container h2 {
+            font-size: 1.3rem;
+            color: var(--gray-700);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .orders-container h2 i {
+            margin-right: 10px;
+            color: var(--primary);
         }
 
         .orders-table {
@@ -82,58 +163,173 @@
         .orders-table th {
             text-align: left;
             padding: 16px;
-            background: #f8f9fa;
-            color: #4169E1;
+            background: var(--gray-100);
+            color: var(--gray-700);
             font-weight: 600;
-            border-bottom: 2px solid #e9ecef;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--gray-200);
         }
 
         .orders-table td {
             text-align: left;
             padding: 16px;
-            border-bottom: 1px solid #e9ecef;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--gray-200);
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: none;
         }
 
         .orders-table tr:hover td {
-            background-color: #f8f9fa;
+            background-color: var(--gray-100);
         }
 
-        .gig-title-cell{
+        .gig-title-cell {
             display: flex;
             align-items: center;
             transition: transform 0.2s ease;
+            gap: 15px;
         }
-        .gig-title-cell:hover{
+        
+        .gig-title-cell:hover {
             transform: scale(1.01);
         }
 
         .gig-thumb {
-            width: 70px;
-            height: 50px;
+            width: 80px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 6px;
-            margin-right: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .gig-title {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: rgba(45, 206, 137, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background-color: rgba(251, 99, 64, 0.1);
+            color: var(--warning);
+        }
+
+        .status-paused {
+            background-color: rgba(245, 54, 92, 0.1);
+            color: var(--danger);
+        }
+
+        .price-column {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .date-column {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
 
         .action-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: #4169E1;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            padding: 8px;
-            margin: 0 5px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--gray-500);
         }
 
-        .action-btn:hover {
-            color: #8A2BE2;
+        .edit-btn:hover {
+            background-color: rgba(94, 114, 228, 0.1);
+            color: var(--primary);
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(245, 54, 92, 0.1);
+            color: var(--danger);
+        }
+
+        .view-btn:hover {
+            background-color: rgba(45, 206, 137, 0.1);
+            color: var(--success);
+        }
+
+        .create-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(94, 114, 228, 0.3);
+        }
+
+        .create-btn:hover {
+            background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(94, 114, 228, 0.4);
+        }
+
+        .create-btn i {
+            font-size: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--gray-600);
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Modal Styles */
-
         .modal {
             display: flex;
             justify-content: center;
@@ -143,85 +339,243 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-content {
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
             width: 90%;
-            transform: translateY(-50%);
-            top: 50%;
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: rgba(245, 54, 92, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .modal-icon i {
+            font-size: 30px;
+            color: var(--danger);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: var(--gray-700);
+            font-size: 1.3rem;
         }
 
         .modal-content p {
-            margin: 0 0 20px;
-            font-size: 1.1em;
-            color: #333;
+            margin: 0 0 30px;
+            font-size: 1rem;
+            color: var(--gray-500);
+            line-height: 1.6;
         }
 
-        #confirmDelete, #cancelDelete {
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-btn {
             padding: 12px 25px;
-            border-radius: 12px;
+            border-radius: var(--border-radius);
             font-weight: 600;
+            font-size: 0.95rem;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
+            transition: var(--transition);
         }
 
-        #confirmDelete {
-            background: #4169E1;
-            color: white;
+        .confirm-btn {
+            background: var(--danger);
+            color: var(--white);
         }
 
-        #cancelDelete {
-            background: #dc3545;
-            color: white;
+        .confirm-btn:hover {
+            background: #e02955;
+            box-shadow: 0 4px 15px rgba(245, 54, 92, 0.3);
         }
 
-        #confirmDelete:hover, #cancelDelete:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        .cancel-btn {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .cancel-btn:hover {
+            background: var(--gray-200);
+        }
+
+        @media (max-width: 992px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
-            .hero {
-                padding: 40px 20px;
+            .hero-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
             }
             
-            .orders-container {
-                padding: 15px;
+            .hero {
+                padding: 30px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
             }
 
-            .orders-table th, .orders-table td {
+            .orders-container {
+                padding: 20px 15px;
+                overflow-x: auto;
+            }
+            
+            .orders-table {
+                min-width: 800px;
+            }
+            
+            .orders-table th, 
+            .orders-table td {
                 padding: 12px;
             }
+
+            .action-buttons {
+                flex-direction: row;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-container {
+                padding: 0 15px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .search-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
         }
     </style>
 </head>
 
 <body>
-<div class="hero">
+    <div class="hero">
         <div class="hero-container">
-            <h1>My Gigs</h1>
-            <button class="packages-button" onclick="window.location.href='/designer/add-gig'">+ Create Gig</button>
+            <div class="hero-content">
+                <h1><i class="fas fa-briefcase"></i> My Gigs</h1>
+                <p>Manage and track all your gigs in one place.</p>
+            </div>
+            <button class="create-btn" onclick="window.location.href='/designer/add-gig'">
+                <i class="fas fa-plus"></i> Create New Gig
+            </button>
         </div>
     </div>
 
+    <div class="container page-content">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="totalGigs">0</div>
+                <div class="stat-label">Total Gigs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeGigs">0</div>
+                <div class="stat-label">Active Gigs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgPrice">$0</div>
+                <div class="stat-label">Avg. Basic Price</div>
+            </div>
+        </div>
 
-<div class="container">
         <div class="orders-container">
+            <div class="search-filters">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchGigs" placeholder="Search gigs...">
+                </div>
+            </div>
+
             <table class="orders-table" id="gigs-table">
-                <!-- Keep existing table structure -->
                 <thead>
                     <tr>
                         <th>Gig</th>
@@ -234,112 +588,211 @@
                     </tr>
                 </thead>
                 <tbody id="ordersTableBody">
-                        <!-- Gigs will be displayed here -->
-                        <script>
-                            document.addEventListener('DOMContentLoaded', async () => {
-                                try {
-                                    const queryParams = new URLSearchParams({
-                                        current_user: true
-                                    });
-
-                                    const response = await fetch(`/api/services?${queryParams}`);
-                                    const result = await response.json();
-
-                                    const gigs = result.services;
-
-                                    console.log(gigs);
-                                    
-
-                                    const tableBody = document.getElementById('ordersTableBody');
-                                    tableBody.innerHTML = ''; // Clear existing table content
-
-                                    if (gigs.length > 0) {
-                                        gigs.forEach(gig => {
-
-                                            // Ensure packages are present and handle package data correctly
-                                            // const basicPackage = gig.package;
-                                            const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-                                            // const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-                                            const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
-
-                                            const row = document.createElement('tr');
-
-                                            // Dynamically populate the table row
-                                            row.innerHTML = `
-                                                <td onclick="window.location.href='/services/${gig.service_id}'" style="cursor: pointer;">
-                                                    <div class="gig-title-cell">
-                                                        <img src="/${gig.cover_image}" class="gig-thumb me-2" alt="thumbnail">
-                                                        ${gig.title}
-                                                    </div>
-                                                </td>
-                                                <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
-                                                <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
-                                                <td>${new Date(gig.updated_at).toLocaleDateString()}</td>
-                                                <td>${new Date(gig.created_at).toLocaleDateString()}</td>
-                                                <td>${gig.status || 'Active'}</td> <!-- Handle if gig status is missing -->
-                                                <td>
-                                                    <button onclick="window.location.href='/designer/edit-gig/${gig.service_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
-                                                    <button onclick="confirmDelete(${gig.service_id})" class="action-btn"><i class="fas fa-trash"></i></button>
-                                                </td>
-                                            `;
-
-                                            // Append the new row to the table
-                                            tableBody.appendChild(row);
-                                        });
-                                    } else {
-                                        // If no gigs are found, show a message
-                                        const row = document.createElement('tr');
-                                        row.innerHTML = '<td colspan="5">No gigs found.</td>';
-                                        tableBody.appendChild(row);
-                                    }
-                                } catch (error) {
-                                    console.error('Error fetching gigs:', error);
-                                }
-                            });
-                        </script>
+                    <!-- Empty state placeholder, will be replaced by JS -->
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <h3>Loading your gigs...</h3>
+                                <p>Please wait while we fetch your gig data.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- Delete Modal -->
-    <div id="deleteModal" class="modal" style="display: none;">
+    <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <p>Are you sure you want to delete this item?</p>
-            <button id="confirmDelete">Yes</button>
-            <button id="cancelDelete">No</button>
+            <div class="modal-icon">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3>Delete Gig</h3>
+            <p>Are you sure you want to delete this gig? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="cancelDelete" class="modal-btn cancel-btn">Cancel</button>
+                <button id="confirmDelete" class="modal-btn confirm-btn">Yes, Delete</button>
+            </div>
         </div>
     </div>
 
     <script>
         let selectedGigId = null;
+        let allGigs = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchGigs();
+            
+            // Add event listener for search
+            document.getElementById('searchGigs').addEventListener('input', filterGigs);
+        });
+
+        async function fetchGigs() {
+            try {
+                const queryParams = new URLSearchParams({
+                    current_user: true
+                });
+
+                const response = await fetch(`/api/services?${queryParams}`);
+                const result = await response.json();
+
+                allGigs = result.services || [];
+                
+                // Update stats
+                updateStats(allGigs);
+                
+                // Render gigs
+                renderGigs(allGigs);
+                
+                console.log('Gigs loaded:', allGigs);
+            } catch (error) {
+                console.error('Error fetching gigs:', error);
+                
+                // Show error state
+                const tableBody = document.getElementById('ordersTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <h3>Couldn't load gigs</h3>
+                                <p>An error occurred while loading your gigs. Please try refreshing the page.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function updateStats(gigs) {
+            document.getElementById('totalGigs').textContent = gigs.length;
+            
+            const activeGigs = gigs.filter(gig => gig.status === 'Active' || !gig.status).length;
+            document.getElementById('activeGigs').textContent = activeGigs;
+            
+            if (gigs.length > 0) {
+                // Calculate average basic price
+                let totalBasicPrice = 0;
+                let validPricesCount = 0;
+                
+                gigs.forEach(gig => {
+                    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+                    if (basicPackage && basicPackage.price) {
+                        totalBasicPrice += parseFloat(basicPackage.price);
+                        validPricesCount++;
+                    }
+                });
+                
+                const avgPrice = validPricesCount > 0 ? totalBasicPrice / validPricesCount : 0;
+                document.getElementById('avgPrice').textContent = '$' + avgPrice.toFixed(2);
+            }
+        }
+
+        function renderGigs(gigs) {
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = ''; // Clear existing table content
+
+            if (gigs.length > 0) {
+                gigs.forEach(gig => {
+                    // Find packages
+                    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
+                    const premiumPackage = gig.packages.find(pkg => pkg.package_type === 'premium');
+                    
+                    // Format status
+                    const status = gig.status || 'Active';
+                    const statusClass = 
+                        status.toLowerCase() === 'active' ? 'status-active' : 
+                        status.toLowerCase() === 'pending' ? 'status-pending' : 
+                        'status-paused';
+
+                    const row = document.createElement('tr');
+
+                    // Dynamically populate the table row
+                    row.innerHTML = `
+                        <td>
+                            <div class="gig-title-cell" onclick="window.location.href='/services/${gig.service_id}'" style="cursor: pointer;">
+                                <img src="/${gig.cover_image}" class="gig-thumb" alt="${gig.title}">
+                                <span class="gig-title">${gig.title}</span>
+                            </div>
+                        </td>
+                        <td class="price-column">$${basicPackage ? basicPackage.price : 'N/A'}</td>
+                        <td class="price-column">$${premiumPackage ? premiumPackage.price : 'N/A'}</td>
+                        <td class="date-column">${formatDate(gig.updated_at)}</td>
+                        <td class="date-column">${formatDate(gig.created_at)}</td>
+                        <td><span class="status-badge ${statusClass}">${status}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button onclick="window.location.href='/designer/edit-gig/${gig.service_id}'" class="action-btn edit-btn" title="Edit Gig">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="confirmDelete(${gig.service_id})" class="action-btn delete-btn" title="Delete Gig">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    // Append the new row to the table
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // If no gigs are found, show a message
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h3>No gigs found</h3>
+                                <p>You haven't created any gigs yet. Get started by creating your first gig.</p>
+                                <button class="create-btn" onclick="window.location.href='/designer/add-gig'">
+                                    <i class="fas fa-plus"></i> Create Your First Gig
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function filterGigs(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderGigs(allGigs);
+                return;
+            }
+            
+            const filteredGigs = allGigs.filter(gig => 
+                gig.title.toLowerCase().includes(searchTerm)
+            );
+            
+            renderGigs(filteredGigs);
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
 
         function confirmDelete(serviceId) {
             selectedGigId = serviceId;
             console.log('Selected Gig ID:', selectedGigId);
 
-            document.getElementById('deleteModal').style.display = 'block';
+            document.getElementById('deleteModal').classList.add('show');
         }
 
         async function deleteGig() {
             if (selectedGigId !== null) {
                 console.log('Deleting Gig ID:', selectedGigId);
 
-                // const response = await fetch(`/api/delete-gig/45`);
-                // const response = await fetch(`/api/delete-gig/${selectedGigId}`, {
-                //         method: 'DELETE'
-                //     });
-                // services = await response.json();
-
-                // console.log(services)
-
                 try {
-                    // const response = await fetch(`/api/delete-gig/45`);
                     const response = await fetch(`/api/delete-gig/${selectedGigId}`, {
                         method: 'GET'
                     });
 
-                    console.log(response)
+                    console.log(response);
 
                     if (response.ok) {
                         location.reload();
@@ -350,31 +803,24 @@
                     console.error('Error deleting gig:', error);
                 } finally {
                     selectedGigId = null; // Reset selected gig ID
-                    document.getElementById('deleteModal').style.display = 'none'; // Hide modal
+                    document.getElementById('deleteModal').classList.remove('show');
                 }
             }
         }
-
-        // const tableBody = document.querySelector('#gigs-table tbody');
-
-        // tableBody.addEventListener('click', function (event) {
-        //     const cell = event.target.closest('td');
-        //     if (cell) {
-        //         const gigId = cell.getAttribute('data-gig-id');
-        //         handleRowClick(gigId);
-        //     }
-        // });
-
-        // function handleRowClick(gigId) {
-        //     console.log('Row clicked, Verification ID:');
-        //     window.location.href = '/services/' + gigId;
-        // }
 
         // Add event listeners to the confirm and cancel buttons
         document.getElementById('confirmDelete').addEventListener('click', deleteGig);
         document.getElementById('cancelDelete').addEventListener('click', () => {
             selectedGigId = null;
-            document.getElementById('deleteModal').style.display = 'none'; // Hide modal
+            document.getElementById('deleteModal').classList.remove('show');
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+                selectedGigId = null;
+            }
         });
     </script>
 </body>
