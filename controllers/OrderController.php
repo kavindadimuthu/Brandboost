@@ -874,7 +874,7 @@ class OrderController extends BaseController {
             }
             
             // Validate required fields
-            $requiredFields = ['order_id', 'delivery_note'];
+            $requiredFields = ['order_id', 'delivery_note', 'content_link'];
             $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
     
             if (!empty($missingFields)) {
@@ -981,6 +981,7 @@ class OrderController extends BaseController {
             $deliveryData = [
                 'order_id' => $requestData['order_id'],
                 'delivery_note' => $requestData['delivery_note'],
+                'content_link' => $requestData['content_link'] ?? null,
                 'deliveries' => !empty($uploadedFiles) ? json_encode($uploadedFiles) : null,
                 'status' => 'delivered',
                 'delivered_at' => date('Y-m-d H:i:s'),
@@ -990,6 +991,7 @@ class OrderController extends BaseController {
             error_log("Prepared delivery data: " . json_encode(array_merge(
                 ['order_id' => $deliveryData['order_id']],
                 ['delivery_note_length' => strlen($deliveryData['delivery_note'])],
+                ['content_link' => $deliveryData['content_link']],
                 ['has_files' => !empty($uploadedFiles)],
                 ['status' => $deliveryData['status']],
                 ['timestamps' => [$deliveryData['delivered_at'], $deliveryData['created_at']]]
@@ -1062,118 +1064,6 @@ class OrderController extends BaseController {
                 error_log("Request data at time of error: " . json_encode(array_keys($requestData ?? [])));
             }
              
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Internal server error: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Create a revision for an existing delivery.
-     *
-     * @param Request $request The incoming request object.
-     * @param Response $response The response object to return data.
-     * @return void JSON response indicating success or failure.
-     */
-    public function createRevision($request, $response): void
-    {
-        try {
-            // Parse request body
-            $requestData = $request->getParsedBody();
-            $files = $request->getUploadedFiles();
-
-            // Validate required fields
-            $requiredFields = ['order_id', 'revision_note'];
-            $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
-
-            if (!empty($missingFields)) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
-                ], 400);
-                return;
-            }
-
-            // Initialize models
-            $deliveryModel = $this->model('Orders\OrderDeliveries');
-            $orderModel = $this->model('Orders\Orders');
-
-            // Check if order exists and has revisions left
-            $orderData = $orderModel->getOrderById($requestData['order_id']);
-            if (!$orderData) {
-                $response->sendError('Order not found.', 404);
-                return;
-            }
-
-            if ($orderData['remained_revisions'] <= 0) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'No revisions left for this order.'
-                ], 400);
-                return;
-            }
-
-            // Get current user (buyer/customer)
-            $currentUser = AuthHelper::getCurrentUser();
-            if (!$currentUser || $currentUser['user_id'] != $orderData['customer_id']) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Unauthorized: Only the customer of this order can request revisions.'
-                ], 403);
-                return;
-            }
-
-            // Handle file uploads if present
-            $uploadedFiles = [];
-            if (!empty($files['revision_files'])) {
-                $fileHandler = new FileHandler();
-                // $uploadedFiles = $fileHandler->handleMultipleUploads($files['revision_files'], 'revisions');
-                
-                // if (empty($uploadedFiles)) {
-                //     $response->sendJson([
-                //         'success' => false,
-                //         'message' => 'Failed to upload revision files.'
-                //     ], 500);
-                //     return;
-                // }
-            }
-
-            // Create the revision
-            $revisionData = [
-                'order_id' => $requestData['order_id'],
-                'revision_note' => $requestData['revision_note'],
-                'revision_files' => !empty($uploadedFiles) ? json_encode($uploadedFiles) : null,
-                'status' => 'revision_requested',
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-
-            // Create revision using the createRevision method
-            $created = $deliveryModel->createRevision($requestData['order_id'], $revisionData);
-            if (!$created) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Failed to create revision request.'
-                ], 500);
-                return;
-            }
-
-            // Update order's remaining revisions count
-            $orderModel->updateOrderById($requestData['order_id'], [
-                'remained_revisions' => $orderData['remained_revisions'] - 1,
-                'order_status' => 'in_progress'
-            ]);
-
-            // Return success response
-            $response->sendJson([
-                'success' => true,
-                'message' => 'Revision requested successfully.',
-                'delivery_id' => $created
-            ]);
-        } catch (\Throwable $e) {
-            error_log("Error in createRevision: " . $e->getMessage());
-            error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
-            
             $response->sendJson([
                 'success' => false,
                 'message' => 'Internal server error: ' . $e->getMessage()
@@ -1405,6 +1295,109 @@ class OrderController extends BaseController {
 
 
     }
+
+
+/**
+ * Handle order cancellation requests from sellers
+ *
+ * @param Request $request The incoming request object
+ * @param Response $response The response object to return data
+ * @return void JSON response indicating success or failure
+ */
+public function orderCancellation($request, $response): void
+{
+    try {
+        $userId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+            
+            // For multipart/form-data, access directly from $_POST and $_FILES
+            $orderId = $_POST['order_id'] ?? null;
+            $reason = $_POST['order_cancellation_reason'] ?? null;
+        
+        error_log("Order cancellation request received for order ID: $orderId, reason: $reason");
+
+        if (!$orderId) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Order ID is required'
+            ], 400);
+            return;
+        }
+        
+        // Get current user ID (the seller requesting cancellation)
+        $currentUser = AuthHelper::getCurrentUser();
+        $userRole = $currentUser['role'] ?? null;
+        $sellerId = $currentUser['user_id'] ?? null;
+        
+        if (!$sellerId) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+            return;
+        }
+        
+        // Initialize order model
+        $orderModel = new Orders();
+        
+        // Check if the order exists and belongs to the seller
+        $order = $orderModel->getOrderById($orderId);
+        
+        if (!$order || $order['seller_id'] != $sellerId) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Order not found or you are not authorized to cancel it'
+            ], 404);
+            return;
+        }
+        
+        // Create a cancellation request record
+        // You may need to create a dedicated model for cancellations
+        $orderCancellationModel = new Orders;
+        
+        $cancellationData = [
+            'order_cancellation_reason' => $reason,
+            'order_status' => 'pending',
+            'cancellation_requested_by' => $userRole,
+        ];
+        
+        $cancellationCreated = $orderCancellationModel->updateOrderById($orderId,$cancellationData);
+        
+        if (!$cancellationCreated) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to create cancellation request'
+            ], 500);
+            return;
+        }
+        
+        
+        // if (!$orderUpdated) {
+        //     $response->sendJson([
+        //         'success' => false,
+        //         'message' => 'Failed to update order status'
+        //     ], 500);
+        //     return;
+        // }
+        
+        // Send notification to buyer and admins about the cancellation request
+        // You may need to implement this according to your notification system
+        
+        $response->sendJson([
+            'success' => true,
+            'message' => 'Order cancellation request submitted successfully',
+            'cancellation_id' => $orderCancellationModel->getLastInsertId()
+        ]);
+        
+    } catch (\Exception $e) {
+        error_log("Error in orderCancellation: " . $e->getMessage());
+        error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
+        
+        $response->sendJson([
+            'success' => false,
+            'message' => 'Failed to submit cancellation request: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
     public function submitComplaint($request, $response): void {
         try {

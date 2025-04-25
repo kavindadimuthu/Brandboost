@@ -874,6 +874,211 @@
             cursor: pointer;
             font-size: 1.2em;
         }
+
+        .timer-bar {
+            height: 100%;
+            background-color: #4f46e5;
+            border-radius: 3px;
+            transition: width 1s linear;
+        }
+
+        /* Add CSS for Requirements Section */
+        .requirements-section {
+            margin-top: 24px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .requirements-section h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .requirements-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .requirements-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .requirement-description, 
+        .requirement-files {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .requirement-description h4, 
+        .requirement-files h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 12px 0;
+        }
+
+        .description-content {
+            white-space: pre-line;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .files-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .file-item:hover {
+            border-color: #4f46e5;
+            background-color: #f5f5ff;
+        }
+
+        .file-item i {
+            margin-right: 8px;
+            color: #4f46e5;
+        }
+
+        .file-item a {
+            color: #4b5563;
+            text-decoration: none;
+        }
+
+        .file-item a:hover {
+            color: #4f46e5;
+        }
+
+        .no-files {
+            color: #6b7280;
+            font-style: italic;
+        }
+        .complaint-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 100%;
+    max-width: 500px;
+}
+
+.complaint-popup.active {
+    display: block;
+    animation: popIn 0.3s forwards;
+}
+
+.complaint-dropdown {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95em;
+    background-color: #ffffff;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.complaint-dropdown:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.complaintSupport {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.2em;
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.2s;
+}
+
+.complaintSupport:hover {
+    color: #374151;
+}
+.cancellation-request {
+    margin-top: 20px;
+    background-color: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.cancellation-request h4 {
+    color: #dc2626;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-bottom: 1px solid #fecaca;
+    padding-bottom: 8px;
+}
+
+.cancellation-details {
+    margin-bottom: 16px;
+}
+
+.cancellation-reason {
+    white-space: pre-line;
+    margin-bottom: 8px;
+}
+
+.cancellation-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.accept-button {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.accept-button:hover {
+    background-color: #b91c1c !important;
+}
+
+.decline-button {
+    background-color: #ffffff !important;
+    color: #1f2937 !important;
+    border: 1px solid #d1d5db !important;
+}
+
+.decline-button:hover {
+    background-color: #f3f4f6 !important;
+}
+
     </style>
 </head>
 
@@ -938,10 +1143,27 @@
                     </div>
                     <div class="support-section">
                         <h4>Support</h4>
-                        <a href="http://localhost:8000/InfluencerViewController/contactUs">
-                            <button id="contactSupport">Contact Us</button>
+                            <button id="Complaint">Complaint</button>
                         </a>
                         <button id="reviewOrder">Review</button>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Order Requirements Section -->
+                        <div class="requirements-section">
+                <h3>Order Requirements</h3>
+                <div class="requirements-content">
+                    <div class="requirement-description">
+                        <h4>Description</h4>
+                        <div class="description-content" id="orderDescription">Loading...</div>
+                    </div>
+                    
+                    <div class="requirement-files">
+                        <h4>Attached Files</h4>
+                        <div class="files-list" id="orderFiles">
+                            <div class="loading-files">Loading files...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1026,6 +1248,48 @@
         </div>
     </div>
 
+
+
+<!-- Complain Popup -->
+<div class="complaint-popup" id="complaintPopup">
+    <button class="complaintSupport" id="closeComplaintPopup">&times;</button>
+    <h4>Complaint</h4>
+    <div class="form-group">
+        <label for="complaintType">Complaint Type</label>
+        <select id="complaintType" class="complaint-dropdown">
+            <option value="" disabled selected>Select complaint type...</option>
+            <option value="order_cancellation">Order Cancellation</option>
+            <option value="payment_problem">Payment Problem</option>
+            <option value="service_quality">Service Quality</option>
+            <option value="delivery_issue">Delivery Issue</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="complaintNotes">Notes</label>
+        <textarea id="complaintNotes" placeholder="Description about your complaint..."></textarea>
+    </div>
+    <div class="form-group">
+    <label>Proofs</label>
+    <div class="screenshot-upload">
+        <div class="upload-area" id="complaintUploadArea">
+            <i class="fas fa-file-upload"></i>
+            <h4>Upload Proofs</h4>
+            <p>Click or drag files here (JPG, PNG, MP4 up to 10MB)</p>
+            <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*,video/mp4" />
+        </div>
+        <div class="preview-images" id="previewContainer">
+            <!-- Preview images will appear here -->
+        </div>
+    </div>
+</div>
+    <div class="form-buttons">
+        <button class="cancel-btn" id="cancelComplaint">Cancel</button>
+        <button class="submit-btn" id="submitComplaint">Submit</button>
+    </div>
+</div>
+
+
     <!-- Delivery Details Popup -->
         <div class="delivery-popup" id="deliveryDetailsPopup">
             <div class="popup-header">
@@ -1107,6 +1371,7 @@
             const cancelPopup = document.getElementById('cancelPopup');
             const deliveryPopup = document.getElementById('deliveryPopup');
             const deliveryDetailsPopup = document.getElementById('deliveryDetailsPopup');
+            const complaintPopup = document.getElementById('complaintPopup');
             const daysEl = document.getElementById('days');
             const hoursEl = document.getElementById('hours');
             const minutesEl = document.getElementById('minutes');
@@ -1161,6 +1426,104 @@
                     console.error('Error fetching order details:', error);
                 }
             }
+
+
+            // Add this function to fetch requirements data
+// Updated function to load order requirements from the order details
+async function loadOrderRequirements() {
+    try {
+        // Use the same API endpoint as fetchOrderDetails
+        const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const result = await response.json();
+        console.log('Requirements data from order details:', result);
+        
+        // Check if we have the promise and requested_service data
+        if (result.data?.promise?.requested_service) {
+            let serviceData = {};
+            
+            try {
+                // Parse the JSON string from requested_service
+                if (typeof result.data.promise.requested_service === 'string') {
+                    serviceData = JSON.parse(result.data.promise.requested_service);
+                } else {
+                    serviceData = result.data.promise.requested_service;
+                }
+                
+                // Update description section with the parsed description
+                const descElement = document.getElementById('orderDescription');
+                if (serviceData.description) {
+                    descElement.textContent = serviceData.description;
+                } else if (serviceData.requirements) {
+                    descElement.textContent = serviceData.requirements;
+                } else {
+                    descElement.textContent = 'No description provided';
+                    descElement.classList.add('no-files');
+                }
+                descElement.style.whiteSpace = 'pre-line'; // Preserve line breaks
+                
+                // Update files section if there are files in the data
+                const filesContainer = document.getElementById('orderFiles');
+                filesContainer.innerHTML = ''; // Clear loading state
+                
+                // Check if files exist in the order data
+                if (result.data.order && result.data.order.files) {
+                    let files = [];
+                    
+                    try {
+                        // Parse files if they're stored as JSON string
+                        if (typeof result.data.order.files === 'string') {
+                            files = JSON.parse(result.data.order.files);
+                        } else if (Array.isArray(result.data.order.files)) {
+                            files = result.data.order.files;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing order files JSON:', e);
+                        files = [];
+                    }
+                    
+                    if (Array.isArray(files) && files.length > 0) {
+                        files.forEach((file, index) => {
+                            const fileUrl = file.url || file.path || file;
+                            const fileName = file.name || `File ${index + 1}`;
+                            
+                            const fileItem = document.createElement('div');
+                            fileItem.className = 'file-item';
+                            fileItem.innerHTML = `
+                                <i class="fas fa-file-alt"></i>
+                                <a href="${fileUrl}" target="_blank">${fileName}</a>
+                            `;
+                            filesContainer.appendChild(fileItem);
+                        });
+                    } else {
+                        filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+                    }
+                } else {
+                    filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error parsing requested_service JSON:', error);
+                document.getElementById('orderDescription').textContent = 'Error loading requirements';
+                document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error parsing requirements data</div>';
+            }
+        } else {
+            console.log('No requested_service data found in promise');
+            document.getElementById('orderDescription').textContent = 'No requirements found';
+            document.getElementById('orderFiles').innerHTML = '<div class="no-files">No files attached</div>';
+        }
+        
+    } catch (error) {
+        console.error('Error loading requirements:', error);
+        document.getElementById('orderDescription').textContent = 'Error loading requirements';
+        document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error loading files</div>';
+    }
+}
+
+
 
             function startCountdown(dueDate, createdDate) {
                 const countdownElement = document.getElementById('countdown');
@@ -1296,6 +1659,93 @@ async function loadDeliveryData() {
     }
 }
 
+
+document.getElementById('Complaint').addEventListener('click', () => {
+    complaintPopup.classList.add('active');
+    backdrop.classList.add('active');
+});
+
+document.getElementById('closeComplaintPopup').addEventListener('click', () => {
+    complaintPopup.classList.remove('active');
+    backdrop.classList.remove('active');
+});
+
+document.getElementById('cancelComplaint').addEventListener('click', () => {
+    complaintPopup.classList.remove('active');
+    backdrop.classList.remove('active');
+});
+
+document.getElementById('submitComplaint').addEventListener('click', () => {
+    submitComplaint()
+    complaintPopup.classList.remove('active');
+    backdrop.classList.remove('active');
+});
+
+
+async function submitComplaint() {
+            const complaintType = document.getElementById('complaintType');
+            const complaintNotes = document.getElementById('complaintNotes');
+            const fileInput = document.getElementById('fileUpload');
+            const formData = new FormData();
+            
+            // Make sure orderId is defined
+            if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
+
+            // Validate input
+            if (!complaintNotes.value.trim()) {
+                alert('Please enter complaint details');
+                return;
+            }
+
+            // Append text fields
+            formData.append('order_id', orderId);
+            formData.append('complaint_type', complaintType.value);
+            formData.append('content', complaintNotes.value);
+
+            // Append files
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('proofs[]', fileInput.files[i]);
+            }
+
+            try {
+                // Make sure this URL matches your backend route
+                const response = await fetch('/api/create-complaint', {
+                    method: 'POST',
+                    body: formData,
+                    // No Content-Type header needed for FormData
+                });
+
+                console.log(response);                
+
+                // Check if the response is valid JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server didn't return JSON. Got: " + await response.text());
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Complaint submitted successfully');
+                    // Close popup and reset form
+                    document.getElementById('complaintPopup').style.display = 'none';
+                    complaintNotes.value = '';
+                    fileInput.value = '';
+                    document.getElementById('previewContainer').innerHTML = '';
+                } else {
+                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error submitting complaint:', error);
+                alert('Error submitting complaint: ' + error.message);
+            }
+        }
+
+
+
             //Delivery details on popup
             // Replace the existing showDeliveryDetails function with this improved version
 function showDeliveryDetails(data) {
@@ -1325,11 +1775,17 @@ function showDeliveryDetails(data) {
     
     // Set content link if available
     const linkElement = document.getElementById('popupLink');
-    if (data.content_link) {
-        linkElement.innerHTML = `<a href="${data.content_link}" target="_blank">${data.content_link}</a>`;
-    } else {
-        linkElement.textContent = 'Not provided';
+if (data.content_link) {
+    // Check if the URL already has http:// or https:// prefix
+    let url = data.content_link;
+    if (!url.match(/^https?:\/\//i)) {
+        // If no protocol is specified, prepend https://
+        url = 'https://' + url;
     }
+    linkElement.innerHTML = `<a href="${url}" target="_blank">${data.content_link}</a>`;
+} else {
+    linkElement.textContent = 'Not provided';
+}
     
     // Handle file display
     const mediaElement = document.getElementById('popupMedia');
@@ -1483,6 +1939,7 @@ if(data.revision_note){
     }
 }
 
+
             // Close delivery details popup
             document.getElementById('closeDetailsPopup').addEventListener('click', () => {
                 deliveryDetailsPopup.classList.remove('active');
@@ -1537,14 +1994,53 @@ if(data.revision_note){
                 backdrop.classList.remove('active');
             });
 
-            // Request cancellation
-            document.getElementById('requestCancel').addEventListener('click', () => {
-                const cancelReason = document.getElementById('cancelReason').value;
-                // Send cancellation request to the server
-                console.log('Cancellation reason:', cancelReason);
-                cancelPopup.classList.remove('active');
-                backdrop.classList.remove('active');
-            });
+// Request cancellation
+document.getElementById('requestCancel').addEventListener('click', async () => {
+    const cancelReason = document.getElementById('cancelReason').value;
+    
+    // Validate input
+    if (!cancelReason.trim()) {
+        alert('Please provide a reason for cancellation');
+        return;
+    }
+
+    // console.log('Cancellation reason:', cancelReason);
+    // console.log('Order ID:', orderId);
+    
+    try {
+        // Create FormData to match the controller's expected format
+        const formData = new FormData();
+        formData.append('order_id', orderId);
+        formData.append('order_cancellation_reason', cancelReason);
+        
+        console.log('FormData:', formData.get('order_id'), formData.get('order_cancellation_reason'));
+
+        // Make sure this URL matches your backend route
+        const response = await fetch('/api/order-cancellation', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Cancellation request submitted successfully');
+        } else {
+            alert('Failed to submit cancellation request: ' + result.message);
+        }
+        
+    } catch (error) {
+        console.error('Error submitting cancellation:', error);
+        alert('Failed to submit cancellation request. Please try again.');
+    }
+    
+    cancelPopup.classList.remove('active');
+    backdrop.classList.remove('active');
+});
 
             // Deliver Now button
             document.getElementById('deliverNow').addEventListener('click', () => {
@@ -1625,6 +2121,82 @@ if(data.revision_note){
                     }
                 }
             }
+
+            
+
+            const complaintUploadArea = document.querySelector('#complaintPopup .upload-area');
+    const complaintFileUpload = document.querySelector('#complaintPopup #fileUpload');
+    
+    complaintUploadArea.addEventListener('click', () => {
+        complaintFileUpload.click();
+    });
+    
+    complaintUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        complaintUploadArea.style.borderColor = '#4f46e5';
+        complaintUploadArea.style.backgroundColor = '#f5f5ff';
+    });
+    
+    complaintUploadArea.addEventListener('dragleave', () => {
+        complaintUploadArea.style.borderColor = '#d1d5db';
+        complaintUploadArea.style.backgroundColor = '#f9fafb';
+    });
+    
+    complaintUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        complaintUploadArea.style.borderColor = '#d1d5db';
+        complaintUploadArea.style.backgroundColor = '#f9fafb';
+        
+        if (e.dataTransfer.files.length > 0) {
+            handleComplaintFiles(e.dataTransfer.files);
+        }
+    });
+    
+    complaintFileUpload.addEventListener('change', () => {
+        if (complaintFileUpload.files.length > 0) {
+            handleComplaintFiles(complaintFileUpload.files);
+        }
+    });
+    
+    function handleComplaintFiles(files) {
+        const previewContainer = document.querySelector('#complaintPopup #previewContainer');
+        
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].type.startsWith('image/') || files[i].type === 'video/mp4') {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'preview-image';
+                    
+                    if (files[i].type.startsWith('image/')) {
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Proof preview">
+                            <button class="remove-btn">&times;</button>
+                        `;
+                    } else {
+                        // For video files
+                        previewDiv.innerHTML = `
+                            <video width="100" height="100" controls>
+                                <source src="${e.target.result}" type="${files[i].type}">
+                            </video>
+                            <button class="remove-btn">&times;</button>
+                        `;
+                    }
+                    
+                    previewContainer.appendChild(previewDiv);
+                    
+                    // Add event listener to remove button
+                    previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
+                        previewDiv.remove();
+                    });
+                }
+                
+                reader.readAsDataURL(files[i]);
+            }
+        }
+    }
+
 
             // Submit delivery
             document.getElementById('submitDelivery').addEventListener('click', async () => {
@@ -1729,7 +2301,8 @@ if(data.revision_note){
             // Initialize
             fetchOrderDetails();
             loadDeliveryData();
-
+// Add this to the initialization section at the bottom
+loadOrderRequirements();
             });
         </script>
     </body>
