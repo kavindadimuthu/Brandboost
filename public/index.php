@@ -210,6 +210,7 @@ $app->router->get('/test', 'TestController@test');
 
 $app->router->post('/api/create-review', 'OrderController@createReview'); // Create ReviewcreateReview
 $app->router->post('/api/create-complaint', 'OrderController@submitComplaint'); // add compplaints
+$app->router->post('/api/request-revision', 'OrderController@deliverNow'); // request Revisions
 
 // ==================================
 // Payment API routes

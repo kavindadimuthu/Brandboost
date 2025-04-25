@@ -864,9 +864,9 @@
                     </div>
                     <div class="order-details">
                         <h4>Order Details</h4>
-                        <p><strong>Seller:</strong> <span id="sellerName">Kaikos Cafe</span></p>
-                        <p><strong>Date:</strong> <span id="orderDate">Nov 26, 2024, 8:50 AM</span></p>
-                        <p><strong>Due:</strong> <span id="orderDue">Dec 3, 2024, 8:50 AM</span></p>
+                        <p><strong>Seller:</strong> <span id="sellerName"></span></p>
+                        <p><strong>Date:</strong> <span id="orderDate"></span></p>
+                        <p><strong>Due:</strong> <span id="orderDue"></span></p>
                     </div>
                     <div class="support-section">
                         <h4>Support</h4>
@@ -1152,68 +1152,6 @@
 
         }
 
-        async function submitComplaint() {
-            const complaintType = document.getElementById('complaintType');
-            const complaintNotes = document.getElementById('complaintNotes');
-            const fileInput = document.getElementById('fileUpload');
-            const formData = new FormData();
-            
-            // Make sure orderId is defined
-            if (typeof orderId === 'undefined' || !orderId) {
-                console.error('Order ID is not defined');
-                return;
-            }
-
-            // Validate input
-            if (!complaintNotes.value.trim()) {
-                alert('Please enter complaint details');
-                return;
-            }
-
-            // Append text fields
-            formData.append('order_id', orderId);
-            formData.append('complaint_type', complaintType.value);
-            formData.append('content', complaintNotes.value);
-
-            // Append files
-            for (let i = 0; i < fileInput.files.length; i++) {
-                formData.append('proofs[]', fileInput.files[i]);
-            }
-
-            try {
-                // Make sure this URL matches your backend route
-                const response = await fetch('/api/create-complaint', {
-                    method: 'POST',
-                    body: formData,
-                    // No Content-Type header needed for FormData
-                });
-
-                console.log(response);                
-
-                // Check if the response is valid JSON
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Server didn't return JSON. Got: " + await response.text());
-                }
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert('Complaint submitted successfully');
-                    // Close popup and reset form
-                    document.getElementById('complaintPopup').style.display = 'none';
-                    complaintNotes.value = '';
-                    fileInput.value = '';
-                    document.getElementById('previewContainer').innerHTML = '';
-                } else {
-                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
-                }
-            } catch (error) {
-                console.error('Error submitting complaint:', error);
-                alert('Error submitting complaint: ' + error.message);
-            }
-        }
-
 // Make sure to attach this to your submit button
 // document.getElementById('submitComplaint').addEventListener('click', submitComplaint);
 
@@ -1255,8 +1193,69 @@
             }, 1000);
         }
 
+        async function deliverNow() {
+            const deliveryNotes = document.getElementById('deliveryNotes');
+            const fileInput = document.getElementById('fileUpload');
+            const formData = new FormData();
+            
+            // Make sure orderId is defined
+            if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
+
+            // Validate input
+            if (!deliveryNotes.value.trim()) {
+                alert('Please enter notes of previous revision');
+                return;
+            }
+
+            // Append text fields
+            formData.append('order_id', orderId);
+            formData.append('complaint_notes', complaintNotes.value);
+
+            // Append files
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('revision_photos[]', fileInput.files[i]);
+            }
+
+            try {
+                // Make sure this URL matches your backend route
+                const response = await fetch('/api/request-revision', {
+                    method: 'POST',
+                    body: formData,
+                    // No Content-Type header needed for FormData
+                });
+
+                console.log(response);                
+
+                // Check if the response is valid JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server didn't return JSON. Got: " + await response.text());
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Complaint submitted successfully');
+                    // Close popup and reset form
+                    document.getElementById('complaintPopup').style.display = 'none';
+                    complaintNotes.value = '';
+                    fileInput.value = '';
+                    document.getElementById('previewContainer').innerHTML = '';
+                } else {
+                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error submitting complaint:', error);
+                alert('Error submitting complaint: ' + error.message);
+            }
+        }
+
         // Deliver Now button
         document.getElementById('deliverNow').addEventListener('click', () => {
+            deliverNow
             deliveryPopup.classList.add('active');
             backdrop.classList.add('active');
         });
@@ -1449,6 +1448,68 @@
             }
         });
 
+        async function submitComplaint() {
+            const complaintType = document.getElementById('complaintType');
+            const complaintNotes = document.getElementById('complaintNotes');
+            const fileInput = document.getElementById('fileUpload');
+            const formData = new FormData();
+            
+            // Make sure orderId is defined
+            if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
+
+            // Validate input
+            if (!complaintNotes.value.trim()) {
+                alert('Please enter complaint details');
+                return;
+            }
+
+            // Append text fields
+            formData.append('order_id', orderId);
+            formData.append('complaint_type', complaintType.value);
+            formData.append('content', complaintNotes.value);
+
+            // Append files
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('proofs[]', fileInput.files[i]);
+            }
+
+            try {
+                // Make sure this URL matches your backend route
+                const response = await fetch('/api/create-complaint', {
+                    method: 'POST',
+                    body: formData,
+                    // No Content-Type header needed for FormData
+                });
+
+                console.log(response);                
+
+                // Check if the response is valid JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server didn't return JSON. Got: " + await response.text());
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Complaint submitted successfully');
+                    // Close popup and reset form
+                    document.getElementById('complaintPopup').style.display = 'none';
+                    complaintNotes.value = '';
+                    fileInput.value = '';
+                    document.getElementById('previewContainer').innerHTML = '';
+                } else {
+                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error submitting complaint:', error);
+                alert('Error submitting complaint: ' + error.message);
+            }
+        }
+
         function handleFiles(files) {
             for (let i = 0; i < files.length; i++) {
                 if (files[i].type.startsWith('image/')) {
@@ -1477,7 +1538,7 @@
         }
 
         // Submit delivery
-        document.getElementById('submitDelivery').addEventListener('click', () => {
+        /*document.getElementById('submitDelivery').addEventListener('click', () => {
             const contentLink = document.getElementById('contentLink').value;
             const deliveryNotes = document.getElementById('deliveryNotes').value;
             
@@ -1536,11 +1597,11 @@
             
             // Show success message
             alert('Delivery submitted successfully!');
-        });
+        });*/
 
 
         // Send message functionality
-        document.getElementById('sendMessage').addEventListener('click', () => {
+        /*document.getElementById('sendMessage').addEventListener('click', () => {
             const messageInput = document.getElementById('messageInput');
             const message = messageInput.value.trim();
             
@@ -1558,7 +1619,7 @@
                 
                 // Here you would also send the message to your backend
             }
-        });
+        });*/
 
         // Initialize
         fetchOrderDetails();
