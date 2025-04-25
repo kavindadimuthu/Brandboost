@@ -1297,7 +1297,7 @@
             <i class="fas fa-file-upload"></i>
             <h4>Upload Proofs</h4>
             <p>Click or drag files here (JPG, PNG, MP4 up to 10MB)</p>
-            <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*,video/mp4" />
+            <input type="file" id="complaintFileUpload" style="display: none;" multiple accept="image/*,video/mp4" />
         </div>
         <div class="preview-images" id="previewContainer">
             <!-- Preview images will appear here -->
@@ -1933,10 +1933,11 @@ document.getElementById('submitComplaint').addEventListener('click', () => {
 
 
 async function submitComplaint() {
-            const complaintType = document.getElementById('complaintType');
-            const complaintNotes = document.getElementById('complaintNotes');
-            const fileInput = document.getElementById('fileUpload');
-            const formData = new FormData();
+    const complaintType = document.getElementById('complaintType');
+    const complaintNotes = document.getElementById('complaintNotes');
+    // Use the new ID here
+    const fileInput = document.getElementById('complaintFileUpload');
+    const formData = new FormData();
             
             // Make sure orderId is defined
             if (typeof orderId === 'undefined' || !orderId) {
@@ -2375,11 +2376,11 @@ document.getElementById('requestCancel').addEventListener('click', async () => {
             
 
             const complaintUploadArea = document.querySelector('#complaintPopup .upload-area');
-    const complaintFileUpload = document.querySelector('#complaintPopup #fileUpload');
+            const complaintFileUpload = document.getElementById('complaintFileUpload');
     
-    complaintUploadArea.addEventListener('click', () => {
-        complaintFileUpload.click();
-    });
+            complaintUploadArea.addEventListener('click', () => {
+            complaintFileUpload.click();
+            });
     
     complaintUploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
