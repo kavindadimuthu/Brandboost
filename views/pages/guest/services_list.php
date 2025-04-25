@@ -36,31 +36,9 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .breadcrumb a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .breadcrumb-separator {
-            color: var(--text-secondary);
         }
 
         .page-header {
@@ -312,15 +290,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Breadcrumb navigation -->
-        <div class="breadcrumb">
-            <a href="/"><i class="fas fa-home"></i></a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="/services">Services</a>
-            <span class="breadcrumb-separator">/</span>
-            <span id="current-category">All Services</span>
-        </div>
-
         <div class="page-header">
             <div class="page-header-content">
                 <h1 id="header-title" class="header-title">Services</h1>
@@ -427,7 +396,6 @@
         function updateUI() {
             const container = document.getElementById('serviceCardContainer');
             const summary = document.getElementById('resultsSummary');
-            const currentCategory = document.getElementById('current-category');
 
             if (services.length === 0) {
                 container.innerHTML = `
@@ -439,11 +407,6 @@
                 summary.innerHTML = '<span>No services found</span>';
                 return;
             }
-
-            // Update breadcrumb
-            currentCategory.textContent = filters.type ? 
-                filters.type.charAt(0).toUpperCase() + filters.type.slice(1) + 's' : 
-                'All Services';
 
             // Update results summary
             summary.innerHTML = `

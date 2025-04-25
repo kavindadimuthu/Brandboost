@@ -140,41 +140,4 @@ class Wallet extends BaseModel
         $result = $this->readOne(['seller_id' => $sellerId]);
         return $result !== false;
     }
-
-    /**
-     * Get the total balance of all wallets.
-     *
-     * @return float|false The total balance or false on failure.
-     */
-    public function getTotalSystemBalance()
-    {
-        $sql = "SELECT SUM(balance) as total FROM {$this->table}";
-        
-        try {
-            $result = $this->db->executeWithParams($sql)->fetch(\PDO::FETCH_ASSOC);
-            return $result ? (float)$result['total'] : 0.0;
-        } catch (\Exception $e) {
-            $this->logError($e);
-            return false;
-        }
-    }
-
-    /**
-     * Get wallets with balance greater than specified amount.
-     *
-     * @param float $minBalance The minimum balance to filter by.
-     * @return array|false List of wallets or false on failure.
-     */
-    public function getWalletsWithMinimumBalance(float $minBalance)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE balance >= :min_balance";
-        $params = ['min_balance' => $minBalance];
-        
-        try {
-            return $this->db->executeWithParams($sql, $params)->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            $this->logError($e);
-            return false;
-        }
-    }
 }

@@ -523,6 +523,36 @@ class OrderController extends BaseController {
             return;
         }
 
+        // Create initial transaction (customer -> system)
+        $transactionData = [
+            'order_id' => $orderId,
+            'sender_id' => $customerId,
+            'receiver_id' => 1, // System user_id
+            'amount' => $packageData['price'] ?? 0.00,
+            'status' => 'hold',
+            'hold_until' => date('Y-m-d H:i:s', strtotime('+20 seconds'))
+        ];
+
+        if (!$transactionModel->createTransaction($transactionData)) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to create associated transactions.'
+            ]);
+            return;
+        }
+
+        // Ensure system wallet exists
+        if (!$walletModel->walletExists(100)) {
+            if (!$walletModel->createWallet(100)) {
+                throw new \Exception('Failed to create system wallet.');
+            }
+        }
+
+        // Update system wallet balance
+        if (!$walletModel->updateWalletBalance(100, $transactionData['amount'])) {
+            throw new \Exception('Failed to update system wallet balance.');
+        }
+
 
         // Handle media uploads
         $mediaPaths = [];
