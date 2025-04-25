@@ -1399,6 +1399,130 @@ public function orderCancellation($request, $response): void
     }
 }
 
+
+
+/**
+ * Handle responses to order cancellation requests (accept or decline)
+ *
+ * @param Request $request The incoming request object
+ * @param Response $response The response object to return data
+ * @return void JSON response indicating success or failure
+ */
+public function respondToCancellation($request, $response): void
+{
+    try {
+        // Check if it's a POST request
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Method Not Allowed'
+            ]);
+            return;
+        }
+
+        $orderId = $_POST['order_id'] ?? null;
+        $status = $_POST['status'] ?? null;
+
+        
+
+        // Validate required fields
+        if (!$orderId || !$status) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Missing required fields: order_id and status'
+            ], 400);
+            return;
+        }
+
+        // Validate status is either 'accepted' or 'declined'
+        if (!in_array($status, ['accepted', 'declined'])) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Invalid status. Must be either "accepted" or "declined".'
+            ], 400);
+            return;
+        }
+        
+        // Get the current user
+        $user = AuthHelper::getCurrentUser();
+        
+        if (!$user) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+            return;
+        }
+        
+        // Initialize order model
+        $orderModel = new Orders();
+        
+        // Get order details to check permissions
+        $order = $orderModel->getOrderById($orderId);
+        
+        if (!$order) {
+            $response->sendJson([
+                'success' => false,
+                'message' => 'Order not found'
+            ], 404);
+            return;
+        }
+        error_log("Respondingggpgggggg to cancellation request for order ID: $orderId, status: $status");
+        // Update order based on response
+        if ($status === 'accepted') {
+            // Accept the cancellation - update order status to cancelled
+            $updateData = [
+                'order_status' => 'canceled',
+                'cancellation_acceptancy' => 'yes'
+            ];
+            
+            $result = $orderModel->updateOrderById($orderId, $updateData);
+            
+            if ($result) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Cancellation request accepted successfully'
+                ]);
+                return;
+            } else {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to update order status'
+                ], 500);
+                return;
+            }
+        } else {
+            // Decline the cancellation - clear the cancellation reason
+            $updateData = [
+                'order_cancellation_reason' => null,
+                'cancellation_requested_by' => null
+            ];
+            
+            $result = $orderModel->updateOrderById($orderId, $updateData);
+            
+            if ($result) {
+                $response->sendJson([
+                    'success' => true,
+                    'message' => 'Cancellation request declined successfully'
+                ]);
+                return;
+            } else {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to update order status'
+                ], 500);
+                return;
+            }
+        }
+    } catch (\Exception $e) {
+        $response->sendJson([
+            'success' => false,
+            'message' => 'Error processing cancellation response: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
     public function submitComplaint($request, $response): void {
         try {
             if ($request->getMethod() != 'POST') {
