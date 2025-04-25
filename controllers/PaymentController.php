@@ -842,4 +842,69 @@ class PaymentController extends BaseController {
             $response->sendError('Failed to delete payout method: ' . $e->getMessage(), 500);
         }
     }
+
+    /**
+     * Do a refund for an order cancellation
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+
+    public function refundOrder($request, $response): void
+    {
+        if ($request->getMethod() !== 'POST') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+
+        $data = $request->getParsedBody();
+        $orderId = $data['order_id'] ?? null;
+
+        if (!$orderId) {
+            $response->sendError('Order ID is required', 400);
+            return;
+        }
+
+        // Validate order exists
+        $orderModel = new Orders();
+        $order = $orderModel->getOrderById($orderId);
+        if (!$order) {
+            $response->sendError('Order not found', 404);
+            return;
+        }
+
+        // Check if the order is eligible for a refund
+        if ($order['status'] !== 'cancelled') {
+            $response->sendError('Order is not eligible for a refund', 400);
+            return;
+        }
+
+        // Process the refund
+        try {
+            // Update transaction status to refunded
+            $transactionModel = new Transaction();
+            if (!$transactionModel->updateTransactionById($order['transaction_id'], ['status' => 'refunded'])) {
+                $response->sendError('Failed to update transaction status', 500);
+                return;
+            }
+
+            // Update wallet balance for the buyer
+            $walletModel = new Wallet();
+            if (!$walletModel->updateWalletBalance($order['buyer_id'], $order['amount'])) {
+                $response->sendError('Failed to update buyer wallet balance', 500);
+                return;
+            }
+
+            // Optionally, you can also log the refund in a separate table or send a notification
+
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Refund processed successfully'
+            ]);
+        } catch (\Exception $e) {
+            error_log("Refund error: " . $e->getMessage());
+            $response->sendError('Failed to process refund: ' . $e->getMessage(), 500);
+        }
+    }
 }
