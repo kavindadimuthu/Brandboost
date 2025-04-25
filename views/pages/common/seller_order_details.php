@@ -874,6 +874,106 @@
             cursor: pointer;
             font-size: 1.2em;
         }
+
+        .timer-bar {
+            height: 100%;
+            background-color: #4f46e5;
+            border-radius: 3px;
+            transition: width 1s linear;
+        }
+
+        /* Add CSS for Requirements Section */
+        .requirements-section {
+            margin-top: 24px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .requirements-section h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .requirements-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .requirements-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .requirement-description, 
+        .requirement-files {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .requirement-description h4, 
+        .requirement-files h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 12px 0;
+        }
+
+        .description-content {
+            white-space: pre-line;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .files-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .file-item:hover {
+            border-color: #4f46e5;
+            background-color: #f5f5ff;
+        }
+
+        .file-item i {
+            margin-right: 8px;
+            color: #4f46e5;
+        }
+
+        .file-item a {
+            color: #4b5563;
+            text-decoration: none;
+        }
+
+        .file-item a:hover {
+            color: #4f46e5;
+        }
+
+        .no-files {
+            color: #6b7280;
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -942,6 +1042,24 @@
                             <button id="contactSupport">Contact Us</button>
                         </a>
                         <button id="reviewOrder">Review</button>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Order Requirements Section -->
+                        <div class="requirements-section">
+                <h3>Order Requirements</h3>
+                <div class="requirements-content">
+                    <div class="requirement-description">
+                        <h4>Description</h4>
+                        <div class="description-content" id="orderDescription">Loading...</div>
+                    </div>
+                    
+                    <div class="requirement-files">
+                        <h4>Attached Files</h4>
+                        <div class="files-list" id="orderFiles">
+                            <div class="loading-files">Loading files...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1161,6 +1279,104 @@
                     console.error('Error fetching order details:', error);
                 }
             }
+
+
+            // Add this function to fetch requirements data
+// Updated function to load order requirements from the order details
+async function loadOrderRequirements() {
+    try {
+        // Use the same API endpoint as fetchOrderDetails
+        const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const result = await response.json();
+        console.log('Requirements data from order details:', result);
+        
+        // Check if we have the promise and requested_service data
+        if (result.data?.promise?.requested_service) {
+            let serviceData = {};
+            
+            try {
+                // Parse the JSON string from requested_service
+                if (typeof result.data.promise.requested_service === 'string') {
+                    serviceData = JSON.parse(result.data.promise.requested_service);
+                } else {
+                    serviceData = result.data.promise.requested_service;
+                }
+                
+                // Update description section with the parsed description
+                const descElement = document.getElementById('orderDescription');
+                if (serviceData.description) {
+                    descElement.textContent = serviceData.description;
+                } else if (serviceData.requirements) {
+                    descElement.textContent = serviceData.requirements;
+                } else {
+                    descElement.textContent = 'No description provided';
+                    descElement.classList.add('no-files');
+                }
+                descElement.style.whiteSpace = 'pre-line'; // Preserve line breaks
+                
+                // Update files section if there are files in the data
+                const filesContainer = document.getElementById('orderFiles');
+                filesContainer.innerHTML = ''; // Clear loading state
+                
+                // Check if files exist in the order data
+                if (result.data.order && result.data.order.files) {
+                    let files = [];
+                    
+                    try {
+                        // Parse files if they're stored as JSON string
+                        if (typeof result.data.order.files === 'string') {
+                            files = JSON.parse(result.data.order.files);
+                        } else if (Array.isArray(result.data.order.files)) {
+                            files = result.data.order.files;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing order files JSON:', e);
+                        files = [];
+                    }
+                    
+                    if (Array.isArray(files) && files.length > 0) {
+                        files.forEach((file, index) => {
+                            const fileUrl = file.url || file.path || file;
+                            const fileName = file.name || `File ${index + 1}`;
+                            
+                            const fileItem = document.createElement('div');
+                            fileItem.className = 'file-item';
+                            fileItem.innerHTML = `
+                                <i class="fas fa-file-alt"></i>
+                                <a href="${fileUrl}" target="_blank">${fileName}</a>
+                            `;
+                            filesContainer.appendChild(fileItem);
+                        });
+                    } else {
+                        filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+                    }
+                } else {
+                    filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error parsing requested_service JSON:', error);
+                document.getElementById('orderDescription').textContent = 'Error loading requirements';
+                document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error parsing requirements data</div>';
+            }
+        } else {
+            console.log('No requested_service data found in promise');
+            document.getElementById('orderDescription').textContent = 'No requirements found';
+            document.getElementById('orderFiles').innerHTML = '<div class="no-files">No files attached</div>';
+        }
+        
+    } catch (error) {
+        console.error('Error loading requirements:', error);
+        document.getElementById('orderDescription').textContent = 'Error loading requirements';
+        document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error loading files</div>';
+    }
+}
+
+
 
             function startCountdown(dueDate, createdDate) {
                 const countdownElement = document.getElementById('countdown');
@@ -1483,6 +1699,8 @@ if(data.revision_note){
     }
 }
 
+
+
             // Close delivery details popup
             document.getElementById('closeDetailsPopup').addEventListener('click', () => {
                 deliveryDetailsPopup.classList.remove('active');
@@ -1729,7 +1947,8 @@ if(data.revision_note){
             // Initialize
             fetchOrderDetails();
             loadDeliveryData();
-
+// Add this to the initialization section at the bottom
+loadOrderRequirements();
             });
         </script>
     </body>

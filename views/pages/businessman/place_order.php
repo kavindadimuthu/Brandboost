@@ -688,7 +688,15 @@
                     delivery_days: currentPackageDetails.delivery_days,
                     number_of_revisions: currentPackageDetails.revisions,
                     price: currentPackageDetails.price
-                }));            
+                }));     
+                
+                console.log('Document Files:', Array.from(fileInput.files).map(file => ({
+                    name: file.name,
+                    type: file.type,
+                    size: file.size + ' bytes'
+                })));
+                
+                
 
                 // Submit form data
                 const response = await fetch('/api/create-order', {
