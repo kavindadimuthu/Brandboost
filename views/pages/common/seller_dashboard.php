@@ -180,7 +180,7 @@
             background-color: white;
             color: var(--gray-600);
             font-size: 0.75rem;
-            cursor: pointer;
+            /* cursor: pointer; */
             transition: all 0.2s ease;
         }
 
@@ -423,10 +423,10 @@
                 </div>
                 <div class="card-label">Total Income in last month</div>
                 <div class="card-value" id="income-card"></div>
-                <div class="card-trend trend-up">
+                <!-- <div class="card-trend trend-up">
                     <i class="fas fa-arrow-up"></i>
                     <span>4.85% from last month</span>
-                </div>
+                </div> -->
             </div>
             
             <div class="summary-card sales">
@@ -434,35 +434,35 @@
                     <i class="fas fa-shopping-cart"></i>
                 </div>
                 <div class="card-label">Pending Orders</div>
-                <div class="card-value" id="pending-card">3,500</div>
-                <div class="card-trend trend-down">
+                <div class="card-value" id="pending-card">0</div>
+                <!-- <div class="card-trend trend-down">
                     <i class="fas fa-arrow-down"></i>
                     <span>5.52% from last month</span>
-                </div>
+                </div> -->
             </div>
             
             <div class="summary-card clients">
                 <div class="card-icon">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="card-label">Completed Orders</div>
-                <div class="card-value" id="completed-card">1,700</div>
-                <div class="card-trend trend-up">
+                <div class="card-value" id="completed-card">0</div>
+                <!-- <div class="card-trend trend-up">
                     <i class="fas fa-arrow-up"></i>
                     <span>9.55% from last month</span>
-                </div>
+                </div> -->
             </div>
             
             <div class="summary-card conversion">
                 <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-users"></i>
                 </div>
-                <div class="card-label">Conversion Rate</div>
-                <div class="card-value">14.8%</div>
-                <div class="card-trend trend-down">
+                <div class="card-label">Member of BrandBoost Since</div>
+                <div class="card-value" id="member-since-card"></div>
+                <!-- <div class="card-trend trend-down">
                     <i class="fas fa-arrow-down"></i>
                     <span>10.30% from last month</span>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -472,9 +472,8 @@
                 <div class="chart-header">
                     <h2 class="chart-title">Income Overview</h2>
                     <div class="chart-period">
-                        <button class="period-btn">Week</button>
-                        <button class="period-btn active">Month</button>
-                        <button class="period-btn">Year</button>
+                        <!-- <button class="period-btn">Week</button> -->
+                        <button class="period-btn active">Income within last month</button>
                     </div>
                 </div>
                 <div id="income-chart" class="chart-content"></div>
@@ -489,7 +488,11 @@
         </div>
 
         <!-- Order History Table -->
-        <table class="orders-table">
+        <div class="table-container">
+            <div class="chart-header">
+                <h2 class="chart-title">Recent 5 orders</h2>
+            </div>
+            <table class="orders-table">
                 <thead>
                     <tr>
                         <th>Buyer</th>
@@ -508,6 +511,7 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
     </div>
 
     <script>
@@ -515,6 +519,7 @@
             const incomeCard = document.getElementById('income-card');
             const pendingCard = document.getElementById('pending-card');
             const completedCard = document.getElementById('completed-card');
+            const memberSinceCard = document.getElementById('member-since-card');
 
             const state = {
                 orders: [],
@@ -544,6 +549,51 @@
                     }
                 } catch (error) {
                     console.error('Error fetching total income:', error);
+                }
+            }
+
+             // Fetch order count for status cards
+             async function getOrderCount() {
+                try {
+                    const response = await fetch('/api/orders/seller');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        pendingCard.textContent = data.count.by_status.pending || 0;
+                        completedCard.textContent = data.count.by_status.completed || 0;
+                    } else {
+                        console.error('Failed to fetch order counts:', data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching order counts:', error);
+                }
+            }
+
+            async function getRegisterDate() {
+                try {
+                    const userId = <?php echo (int)$_SESSION['user']['user_id']; ?>;
+                    console.log('userId', userId);
+                    
+                    const response = await fetch(`/api/user/${userId}`);
+                    const data = await response.json();
+                    
+                    console.log('getRegisterDate', data);
+
+                    if (data.created_at) {
+                        const registerDate = new Date(data.created_at);
+                        console.log('registerDate', registerDate);
+                        
+                        // Format the date as YYYY Month DD
+                        const year = registerDate.getFullYear();
+                        const month = registerDate.toLocaleString('default', { month: 'long' });
+                        const day = registerDate.getDate();
+                        
+                        memberSinceCard.textContent = `${year} ${month} ${day}`;
+                    } else {
+                        console.error('Failed to fetch register date:', data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching register date:', error);
                 }
             }
 
@@ -711,7 +761,7 @@
                 });
             }
             
-            // Set up period buttons functionality for the income chart
+            //Set up period buttons functionality for the income chart
             function setupPeriodButtons(chart) {
                 const periodBtns = document.querySelectorAll('.period-btn');
                 
@@ -760,23 +810,6 @@
                 }]);
             }
 
-            // Fetch order count for status cards
-            async function getOrderCount() {
-                try {
-                    const response = await fetch('/api/orders/seller');
-                    const data = await response.json();
-
-                    if (data.success) {
-                        pendingCard.textContent = data.count.by_status.pending || 0;
-                        completedCard.textContent = data.count.by_status.completed || 0;
-                    } else {
-                        console.error('Failed to fetch order counts:', data);
-                    }
-                } catch (error) {
-                    console.error('Error fetching order counts:', error);
-                }
-            }
-
             // Fetch orders for table and update charts
             async function fetchOrders() {
                 const tableBody = document.getElementById('ordersTableBody');
@@ -791,10 +824,13 @@
                 try {
                     const response = await fetch(`/api/orders/seller`);
                     const result = await response.json();
+                    console.log('fetchOrders', result);                    
 
                     if (result.success) {
                         state.orders = result.data;
-                        state.filteredOrders = [...state.orders];
+                        // Get only the last 5 orders (most recent orders)
+                        const lastFiveOrders = [...state.orders].slice(-5);
+                        state.filteredOrders = lastFiveOrders;
                         renderOrders();
                         updateSalesChart(result.count);
                     } else {
@@ -916,13 +952,19 @@
                 return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
             }
 
-            function navigateToOrderDetails(orderId, role) {
-                window.location.href = `/dashboard/${role}/orders/${orderId}`;
+            // Navigate to order details page
+            function navigateToOrderDetails(orderId, sellerRole) {
+                if (sellerRole == 'designer') {
+                    window.location.href = `/designer/order-details/${orderId}`;
+                } else if (sellerRole == 'influencer') {
+                    window.location.href = `/influencer/order-details/${orderId}`;
+                }
             }
 
             // === Initialization ===
             getTotalIncome();
             getOrderCount();
+            getRegisterDate();
             fetchOrders();
         });
     </script>
