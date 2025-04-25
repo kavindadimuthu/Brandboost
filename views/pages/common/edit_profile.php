@@ -769,8 +769,8 @@
         // 5. UI Functions
         // ===============================
         function populateForm(user) {
-            coverPhoto.src = "/" + user.cover_picture;
-            profilePhoto.src = "/" + user.profile_picture;
+            coverPhoto.src = user.cover_picture;
+            profilePhoto.src = user.profile_picture;
 
             document.getElementById('fullname').value = user.name;
             document.getElementById('title').value = user.professional_title || "Not set";

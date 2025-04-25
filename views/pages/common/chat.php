@@ -58,16 +58,19 @@
         }
 
         .sidebar-header {
-            padding: 20px;
+            padding: 24px;
+            padding-left: 12%;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
+            background: linear-gradient(270deg, #8A2BE2, #4169E1);
         }
 
         .sidebar-header .brand {
             font-weight: 700;
             font-size: 20px;
-            color: var(--primary-color);
+            /* color: var(--primary-color); */
+            color: white;
         }
 
         .sidebar-header .back-button {
@@ -204,6 +207,17 @@
             margin-left: 8px;
         }
 
+        .avatar a {
+            display: block;
+            position: relative;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .avatar a:hover {
+            opacity: 0.9;
+        }
+
         /* Chat Container Styles */
         .chat-container {
             flex-grow: 1;
@@ -216,8 +230,10 @@
         .chat-header {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            background-color: var(--light-bg);
+            padding: 10px 20px;
+            /* background-color: var(--light-bg); */
+            /* background-color: var(--primary-color); */
+            background: linear-gradient(135deg, #8A2BE2, #4169E1);
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             z-index: 10;
@@ -232,19 +248,33 @@
             border: 1px solid var(--border-color);
         }
 
+        .chat-header a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .chat-header a:hover img {
+            border-color: #ffffff;
+        }
+
         .chat-header .chat-info {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .chat-header .chat-info .name {
             font-weight: 600;
-            color: var(--text-primary);
+            /* color: var(--text-primary); */
+            color: white;
             font-size: 16px;
         }
 
         .chat-header .chat-info .status {
-            color: var(--text-muted);
-            font-size: 13px;
+            /* color: var(--text-muted); */
+            color: white;
+            font-size: 12px;
             display: flex;
             align-items: center;
         }
@@ -258,7 +288,8 @@
         }
 
         .chat-header .chat-options {
-            color: var(--text-muted);
+            /* color: var(--text-muted); */
+            color: white;
             font-size: 18px;
             cursor: pointer;
             display: flex;
@@ -329,6 +360,15 @@
             max-width: 80%;
         }
 
+        .chat-messages .message a {
+            text-decoration: none;
+            display: block;
+        }
+
+        .chat-messages .message a:hover img {
+            border-color: var(--primary-color);
+        }
+
         .chat-messages .message.received {
             align-self: flex-start;
         }
@@ -373,41 +413,6 @@
             background-color: var(--primary-color);
             color: white;
             border-bottom-right-radius: 4px;
-        }
-
-        .chat-messages .message .message-content .file {
-            background-color: var(--hover-bg);
-            padding: 12px 15px;
-            border-radius: 18px;
-            font-size: 14px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            box-shadow: var(--shadow);
-        }
-
-        .chat-messages .message .message-content .file i {
-            margin-right: 10px;
-            font-size: 18px;
-            color: var(--primary-color);
-        }
-
-        .chat-messages .message .message-content .image-preview {
-            max-width: 250px;
-            max-height: 300px;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 5px;
-            box-shadow: var(--shadow);
-        }
-
-        .chat-messages .message .message-content .image-preview img {
-            width: 100%;
-            height: auto;
-            border-radius: 0;
-            margin: 0;
-            border: none;
         }
 
         .chat-messages .message .message-content .time {
@@ -503,41 +508,6 @@
 
         .chat-input .send-button:hover {
             background-color: var(--accent-color);
-        }
-
-        /* File upload preview */
-        .upload-preview {
-            padding: 10px 20px;
-            background-color: var(--light-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .upload-preview .preview-item {
-            display: flex;
-            align-items: center;
-            background-color: var(--secondary-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-right: 10px;
-            font-size: 13px;
-        }
-
-        .upload-preview .preview-item i {
-            margin-right: 8px;
-            color: var(--primary-color);
-        }
-
-        .upload-preview .preview-item .remove {
-            margin-left: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .upload-preview .preview-item .remove:hover {
-            color: #e74c3c;
         }
 
         /* Hide elements when not active */
@@ -673,14 +643,12 @@
                     <div class="mobile-toggle" id="sidebar-toggle">
                         <i class="fas fa-bars"></i>
                     </div>
-                    <img src="" alt="Profile picture" id="chat-user-avatar">
+                    <a href="#" id="chat-user-profile-link">
+                        <img src="" alt="Profile picture" id="chat-user-avatar">
+                    </a>
                     <div class="chat-info">
                         <div class="name" id="chat-user-name"></div>
                         <div class="status"><span class="status-dot"></span> <span id="chat-user-status">Active now</span></div>
-                    </div>
-                    <div class="chat-options">
-                        <i class="fas fa-phone" title="Call"></i>
-                        <i class="fas fa-ellipsis-v" title="More options"></i>
                     </div>
                 </div>
 
@@ -689,24 +657,12 @@
                     <div class="spinner" id="messages-loader"></div>
                 </div>
 
-                <!-- File upload preview area (hidden initially) -->
-                <div class="upload-preview hidden" id="upload-preview">
-                    <!-- Preview items will be added dynamically -->
-                </div>
-
                 <div class="chat-input-container">
                     <div class="chat-input">
                         <div class="input-wrapper">
                             <textarea id="message-input" placeholder="Type a message..." rows="1"></textarea>
                         </div>
                         <div class="actions">
-                            <div class="action-button" title="Attach file">
-                                <i class="fas fa-paperclip"></i>
-                                <input type="file" id="file-input" hidden>
-                            </div>
-                            <div class="action-button" title="Send emoji">
-                                <i class="far fa-smile"></i>
-                            </div>
                             <button class="send-button" id="send-button" title="Send message">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
@@ -731,8 +687,6 @@
             const messagesLoader = document.getElementById('messages-loader');
             const messageInput = document.getElementById('message-input');
             const sendButton = document.getElementById('send-button');
-            const fileInput = document.getElementById('file-input');
-            const uploadPreview = document.getElementById('upload-preview');
             const sidebarToggle = document.getElementById('sidebar-toggle');
 
             // Chat user elements
@@ -740,6 +694,7 @@
             const chatUserName = document.getElementById('chat-user-name');
             const chatUserStatus = document.getElementById('chat-user-status');
             const chatUserStatusDot = document.querySelector('.chat-info .status .status-dot');
+            const chatUserProfileLink = document.getElementById('chat-user-profile-link');
 
             // WebSocket connection
             let socket;
@@ -972,22 +927,6 @@
                     const searchTerm = e.target.value.toLowerCase();
                     filterConversations(searchTerm);
                 });
-
-                // File input change
-                fileInput.addEventListener('change', handleFileInput);
-
-                // Make attach file button click trigger file input
-                const attachButton = document.querySelector('.action-button .fa-paperclip').parentElement;
-                attachButton.addEventListener('click', () => {
-                    fileInput.click();
-                });
-
-                // Handle emoji button click
-                const emojiButton = document.querySelector('.action-button .fa-smile').parentElement;
-                emojiButton.addEventListener('click', () => {
-                    // For now just insert a smiley emoji
-                    insertTextAtCursor(messageInput, '😊');
-                });
             }
 
             // Handle typing indicator
@@ -1069,59 +1008,6 @@
                 }
             }
 
-            // Handle file input change
-            function handleFileInput(e) {
-                const files = e.target.files;
-
-                if (files.length > 0) {
-                    // Clear previous previews
-                    uploadPreview.innerHTML = '';
-
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        const preview = createFilePreview(file);
-                        uploadPreview.appendChild(preview);
-                    }
-
-                    uploadPreview.classList.remove('hidden');
-                }
-            }
-
-            // Create file preview element
-            function createFilePreview(file) {
-                const preview = document.createElement('div');
-                preview.className = 'preview-item';
-
-                // Determine icon based on file type
-                let icon;
-                if (file.type.startsWith('image/')) {
-                    icon = 'fa-image';
-                } else if (file.type.startsWith('video/')) {
-                    icon = 'fa-video';
-                } else if (file.type.startsWith('audio/')) {
-                    icon = 'fa-music';
-                } else {
-                    icon = 'fa-file';
-                }
-
-                preview.innerHTML = `
-                    <i class="fas ${icon}"></i>
-                    <span>${file.name}</span>
-                    <i class="fas fa-times remove"></i>
-                `;
-
-                // Remove button functionality
-                const removeBtn = preview.querySelector('.remove');
-                removeBtn.addEventListener('click', () => {
-                    preview.remove();
-                    if (uploadPreview.children.length === 0) {
-                        uploadPreview.classList.add('hidden');
-                    }
-                });
-
-                return preview;
-            }
-
             // Auto-resize textarea
             function autoResizeTextarea() {
                 messageInput.addEventListener('input', function() {
@@ -1199,21 +1085,23 @@
                 // Status indicator for online/offline
                 const statusClass = status === 'online' ? 'status-indicator' : 'hidden';
 
-                // HTML structure
+                // Modified HTML structure with clickable avatar
                 item.innerHTML = `
-                    <div class="avatar">
+                <div class="avatar">
+                    <a href="/user/${userId}" onclick="event.stopPropagation();">
                         <img src="${avatar}" alt="Profile picture of ${name}" width="40" height="40">
                         <div class="${statusClass}"></div>
+                    </a>
+                </div>
+                <div class="message-info">
+                    <div class="name-time">
+                        <span class="name">${name}</span>
+                        <span class="time">${timeFormatted}</span>
                     </div>
-                    <div class="message-info">
-                        <div class="name-time">
-                            <span class="name">${name}</span>
-                            <span class="time">${timeFormatted}</span>
-                        </div>
-                        <div class="text">${lastMessage || 'Start a conversation'}</div>
-                    </div>
-                    ${unread > 0 ? `<div class="unread-badge">${unread}</div>` : ''}
-                `;
+                    <div class="text">${lastMessage || 'Start a conversation'}</div>
+                </div>
+                ${unread > 0 ? `<div class="unread-badge">${unread}</div>` : ''}
+            `;
 
                 // Click event to open the conversation
                 item.addEventListener('click', () => {
@@ -1255,6 +1143,9 @@
                 chatUserAvatar.src = conversation.avatar;
                 chatUserAvatar.alt = `Profile picture of ${conversation.name}`;
                 chatUserName.textContent = conversation.name;
+
+                // Set the profile link URL
+                chatUserProfileLink.href = `/user/${conversation.userId}`;
 
                 // Update status indicator
                 updateStatusDisplay(conversation.status);
@@ -1351,7 +1242,10 @@
                 messageEl.dataset.messageId = message.message_id || '';
 
                 // Avatar HTML (only for received messages)
-                const avatarHtml = isSent ? '' : `<img src="${activeConversation.avatar}" alt="Profile picture">`;
+                const avatarHtml = isSent ? '' : `
+                <a href="/user/${activeConversation.userId}">
+                    <img src="${activeConversation.avatar}" alt="Profile picture">
+                </a>`;
 
                 // Format time
                 const time = new Date(message.created_at);
@@ -1370,12 +1264,12 @@
                     '';
 
                 messageEl.innerHTML = `
-                    ${avatarHtml}
-                    <div class="message-content">
-                        <div class="text">${formatMessageText(message.message)}</div>
-                        <div class="time">${timeFormatted} ${statusIcon}</div>
-                    </div>
-                `;
+                ${avatarHtml}
+                <div class="message-content">
+                    <div class="text">${formatMessageText(message.message)}</div>
+                    <div class="time">${timeFormatted} ${statusIcon}</div>
+                </div>
+            `;
 
                 // Add the message to the chat
                 chatMessages.appendChild(messageEl);
@@ -1396,14 +1290,6 @@
                 // Clear input
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
-
-                // Check if there are files to send
-                const files = fileInput.files;
-                if (files.length > 0) {
-                    // TODO: Implement file upload
-                    uploadPreview.classList.add('hidden');
-                    fileInput.value = '';
-                }
 
                 // Send message to server
                 socket.send(JSON.stringify({

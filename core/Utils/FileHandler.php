@@ -52,7 +52,7 @@ class FileHandler
         $filePath = rtrim($destination, '/') . '/' . $newFileName;
         $absolutePath = self::$basePath . $filePath ;
 
-        return move_uploaded_file($file['tmp_name'], $absolutePath) ? $filePath : false;
+        return move_uploaded_file($file['tmp_name'], $absolutePath) ? '/' . $filePath : false;
     }
 
     /**
