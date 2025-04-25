@@ -381,7 +381,8 @@ class PaymentController extends BaseController {
                     'start' => $startDate,
                     'end' => $endDate
                 ],
-                'transactions_count' => count($releasedTransactions)
+                'transactions_count' => count($releasedTransactions),
+                'transactions' => $releasedTransactions	
             ]);
         } catch (\Exception $e) {
             error_log("Error getting period earnings: " . $e->getMessage());

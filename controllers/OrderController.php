@@ -320,7 +320,15 @@ class OrderController extends BaseController {
             
             // Get orders directly by seller_id
             $orders = $orderModel->getOrdersBySellerId($sellerId);
-            // $totalOrders = $orderModel->countOrdersBySellerId($sellerId);
+
+            $totalOrders = $orderModel->count(['seller_id' => $sellerId]);
+
+            // Optional: Get counts by status
+            $pendingCount = $orderModel->count(['order_status' => 'pending', 'seller_id' => $sellerId]);
+            $inProgressCount = $orderModel->count(['order_status' => 'in_progress', 'seller_id' => $sellerId]);
+            $completedCount = $orderModel->count(['order_status' => 'completed', 'seller_id' => $sellerId]);
+            $canceledCount = $orderModel->count(['order_status' => 'canceled', 'seller_id' => $sellerId]);
+            
             
             error_log("Found " . count($orders) . " orders for seller ID " . $sellerId);
             
@@ -379,6 +387,15 @@ class OrderController extends BaseController {
                 'success' => true,
                 'message' => 'Seller orders retrieved successfully.',
                 'data' => $orderList,
+                'count' => [
+                    'total' => $totalOrders,
+                    'by_status' => [
+                        'pending' => $pendingCount,
+                        'in_progress' => $inProgressCount,
+                        'completed' => $completedCount,
+                        'canceled' => $canceledCount
+                    ]
+                ]
                 // 'pagination' => [
                 //     'total' => $totalOrders,
                 //     'page' => $page,
@@ -386,6 +403,7 @@ class OrderController extends BaseController {
                 //     'pages' => ceil($totalOrders / $limit)
                 // ]
             ]);
+
         } catch (\Throwable $e) {
             error_log("Error in getSellerOrders: " . $e->getMessage());
             error_log("File: " . $e->getFile() . " Line: " . $e->getLine());
@@ -397,7 +415,7 @@ class OrderController extends BaseController {
             ], 500);
         }
     }
-
+   
 
     /**
      * Create a new order API endpoint.
@@ -527,7 +545,7 @@ class OrderController extends BaseController {
         $transactionData = [
             'order_id' => $orderId,
             'sender_id' => $customerId,
-            'receiver_id' => 1, // System user_id
+            'receiver_id' => 100, // System user_id
             'amount' => $packageData['price'] ?? 0.00,
             'status' => 'hold',
             'hold_until' => date('Y-m-d H:i:s', strtotime('+20 seconds'))
