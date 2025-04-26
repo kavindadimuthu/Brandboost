@@ -804,31 +804,31 @@
           </div>
           <div class="ratings-breakdown">
             <div class="rating-bars">
-              <div class="rating-label">
+              <div class="rating-label" id="rating-label-1">
                 5 <i class="fas fa-star"></i>
               </div>
               <div class="rating-bar">
                 <div class="rating-fill" style="width: 80%"></div>
               </div>
-              <div class="rating-count">80%</div>
+              <div class="rating-count" id="rating-count-1">80%</div>
             </div>
             <div class="rating-bars">
-              <div class="rating-label">
+              <div class="rating-label" id="rating-label-2">
                 4 <i class="fas fa-star"></i>
               </div>
               <div class="rating-bar">
                 <div class="rating-fill" style="width: 15%"></div>
               </div>
-              <div class="rating-count">15%</div>
+              <div class="rating-count" id="rating-count-2">15%</div>
             </div>
             <div class="rating-bars">
-              <div class="rating-label">
+              <div class="rating-label" id="rating-label-3">
                 3 <i class="fas fa-star"></i>
               </div>
               <div class="rating-bar">
                 <div class="rating-fill" style="width: 5%"></div>
               </div>
-              <div class="rating-count">5%</div>
+              <div class="rating-count" id="rating-count-3">5%</div>
             </div>
           </div>
         </div>
@@ -872,6 +872,7 @@
         }
 
         const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
+        console.log("Response is: ", response);
         const result = await response.json();
 
         console.log(result);
@@ -958,6 +959,9 @@
             }
           }
         };
+
+        console.log('gig data ', gigData);
+        
 
         // Render all UI components
         renderBreadcrumb();

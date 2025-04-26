@@ -1280,19 +1280,23 @@ public function createOrder($request, $response) {
         
         // Parse request body
         $requestData = $request->getParsedBody(); 
-        if (empty($requestData['order_id']) || empty($requestData['review'])) {
+        if (empty($requestData['order_id']) || empty($requestData['reviewText']) || empty($requestData['rating'])) {
             $response->sendError('No data provided for review.');
         }
 
         error_log(print_r($requestData, 1));
 
+        $id = $requestData['order_id'];
+        $orderModel = new Orders();
+        $order = $orderModel->getOrderById($id);
+
         $review = [
-            'order_id' => $requestData['order_id'], 
-            'service_id' => 136 , 
+            'order_id' => $id, 
+            'service_id' => $order['service_id'], 
             'user_id' => $_SESSION['user']['user_id'],
             'review_type' => 'review',            
             'content' => $requestData['reviewText'], 
-            'rating' => 3 ,
+            'rating' => $requestData['rating'],
             'created_at' => date('Y-m-d H:i:s')  
 
         ];

@@ -953,7 +953,7 @@
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-chart-bar"></i>
                     <h4>Upload Screenshots and videos</h4>
-                    <p>Upload Evidences..... (JPG, PNG, MP4 up to 10MB)</p>
+                    <p>Upload Evidences..... (JPG, PNG, up to 10MB)</p>
                     <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*,video/mp4" />
                 </div>
                 <div class="preview-images" id="previewContainer">
@@ -1013,10 +1013,10 @@
         <div class="form-group">
             <label>Proofs</label>
             <div class="screenshot-upload">
-                <div class="upload-area" id="uploadArea">
+                <div class="upload-area" id="uploadSection">
                     <i class="fas fa-chart-bar"></i>
                     <h4>Upload Screenshots and videos</h4>
-                    <p>Upload engagement metrics, reach, impressions, etc. (JPG, PNG, MP4 up to 10MB)</p>
+                    <p>Upload engagement metrics, reach, impressions, etc. (JPG, PNG)</p>
                     <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*" />
                 </div>
                 <div class="preview-images" id="previewContainer">
@@ -1049,7 +1049,7 @@
         const countdown = document.getElementById('countdown');
         const acceptPopup = document.getElementById('acceptPopup');
         const reviewPopup = document.getElementById('reviewPopup');
-        const reviewStars = document.getElementById('reviewStars');
+        // const stars = document.getElementById('stars');
         const reviewComment = document.getElementById('reviewComment');
         const cancelPopup = document.getElementById('cancelPopup');
         const deliveryPopup = document.getElementById('deliveryPopup');
@@ -1124,36 +1124,40 @@
 
                 // For demo purposes, also fetch deliverables here
                 // In production, replace with real API call
-                renderDeliverables(mockDeliverables);
+                //renderDeliverables(mockDeliverables);
 
             } catch (error) {
                 console.error('Error fetching order details:', error);
                 // For demo purposes, show mock deliverables even if API fails
-                renderDeliverables(mockDeliverables);
+                //renderDeliverables(mockDeliverables);
             }
         }
 
-        async function submitReview(){
-            const response =await fetch('/api/create-review', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body : JSON.stringify({ 
-                    order_id: orderId, 
-                    service_id: 136, 
-                    reviewText: reviewComment.value }),
-            });
+        async function submitReview() {
+        // Get star rating by counting the number of active stars
+        const activeStars = document.querySelectorAll('.stars i.active');
+        const rating = activeStars.length;
+        console.log('rating', rating);
+        
+        
+        const response = await fetch('/api/create-review', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                order_id: orderId, 
+                reviewText: reviewComment.value,
+                rating: rating  // Adding the star rating to the request
+            }),
+        });
 
-            if (response.success) {
-                console.log('Review Created Successfully.');
-                
-            }else{
-                console.error('Failed to create review:', response.statusText);
-            }
-
+        if (response.success) {
+            console.log('Review Created Successfully.');
+        } else {
+            console.error('Failed to create review:', response.statusText);
         }
+    }
 
-// Make sure to attach this to your submit button
-// document.getElementById('submitComplaint').addEventListener('click', submitComplaint);
+        //Countdown Starts
 
         function startCountdown(dueDate, createdDate) {
             const countdownElement = document.getElementById('countdown');
@@ -1193,9 +1197,11 @@
             }, 1000);
         }
 
+        //Request Revision
+        
         async function deliverNow() {
             const deliveryNotes = document.getElementById('deliveryNotes');
-            const fileInput = document.getElementById('fileUpload');
+            const fileInput = document.getElementById('uploadSection');
             const formData = new FormData();
             
             // Make sure orderId is defined
@@ -1364,7 +1370,7 @@
             });
         });
 
-        // Submit review
+        /*// Submit review
         document.getElementById('submitReview').addEventListener('click', () => {
             // Get star rating
             const stars = document.querySelectorAll('.stars .fa-star.active');
@@ -1414,7 +1420,7 @@
                 console.error('Error submitting review:', error);
                 alert('There was an error submitting your review. Please try again.');
             });
-        });
+        });*/
         
 
         // File upload area
@@ -1541,90 +1547,6 @@
                 }
             }
         }
-
-        // Submit delivery
-        /*document.getElementById('submitDelivery').addEventListener('click', () => {
-            const contentLink = document.getElementById('contentLink').value;
-            const deliveryNotes = document.getElementById('deliveryNotes').value;
-            
-            // Validate form
-            if (!contentLink) {
-                alert('Please provide a content link');
-                return;
-            }
-            
-            // Get all preview images (would be uploaded to server in production)
-            const screenshots = Array.from(previewContainer.querySelectorAll('.preview-image img')).map(img => img.src);
-            
-            if (screenshots.length === 0) {
-                alert('Please upload at least one screenshot as proof');
-                return;
-            }
-            
-            // Create submission object
-            const deliveryData = {
-                orderId,
-                contentLink,
-                deliveryNotes,
-                screenshots
-            };
-            
-            // In a real application, send this data to the server
-            console.log('Delivery submitted:', deliveryData);
-            
-            // For demo purposes, add to deliverables immediately
-            const newDeliverable = {
-                id: mockDeliverables.length + 1,
-                type: determineContentType(contentLink),
-                title: determineContentTitle(contentLink),
-                description: deliveryNotes || 'Content as requested',
-                status: 'delivered',
-                date: new Date().toISOString().split('T')[0],
-                link: contentLink,
-                screenshots: screenshots.map((src, index) => ({
-                    id: 1000 + index,
-                    url: src,
-                    title: `Analytics Screenshot ${index + 1}`
-                }))
-            };
-            
-            mockDeliverables.push(newDeliverable);
-            renderDeliverables(mockDeliverables);
-            
-            // Close popup
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-            
-            // Reset form
-            document.getElementById('contentLink').value = '';
-            document.getElementById('deliveryNotes').value = '';
-            previewContainer.innerHTML = '';
-            
-            // Show success message
-            alert('Delivery submitted successfully!');
-        });*/
-
-
-        // Send message functionality
-        /*document.getElementById('sendMessage').addEventListener('click', () => {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-            
-            if (message) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', 'sent');
-                messageElement.textContent = message;
-                chatBox.appendChild(messageElement);
-                
-                // Clear input
-                messageInput.value = '';
-                
-                // Scroll to bottom of chat
-                chatBox.scrollTop = chatBox.scrollHeight;
-                
-                // Here you would also send the message to your backend
-            }
-        });*/
 
         // Initialize
         fetchOrderDetails();
