@@ -488,6 +488,7 @@
                 });
                 
                 const result = await response.json();
+                console.log('Fetched orders:', result);
                 
                 if (result.success) {
                     state.orders = result.data;
@@ -581,8 +582,17 @@
             // Total revenue from completed orders
             const totalRevenue = orders
                 .filter(order => order.status.toLowerCase() === 'completed')
-                .reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
-            document.getElementById('totalRevenue').textContent = '$' + totalRevenue.toFixed(2);
+                .reduce((sum, order) => {
+                    // Extract numeric value from currency string (e.g., "LKR 40.00" → 40.00)
+                    const amount = order.total ? parseFloat(order.total.toString().replace(/[^0-9.]/g, '')) : 0;
+                    return sum + amount;
+                }, 0);
+            console.log('Total Revenue:', totalRevenue);
+            if(isNaN(totalRevenue)) {
+                document.getElementById('totalRevenue').textContent = 'LKR 0';
+            } else {
+                document.getElementById('totalRevenue').textContent = 'LKR ' + totalRevenue.toFixed(2);
+            }
         }
         
         // Get buyer initials for avatar
