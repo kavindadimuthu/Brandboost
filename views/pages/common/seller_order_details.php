@@ -1078,6 +1078,36 @@
 .decline-button:hover {
     background-color: #f3f4f6 !important;
 }
+.file-thumbnail {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-right: 12px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.file-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+}
 
     </style>
 </head>
@@ -1678,8 +1708,7 @@ async function fetchOrderDetails() {
     }
 }
 
-            // Add this function to fetch requirements data
-// Updated function to load order requirements from the order details
+// Updated function to load order requirements and display files properly
 async function loadOrderRequirements() {
     try {
         // Use the same API endpoint as fetchOrderDetails
@@ -1715,45 +1744,93 @@ async function loadOrderRequirements() {
                 }
                 descElement.style.whiteSpace = 'pre-line'; // Preserve line breaks
                 
-                // Update files section if there are files in the data
+                // Update files section
                 const filesContainer = document.getElementById('orderFiles');
                 filesContainer.innerHTML = ''; // Clear loading state
                 
-                // Check if files exist in the order data
-                if (result.data.order && result.data.order.files) {
-                    let files = [];
-                    
+                // Check for project_documents in promise data (primary source for files)
+                let filesList = [];
+                
+                if (result.data.promise && result.data.promise.project_documents) {
                     try {
-                        // Parse files if they're stored as JSON string
-                        if (typeof result.data.order.files === 'string') {
-                            files = JSON.parse(result.data.order.files);
-                        } else if (Array.isArray(result.data.order.files)) {
-                            files = result.data.order.files;
+                        if (typeof result.data.promise.project_documents === 'string') {
+                            filesList = JSON.parse(result.data.promise.project_documents);
+                        } else if (Array.isArray(result.data.promise.project_documents)) {
+                            filesList = result.data.promise.project_documents;
                         }
                     } catch (e) {
-                        console.error('Error parsing order files JSON:', e);
-                        files = [];
+                        console.error('Error parsing project_documents JSON:', e);
                     }
-                    
-                    if (Array.isArray(files) && files.length > 0) {
-                        files.forEach((file, index) => {
-                            const fileUrl = file.url || file.path || file;
-                            const fileName = file.name || `File ${index + 1}`;
-                            
-                            const fileItem = document.createElement('div');
-                            fileItem.className = 'file-item';
-                            fileItem.innerHTML = `
-                                <i class="fas fa-file-alt"></i>
-                                <a href="${fileUrl}" target="_blank">${fileName}</a>
-                            `;
-                            filesContainer.appendChild(fileItem);
-                        });
-                    } else {
-                        filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
-                    }
-                } else {
-                    filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
                 }
+                
+                // Display files if we have any
+if (Array.isArray(filesList) && filesList.length > 0) {
+    console.log('Files from database:', filesList);
+    
+    filesList.forEach((file, index) => {
+        // Handle different file data structures, including JSON string representation
+        let fileUrl = '';
+        
+        if (typeof file === 'string') {
+            // If it's a simple string, use it directly
+            if (file.startsWith('[') && file.endsWith(']')) {
+                // This is a stringified array with a single element
+                try {
+                    const parsed = JSON.parse(file);
+                    fileUrl = parsed[0];
+                } catch (e) {
+                    // If parsing fails, use the string as is but remove brackets
+                    fileUrl = file.substring(1, file.length - 1);
+                }
+            } else {
+                fileUrl = file;
+            }
+            
+            // Handle escaped slashes in the URL
+            fileUrl = fileUrl.replace(/\\\//g, '/');
+        } else if (file && (file.url || file.path)) {
+            // If it's an object with url or path property
+            fileUrl = file.url || file.path;
+        }
+        
+        // Handle final path formatting
+        if (fileUrl && !fileUrl.startsWith('http') && !fileUrl.startsWith('/')) {
+            fileUrl = '/' + fileUrl;
+        }
+        
+        const fileName = (file && file.name) ? file.name : `File ${index + 1}`;
+        
+        if (fileUrl) {
+            console.log(`Processing file ${index}: ${fileUrl}`);
+            
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            // Check if it's an image file by extension
+            const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(fileUrl);
+            
+            if (isImage) {
+                // For images, show a thumbnail with a link to the full image
+                fileItem.innerHTML = `
+                    <div class="file-thumbnail">
+                        <img src="${fileUrl}" alt="${fileName}" onclick="window.open('${fileUrl}', '_blank')">
+                    </div>
+                    <a href="${fileUrl}" target="_blank">${fileName}</a>
+                `;
+            } else {
+                // For non-image files, show the regular file icon
+                fileItem.innerHTML = `
+                    <i class="fas fa-file-alt"></i>
+                    <a href="${fileUrl}" target="_blank">${fileName}</a>
+                `;
+            }
+            
+            filesContainer.appendChild(fileItem);
+        }
+    });
+} else {
+    filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+}
                 
             } catch (error) {
                 console.error('Error parsing requested_service JSON:', error);
