@@ -399,121 +399,155 @@ class OrderController extends BaseController {
     }
 
 
-    /**
-     * Create a new order API endpoint.
-     *
-     * @param Request $request The incoming request object.
-     * @param Response $response The response object to return data.
-     * @return Response JSON response indicating success or failure.
-     */
-    public function createOrder($request, $response) {
-        // Extract data from the request
-        $requestData = $request->getParsedBody();
-        DebugHelper::logArray($requestData);
-        
-        // Validate required fields
-        $requiredFields = ['service_id', 'payment_type'];
-        $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
+/**
+ * Create a new order API endpoint.
+ *
+ * @param Request $request The incoming request object.
+ * @param Response $response The response object to return data.
+ * @return Response JSON response indicating success or failure.
+ */
+public function createOrder($request, $response) {
+    // Extract data from the request
+    $requestData = $request->getParsedBody();
+    DebugHelper::logArray($requestData);
 
-        if (!empty($missingFields)) {
-            return $response->sendJson([
-                'success' => false,
-                'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
-            ], 400);
-        }
-
-        // Check authentication
-        $customerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
-        if (!$customerId) {
-            return $response->sendJson([
-                'success' => false,
-                'message' => 'Unauthorized access: user not authenticated.'
-            ], 401);
-        }
-        
-        // Initialize required models
-        $orderModel = new Orders();
-        $orderPromisesModel = new OrderPromises();
-        $serviceModel = new Service();
-        $servicePackageModel = new ServicePackage();
-        $transactionModel = new Transaction();
-        $walletModel = new Wallet();
-        $orderDeliveriesModel = new OrderDeliveries();
-        
-        // Extract other data from the request
-        $serviceId = $requestData['service_id'];
-        $paymentType = $requestData['payment_type'];
-        $packageId = $requestData['package_id'] ?? null;
-        $customPackageId = $requestData['custom_package_id'] ?? null;
-        
-        // Parse promises if provided
-        $promises = [];
-        if (!empty($requestData['promises'])) {
-            $promises = json_decode($requestData['promises'], true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                return $response->sendJson([
-                    'success' => false,
-                    'message' => 'Invalid JSON format in promises.'
-                ], 400);
+    error_log("Request data: " . json_encode($requestData, JSON_PRETTY_PRINT));
+    
+    // Get uploaded files - Using $_FILES instead of getUploadedFiles()
+    $uploadedFiles = [];
+    if (isset($_FILES)) {
+        foreach ($_FILES as $key => $file) {
+            if (strpos($key, 'additionalImage') === 0 && $file['error'] === UPLOAD_ERR_OK) {
+                $uploadedFiles[$key] = $file;
             }
         }
-        
-        // Fetch service and package data
-        $serviceData = $serviceModel->getServiceById($serviceId);
-        $packageData = $servicePackageModel->getPackageById($packageId);
+    }
+    error_log("Uploaded files: " . json_encode(array_keys($uploadedFiles)));
 
-        if (!$serviceData || !$packageData) {
+            // Handle media uploads
+            $mediaPaths = [];
+            foreach ($uploadedFiles as $key => $file) {
+                // Use FileHandler to upload the file
+                $mediaPath = FileHandler::fileUploader(
+                    $file, 
+                    'cdn_uploads/orders/order_attachments'
+                );
+                
+                if ($mediaPath) {
+                    $mediaPaths[] = $mediaPath;
+                    error_log("File uploaded successfully: " . $mediaPath);
+                } else {
+                    error_log("Failed to upload file: " . $key);
+                }
+            }
+    
+    // Validate required fields
+    $requiredFields = ['service_id', 'payment_type'];
+    $missingFields = array_filter($requiredFields, fn($field) => empty($requestData[$field]));
+
+    if (!empty($missingFields)) {
+        return $response->sendJson([
+            'success' => false,
+            'message' => 'Missing required fields: ' . implode(', ', $missingFields) . '.'
+        ], 400);
+    }
+
+    // Check authentication
+    $customerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+    if (!$customerId) {
+        return $response->sendJson([
+            'success' => false,
+            'message' => 'Unauthorized access: user not authenticated.'
+        ], 401);
+    }
+    
+    // Initialize required models
+    $orderModel = new Orders();
+    $orderPromisesModel = new OrderPromises();
+    $serviceModel = new Service();
+    $servicePackageModel = new ServicePackage();
+    $transactionModel = new Transaction();
+    $walletModel = new Wallet();
+    $orderDeliveriesModel = new OrderDeliveries();
+    
+    // Extract other data from the request
+    $serviceId = $requestData['service_id'];
+    $paymentType = $requestData['payment_type'];
+    $packageId = $requestData['package_id'] ?? null;
+    $customPackageId = $requestData['custom_package_id'] ?? null;
+    
+    // Parse promises if provided
+    $promises = [];
+    if (!empty($requestData['promises'])) {
+        $promises = json_decode($requestData['promises'], true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
             return $response->sendJson([
                 'success' => false,
-                'message' => 'Invalid service or package ID.'
+                'message' => 'Invalid JSON format in promises.'
             ], 400);
         }
-        
-        try {
-            // Prepare order data
-            $orderData = [
-                'customer_id' => $customerId,
-                'seller_id' => $serviceData['user_id'],
-                'service_id' => $serviceId,
-                'package_id' => $packageId,
-                'custom_package_id' => $customPackageId,
-                'payment_type' => $paymentType,
-                'remained_revisions' => $packageData['revisions'] ?? 0,
-                'order_status' => 'pending',
-                'created_at' => date('Y-m-d H:i:s')
-            ];
+    }
+    
+    // Fetch service and package data
+    $serviceData = $serviceModel->getServiceById($serviceId);
+    $packageData = $servicePackageModel->getPackageById($packageId);
 
-            // Create the order
-            if (!$orderModel->createOrder($orderData)) {
-                throw new \Exception('Failed to create order.');
-            }
+    if (!$serviceData || !$packageData) {
+        return $response->sendJson([
+            'success' => false,
+            'message' => 'Invalid service or package ID.'
+        ], 400);
+    }
+    
+    try {
+        // Prepare order data
+        $orderData = [
+            'customer_id' => $customerId,
+            'seller_id' => $serviceData['user_id'],
+            'service_id' => $serviceId,
+            'package_id' => $packageId,
+            'custom_package_id' => $customPackageId,
+            'payment_type' => $paymentType,
+            'remained_revisions' => $packageData['revisions'] ?? 0,
+            'order_status' => 'pending',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
 
-            // Get the last inserted order ID
-            $orderId = $orderModel->getLastInsertId();
+        // Create the order
+        if (!$orderModel->createOrder($orderData)) {
+            throw new \Exception('Failed to create order.');
+        }
 
-            // Add service description and package benefits to promised data
-            $agreedData = json_encode([
-                'title' => $serviceData['title'],
-                'description' => $serviceData['description'],
-                'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
-                'benefits' => $packageData['benefits'] ?? 'No benefits available.',
-                'service_type' => $serviceData['service_type']
-            ]);
+        // Get the last inserted order ID
+        $orderId = $orderModel->getLastInsertId();
 
-            $buyerRequest = json_encode([
-                'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
-                'description' => $requestData['description'] ?? 'No description provided.'
-            ]);
+        // Add service description and package benefits to promised data
+        $agreedData = json_encode([
+            'title' => $serviceData['title'],
+            'description' => $serviceData['description'],
+            'delivery_formats' => $serviceData['delivery_formats'] ?? 'No delivery formats available.',
+            'benefits' => $packageData['benefits'] ?? 'No benefits available.',
+            'service_type' => $serviceData['service_type']
+        ]);
 
-            // Create promises associated with the order
-            $promiseData = [
-                'order_id' => $orderId,
-                'accepted_service' => $agreedData,
-                'requested_service' => $buyerRequest,
-                'delivery_days' => $packageData['delivery_days'] ?? 0,
-                'number_of_revisions' => $packageData['revisions'] ?? 0,
-                'price' => $packageData['price'] ?? 0.00
-            ];
+        $buyerRequest = json_encode([
+            'requirements' => $requestData['requirements'] ?? 'No requirements provided.',
+            'description' => $requestData['description'] ?? 'No description provided.'
+        ]);
+
+        // Log the uploaded file paths
+        error_log("Media paths for order: " . json_encode($mediaPaths));
+
+        // Create promises associated with the order
+        $promiseData = [
+            'order_id' => $orderId,
+            'accepted_service' => $agreedData,
+            'requested_service' => $buyerRequest,
+            'delivery_days' => $packageData['delivery_days'] ?? 0,
+            'number_of_revisions' => $packageData['revisions'] ?? 0,
+            'project_documents' => json_encode($mediaPaths),
+            'price' => $packageData['price'] ?? 0.00
+        ];
 
         if (!$orderPromisesModel->createPromise($promiseData)) {
             $response->sendJson([
@@ -553,55 +587,22 @@ class OrderController extends BaseController {
             throw new \Exception('Failed to update system wallet balance.');
         }
 
-
-        // Handle media uploads
-        $mediaPaths = [];
-        for ($i = 0; $i < 4; $i++) {
-            $key = "additionalImage{$i}";
-            if (isset($uploadedFiles[$key]) && $uploadedFiles[$key]['error'] === UPLOAD_ERR_OK) {
-                $file = $uploadedFiles[$key];
-                $mediaPath = FileHandler::fileUploader($file, 'cdn_uploads/orders/order_attachments');
-                if ($mediaPath) {
-                    $mediaPaths[] = $mediaPath;
-                }
-            }
-        }
-
-        // Create the delivery record
-        $deliveryData = [
-            'order_id' => $orderId,
-            'revision_number' => 0,
-            'revision_note' => $requestData['requirements'],
-            'revision_files' => json_encode($mediaPaths),
-            'status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-
-        if (!$orderDeliveriesModel->createDelivery($deliveryData)) {
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Failed to create associated delivery record.'
-            ]);
-            return;
-        }
-
-
-
         // Return success response
         $response->sendJson([
             'success' => true,
             'message' => 'Order created successfully.',
             'order_id' => $orderId
         ]);
-        } catch (\Exception $e) {
-            // Handle exceptions and return error response
-            error_log("Error creating order: " . $e->getMessage());
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Internal server error: ' . $e->getMessage()
-            ], 500);
-        }
+        
+    } catch (\Exception $e) {
+        // Handle exceptions and return error response
+        error_log("Error creating order: " . $e->getMessage());
+        $response->sendJson([
+            'success' => false,
+            'message' => 'Internal server error: ' . $e->getMessage()
+        ], 500);
     }
+}
     
     /**
      * Update an existing order API endpoint.
