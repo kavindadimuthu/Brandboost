@@ -314,6 +314,160 @@ use app\core\Helpers\AuthHelper;
             color: #4169E1;
             background: #f5f5f5;
         }
+        
+        /* Notification Dropdown Styles */
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 50px;
+            margin-top: 12px;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .notification-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .notification-count {
+            background:rgb(90, 65, 225);
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .notification-list {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .notification-item:hover {
+            background-color: rgba(65, 105, 225, 0.05);
+        }
+        
+        .notification-item.unread {
+            background-color: rgba(65, 105, 225, 0.08);
+        }
+        
+        .notification-icon {
+            margin-right: 15px;
+            height: 36px;
+            width: 36px;
+            border-radius: 50%;
+            background: rgba(65, 105, 225, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color:rgb(90, 65, 225);
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .notification-time {
+            font-size: 12px;
+            color: #888;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        .notification-footer {
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .view-all {
+            color: rgb(90, 65, 225);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .view-all:hover {
+            opacity: 0.8;
+        }
+        
+        /* Add notification indicator dot */
+        #notification-bell {
+            position: relative;
+        }
+        
+        #notification-bell:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 6px;
+            height: 8px;
+            width: 8px;
+            background: #FF5252;
+            border-radius: 50%;
+            border: 2px solid rgba(65, 105, 225, 1);
+        }
+        
+        /* Add scroll styling for notification list */
+        .notification-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .notification-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .notification-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 3px;
+        }
+        
+        .notification-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.25);
+        }
+        
 
         /* Media Queries */
         @media (max-width: 768px) {
@@ -458,7 +612,7 @@ use app\core\Helpers\AuthHelper;
                     <?php endif; ?>
                     <?php if (isset($_SESSION['user']['role']) && isset($_SESSION['user']['username'])): ?>
                         <div class="header-icons">
-                            <i class="fas fa-bell header-icon"></i>
+                            <i class="fas fa-bell header-icon" id="notification-bell" onclick="toggleNotifications()"></i>
                             <i class="fas fa-comments header-icon" onclick="window.location.href='/chat'"></i>
                         </div>
                         <div class="profile" onclick="toggleProfileMenu()">
@@ -473,7 +627,7 @@ use app\core\Helpers\AuthHelper;
                                 <span class="profile-role"><?php echo $_SESSION['user']['role']; ?></span>
                             </div>
                             <?php if (AuthHelper::getCurrentUser()['role'] != 'admin'): ?>
-                                <img src="<?php echo '/' . AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
+                                <img src="<?php echo AuthHelper::getCurrentUser()['profile_picture'] ?? '\assets\images\dp-empty.png'; ?>"
                                     alt="User profile picture">
                             <?php endif; ?>
                         </div>
@@ -495,6 +649,23 @@ use app\core\Helpers\AuthHelper;
                             <?php endif; ?>
                             <a href="/auth/logout" class="profile-dropdown-link">Logout</a>
                         </div>
+                        <!-- Add notification dropdown -->
+                        <div class="notification-dropdown" id="notification-menu">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <span class="notification-count" id="notification-count">0</span>
+                            </div>
+                            <div class="notification-list" id="notification-list">
+                                <!-- Notifications will be loaded dynamically -->
+                                <div class="notification-loading">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="/notifications" class="view-all">View All Notifications</a>
+                            </div>
+                        </div>
+                        <!-- End notification dropdown -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -503,17 +674,367 @@ use app\core\Helpers\AuthHelper;
                 function toggleProfileMenu() {
                     const profileMenu = document.getElementById('profile-menu');
                     profileMenu.classList.toggle('show');
+                    // Hide notifications when profile menu is opened
+                    document.getElementById('notification-menu')?.classList.remove('show');
                 }
-
-                // Close dropdown when clicking outside
+                
+                function toggleNotifications() {
+                    const notificationMenu = document.getElementById('notification-menu');
+                    notificationMenu.classList.toggle('show');
+                    // Hide profile menu when notifications are opened
+                    document.getElementById('profile-menu')?.classList.remove('show');
+                    
+                    // Mark notifications as read when dropdown is opened
+                    if (notificationMenu.classList.contains('show')) {
+                        notificationSocket.send(JSON.stringify({
+                            type: 'mark_all_read'
+                        }));
+                    }
+                }
+            
+                // Close dropdowns when clicking outside
                 document.addEventListener('click', function(event) {
                     const profile = document.querySelector('.profile');
                     const profileMenu = document.getElementById('profile-menu');
-
+                    const notificationBell = document.getElementById('notification-bell');
+                    const notificationMenu = document.getElementById('notification-menu');
+            
                     if (!profile?.contains(event.target)) {
                         profileMenu?.classList.remove('show');
                     }
+                    
+                    if (!notificationBell?.contains(event.target) && !notificationMenu?.contains(event.target)) {
+                        notificationMenu?.classList.remove('show');
+                    }
                 });
+                
+                // Notification WebSocket Handling
+                <?php if (isset($_SESSION['user']) && !empty($_SESSION['user']['user_id'])): ?>
+                    let notificationSocket;
+                    let notificationRetryCount = 0;
+                    const MAX_RETRY_ATTEMPTS = 5;
+                    const RETRY_INTERVAL = 3000; // 3 seconds
+                    
+                    function connectNotificationSocket() {
+                        // Connect to the notification WebSocket server
+                        notificationSocket = new WebSocket('ws://localhost:8081');
+                        
+                        notificationSocket.onopen = function() {
+                            console.log('Connected to notification server');
+                            notificationRetryCount = 0;
+                            
+                            // Authenticate with the server using user ID or token
+                            notificationSocket.send(JSON.stringify({
+                                type: 'auth',
+                                token: '<?php echo AuthHelper::getCurrentSessionToken(); ?>'
+                            }));
+                        };
+                        
+                        notificationSocket.onmessage = function(event) {
+                            const data = JSON.parse(event.data);
+                            
+                            switch(data.type) {
+                                case 'auth_required':
+                                    // Authentication required
+                                    break;
+                                    
+                                case 'auth_success':
+                                    // Successfully authenticated
+                                    // Fetch the notifications list
+                                    notificationSocket.send(JSON.stringify({
+                                        type: 'fetch_notifications'
+                                    }));
+                                    break;
+                                    
+                                case 'auth_failed':
+                                    // Authentication failed
+                                    console.error('Authentication failed with notification server');
+                                    break;
+                                    
+                                case 'notifications_list':
+                                    // Received notifications list
+                                    renderNotifications(data.notifications);
+                                    updateNotificationCounter(data.unread_count);
+                                    break;
+                                    
+                                case 'new_notification':
+                                    // New notification received
+                                    addNewNotification(data.notification);
+                                    playNotificationSound();
+                                    showNotificationPopup(data.notification);
+                                    break;
+                                    
+                                case 'notification_marked_read':
+                                    // Single notification marked as read
+                                    updateNotificationCounter(data.unread_count);
+                                    break;
+                                    
+                                case 'all_notifications_marked_read':
+                                    // All notifications marked as read
+                                    updateNotificationCounter(0);
+                                    break;
+                                    
+                                case 'error':
+                                    console.error('Error from notification server:', data.message);
+                                    break;
+                            }
+                        };
+                        
+                        notificationSocket.onclose = function(event) {
+                            console.log('Disconnected from notification server');
+                            
+                            // Attempt to reconnect with backoff
+                            if (notificationRetryCount < MAX_RETRY_ATTEMPTS) {
+                                setTimeout(function() {
+                                    notificationRetryCount++;
+                                    connectNotificationSocket();
+                                }, RETRY_INTERVAL * notificationRetryCount);
+                            }
+                        };
+                        
+                        notificationSocket.onerror = function(error) {
+                            console.error('WebSocket error:', error);
+                        };
+                    }
+                    
+                    // Function to render notifications in the dropdown
+                    function renderNotifications(notifications) {
+                        const notificationList = document.getElementById('notification-list');
+                        
+                        if (!notifications || notifications.length === 0) {
+                            notificationList.innerHTML = `
+                                <div class="notification-empty">
+                                    <p>No notifications yet</p>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        // Show max 5 notifications in the header dropdown
+                        const recentNotifications = notifications.slice(0, 5);
+                        
+                        let notificationsHTML = '';
+                        
+                        recentNotifications.forEach(notification => {
+                            const icon = getNotificationIcon(notification.message);
+                            
+                            notificationsHTML += `
+                                <div class="notification-item ${!notification.read ? 'unread' : ''}" data-id="${notification.id}">
+                                    <div class="notification-icon">
+                                        <i class="fas ${icon}"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>${notification.message}</p>
+                                        <span class="notification-time">${notification.time_ago}</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        notificationList.innerHTML = notificationsHTML;
+                        
+                        // Add click handler to mark notifications as read
+                        document.querySelectorAll('.notification-item').forEach(item => {
+                            item.addEventListener('click', function() {
+                                const notificationId = this.dataset.id;
+                                
+                                // If unread, mark as read
+                                if (this.classList.contains('unread')) {
+                                    notificationSocket.send(JSON.stringify({
+                                        type: 'mark_read',
+                                        notification_id: notificationId
+                                    }));
+                                    
+                                    this.classList.remove('unread');
+                                }
+                            });
+                        });
+                    }
+                    
+                    // Function to add a new notification to the top of the list
+                    function addNewNotification(notification) {
+                        const notificationList = document.getElementById('notification-list');
+                        const emptyNotification = notificationList.querySelector('.notification-empty');
+                        
+                        if (emptyNotification) {
+                            notificationList.innerHTML = '';
+                        }
+                        
+                        // Create new notification element
+                        const notificationElement = document.createElement('div');
+                        notificationElement.className = 'notification-item unread';
+                        notificationElement.dataset.id = notification.id;
+                        
+                        const icon = getNotificationIcon(notification.message);
+                        
+                        notificationElement.innerHTML = `
+                            <div class="notification-icon">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>${notification.message}</p>
+                                <span class="notification-time">${notification.time_ago}</span>
+                            </div>
+                        `;
+                        
+                        // Add click handler
+                        notificationElement.addEventListener('click', function() {
+                            if (this.classList.contains('unread')) {
+                                notificationSocket.send(JSON.stringify({
+                                    type: 'mark_read',
+                                    notification_id: notification.id
+                                }));
+                                
+                                this.classList.remove('unread');
+                            }
+                        });
+                        
+                        // Add to the beginning of the list
+                        notificationList.insertBefore(notificationElement, notificationList.firstChild);
+                        
+                        // Remove excess notifications to keep only 5
+                        const allNotifications = notificationList.querySelectorAll('.notification-item');
+                        if (allNotifications.length > 5) {
+                            allNotifications[allNotifications.length - 1].remove();
+                        }
+                        
+                        // Update notification counter
+                        updateNotificationCounter(parseInt(document.getElementById('notification-count').textContent || '0') + 1);
+                    }
+                    
+                    // Function to update the notification counter
+                    function updateNotificationCounter(count) {
+                        const counterElement = document.getElementById('notification-count');
+                        const bellIcon = document.getElementById('notification-bell');
+                        
+                        counterElement.textContent = count;
+                        
+                        if (count > 0) {
+                            // Add notification indicator
+                            bellIcon.classList.add('has-notifications');
+                            counterElement.style.display = 'inline-block';
+                        } else {
+                            // Remove notification indicator
+                            bellIcon.classList.remove('has-notifications');
+                            counterElement.style.display = 'none';
+                        }
+                    }
+                    
+                    // Function to determine icon for notification
+                    function getNotificationIcon(message) {
+                        const lowerMessage = message.toLowerCase();
+                        
+                        if (lowerMessage.includes('order')) {
+                            return 'fa-shopping-bag';
+                        } else if (lowerMessage.includes('payment') || lowerMessage.includes('paid') || lowerMessage.includes('payout')) {
+                            return 'fa-comment-dollar';
+                        } else if (lowerMessage.includes('message') || lowerMessage.includes('chat')) {
+                            return 'fa-envelope';
+                        } else if (lowerMessage.includes('approved') || lowerMessage.includes('verified')) {
+                            return 'fa-check-circle';
+                        } else if (lowerMessage.includes('rejected') || lowerMessage.includes('warning')) {
+                            return 'fa-exclamation-triangle';
+                        } else if (lowerMessage.includes('profile') || lowerMessage.includes('account')) {
+                            return 'fa-user';
+                        } else if (lowerMessage.includes('custom package') || lowerMessage.includes('package')) {
+                            return 'fa-box';
+                        } else {
+                            return 'fa-bell';
+                        }
+                    }
+                    
+                    // Function to play notification sound
+                    function playNotificationSound() {
+                        // Create an audio element and play a sound
+                        const audio = new Audio('/assets/sounds/notification.mp3');
+                        audio.volume = 0.5;
+                        audio.play().catch(e => {
+                            // Browser may block autoplay
+                            console.log('Could not play notification sound', e);
+                        });
+                    }
+                    
+                    // Function to show notification popup
+                    function showNotificationPopup(notification) {
+                        // Only show if notification is not currently open
+                        if (!document.getElementById('notification-menu').classList.contains('show')) {
+                            // Create popup element
+                            const popup = document.createElement('div');
+                            popup.className = 'notification-popup';
+                            popup.innerHTML = `
+                                <div class="notification-popup-content">
+                                    <div class="notification-popup-icon">
+                                        <i class="fas ${getNotificationIcon(notification.message)}"></i>
+                                    </div>
+                                    <div class="notification-popup-message">
+                                        <p>${notification.message}</p>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Add styles
+                            popup.style.position = 'fixed';
+                            popup.style.top = '20px';
+                            popup.style.right = '20px';
+                            popup.style.backgroundColor = 'white';
+                            popup.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+                            popup.style.borderRadius = '10px';
+                            popup.style.padding = '15px';
+                            popup.style.zIndex = '1000';
+                            popup.style.transition = 'all 0.3s ease';
+                            popup.style.cursor = 'pointer';
+                            popup.style.opacity = '0';
+                            popup.style.transform = 'translateY(-20px)';
+                            
+                            // Style the content
+                            const content = popup.querySelector('.notification-popup-content');
+                            content.style.display = 'flex';
+                            content.style.alignItems = 'center';
+                            
+                            // Style the icon
+                            const iconDiv = popup.querySelector('.notification-popup-icon');
+                            iconDiv.style.marginRight = '15px';
+                            iconDiv.style.height = '40px';
+                            iconDiv.style.width = '40px';
+                            iconDiv.style.borderRadius = '50%';
+                            iconDiv.style.backgroundColor = 'rgba(65, 105, 225, 0.1)';
+                            iconDiv.style.display = 'flex';
+                            iconDiv.style.alignItems = 'center';
+                            iconDiv.style.justifyContent = 'center';
+                            iconDiv.style.color = '#4169E1';
+                            
+                            // Add to body
+                            document.body.appendChild(popup);
+                            
+                            // Show popup with animation
+                            setTimeout(() => {
+                                popup.style.opacity = '1';
+                                popup.style.transform = 'translateY(0)';
+                            }, 100);
+                            
+                            // Add click handler to open notifications
+                            popup.addEventListener('click', () => {
+                                toggleNotifications();
+                                popup.remove();
+                            });
+                            
+                            // Auto remove after 5 seconds
+                            setTimeout(() => {
+                                popup.style.opacity = '0';
+                                popup.style.transform = 'translateY(-20px)';
+                                
+                                setTimeout(() => {
+                                    popup.remove();
+                                }, 300);
+                            }, 5000);
+                        }
+                    }
+                    
+                    // Connect to notification socket when page loads
+                    document.addEventListener('DOMContentLoaded', function() {
+                        connectNotificationSocket();
+                    });
+                <?php endif; ?>
             </script>
         </div>
 

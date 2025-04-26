@@ -30,15 +30,10 @@ class AuthHelper {
     public static function logOut() {
         SessionHelper::remove('user');
     }
-
-    // public static function authenticate($token) {
-    //     $userSessionModel = new UserSession();
-    //     $session = $userSessionModel->readOne([
-    //         'session_token' => $token,
-    //         'expires_at >=' => date('Y-m-d H:i:s')
-    //     ]);
-    //     return $session ? $session['user_id'] : false;
-    // }
+    
+    public static function generateSessionToken(): string {
+        return bin2hex(random_bytes(32));
+    }
 
     public static function authenticate($token)
     {
@@ -52,7 +47,26 @@ class AuthHelper {
         return $result ? $result['user_id'] : false;
     }
 
-    public static function generateSessionToken(): string {
-        return bin2hex(random_bytes(32));
+    /**
+     * Get the active session token for a user
+     * 
+     * @param int $userId The user ID to look up
+     * @return string|false The session token if found, false otherwise
+     */
+    public static function getCurrentSessionToken()
+    {
+        $userId = AuthHelper::getCurrentUser()['user_id'];
+        if (!$userId) {
+            return false; // User ID is not set, return false
+        }
+        $userSessionModel = new UserSession();
+        $now = (new \DateTime())->format('Y-m-d H:i:s');
+        $sql = "SELECT session_token FROM user_sessions WHERE user_id = :userId AND expires_at >= :now ORDER BY expires_at DESC LIMIT 1";
+        $result = $userSessionModel->executeCustomQuery($sql, [
+            'userId' => $userId,
+            'now' => $now
+        ], false);
+        
+        return $result ? $result['session_token'] : false;
     }
 }
