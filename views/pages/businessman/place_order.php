@@ -665,8 +665,10 @@
                 const formData = new FormData();
                 formData.append('requirements', document.getElementById('requirements').value);
                 formData.append('description', document.getElementById('description').value);
-                Array.from(fileInput.files).forEach(file => {
-                    formData.append('documents[]', file);
+                Array.from(fileInput.files).forEach((file, index) => {
+                    if (index < 4) {  // Limit to 4 files as per your backend
+                        formData.append(`additionalImage${index}`, file);
+                    }
                 });
                 formData.append('service_id', serviceId);
                 formData.append('package_id', packageId);
@@ -688,7 +690,9 @@
                     delivery_days: currentPackageDetails.delivery_days,
                     number_of_revisions: currentPackageDetails.revisions,
                     price: currentPackageDetails.price
-                }));            
+                }));  
+                
+                console.log('Form Data:', Object.fromEntries(formData.entries()));
 
                 // Submit form data
                 const response = await fetch('/api/create-order', {
@@ -702,10 +706,10 @@
                     const data = JSON.parse(responseText);
                     if (data.success) {
                         // alert('Order placed successfully!');
-                        window.location.href = '/payment-success';
+                        // window.location.href = '/payment-success';
                     } else {
                         // alert(`Failed to place order: ${data.message || 'Unknown error'}`);
-                        window.location.href = '/payment-error';
+                        // window.location.href = '/payment-error';
                     }
                 } catch (jsonError) {
                     console.error('Failed to parse JSON response:', jsonError);

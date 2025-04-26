@@ -4,16 +4,22 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Gig Details Page</title>
+  <title>Service Details | Brandboost</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #6366f1;
-      --secondary-color: #4f46e5;
+      --primary-color:rgb(103, 68, 241);
+      --primary-hover:rgb(70, 58, 204);
+      --secondary-color: #6c757d;
       --text-color: #333;
-      --light-gray: #f5f5f5;
-      --border-color: #e5e7eb;
-      --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --text-light: #6c757d;
+      --light-gray: #f8f9fa;
+      --medium-gray: #e9ecef;
+      --border-color: #dee2e6;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
     }
 
     * {
@@ -23,7 +29,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.6;
       color: var(--text-color);
       background-color: var(--light-gray);
@@ -31,8 +37,7 @@
 
     /* Breadcrumb Styles */
     .breadcrumb {
-      /* padding: 2rem; */
-      padding: 2rem 2rem 0;
+      padding: 1.5rem 2rem 0;
     }
 
     .breadcrumb ul {
@@ -45,12 +50,18 @@
     .breadcrumb li:not(:last-child)::after {
       content: "/";
       margin-left: 0.5rem;
-      color: #666;
+      color: var(--secondary-color);
     }
 
     .breadcrumb a {
       color: var(--primary-color);
       text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-hover);
     }
 
     .breadcrumb i {
@@ -60,7 +71,7 @@
     /* Main Layout */
     .page-container {
       max-width: 1400px;
-      margin: 2rem auto;
+      margin: 1.5rem auto 3rem;
       padding: 0 2rem;
       display: grid;
       grid-template-columns: 1fr 380px;
@@ -70,20 +81,28 @@
     /* Gig Content Container */
     .gig-content {
       background: white;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--card-shadow);
+      transition: box-shadow 0.3s;
+    }
+
+    .gig-content:hover {
+      box-shadow: var(--card-hover-shadow);
     }
 
     /* Gig Header */
     .gig-header {
-      padding: 1rem 2rem 2rem;
+      padding: 2rem 2.5rem;
       border-bottom: 1px solid var(--border-color);
     }
 
     .gig-title {
-      font-size: 1.75rem;
+      font-size: 2rem;
+      font-weight: 700;
       margin-bottom: 1.5rem;
+      color: #2d3748;
+      line-height: 1.3;
     }
 
     .seller-info {
@@ -93,10 +112,11 @@
     }
 
     .seller-avatar {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       object-fit: cover;
+      border: 2px solid var(--primary-color);
     }
 
     .seller-details {
@@ -106,30 +126,34 @@
 
     .seller-name {
       font-weight: 600;
+      font-size: 1.125rem;
       color: var(--primary-color);
+      margin-bottom: 0.25rem;
     }
 
     .rating {
-      color: #fbbf24;
+      color: #f59e0b;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-size: 0.95rem;
     }
 
     /* Media Preview */
     .media-preview {
       position: relative;
-      padding: 1rem 0;
-      max-width: 850px;
+      padding: 2rem;
+      max-width: 900px;
       margin: 0 auto;
     }
 
     .preview-container {
       position: relative;
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
       padding-top: 56.25%;
       background: #f5f5f5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .preview-image {
@@ -140,102 +164,168 @@
       height: 100%;
       object-fit: cover;
       background: #f5f5f5;
+      transition: transform 0.3s ease;
+    }
+
+    .preview-container:hover .preview-image {
+      transform: scale(1.02);
     }
 
     .nav-button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.9);
+      background: white;
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+      transition: all 0.2s;
+    }
+
+    .nav-button:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-50%) scale(1.05);
     }
 
     .prev-button {
-      left: 1rem;
+      left: 1.5rem;
     }
 
     .next-button {
-      right: 1rem;
+      right: 1.5rem;
     }
 
     .thumbnails {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
-      margin-top: 1rem;
-      max-width: 850px;
+      margin-top: 1.5rem;
+      max-width: 900px;
     }
 
     .thumbnail {
+      aspect-ratio: 16/9;
       width: 100%;
-      height: 100%;
-      max-height: 100px;
       object-fit: cover;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
-      opacity: 0.8;
-      transition: opacity 0.3s;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
     .thumbnail:hover {
-      opacity: 0.8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-color);
     }
 
-    /* About Section */
-    .about-section {
-      padding: 2rem;
+    .thumbnail.active {
+      border-color: var(--primary-color);
+    }
+
+    /* Content Sections */
+    .content-section {
+      padding: 2.5rem;
       border-top: 1px solid var(--border-color);
     }
 
     .section-title {
       font-size: 1.5rem;
+      font-weight: 700;
       margin-bottom: 1.5rem;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title i {
+      color: var(--primary-color);
+      font-size: 1.25rem;
     }
 
     .about-content {
-      color: #666;
+      color: #4a5568;
       line-height: 1.8;
+      font-size: 1.05rem;
     }
 
-    /* Delivery Formats */
-    .delivery-formats {
-      padding: 2rem;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .format-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    /* Platforms Section */
+    .platform-grid {
+      display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
     }
 
-    .format-card {
+    .platform-card {
       background: var(--light-gray);
-      padding: 1rem;
+      padding: 0.75rem 1.25rem;
       border-radius: 8px;
-      text-align: center;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s;
+    }
+
+    .platform-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: #eef2ff;
+    }
+
+    .platform-card i {
+      color: var(--primary-color);
     }
 
     /* Reviews Section */
     .reviews-section {
-      padding: 2rem;
-      border-top: 1px solid var(--border-color);
+      background: linear-gradient(to bottom, white, var(--light-gray) 15%, white 100%);
+    }
+
+    .ratings-overview {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .ratings-average {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-right: 2rem;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .average-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+
+    .total-reviews {
+      color: var(--text-light);
+      margin-top: 0.5rem;
     }
 
     .ratings-breakdown {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
+      flex: 1;
     }
 
     .rating-bars {
@@ -243,12 +333,24 @@
       grid-template-columns: auto 1fr auto;
       gap: 1rem;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .rating-label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--text-light);
+      width: 60px;
+    }
+
+    .rating-label i {
+      color: #f59e0b;
     }
 
     .rating-bar {
       height: 8px;
-      background: #e5e7eb;
+      background: var(--medium-gray);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -258,62 +360,117 @@
       background: var(--primary-color);
     }
 
+    .rating-count {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      width: 50px;
+      text-align: right;
+    }
+
     .reviews-list {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
 
-
     .review-card {
-      padding: 1.5rem 1rem;
-      border: 0.5px solid var(--border-color);
+      padding: 1.5rem;
+      background: white;
       border-radius: 12px;
-      box-shadow: var(--card-shadow);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .review-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     .review-header {
       display: flex;
-      align-items: center;
-      gap: 1rem;
+      justify-content: space-between;
       margin-bottom: 1rem;
     }
 
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
     .reviewer-avatar {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .reviewer-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .reviewer-name {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .review-date {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .review-rating {
+      color: #f59e0b;
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .review-content {
+      color: #4a5568;
+      line-height: 1.7;
     }
 
     /* Tags Section */
-    .tags-section {
-      padding: 2rem;
-      border-top: 1px solid var(--border-color);
-    }
-
     .tags-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
 
     .tag {
       background: var(--light-gray);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.875rem;
-      color: #666;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tag:hover {
+      background: #eef2ff;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     /* Pricing Card */
     .pricing-card {
       background: white;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--card-shadow);
       position: sticky;
-      top: 6rem;
+      top: 2rem;
       height: fit-content;
+      transition: box-shadow 0.3s;
+    }
+
+    .pricing-card:hover {
+      box-shadow: var(--card-hover-shadow);
     }
 
     .tabs {
@@ -323,34 +480,54 @@
 
     .tab {
       flex: 1;
-      padding: 1rem;
+      padding: 1.25rem 1rem;
       text-align: center;
       cursor: pointer;
       font-weight: 600;
-      color: #666;
+      color: var(--text-light);
       transition: all 0.3s;
+      background: white;
+      position: relative;
     }
 
     .tab.active {
       color: var(--primary-color);
-      background: #f8f8ff;
+      background: #f8faff;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary-color);
     }
 
     .pricing-content {
-      padding: 1.5rem;
+      padding: 2rem;
     }
 
     .time-info {
       display: flex;
-      gap: 1.5rem;
+      justify-content: space-between;
       margin-bottom: 1.5rem;
+      background: #f8faff;
+      padding: 1rem;
+      border-radius: 12px;
     }
 
     .time-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #666;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .time-item i {
+      color: var(--primary-color);
     }
 
     .features-list {
@@ -359,51 +536,116 @@
 
     .feature-item {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .feature-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .feature-icon {
+      color: var(--success-color);
+      margin-top: 0.25rem;
+    }
+
+    .feature-text {
+      flex: 1;
+      color: #4a5568;
     }
 
     .price {
-      font-size: 2rem;
-      font-weight: 600;
+      font-size: 2.25rem;
+      font-weight: 700;
       text-align: center;
-      margin: 1.5rem 0;
+      margin: 2rem 0;
+      color: #2d3748;
     }
 
-    .order-button {
+    .action-button {
       width: 100%;
-      padding: 1rem;
+      padding: 1.25rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .primary-button {
       background: var(--primary-color);
       color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s;
     }
 
-    .order-button:hover {
-      background: var(--secondary-color);
+    .primary-button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
     }
 
-    .contact-button {
-      width: 100%;
-      margin-top: 1rem;
-      padding: 1rem;
+    .secondary-button {
       background: var(--light-gray);
       color: var(--primary-color);
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s;
+      margin-top: 1rem;
     }
 
-    .contact-button:hover {
-      background: #e5e7eb;
+    .secondary-button:hover {
+      background: var(--medium-gray);
+      transform: translateY(-2px);
+    }
+
+    .guarantee-text {
+      margin-top: 1.5rem;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .guarantee-text i {
+      color: var(--success-color);
+    }
+
+    /* Empty state for reviews */
+    .empty-state {
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--border-color);
+    }
+
+    .empty-text {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-subtext {
+      font-size: 0.95rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .page-container {
+        grid-template-columns: 1fr 340px;
+      }
     }
 
     @media (max-width: 1024px) {
@@ -413,16 +655,77 @@
 
       .pricing-card {
         position: static;
+        margin-bottom: 2rem;
+      }
+
+      .page-container {
+        display: flex;
+        /* flex-direction: column-reverse; */
+        flex-direction: column;
       }
     }
 
     @media (max-width: 768px) {
+      .gig-header {
+        padding: 1.5rem;
+      }
+
+      .gig-title {
+        font-size: 1.75rem;
+      }
+
+      .content-section {
+        padding: 1.5rem;
+      }
+
       .media-preview {
         padding: 1rem;
       }
 
       .thumbnails {
         grid-template-columns: repeat(3, 1fr);
+      }
+
+      .ratings-overview {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+      }
+
+      .ratings-average {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-container {
+        padding: 0 1rem;
+      }
+
+      .nav-button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .prev-button {
+        left: 0.5rem;
+      }
+
+      .next-button {
+        right: 0.5rem;
+      }
+
+      .thumbnails {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .time-info {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
   </style>
@@ -432,7 +735,7 @@
   <div class="page-container">
     <!-- Main Content -->
     <div class="gig-content">
-      <!-- Add breadcrumb here -->
+      <!-- Breadcrumb -->
       <nav class="breadcrumb"></nav>
 
       <!-- Gig Header -->
@@ -471,56 +774,79 @@
       </div>
 
       <!-- About Section -->
-      <div class="about-section">
-        <h2 class="section-title">About This Gig</h2>
+      <div class="content-section">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          About This Service
+        </h2>
         <div class="about-content"></div>
       </div>
 
-      <!-- Delivery Formats -->
-      <div class="delivery-formats">
-        <h2 class="section-title">Platforms</h2>
-        <div class="format-grid"></div>
+      <!-- Platforms Section -->
+      <div class="content-section">
+        <h2 class="section-title">
+          <i class="fas fa-share-alt"></i>
+          Platforms
+        </h2>
+        <div class="platform-grid"></div>
       </div>
 
       <!-- Reviews Section -->
-      <div class="reviews-section">
-        <h2 class="section-title">Reviews</h2>
-        <div class="ratings-breakdown">
-          <div class="rating-bars">
-            <span>5 stars</span>
-            <div class="rating-bar">
-              <div class="rating-fill"></div>
-            </div>
-            <span></span>
+      <div class="content-section reviews-section">
+        <h2 class="section-title">
+          <i class="fas fa-star"></i>
+          Reviews
+        </h2>
+        <div class="ratings-overview">
+          <div class="ratings-average">
+            <div class="average-score">4.8</div>
+            <div class="total-reviews">from 68 reviews</div>
           </div>
-          <div class="rating-bars">
-            <span>4 stars</span>
-            <div class="rating-bar">
-              <div class="rating-fill"></div>
+          <div class="ratings-breakdown">
+            <div class="rating-bars">
+              <div class="rating-label">
+                5 <i class="fas fa-star"></i>
+              </div>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 80%"></div>
+              </div>
+              <div class="rating-count">80%</div>
             </div>
-            <span></span>
-          </div>
-          <div class="rating-bars">
-            <span>3 stars</span>
-            <div class="rating-bar">
-              <div class="rating-fill"></div>
+            <div class="rating-bars">
+              <div class="rating-label">
+                4 <i class="fas fa-star"></i>
+              </div>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 15%"></div>
+              </div>
+              <div class="rating-count">15%</div>
             </div>
-            <span></span>
+            <div class="rating-bars">
+              <div class="rating-label">
+                3 <i class="fas fa-star"></i>
+              </div>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 5%"></div>
+              </div>
+              <div class="rating-count">5%</div>
+            </div>
           </div>
         </div>
         <div class="reviews-list">
-
+          <!-- Reviews will be inserted here -->
         </div>
       </div>
 
       <!-- Tags Section -->
-      <div class="tags-section">
-        <h2 class="section-title">Related Tags</h2>
+      <div class="content-section">
+        <h2 class="section-title">
+          <i class="fas fa-tags"></i>
+          Related Tags
+        </h2>
         <div class="tags-container"></div>
       </div>
     </div>
-
-    <!-- Pricing Card -->
+    <!-- Pricing Card (moved up for mobile) -->
     <div class="pricing-card">
       <div class="tabs">
         <div class="tab active" onclick="switchTab('standard')">Standard</div>
@@ -528,79 +854,88 @@
       </div>
       <div class="pricing-content" id="pricing-content"></div>
     </div>
+
   </div>
 
   <script>
     let gigData;
+    let currentPlan = 'standard';
 
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        // Get the gig ID from the URL path
+        // Get the service ID from the URL path
         const pathSegments = window.location.pathname.split('/');
         const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
 
         if (!serviceID) {
-          throw new Error('Gig ID is required in the URL');
+          throw new Error('Service ID is required in the URL');
         }
 
         const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
         const result = await response.json();
 
         console.log(result);
-        // console.log(result.service_type);
 
-        // console.log(result.user);
+        // Get service ID and type for action buttons
         const serviceId = result.service_id;
+        const serviceType = result.service_type;
+        const serviceTypeName = serviceType.charAt(0).toUpperCase() + serviceType.slice(1) + 's';
 
-        const serviceType = result.service_type.charAt(0).toUpperCase() + result.service_type.slice(1) + 's';
+        // Map platforms to icons
+        const platformIcons = {
+          'facebook': 'fab fa-facebook',
+          'instagram': 'fab fa-instagram',
+          'twitter': 'fab fa-twitter',
+          'linkedin': 'fab fa-linkedin',
+          'youtube': 'fab fa-youtube',
+          'tiktok': 'fab fa-tiktok',
+          'pinterest': 'fab fa-pinterest'
+        };
 
-        // console.log(serviceType);
+        // Calculate review statistics if reviews exist
+        let reviewStats = {
+          average: 4.8,
+          total: 0,
+          distribution: {
+            5: 80,
+            4: 15,
+            3: 5
+          }
+        };
 
-        // Assign the complete structure to gigData before using it
+        if (result.reviews && result.reviews.length > 0) {
+          // Calculate actual review statistics here if needed
+          reviewStats.total = result.reviews.length;
+        }
+
+        // Parse data for display
         gigData = {
           breadcrumb: {
-            categories: ["Services", serviceType] // Static categories for now
+            categories: ["Services", serviceTypeName]
           },
-          serviceType: result.service_type,
+          serviceType: serviceType,
           gig: {
             title: result.title,
             seller: {
               name: result.user.name,
               avatar: result.user.profile_picture,
-              rating: 4.8,
-              reviewCount: "2k+"
+              rating: reviewStats.average,
+              reviewCount: reviewStats.total
             },
             media: {
               images: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)],
               thumbnails: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)]
             },
             about: {
-              description: result.description,
-              features: ["Wide Reach", "Platform Diversity", "Creative Strategies", "Service Guarantee"]
+              description: result.description
             },
             platforms: Array.isArray(result.platforms)
               ? result.platforms
               : JSON.parse(result.platforms || '[]'),
+            platformIcons: platformIcons,
             reviews: {
-              ratings: {
-                "5": 80,
-                "4": 15,
-                "3": 5
-              },
-              list: [
-                {
-                  name: "Emma L.",
-                  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop",
-                  rating: 5,
-                  text: "Amazing experience! The campaign brought in so much traffic to my site."
-                },
-                {
-                  name: "Nethsilu",
-                  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop",
-                  rating: 5,
-                  text: "Amazing experience! The campaign brought in so much traffic to my site."
-                }
-              ]
+              stats: reviewStats,
+              list: result.reviews || []
             },
             tags: Array.isArray(result.tags)
               ? result.tags
@@ -610,184 +945,310 @@
                 packageId: result.packages[0].package_id,
                 duration: `${result.packages[0].delivery_days} days`,
                 revisions: `${result.packages[0].revisions} revisions`,
-                features: result.packages[0].benefits.split(','),
+                features: result.packages[0].benefits.split(',').map(item => item.trim()).filter(item => item),
                 price: `LKR ${result.packages[0].price}`
               },
               premium: {
                 packageId: result.packages[1].package_id,
                 duration: `${result.packages[1].delivery_days} days`,
                 revisions: `${result.packages[1].revisions} revisions`,
-                features: result.packages[1].benefits.split(','),
+                features: result.packages[1].benefits.split(',').map(item => item.trim()).filter(item => item),
                 price: `LKR ${result.packages[1].price}`
               }
             }
           }
         };
 
-        // Only call render functions after gigData is fully populated
+        // Render all UI components
         renderBreadcrumb();
         renderGigHeader();
         renderMediaPreview();
         renderAboutSection();
         renderPlatforms();
-        renderReviews(result);
-        renderReviews(result);
+        renderReviewsSection();
         renderTags();
-        renderPricingContent('standard', serviceId, gigData.serviceType);
+        renderPricingContent(currentPlan, serviceId, serviceType);
 
-        // Image navigation functionality
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const previewImage = document.querySelector('.preview-image');
-        let currentImageIndex = 0;
-
-        thumbnails.forEach((thumbnail, index) => {
-          thumbnail.addEventListener('click', () => {
-            previewImage.src = gigData.gig.media.images[index];
-            currentImageIndex = index;
-          });
-        });
-
-        document.querySelector('.prev-button').addEventListener('click', () => {
-          currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
-          previewImage.src = gigData.gig.media.images[currentImageIndex];
-        });
-
-        document.querySelector('.next-button').addEventListener('click', () => {
-          currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
-          previewImage.src = gigData.gig.media.images[currentImageIndex];
-        });
+        // Set up image navigation
+        setupImageNavigation();
 
       } catch (error) {
-        console.error('Error fetching gig data:', error);
+        console.error('Error fetching service data:', error);
+        document.body.innerHTML = `
+          <div style="text-align: center; padding: 3rem; color: #666;">
+            <h2>We couldn't load this service</h2>
+            <p>Please try again later or contact support.</p>
+            <button onclick="window.location.href='/services'" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #4169E1; color: white; border: none; border-radius: 8px; cursor: pointer;">
+              See All Services
+            </button>
+          </div>
+        `;
       }
     });
 
     function renderBreadcrumb() {
       const breadcrumbHtml = `
-                <ul>
-                    <li><a href="/"><i class="fas fa-home"></i></a></li>
-                    ${gigData.breadcrumb.categories.map(category =>
-        `<li><a href="/services">${category}</a></li>`
-      ).join('')}
-                </ul>
-            `;
+        <ul>
+          <li><a href="/"><i class="fas fa-home"></i></a></li>
+          ${gigData.breadcrumb.categories.map(category =>
+            `<li><a href="/services">${category}</a></li>`
+          ).join('')}
+        </ul>
+      `;
       document.querySelector('.breadcrumb').innerHTML = breadcrumbHtml;
     }
 
     function renderGigHeader() {
       const { title, seller } = gigData.gig;
       document.querySelector('.gig-title').textContent = title;
-      document.querySelector('.seller-avatar').src = seller.avatar;
+      document.querySelector('.seller-avatar').src = seller.avatar || '/assets/images/default-avatar.png';
       document.querySelector('.seller-name').textContent = seller.name;
-      document.querySelector('.rating span').textContent = `${seller.rating} (${seller.reviewCount} Reviews)`;
+      document.querySelector('.rating span').textContent = `${seller.rating} (${seller.reviewCount || 0} Reviews)`;
     }
 
     function renderMediaPreview() {
       const { images, thumbnails } = gigData.gig.media;
-      document.querySelector('.preview-image').src = images[0];
+      
+      // Set the main preview image
+      const previewImage = document.querySelector('.preview-image');
+      previewImage.src = images[0];
+      previewImage.alt = gigData.gig.title;
 
+      // Create thumbnail images
       const thumbnailsHtml = thumbnails.map((thumb, index) => `
-                <img src="${thumb}" alt="Preview ${index + 1}" class="thumbnail">
-            `).join('');
+        <img src="${thumb}" alt="Preview ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+      `).join('');
+      
       document.querySelector('.thumbnails').innerHTML = thumbnailsHtml;
     }
 
+    function setupImageNavigation() {
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      const previewImage = document.querySelector('.preview-image');
+      let currentImageIndex = 0;
+
+      // Thumbnail click handler
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', () => {
+          previewImage.src = gigData.gig.media.images[index];
+          currentImageIndex = index;
+          updateActiveThumbnail(index);
+        });
+      });
+
+      // Previous button click handler
+      document.querySelector('.prev-button').addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
+        previewImage.src = gigData.gig.media.images[currentImageIndex];
+        updateActiveThumbnail(currentImageIndex);
+      });
+
+      // Next button click handler
+      document.querySelector('.next-button').addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
+        previewImage.src = gigData.gig.media.images[currentImageIndex];
+        updateActiveThumbnail(currentImageIndex);
+      });
+
+      // Update active thumbnail styling
+      function updateActiveThumbnail(activeIndex) {
+        thumbnails.forEach((thumb, i) => {
+          if (i === activeIndex) {
+            thumb.classList.add('active');
+          } else {
+            thumb.classList.remove('active');
+          }
+        });
+      }
+    }
+
     function renderAboutSection() {
-      const { description, features } = gigData.gig.about;
-      const aboutHtml = `
-                <p>${description}</p>
-                
-            `;
+      const { description } = gigData.gig.about;
+      const aboutHtml = `<p>${description}</p>`;
       document.querySelector('.about-content').innerHTML = aboutHtml;
     }
 
     function renderPlatforms() {
-      const platformsHtml = gigData.gig.platforms.map(platform =>
-        `<div class="format-card">${platform}</div>`
-      ).join('');
-      document.querySelector('.format-grid').innerHTML = platformsHtml;
+      const { platforms, platformIcons } = gigData.gig;
+      
+      if (!platforms || platforms.length === 0) {
+        document.querySelector('.platform-grid').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-share-alt empty-icon"></i>
+            <p class="empty-text">No platforms specified</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const platformsHtml = platforms.map(platform => {
+        const icon = platformIcons[platform.toLowerCase()] || 'fas fa-globe';
+        return `
+          <div class="platform-card">
+            <i class="${icon}"></i>
+            ${platform}
+          </div>
+        `;
+      }).join('');
+      
+      document.querySelector('.platform-grid').innerHTML = platformsHtml;
     }
 
-    function renderReviews(result) {
-      const { ratings, list } = gigData.gig.reviews;
-
-      // Render ratings breakdown
-      Object.entries(ratings).reverse().forEach(([stars, percentage]) => {
-        const ratingBar = document.querySelector(`.rating-bars:nth-child(${6 - stars})`);
-        ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
-        ratingBar.querySelector('span:last-child').textContent = `${percentage}%`;
-      });
-
-      console.log("Ratings breakdown:", result.user);
-      // console.log(result.user);
-
+    function renderReviewsSection() {
+      const { stats, list } = gigData.gig.reviews;
       
-      const reviewList = result.reviews;
-      console.log(reviewList);
-      // Render review list
-      const reviewsHtml = reviewList.map(review => `
-                <div class="review-card">
-                    <div class="review-header">
-                        <img src="${review.avatar}" alt="${review.name}" class="reviewer-avatar">
-                        <div>
-                            <div class="reviewer-name">${review.name}</div>
-                            <div class="rating">
-                                ${Array(Math.floor(review.rating)).fill('<i class="fas fa-star"></i>').join('')}
-                                ${review.rating % 1 ? '<i class="fas fa-star-half-alt"></i>' : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-text">${review.content}</div>
+      // Update ratings overview
+      document.querySelector('.average-score').textContent = stats.average.toFixed(1);
+      document.querySelector('.total-reviews').textContent = `from ${stats.total} reviews`;
+      
+      // Update rating bars
+      Object.entries(stats.distribution).forEach(([stars, percentage]) => {
+        const selector = `.rating-bars:nth-child(${6 - parseInt(stars)})`;
+        const ratingBar = document.querySelector(selector);
+        if (ratingBar) {
+          ratingBar.querySelector('.rating-fill').style.width = `${percentage}%`;
+          ratingBar.querySelector('.rating-count').textContent = `${percentage}%`;
+        }
+      });
+      
+      // Show reviews or empty state
+      if (list && list.length > 0) {
+        const reviewsHtml = list.map(review => {
+          // Format date if available
+          const reviewDate = review.created_at ? new Date(review.created_at).toLocaleDateString() : '';
+          const rating = review.rating || 5;
+          
+          return `
+            <div class="review-card">
+              <div class="review-header">
+                <div class="reviewer">
+                  <img src="${review.avatar || '/assets/images/default-avatar.png'}" alt="${review.name}" class="reviewer-avatar">
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">${review.name}</div>
+                    <div class="review-date">${reviewDate}</div>
+                  </div>
                 </div>
-            `).join('');
-      document.querySelector('.reviews-list').innerHTML = reviewsHtml;
+                <div class="review-rating">
+                  ${Array(Math.floor(rating)).fill('<i class="fas fa-star"></i>').join('')}
+                  ${rating % 1 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                </div>
+              </div>
+              <div class="review-content">${review.content}</div>
+            </div>
+          `;
+        }).join('');
+        
+        document.querySelector('.reviews-list').innerHTML = reviewsHtml;
+      } else {
+        document.querySelector('.reviews-list').innerHTML = `
+          <div class="empty-state">
+            <i class="far fa-comment-dots empty-icon"></i>
+            <p class="empty-text">No reviews yet</p>
+            <p class="empty-subtext">Be the first to leave a review for this service</p>
+          </div>
+        `;
+      }
     }
 
     function renderTags() {
-      const tagsHtml = gigData.gig.tags.map(tag =>
-        `<span class="tag">${tag}</span>`
-      ).join('');
+      const { tags } = gigData.gig;
+      
+      if (!tags || tags.length === 0) {
+        document.querySelector('.tags-container').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-tags empty-icon"></i>
+            <p class="empty-text">No tags available</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const tagsHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
       document.querySelector('.tags-container').innerHTML = tagsHtml;
     }
 
     function renderPricingContent(plan, serviceId, serviceType) {
+      currentPlan = plan; // Update current plan state
       const data = gigData.gig.pricing[plan];
-      console.log(data);
+      const isGig = serviceType === 'gig';
+      
+      // Generate features list HTML
+      const featuresHtml = data.features.map(feature => `
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="feature-text">${feature}</div>
+        </div>
+      `).join('');
+      
+      // Generate button text and icons based on service type
+      const primaryBtnText = isGig ? "Order Now" : "Request to Order";
+      const primaryBtnIcon = isGig ? "fas fa-shopping-cart" : "fas fa-paper-plane";
+      const primaryBtnUrl = isGig 
+        ? `/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}`
+        : `/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}`;
+      
+      // Custom package button only for promotions
+      const customPackageBtn = !isGig 
+        ? `<button class="action-button secondary-button" onclick="window.location.href='/businessman/request-package?service_id=${serviceId}'">
+            <i class="fas fa-box"></i> Request Custom Package
+          </button>` 
+        : '';
+      
+      // Determine contact text based on service type
+      const contactText = isGig ? "Designer" : "Influencer";
+      
       const content = `
-                <div class="time-info">
-                    <div class="time-item">
-                        <i class="far fa-clock"></i>
-                        ${data.duration}
-                    </div>
-                    <div class="time-item">
-                        <i class="fas fa-sync-alt"></i>
-                        ${data.revisions}
-                    </div>
-                </div>
-                <div class="features-list">
-                    ${data.features.map(feature => `
-                        <div class="feature-item">
-                            <i class="fas fa-check" style="color: var(--primary-color)"></i>
-                            ${feature}
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="price">${data.price}</div>
-                <button class="order-button" onclick="window.location.href='/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}'">${serviceType == "gig" ? "Order Now" : "Request to Order"}</button>
-                ${serviceType == "promotion" ? `<button class="contact-button" onclick="window.location.href='/businessman/request-package?service_id=${serviceId}'">Request custom package</button>` : ''}
-                <button class="contact-button" onclick="window.location.href='#'">Contact ${serviceType == "gig" ? "Designer" : "Influencer"}</button>
-                `;
+        <div class="time-info">
+          <div class="time-item">
+            <i class="far fa-clock"></i>
+            ${data.duration}
+          </div>
+          <div class="time-item">
+            <i class="fas fa-sync-alt"></i>
+            ${data.revisions}
+          </div>
+        </div>
+        
+        <div class="features-list">
+          ${featuresHtml}
+        </div>
+        
+        <div class="price">${data.price}</div>
+        
+        <button class="action-button primary-button" onclick="window.location.href='${primaryBtnUrl}'">
+          <i class="${primaryBtnIcon}"></i> ${primaryBtnText}
+        </button>
+        
+        ${customPackageBtn}
+        
+        <button class="action-button secondary-button" onclick="window.location.href='#'">
+          <i class="far fa-comment-dots"></i> Contact ${contactText}
+        </button>
+        
+        <div class="guarantee-text">
+          <i class="fas fa-shield-alt"></i> 100% Satisfaction Guarantee
+        </div>
+      `;
+      
       document.getElementById('pricing-content').innerHTML = content;
     }
 
     function switchTab(plan) {
+      // Update active tab UI
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
       document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
-      renderPricingContent(plan);
+      
+      // Get service ID and type from current data
+      const serviceId = gigData.gig.pricing[plan].packageId;
+      const serviceType = gigData.serviceType;
+      
+      // Render the selected pricing plan
+      renderPricingContent(plan, serviceId, serviceType);
     }
   </script>
 </body>
-
 </html>

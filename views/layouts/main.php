@@ -444,7 +444,6 @@ use app\core\Helpers\AuthHelper;
                         <a href="/designer/dashboard">Dashboard</a>
                         <a href="/designer/my-gigs">My Gigs</a>
                         <a href="/designer/orders-list">Orders</a>
-                        <a href="/designer/custom-packages">Custom Packages</a>
                         <a href="/designer/earnings">Earnings</a>
                     ';
                     }

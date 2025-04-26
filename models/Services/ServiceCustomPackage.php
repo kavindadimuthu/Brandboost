@@ -145,7 +145,7 @@ class ServiceCustomPackage extends BaseModel
             }
     
             // Execute the query with parameters
-            return $this->executeWithParams($sql, $conditions);
+            return $this->executeCustomQuery($sql, $conditions);
             
     
         } catch (\Exception $e) {

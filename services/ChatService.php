@@ -1,33 +1,43 @@
 <?php
+
 namespace app\services;
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use app\models\Communication\ChatMessage;
 use app\models\Communication\ChatRoom;
+use app\models\Users\User;
 use app\core\Helpers\AuthHelper;
 
-class ChatService implements MessageComponentInterface {
+class ChatService implements MessageComponentInterface
+{
     protected $clients;
     protected $userConnections = [];
     protected $chatMessageModel;
     protected $chatRoomModel;
+    protected $userModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->clients = new \SplObjectStorage;
         $this->chatMessageModel = new ChatMessage();
         $this->chatRoomModel = new ChatRoom();
+        $this->userModel = new User();
     }
 
-    public function onOpen(ConnectionInterface $conn) {
+    public function onOpen(ConnectionInterface $conn)
+    {
         $this->clients->attach($conn);
         $conn->authenticated = false;
         $conn->userId = null;
         $conn->send(json_encode(['type' => 'auth_required']));
     }
 
-    public function onMessage(ConnectionInterface $from, $msg) {
+    public function onMessage(ConnectionInterface $from, $msg)
+    {
         $data = json_decode($msg, true);
+
+        // Handle authentication first
         if (!$from->authenticated) {
             if (isset($data['type']) && $data['type'] === 'auth' && !empty($data['token'])) {
                 $userId = AuthHelper::authenticate($data['token']);
@@ -36,8 +46,14 @@ class ChatService implements MessageComponentInterface {
                     $from->userId = $userId;
                     $this->userConnections[$userId] = $from;
                     $from->send(json_encode(['type' => 'auth_success', 'userId' => $userId]));
+
+                    // Broadcast online status to relevant users
+                    $this->broadcastUserStatus($userId, 'online');
+
+                    // Send conversation list after authentication
+                    $this->sendConversationsList($from);
                 } else {
-                    $from->send(json_encode(['type' => 'auth_failed', 'message' => $data]));
+                    $from->send(json_encode(['type' => 'auth_failed']));
                     $from->close();
                 }
             } else {
@@ -46,33 +62,53 @@ class ChatService implements MessageComponentInterface {
             return;
         }
 
-        switch ($data['type'] ?? null) {
+        // Handle various message types
+        switch ($data['type'] ?? '') {
             case 'message':
                 $this->handleMessage($from, $data);
                 break;
             case 'fetch_history':
                 $this->sendHistory($from, $data['withUserId'] ?? null);
                 break;
+            case 'fetch_conversations':
+                $this->sendConversationsList($from);
+                break;
+            case 'mark_read':
+                $this->markMessagesAsRead($from, $data['to'] ?? null);
+                break;
+            case 'typing':
+                $this->broadcastTypingStatus($from, $data['to'] ?? null, true);
+                break;
+            case 'typing_stop':
+                $this->broadcastTypingStatus($from, $data['to'] ?? null, false);
+                break;
             default:
-                $from->send(json_encode(['type' => 'error', 'message' => 'Unknown command']));
+                $from->send(json_encode(['type' => 'error', 'message' => 'Unknown command', 'data' => $data]));
         }
     }
 
-    public function onClose(ConnectionInterface $conn) {
+    public function onClose(ConnectionInterface $conn)
+    {
         $this->clients->detach($conn);
+
         if ($conn->authenticated && isset($this->userConnections[$conn->userId])) {
+            // Broadcast offline status before removing the connection
+            $this->broadcastUserStatus($conn->userId, 'offline');
             unset($this->userConnections[$conn->userId]);
         }
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e) {
+    public function onError(ConnectionInterface $conn, \Exception $e)
+    {
+        error_log("Error in chat service: " . $e->getMessage());
         $conn->close();
     }
 
     /**
      * Handles sending and storing a chat message.
      */
-    private function handleMessage(ConnectionInterface $from, $data) {
+    private function handleMessage(ConnectionInterface $from, $data)
+    {
         $senderId = $from->userId;
         $receiverId = $data['to'] ?? null;
         $messageText = $data['message'] ?? '';
@@ -87,6 +123,7 @@ class ChatService implements MessageComponentInterface {
             'user_1' => min($senderId, $receiverId),
             'user_2' => max($senderId, $receiverId)
         ]);
+
         if (!$room) {
             $this->chatRoomModel->create([
                 'user_1' => min($senderId, $receiverId),
@@ -97,7 +134,9 @@ class ChatService implements MessageComponentInterface {
                 'user_2' => max($senderId, $receiverId)
             ]);
         }
+
         $chatRoomId = $room['chat_room_id'];
+        $now = date('Y-m-d H:i:s');
 
         // Store message
         $msgData = [
@@ -105,23 +144,26 @@ class ChatService implements MessageComponentInterface {
             'sender_id' => $senderId,
             'receiver_id' => $receiverId,
             'message' => $messageText,
-            'read_status' => 'sent'
+            'read_status' => 'sent',
+            'created_at' => $now
         ];
+
         $this->chatMessageModel->create($msgData);
-        $msgData['created_at'] = date('Y-m-d H:i:s'); // Optionally add timestamp
+        $messageId = $this->chatMessageModel->getLastInsertId();
 
         // Send to receiver if online
         if (isset($this->userConnections[$receiverId])) {
             $this->userConnections[$receiverId]->send(json_encode([
                 'type' => 'message',
+                'id' => $messageId,
                 'from' => $senderId,
                 'message' => $messageText,
-                'created_at' => $msgData['created_at']
+                'created_at' => $now
             ]));
-            // Optionally update delivered_at and read_status
-            $lastId = $this->chatMessageModel->getLastInsertId();
-            $this->chatMessageModel->update(['message_id' => $lastId], [
-                'delivered_at' => date('Y-m-d H:i:s'),
+
+            // Update to delivered status
+            $this->chatMessageModel->update(['message_id' => $messageId], [
+                'delivered_at' => $now,
                 'read_status' => 'delivered'
             ]);
         }
@@ -129,19 +171,22 @@ class ChatService implements MessageComponentInterface {
         // Confirm to sender
         $from->send(json_encode([
             'type' => 'message_sent',
+            'id' => $messageId,
             'to' => $receiverId,
             'message' => $messageText,
-            'created_at' => $msgData['created_at']
+            'created_at' => $now
         ]));
     }
 
     /**
      * Sends chat history between the authenticated user and another user.
      */
-    private function sendHistory(ConnectionInterface $conn, $withUserId) {
+    private function sendHistory(ConnectionInterface $conn, $withUserId)
+    {
         $userId = $conn->userId;
+
         if (!$withUserId) {
-            $conn->send(json_encode(['type' => 'error', 'message' => 'Missing withUserId']));
+            $conn->send(json_encode(['type' => 'error', 'message' => 'Missing user ID']));
             return;
         }
 
@@ -150,10 +195,16 @@ class ChatService implements MessageComponentInterface {
             'user_1' => min($userId, $withUserId),
             'user_2' => max($userId, $withUserId)
         ]);
+
         if (!$room) {
-            $conn->send(json_encode(['type' => 'history', 'messages' => []]));
+            $conn->send(json_encode([
+                'type' => 'history',
+                'withUserId' => $withUserId,
+                'messages' => []
+            ]));
             return;
         }
+
         $chatRoomId = $room['chat_room_id'];
 
         // Fetch messages in this room, ordered by created_at
@@ -167,5 +218,151 @@ class ChatService implements MessageComponentInterface {
             'withUserId' => $withUserId,
             'messages' => $messages ?: []
         ]));
+    }
+
+    /**
+     * Sends the list of all conversations for the current user.
+     */
+    private function sendConversationsList(ConnectionInterface $conn)
+    {
+        $userId = $conn->userId;
+
+        // Find rooms where user is user_1
+        $rooms1 = $this->chatRoomModel->read(['user_1' => $userId]);
+
+        // Find rooms where user is user_2
+        $rooms2 = $this->chatRoomModel->read(['user_2' => $userId]);
+
+        // Merge the results
+        $rooms = array_merge($rooms1 ?: [], $rooms2 ?: []);
+
+        $conversations = [];
+
+        foreach ($rooms as $room) {
+            // Determine the other user in the chat
+            $otherUserId = ($room['user_1'] == $userId) ? $room['user_2'] : $room['user_1'];
+
+            // Get user details
+            $user = $this->userModel->getUserById($otherUserId);
+
+            if (!$user) continue;
+
+            // Get last message
+            $lastMessage = $this->chatMessageModel->read(
+                ['chat_room_id' => $room['chat_room_id']],
+                ['order' => 'created_at DESC', 'limit' => 1]
+            );
+
+            // Count unread messages
+            $unreadCount = $this->chatMessageModel->count([
+                'chat_room_id' => $room['chat_room_id'],
+                'receiver_id' => $userId,
+                'read_status' => ['sent', 'delivered']
+            ]);
+
+            // Add to conversations list
+            $conversations[] = [
+                'userId' => $otherUserId,
+                'name' => $user['name'] ?? 'User ' . $otherUserId,
+                'avatar' => $user['profile_picture'] ?? '/assets/default-avatar.png',
+                'lastMessage' => $lastMessage[0]['message'] ?? '',
+                'lastMessageTime' => $lastMessage[0]['created_at'] ?? '',
+                'unread' => $unreadCount,
+                'status' => isset($this->userConnections[$otherUserId]) ? 'online' : 'offline'
+            ];
+        }
+
+        $conn->send(json_encode([
+            'type' => 'conversations',
+            'conversations' => $conversations
+        ]));
+    }
+
+    /**
+     * Mark messages from a specific user as read.
+     */
+    private function markMessagesAsRead(ConnectionInterface $conn, $fromUserId)
+    {
+        if (!$fromUserId) return;
+
+        $userId = $conn->userId;
+
+        // Find chat room
+        $room = $this->chatRoomModel->readOne([
+            'user_1' => min($userId, $fromUserId),
+            'user_2' => max($userId, $fromUserId)
+        ]);
+
+        if (!$room) return;
+
+        // Update all unread messages
+        $this->chatMessageModel->update(
+            [
+                'chat_room_id' => $room['chat_room_id'],
+                'sender_id' => $fromUserId,
+                'receiver_id' => $userId,
+                'read_status' => ['sent', 'delivered']
+            ],
+            [
+                'read_status' => 'read',
+                'read_at' => date('Y-m-d H:i:s')
+            ]
+        );
+
+        // Notify the sender that messages have been read
+        if (isset($this->userConnections[$fromUserId])) {
+            $this->userConnections[$fromUserId]->send(json_encode([
+                'type' => 'messages_read',
+                'by' => $userId
+            ]));
+        }
+    }
+
+    /**
+     * Broadcast user online/offline status to relevant users.
+     */
+    private function broadcastUserStatus($userId, $status)
+    {
+        // Find rooms where user is user_1
+        $rooms1 = $this->chatRoomModel->read(['user_1' => $userId]);
+
+        // Find rooms where user is user_2
+        $rooms2 = $this->chatRoomModel->read(['user_2' => $userId]);
+
+        // Merge the results
+        $rooms = array_merge($rooms1 ?: [], $rooms2 ?: []);
+
+        if (!$rooms) return;
+
+        foreach ($rooms as $room) {
+            // Get the other user
+            $otherUserId = ($room['user_1'] == $userId) ? $room['user_2'] : $room['user_1'];
+
+            // Send status update if they're online
+            if (isset($this->userConnections[$otherUserId])) {
+                $this->userConnections[$otherUserId]->send(json_encode([
+                    'type' => 'user_status',
+                    'userId' => $userId,
+                    'status' => $status
+                ]));
+            }
+        }
+    }
+
+    /**
+     * Broadcast typing status to the recipient.
+     */
+    private function broadcastTypingStatus(ConnectionInterface $from, $toUserId, $isTyping)
+    {
+        if (!$toUserId) return;
+
+        $userId = $from->userId;
+
+        if (isset($this->userConnections[$toUserId])) {
+            $this->userConnections[$toUserId]->send(json_encode([
+                'type' => $isTyping ? 'typing' : 'typing_stop',
+                'userId' => $userId
+            ]));
+        }
     }
 }
