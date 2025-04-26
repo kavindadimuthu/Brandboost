@@ -232,5 +232,12 @@ $app->router->post('/api/payments/update-payoutmethod', 'PaymentController@updat
 $app->router->get('/api/payments/delete-payoutmethod', 'PaymentController@deletePayoutMethod'); 
 
 
+// Notification routes
+$app->router->get('/notifications', 'NotificationController@index'); // Notifications page
+$app->router->get('/api/notifications', 'NotificationController@getNotifications'); // Get notifications list
+$app->router->post('/api/notifications/mark-read', 'NotificationController@markAsRead'); // Mark notification as read
+$app->router->post('/api/notifications/mark-all-read', 'NotificationController@markAllAsRead'); // Mark all notifications as read
+$app->router->get('/api/notifications/unread-count', 'NotificationController@getUnreadCount'); // Get unread notification count
+
 // Run the application
 $app->run();

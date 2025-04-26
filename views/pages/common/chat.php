@@ -1291,24 +1291,27 @@
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
 
+                // Censor contact information before sending
+                const censoredMessage = censorContactInfo(message);
+
                 // Send message to server
                 socket.send(JSON.stringify({
                     type: 'message',
                     to: activeConversation.userId,
-                    message: message
+                    message: censoredMessage
                 }));
 
                 // Add message to the chat (optimistic UI update)
                 const now = new Date();
                 addMessageToChat({
                     sender_id: currentUserId,
-                    message: message,
+                    message: censoredMessage,
                     created_at: now.toISOString(),
                     read_status: 'sent'
                 }, true);
 
                 // Update conversation preview
-                updateConversationPreview(activeConversation.userId, message, now.toISOString());
+                updateConversationPreview(activeConversation.userId, censoredMessage, now.toISOString());
 
                 // Send typing_stop since we've sent the message
                 socket.send(JSON.stringify({
@@ -1642,16 +1645,46 @@
                 // Escape HTML to prevent XSS
                 text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-                // Convert URLs to links
-                text = text.replace(
-                    /(https?:\/\/[^\s]+)/g,
-                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-                );
+                // Censor contact information in displayed messages for extra security
+                text = censorContactInfo(text);
 
                 // Replace line breaks with <br>
                 text = text.replace(/\n/g, '<br>');
 
                 return text;
+            }
+
+            // Censor contact information in messages
+            function censorContactInfo(text) {
+                if (!text) return '';
+                
+                // Phone number pattern: matches common phone number formats
+                // This covers formats like: +1234567890, (123) 456-7890, 123-456-7890, 123.456.7890
+                const phonePattern = /(\+\d{1,3}[-\.\s]?)?(\(?\d{3}\)?[-\.\s]?)?\d{3}[-\.\s]?\d{4}/g;
+                
+                // Email pattern: matches standard email formats
+                const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+                
+                // URL pattern: matches web URLs, including those with and without protocol
+                const urlPattern = /(https?:\/\/)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([\/\?#].*)?/g;
+                
+                // Social media handles pattern: matches common social media username formats
+                const socialPattern = /[@#][a-zA-Z0-9_]{2,}/g;
+                
+                // Replace contact information with asterisks
+                let censoredText = text
+                    .replace(phonePattern, match => '*'.repeat(match.length))
+                    .replace(emailPattern, match => '*'.repeat(match.length))
+                    .replace(urlPattern, match => {
+                        // Preserve certain safe URLs (optional, remove if all URLs should be censored)
+                        if (match.includes('brandboost') || match.includes('yourplatform')) {
+                            return match;
+                        }
+                        return '*'.repeat(match.length);
+                    })
+                    .replace(socialPattern, match => '*'.repeat(match.length));
+                
+                return censoredText;
             }
 
             // Get cookie by name

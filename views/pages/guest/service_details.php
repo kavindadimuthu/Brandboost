@@ -1011,12 +1011,12 @@
       
       // Set the main preview image
       const previewImage = document.querySelector('.preview-image');
-      previewImage.src = images[0];
-      previewImage.alt = gigData.gig.title;
+      previewImage.src = images[0].substring(1); // Remove first '/' character
+      previewImage.alt = gigData.gig.title
 
       // Create thumbnail images
       const thumbnailsHtml = thumbnails.map((thumb, index) => `
-        <img src="${thumb}" alt="Preview ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+        <img src="${thumb.substring(1)}" alt="Preview ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
       `).join('');
       
       document.querySelector('.thumbnails').innerHTML = thumbnailsHtml;
@@ -1030,7 +1030,7 @@
       // Thumbnail click handler
       thumbnails.forEach((thumbnail, index) => {
         thumbnail.addEventListener('click', () => {
-          previewImage.src = gigData.gig.media.images[index];
+          previewImage.src = gigData.gig.media.images[index].substring(1);
           currentImageIndex = index;
           updateActiveThumbnail(index);
         });
@@ -1039,14 +1039,14 @@
       // Previous button click handler
       document.querySelector('.prev-button').addEventListener('click', () => {
         currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
-        previewImage.src = gigData.gig.media.images[currentImageIndex];
+        previewImage.src = gigData.gig.media.images[currentImageIndex].substring(1);
         updateActiveThumbnail(currentImageIndex);
       });
 
       // Next button click handler
       document.querySelector('.next-button').addEventListener('click', () => {
         currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
-        previewImage.src = gigData.gig.media.images[currentImageIndex];
+        previewImage.src = gigData.gig.media.images[currentImageIndex].substring(1);
         updateActiveThumbnail(currentImageIndex);
       });
 
