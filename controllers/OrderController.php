@@ -1441,9 +1441,7 @@ public function respondToCancellation($request, $response): void
         }
 
         $orderId = $_POST['order_id'] ?? null;
-        $status = $_POST['status'] ?? null;
-
-        
+        $status = $_POST['status'] ?? null;        
 
         // Validate required fields
         if (!$orderId || !$status) {
@@ -1487,7 +1485,7 @@ public function respondToCancellation($request, $response): void
             ], 404);
             return;
         }
-        error_log("Respondingggpgggggg to cancellation request for order ID: $orderId, status: $status");
+        error_log("Responding to cancellation request for order ID: $orderId, status: $status");
         // Update order based on response
         if ($status === 'accepted') {
             // Accept the cancellation - update order status to cancelled
@@ -1497,11 +1495,37 @@ public function respondToCancellation($request, $response): void
             ];
             
             $result = $orderModel->updateOrderById($orderId, $updateData);
-            
+            error_log("Orderrrrrrrr status updated to 'canceled' for order ID: $orderId, result: " . ($result ? 'success' : 'failure'));
+
             if ($result) {
+                $transaction = new Transaction();
+                $refund_time = date('Y-m-d H:i:s');
+                
+
+                $returned_transaction = $transaction->getTransactionsByOrderId($orderId);
+                error_log("Returned transaction: " . json_encode($returned_transaction));
+                error_log(print_r($returned_transaction, 1));
+                
+                $transaction_id = $returned_transaction[0]['transaction_id'];
+                error_log("Transaction ID: $transaction_id");
+                $refund_data = [
+                        'status' => 'refund',
+                        'refunded_at' => $refund_time
+                ];
+                $transaction_result = $transaction->updateTransactionById($transaction_id, $refund_data);
+                
+                $wallet = new Wallet();
+                $transaction_amount = $returned_transaction[0]['amount'];
+
+                $refund_amount = -($transaction_amount*0.98); // 2% fee deducted, negative for deduction
+
+                $wallet_result = $wallet->updateWalletBalance(100, $refund_amount);
+            }
+            
+            if ($result && $transaction_result && $wallet_result) {
                 $response->sendJson([
                     'success' => true,
-                    'message' => 'Cancellation request accepted successfully'
+                    'message' => 'Cancellation request accepted successfully and refunded!'
                 ]);
                 return;
             } else {

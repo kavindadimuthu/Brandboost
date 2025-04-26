@@ -706,10 +706,10 @@
                     const data = JSON.parse(responseText);
                     if (data.success) {
                         // alert('Order placed successfully!');
-                        // window.location.href = '/payment-success';
+                        window.location.href = '/payment-success';
                     } else {
                         // alert(`Failed to place order: ${data.message || 'Unknown error'}`);
-                        // window.location.href = '/payment-error';
+                        window.location.href = '/payment-error';
                     }
                 } catch (jsonError) {
                     console.error('Failed to parse JSON response:', jsonError);

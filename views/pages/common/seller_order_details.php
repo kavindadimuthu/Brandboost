@@ -1524,9 +1524,10 @@ document.getElementById('acceptCancellation').addEventListener('click', async ()
             }
             
             const result = await response.json();
+            console.log('Response:', result); // Log the response for debugging
             
             if (result.success) {
-                alert('Cancellation request accepted successfully');
+                alert(result.message);
                 
                 // Hide cancellation request section
                 document.getElementById('cancellationRequestSection').style.display = 'none';
