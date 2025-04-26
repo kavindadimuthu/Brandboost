@@ -3,24 +3,31 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
-use app\core\Helpers\AuthHelper;
 use app\core\Request;
 use app\core\Response;
 
-class DisputeController extends BaseController {
+// Utility imports
+use app\core\Helpers\AuthHelper;
+use app\core\Utils\FileHandler;
+
+// Model imports
+use app\models\Actions\Complaint;
+use app\models\Orders\Orders;
+
+class ComplaintController extends BaseController {
 
     /**
      * Get a paginated and filtered list of complaints
      * 
      * @param Request $request The HTTP request object
      * @param Response $response The HTTP response object
-     * @return Response JSON response with complaint data and pagination details
+     * @return mixed JSON response with complaint data and pagination details
      */
-    public function getDisputeList($request, $response) {
+    public function getComplaintList($request, $response) {
     
         $user = AuthHelper::getCurrentUser();
         if ($user['role'] !== 'admin') {
-            return $response->sendJson(['error' => 'Unauthorized'], 403);
+            return $response->sendJson(['error' => 'Unauthorized']);
         }
     
         $queryParams = $request->getQueryParams();
@@ -115,7 +122,7 @@ class DisputeController extends BaseController {
      * 
      * @param Request $request The HTTP request object
      * @param Response $response The HTTP response object
-     * @return Response JSON response with detailed complaint data
+     * @return mixed JSON response with detailed complaint data
      */
     public function getComplaintDetails($request, $response) {
         $user = AuthHelper::getCurrentUser();
@@ -157,13 +164,117 @@ class DisputeController extends BaseController {
             'data' => $formattedComplaint
         ]);
     }
+
+    /**
+     * Submit a complaint for an order
+     * 
+     * @param Request $request The HTTP request object
+     * @param Response $response The HTTP response object
+     * @return void
+     */
+    public function CreateComplaint($request, $response): void
+    {
+        try {
+            if ($request->getMethod() != 'POST') {
+                $response->setStatusCode(405);
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Method Not Allowed'
+                ]);
+                return;
+            }
+
+            $userId = AuthHelper::getCurrentUser()['user_id'] ?? null;
+
+            // For multipart/form-data, access directly from $_POST and $_FILES
+            $orderId = $_POST['order_id'] ?? null;
+            $content = $_POST['content'] ?? null;
+            $complaintType = $_POST['complaint_type'] ?? null;
+
+            if (empty($orderId) || empty($content)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'No data provided for complaint.'
+                ]);
+                return;
+            }
+
+            // Handle file uploads using FileHandler
+            $savedFiles = [];
+            $uploadDir = 'cdn_uploads/complaints/';
+
+            if (isset($_FILES['proofs']) && is_array($_FILES['proofs']['name'])) {
+                // Create a temporary array for multiple file uploads
+                for ($i = 0; $i < count($_FILES['proofs']['name']); $i++) {
+                    if ($_FILES['proofs']['error'][$i] === UPLOAD_ERR_OK) {
+                        $tempFile = [
+                            'name' => $_FILES['proofs']['name'][$i],
+                            'type' => $_FILES['proofs']['type'][$i],
+                            'tmp_name' => $_FILES['proofs']['tmp_name'][$i],
+                            'error' => $_FILES['proofs']['error'][$i],
+                            'size' => $_FILES['proofs']['size'][$i]
+                        ];
+
+                        // Use FileHandler with proper namespace
+                        $filePath = FileHandler::fileUploader(
+                            $tempFile,
+                            $uploadDir
+                        );
+
+                        if ($filePath) {
+                            $savedFiles[] = $filePath;
+                        }
+                    }
+                }
+            }
+
+            $orderModel = new Orders();
+            $returnedOrder = $orderModel->getOrderById($orderId);
+            $reportedUserId = $returnedOrder['seller_id'];
+
+            // Save complaint in DB
+            $complaint = [
+                'order_id' => $orderId,
+                'complainant_user_id' => $userId ?? 0,
+                'reported_user_id' => $reportedUserId,
+                'complaint_type' => $complaintType,
+                'description' => $content,
+                'proofs' => json_encode($savedFiles), // Store as JSON array
+                'status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            $complaintModel = new Complaint();
+            if (!$complaintModel->createComplaint($complaint)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Failed to submit complaint.'
+                ]);
+                return;
+            }
+
+            $response->sendJson([
+                'success' => true,
+                'message' => 'Complaint submitted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            // Log the error
+            error_log('Complaint submission error: ' . $e->getMessage());
+
+            // Send a JSON response even for errors
+            $response->sendJson([
+                'success' => false,
+                'message' => 'An error occurred while processing your request: ' . $e->getMessage()
+            ]);
+        }
+    }
     
     /**
      * Update the status of a complaint
      * 
      * @param Request $request The HTTP request object
      * @param Response $response The HTTP response object
-     * @return Response JSON response with result of the update operation
+     * @return mixed JSON response with result of the update operation
      */
     public function updateComplaintStatus($request, $response) {
         $user = AuthHelper::getCurrentUser();
