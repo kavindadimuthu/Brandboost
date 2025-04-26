@@ -1308,7 +1308,7 @@ class OrderController extends BaseController {
      * @param Response $response The response object to return data.
      * @return void JSON response with revisions data.
      */
-    public function getRevisions($request, $response): void
+    /*public function getRevisions($request, $response): void
     {
         if ($request->getMethod() !== 'GET') {
             $response->setStatusCode(405);
@@ -1359,7 +1359,7 @@ class OrderController extends BaseController {
         ];
         
         $deliveryModel->executeCustomQuery($sql, $params);
-    }
+    }*/
 
 
     public function createReview($request, $response){
@@ -1434,7 +1434,7 @@ class OrderController extends BaseController {
     
             // Handle file uploads using FileHandler
             $savedFiles = [];
-            $uploadDir = 'uploads/complaints/';
+            $uploadDir = 'cdn_uploads/complaints/';
             
             if (isset($_FILES['proofs']) && is_array($_FILES['proofs']['name'])) {
                 // Create a temporary array for multiple file uploads

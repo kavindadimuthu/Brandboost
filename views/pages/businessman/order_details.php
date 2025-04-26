@@ -1212,7 +1212,7 @@
 
             // Append text fields
             formData.append('order_id', orderId);
-            formData.append('complaint_notes', complaintNotes.value);
+            formData.append('delivery_notes', deliveryNotes.value);
 
             // Append files
             for (let i = 0; i < fileInput.files.length; i++) {
@@ -1238,7 +1238,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('Complaint submitted successfully');
+                    alert('Revision Requested successfully');
                     // Close popup and reset form
                     document.getElementById('complaintPopup').style.display = 'none';
                     complaintNotes.value = '';
@@ -1255,9 +1255,14 @@
 
         // Deliver Now button
         document.getElementById('deliverNow').addEventListener('click', () => {
-            deliverNow
             deliveryPopup.classList.add('active');
             backdrop.classList.add('active');
+        });
+
+        document.getElementById('submitDelivery').addEventListener('click', () => {
+            deliverNow();
+            deliveryPopup.classList.remove('active');
+            backdrop.classList.rempve('active');
         });
 
         // Close delivery popup
