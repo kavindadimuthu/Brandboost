@@ -724,59 +724,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Top Performing Posts Table -->
-            <div class="data-card">
-                <div class="chart-header">
-                    <h2 class="chart-title">Top Performing Posts</h2>
-                </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Post</th>
-                            <th>Revenue</th>
-                            <th>Sales</th>
-                            <th>Reviews</th>
-                            <th>Views</th>
-                            <th>Conversion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Premium T-Shirt Design</strong></td>
-                            <td><span class="price-positive">$26,680.90</span></td>
-                            <td>1,072</td>
-                            <td>1,727</td>
-                            <td>2,680</td>
-                            <td>40%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Vintage Logo Collection</strong></td>
-                            <td><span class="price-positive">$16,729.19</span></td>
-                            <td>1,016</td>
-                            <td>720</td>
-                            <td>2,186</td>
-                            <td>46%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Social Media Package</strong></td>
-                            <td><span class="price-positive">$12,872.24</span></td>
-                            <td>987</td>
-                            <td>964</td>
-                            <td>1,872</td>
-                            <td>53%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>TikTok Marketing Campaign</strong></td>
-                            <td><span class="price-positive">$11,457.83</span></td>
-                            <td>836</td>
-                            <td>1,142</td>
-                            <td>2,540</td>
-                            <td>33%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
