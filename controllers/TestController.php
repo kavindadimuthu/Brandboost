@@ -536,9 +536,16 @@ class TestController extends BaseController
     }
 
     public function getUsers($req, $res){
+
+        $queryParams = $req->getQueryParams();
+        error_log(print_r($queryParams, true));
+
+
         $userModel = $this->model("Users\User");
-        $user = $userModel->getUserById(2);
-        error_log(print_r($user, true));
+        // $user = $userModel->getUsersByRole($queryParams['role']);
+        $user = $userModel->read();
+
+        $res->sendJson(['user' => $user]);
     }
 
 

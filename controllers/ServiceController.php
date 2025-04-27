@@ -129,9 +129,6 @@ class ServiceController extends BaseController
         }
 
         // Send the response with service data
-        if($bycontroller){
-            return $services;
-        }else
         $response->sendJson(['services' => $services]);
     }
 
