@@ -1240,19 +1240,20 @@
     }
 
     function switchTab(plan) {
-      // Update active tab UI
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
-      
-      // Get service ID and type from current data
-      const serviceId = gigData.gig.pricing[plan].packageId;
-      const serviceType = gigData.serviceType;
-      
-      // Render the selected pricing plan
-      renderPricingContent(plan, serviceId, serviceType);
-    }
+  // Update active tab UI
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
+  
+  // Get service ID from the URL path segments (this is the actual service ID)
+  const pathSegments = window.location.pathname.split('/');
+  const serviceId = pathSegments[pathSegments.length - 1];
+  const serviceType = gigData.serviceType;
+  
+  // Render the selected pricing plan
+  renderPricingContent(plan, serviceId, serviceType);
+}
   </script>
 </body>
 </html>
