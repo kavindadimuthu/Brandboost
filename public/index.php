@@ -203,6 +203,8 @@ $app->router->post('/api/request-revision', 'RevisionController@requestRevision'
 // ** Order Review **
 $app->router->post('/api/create-review', 'ReviewController@createReview'); // Create Review
 
+$app->router->post('/api/update-delivery-status', 'OrderController@updateDeliveryStatus'); // Update Delivery Status
+
 
 // ===================================
 // Verification Management APIs

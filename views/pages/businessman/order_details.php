@@ -1,4 +1,3 @@
-
 <UPDATED_CODE><!DOCTYPE html>
 <html lang="en">
 
@@ -1665,6 +1664,12 @@
     }
 }
 
+
+
+async function updateStatus() {
+    
+}
+
 function showDeliveryDetails(data) {
     console.log('Showing delivery details:', data);
     
@@ -2039,7 +2044,7 @@ if(data.revision_note){
         });
 
         document.getElementById('yesAccept').addEventListener('click', () => {
-            yesAccept();
+            updateStatus();
             acceptPopup.classList.remove('active');
             backdrop.classList.remove('active');
         });
