@@ -154,10 +154,13 @@ $app->router->post('/api/update-user-account-status', 'UserController@updateUser
 $app->router->post('/api/change-password', 'AuthController@changePassword'); // Change Password
 $app->router->get('/delete-user/{id}', 'UserController@deleteUserProfile'); // Delete User Profile
 
+$app->router->get('/api/user-count', 'GetCountController@getUserCountsSummary'); 
 
 // Service Management
 $app->router->get('/api/services', 'ServiceController@getServiceList'); // Get Service List
 $app->router->get('/api/service/{id}', 'ServiceController@getServiceProfile'); // Get Service Profile
+
+$app->router->get('/api/service-count', 'GetCountController@getServiceCountsSummary'); 
 // ** gigs specific routes
 $app->router->post('/api/create-gig', 'ServiceController@createService'); // Create Gig
 $app->router->post('/api/update-gig/{id}', 'ServiceController@updateService'); // Update Gig
@@ -181,6 +184,7 @@ $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get 
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
 
+$app->router->get('/api/orders-count', 'GetCountController@getOrderCountsSummary');
 
 // Verification Management
 $app->router->get('/api/verifications', 'VerificationController@getVerificationsList'); // Get Verification List
@@ -231,6 +235,7 @@ $app->router->get('/api/payments/seller-balance', 'PaymentController@getSellerBa
 $app->router->get('/api/payments/seller-holds', 'PaymentController@getSellerHoldBalance');
 $app->router->get('/api/payments/seller-transactions', 'PaymentController@getSellerTransactions');
 $app->router->get('/api/payments/period-earnings', 'PaymentController@getPeriodEarnings'); // Get earnings for a specific period
+$app->router->get('/api/payments/system-wallet-balance', 'PaymentController@getSystemWalletBalance'); // Get transaction history
 
 $app->router->post('/api/payments/add-payoutmethod', 'PaymentController@addPayoutMethod');
 $app->router->get('/api/payments/get-seller-payoutmethod', 'PaymentController@getSellerPayoutMethods');

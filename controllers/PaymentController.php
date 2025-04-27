@@ -390,6 +390,23 @@ class PaymentController extends BaseController {
         }
     }
 
+    public function getSystemWalletBalance($request, $response): void
+    {
+        $walletModel = new Wallet();
+        $systemWallet = $walletModel->getWalletBySellerId(100); // Assuming 100 is the system user ID
+
+        if (!$systemWallet) {
+            $response->sendError('System wallet not found', 404);
+            return;
+        }
+
+        $response->sendJson([
+            'success' => true,
+            'balance' => number_format($systemWallet['balance'], 2, '.', ''),
+            'currency' => $systemWallet['currency'] ?? 'USD'
+        ]);
+    }
+
     /**
      * Mark transaction as failed
      * 

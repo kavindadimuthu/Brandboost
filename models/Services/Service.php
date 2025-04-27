@@ -118,4 +118,5 @@ class Service extends BaseModel
         $options['searchColumns'] = ['tags'];
         return $this->read([], $options);
     }
+
 }

@@ -187,6 +187,3 @@ class Orders extends BaseModel
     }
 
 }
-
-
-

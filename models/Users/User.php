@@ -102,46 +102,4 @@ class User extends BaseModel
         return $this->read(['account_status' => $status], $options);
     }
 
-    /**
-     * Count users matching specified filters
-     * 
-     * @param array $filters Filter conditions
-     * @param array $options Additional options like search
-     * @return int Total count of matching users
-     */
-    public function countUsers($filters = [], $options = []): int {
-        // Start building the query
-        $query = "SELECT COUNT(*) AS total FROM user WHERE 1=1";
-        $params = [];
-        
-        // Add search condition if provided
-        if (!empty($options['search']) && !empty($options['searchColumns'])) {
-            $searchColumns = $options['searchColumns'];
-            $searchConditions = [];
-            foreach ($searchColumns as $column) {
-                $searchConditions[] = "$column LIKE :search";
-            }
-            if (!empty($searchConditions)) {
-                $query .= " AND (" . implode(" OR ", $searchConditions) . ")";
-                $params[':search'] = '%' . $options['search'] . '%';
-            }
-        }
-        
-        // Add filters
-        foreach ($filters as $key => $value) {
-            $query .= " AND $key = :$key";
-            $params[":$key"] = $value;
-        }
-        
-        // Execute the query
-        $stmt = $this->db->prepare($query);
-        foreach ($params as $param => $value) {
-            $this->db->bind($param, $value);
-        }
-        
-        $this->db->execute();
-        $result = $this->db->fetch(\PDO::FETCH_ASSOC);
-        
-        return (int)($result['total'] ?? 0);
-    }
 }

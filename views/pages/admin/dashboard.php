@@ -534,19 +534,19 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="card-label">Total Users</div>
-                    <div class="card-value">2,350</div>
-                    <div class="card-trend trend-up">
+                    <div class="card-value" id="total-users-card">0</div>
+                    <!-- <div class="card-trend trend-up">
                         <i class="fas fa-arrow-up"></i>
                         <span>12.5% from last month</span>
-                    </div>
+                    </div> -->
                 </div>
                 
                 <div class="summary-card gigs">
                     <div class="card-icon">
                         <i class="fas fa-briefcase"></i>
                     </div>
-                    <div class="card-label">Active Gigs</div>
-                    <div class="card-value">567</div>
+                    <div class="card-label">Active Services</div>
+                    <div class="card-value" id="total-services-card">0</div>
                     <div class="card-trend trend-up">
                         <i class="fas fa-arrow-up"></i>
                         <span>8.3% from last month</span>
@@ -558,7 +558,7 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="card-label">Completed Orders</div>
-                    <div class="card-value">230</div>
+                    <div class="card-value" id="complete-orders-card">0</div>
                     <div class="card-trend trend-up">
                         <i class="fas fa-arrow-up"></i>
                         <span>2.15% from last month</span>
@@ -570,7 +570,7 @@
                         <i class="fas fa-dollar-sign"></i>
                     </div>
                     <div class="card-label">Total Revenue</div>
-                    <div class="card-value">$193,000</div>
+                    <div class="card-value" id="total-revenue-card">$193,000</div>
                     <div class="card-trend trend-up">
                         <i class="fas fa-arrow-up"></i>
                         <span>35% from last month</span>
@@ -584,9 +584,9 @@
                     <div class="chart-header">
                         <h2 class="chart-title">Revenue Overview</h2>
                         <div class="chart-period">
-                            <button class="period-btn">Week</button>
+                            <!-- <button class="period-btn">Week</button> -->
                             <button class="period-btn active">Month</button>
-                            <button class="period-btn">Year</button>
+                            <!-- <button class="period-btn">Year</button> -->
                         </div>
                     </div>
                     <div id="revenue-chart" class="chart-content"></div>
@@ -608,7 +608,7 @@
                             <i class="fas fa-user-plus"></i>
                         </div>
                         <div class="stat-content">
-                            <div class="stat-value">48</div>
+                            <div class="stat-value" id="new-signups-today">0</div>
                             <div class="stat-label">New Signups Today</div>
                         </div>
                     </div>
@@ -620,7 +620,7 @@
                             <i class="fas fa-sync-alt"></i>
                         </div>
                         <div class="stat-content">
-                            <div class="stat-value">137</div>
+                            <div class="stat-value" id="ongoing-orders">0</div>
                             <div class="stat-label">Ongoing Orders</div>
                         </div>
                     </div>
@@ -632,7 +632,7 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="stat-content">
-                            <div class="stat-value">25</div>
+                            <div class="stat-value" id="pending-approvals">0</div>
                             <div class="stat-label">Pending Approvals</div>
                         </div>
                     </div>
@@ -644,7 +644,7 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-content">
-                            <div class="stat-value">12</div>
+                            <div class="stat-value" id="active-disputes">0</div>
                             <div class="stat-label">Active Disputes</div>
                         </div>
                     </div>
@@ -782,7 +782,104 @@
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
+        let userCount = 0; // Initialize user count variable
+        let businessmen_count = 0; // Initialize businessmen count variable
+        let designers_count = 0; // Initialize designers count variable
+        let influencers_count = 0; // Initialize influencers count variable
+
         document.addEventListener('DOMContentLoaded', function() {
+
+            fetchUserCount().then(() => {
+                // Now initialize charts after data is available
+                initializeCharts();
+            }).catch(error => {
+                console.error('Error fetching user count:', error);
+            });
+
+            fetchServiceCount().catch(error => {
+                console.error('Error fetching service count:', error);
+            });
+
+            fetchOrdersCount().catch(error => {
+                console.error('Error fetching orders count:', error);
+            });
+
+            fetchWalletBalance().catch(error => {
+                console.error('Error fetching wallet balance:', error);
+            });
+            
+        });
+
+        async function fetchUserCount() {
+            try {
+                const response = await fetch('/api/user-count');
+                const data = await response.json();
+                console.log('User Count:', data);
+
+                userCount = data.counts.total - 1; // Exclude the admin user from the count
+                businessmen_count = data.counts.businessmen;
+                designers_count = data.counts.designers;
+                influencers_count = data.counts.influencers;
+                
+                document.getElementById('total-users-card').textContent = userCount.toLocaleString();
+            } catch (error) {
+                console.error('Error fetching user count:', error);
+            }
+        }
+
+        async function fetchServiceCount() {
+            try {
+                const response = await fetch('/api/service-count');
+                const data = await response.json();
+                console.log('Service Count:', data);
+                
+                document.getElementById('total-services-card').textContent = data.counts.total.toLocaleString();
+            } catch (error) {
+                console.error('Error fetching gig count:', error);
+            }
+        }
+
+        async function fetchOrdersCount() {
+            try {
+                const response = await fetch('/api/orders-count');
+                
+                const data = await response.json();
+                console.log('Orders Count:', data);
+                
+                document.getElementById('complete-orders-card').textContent = data.counts.completedCount.toLocaleString();
+                document.getElementById('ongoing-orders').textContent = data.counts.inProgressCount.toLocaleString();
+            } catch (error) {
+                console.error('Error fetching complete orders count:', error);
+            }
+        }
+
+        async function fetchWalletBalance() {
+            try {
+                const response = await fetch('/api/payments/system-wallet-balance');
+                const data = await response.json();
+                console.log('Wallet Balance:', data);
+                
+                document.getElementById('total-revenue-card').textContent = data.balance.toLocaleString();
+            } catch (error) {
+                console.error('Error fetching wallet balance:', error);
+            }
+        }
+
+        async function fetchNewSignupsCount() {
+            try {
+                const response = await fetch('/api/new-signups-count');
+                const data = await response.json();
+                console.log('New Signups Today:', data);
+                
+                document.getElementById('new-signups-today').textContent = data.counts.newSignupsToday.toLocaleString();
+            } catch (error) {
+                console.error('Error fetching new signups today:', error);
+            }
+        }
+
+        
+        // Initialize charts
+        function initializeCharts() {
             // Revenue Chart
             const revenueOptions = {
                 series: [{
@@ -843,7 +940,7 @@
 
             // User Distribution Chart
             const userOptions = {
-                series: [233, 23, 482],
+                series: [businessmen_count, designers_count, influencers_count],
                 chart: {
                     type: 'donut',
                     height: 350,
@@ -888,7 +985,8 @@
                     // based on the selected period (week/month/year)
                 });
             });
-        });
+
+        }
     </script>
 </body>
 
