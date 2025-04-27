@@ -324,15 +324,21 @@ class ComplaintController extends BaseController {
         
         // Log the admin action
         $actionModel = $this->model('Actions\Action');
+        // $actionData = [
+        //     'admin_id' => $user['user_id'],
+        //     'action_type' => 'complaint_status_update',
+        //     'entity_type' => 'complaint',
+        //     'entity_id' => $complaintId,
+        //     'details' => json_encode([
+        //         'status' => $status,
+        //         'previous_status' => $body['previous_status'] ?? 'unknown'
+        //     ]),
+        //     'created_at' => date('Y-m-d H:i:s')
+        // ];
         $actionData = [
-            'admin_id' => $user['admin_id'],
-            'action_type' => 'complaint_status_update',
-            'entity_type' => 'complaint',
-            'entity_id' => $complaintId,
-            'details' => json_encode([
-                'status' => $status,
-                'previous_status' => $body['previous_status'] ?? 'unknown'
-            ]),
+            'admin_id' => $user['user_id'],
+            'action_type' => 'complaint ' . $status,
+            'action_note' => 'Complaint  ' . $status . ' by admin' . $user['user_id'],	
             'created_at' => date('Y-m-d H:i:s')
         ];
         $actionModel->create($actionData);
