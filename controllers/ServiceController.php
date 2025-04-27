@@ -307,6 +307,8 @@ class ServiceController extends BaseController
         // Extract form data from the request
         $formData = $request->getParsedBody();
         $uploadedFiles = $request->getFiles();
+        error_log("entered to updateService");
+        error_log(print_r($formData, true));
 
         // DebugHelper::logArray($formData);
 
@@ -377,6 +379,8 @@ class ServiceController extends BaseController
             'delivery_formats' => $formData['deliveryFormats'] ?? $existingService['delivery_formats'],
             'tags' => $formData['tags'] ?? $existingService['tags']
         ];
+        error_log("serviceData is updating");
+        error_log(print_r($serviceData, true));
 
         // Update the service in the database
         if ($service->updateServiceById($serviceId, $serviceData)) {
@@ -385,13 +389,8 @@ class ServiceController extends BaseController
                 $packageModel = new ServicePackage();
                 foreach ($formData['packages'] as $packageType => $packageData) {
                     if (in_array($packageType, ['basic', 'premium'])) {
-                        $existingPackage = $packageModel->getPackagesByServiceId($serviceId, ['package_type' => $packageType]);
-                        if ($existingPackage) {
-                            $packageModel->updatePackageById($existingPackage['package_id'], $packageData);
-                        } else {
-                            $packageData['service_id'] = $serviceId;
-                            $packageModel->createPackage($packageData);
-                        }
+                        $packageData = json_decode($packageData, true);
+                        $packageModel->updatePackageById($packageData['package_id'], $packageData);
                     }
                 }
             }
