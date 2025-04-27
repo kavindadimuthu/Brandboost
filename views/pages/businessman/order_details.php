@@ -858,7 +858,7 @@
                             </div>
                         </div>
                         <div id="countdown"></div>
-                        <button id="deliverNow">Request Rivision</button>
+                        <button id="request-revision">Request Rivision</button>
                         <button class="accept-button" id="acceptOrder">Accept</button>
                         <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
                     </div>
@@ -1007,8 +1007,8 @@
         <button class="close-btn" id="closeDeliveryPopup">&times;</button>
         <h4>Request Rivision</h4>
         <div class="form-group">
-            <label for="deliveryNotes">Notes</label>
-            <textarea id="deliveryNotes" placeholder="Any additional information about your previous rivision..."></textarea>
+            <label for="revisionNotes">Notes</label>
+            <textarea id="revisionNotes" placeholder="Any additional information about your previous rivision..."></textarea>
         </div>
         <div class="form-group">
             <label>Proofs</label>
@@ -1017,7 +1017,7 @@
                     <i class="fas fa-chart-bar"></i>
                     <h4>Upload Screenshots and videos</h4>
                     <p>Upload engagement metrics, reach, impressions, etc. (JPG, PNG)</p>
-                    <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*" />
+                    <input type="file" id="fileUploadSection" style="display: none;" multiple accept="image/*" />
                 </div>
                 <div class="preview-images" id="previewContainer">
                     <!-- Preview images will appear here -->
@@ -1026,7 +1026,7 @@
         </div>
         <div class="form-buttons">
             <button class="cancel-btn" id="cancelDelivery">Cancel</button>
-            <button class="submit-btn" id="submitDelivery">Request</button>
+            <button class="submit-btn" id="request">Request</button>
         </div>
     </div>
 
@@ -1199,9 +1199,9 @@
 
         //Request Revision
         
-        async function deliverNow() {
-            const deliveryNotes = document.getElementById('deliveryNotes');
-            const fileInput = document.getElementById('uploadSection');
+        async function requestRevision() {
+            const deliveryNotes = document.getElementById('revisionNotes');
+            const fileInput = document.getElementById('fileUploadSection');
             const formData = new FormData();
             
             // Make sure orderId is defined
@@ -1211,14 +1211,14 @@
             }
 
             // Validate input
-            if (!deliveryNotes.value.trim()) {
+            if (!revisionNotes.value.trim()) {
                 alert('Please enter notes of previous revision');
                 return;
             }
 
             // Append text fields
             formData.append('order_id', orderId);
-            formData.append('delivery_notes', deliveryNotes.value);
+            formData.append('revision_notes', revisionNotes.value);
 
             // Append files
             for (let i = 0; i < fileInput.files.length; i++) {
@@ -1260,13 +1260,13 @@
         }
 
         // Deliver Now button
-        document.getElementById('deliverNow').addEventListener('click', () => {
+        document.getElementById('request-revision').addEventListener('click', () => {
             deliveryPopup.classList.add('active');
             backdrop.classList.add('active');
         });
 
-        document.getElementById('submitDelivery').addEventListener('click', () => {
-            deliverNow();
+        document.getElementById('request').addEventListener('click', () => {
+            requestRevision();
             deliveryPopup.classList.remove('active');
             backdrop.classList.rempve('active');
         });
@@ -1369,64 +1369,12 @@
                 });
             });
         });
-
-        /*// Submit review
-        document.getElementById('submitReview').addEventListener('click', () => {
-            // Get star rating
-            const stars = document.querySelectorAll('.stars .fa-star.active');
-            const rating = stars.length;
-            
-            // Get review text (added this part)
-            const reviewText = document.getElementById('reviewText').value.trim();
-            
-            // Validate if rating is selected
-            if (rating === 0) {
-                alert('Please select a star rating before submitting');
-                return;
-            }
-            
-            // Prepare data to send to server
-            const reviewData = {
-                rating: rating,
-                reviewText: reviewText,
-                // You might want to include additional data like:
-                // orderId: '12345', // Get this from your order system
-                // date: new Date().toISOString()
-            };
-            
-            // Send data to server (example using fetch API)
-            fetch('/api/submit-review', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(reviewData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Review submitted successfully:', data);
-                // Close the popup
-                reviewPopup.classList.remove('active');
-                backdrop.classList.remove('active');
-                // Optional: Show success message
-                alert('Thank you for your review!');
-            })
-            .catch(error => {
-                console.error('Error submitting review:', error);
-                alert('There was an error submitting your review. Please try again.');
-            });
-        });*/
         
 
         // File upload area
         const uploadArea = document.getElementById('uploadArea');
-        const fileUpload = document.getElementById('fileUpload');
-        const previewContainer = document.getElementById('previewContainer');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileUploadSection = document.getElementById('fileUploadSection');
         
         uploadArea.addEventListener('click', () => {
             fileUpload.click();
@@ -1453,9 +1401,34 @@
             }
         });
 
-        fileUpload.addEventListener('change', () => {
-            if (fileUpload.files.length > 0) {
-                handleFiles(fileUpload.files);
+        uploadSection.addEventListener('click', () => {
+            fileUploadSection.click();
+        });
+
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = '#4f46e5';
+            uploadSection.style.backgroundColor = '#f5f5ff';
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.style.borderColor = '#d1d5db';
+            uploadSection.style.backgroundColor = '#f9fafb';
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = '#d1d5db';
+            uploadSection.style.backgroundColor = '#f9fafb';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        fileUploadSection.addEventListener('change', () => {
+            if (fileUploadSection.files.length > 0) {
+                handleFiles(fileUploadSection.files);
             }
         });
 

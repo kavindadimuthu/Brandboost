@@ -199,7 +199,7 @@ $app->router->post('/api/respond-to-cancellation', 'OrderController@respondToCan
 $app->router->get('/api/delivery/{id}', 'OrderDeliveryController@getOrderDeliveries'); // Get Order Deliveries
 $app->router->post('/api/createDelivery', 'OrderDeliveryController@createDelivery'); // Create Order Delivery
 // ** Order Revision **
-$app->router->post('/api/request-revision', 'RevisionController@deliverNow'); // Request Revision
+$app->router->post('/api/request-revision', 'RevisionController@requestRevision'); // Request Revision
 // ** Order Review **
 $app->router->post('/api/create-review', 'ReviewController@createReview'); // Create Review
 

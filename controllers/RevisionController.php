@@ -16,7 +16,7 @@ use app\models\Orders\OrderDeliveries;
 
 class RevisionController extends BaseController {
 
-    public function deliverNow($request, $response): void {
+    public function requestRevision($request, $response): void {
         try {
             if ($request->getMethod() != 'POST') {
                 $response->setStatusCode(405);
@@ -31,9 +31,8 @@ class RevisionController extends BaseController {
             
             // For multipart/form-data, access directly from $_POST and $_FILES
             $orderId = $_POST['order_id'] ?? null;
-            $content = $_POST['delivery_notes'] ?? null;
+            $content = $_POST['revision_notes'] ?? null;
             
-    
             if (empty($orderId) || empty($content)) {
                 $response->sendJson([
                     'success' => false,
@@ -78,26 +77,48 @@ class RevisionController extends BaseController {
             $deliveriesModel = new OrderDeliveries();
             $returnedDelivery = $deliveriesModel->getDeliveriesByOrder($orderId);
 
-            $currentRevisionNo = $returnedOrder['revision_number'];
-            $newRevisionNo = $currentRevisionNo + 1;
-            if ($newRevisionNo > 3) {
-                throw new Exception('Maximum number of revisions (3) reached for this order');
+            // Check if there are any deliveries
+            if (empty($returnedDelivery) || !is_array($returnedDelivery)) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'No deliveries found for this order.'
+                ]);
+                return;
             }
-    
+
+            // Find the latest delivery by ID
+            $latestDelivery = null;
+            $latestDeliveryId = 0;
+
+            foreach ($returnedDelivery as $delivery) {
+                if (isset($delivery['delivery_id']) && $delivery['delivery_id'] > $latestDeliveryId) {
+                    $latestDeliveryId = $delivery['delivery_id'];
+                    $latestDelivery = $delivery;
+                }
+            }
+
+            if (!$latestDelivery) {
+                $response->sendJson([
+                    'success' => false,
+                    'message' => 'Could not determine the latest delivery.'
+                ]);
+                return;
+            }
+
             // Save Revision request in DB
             $revision = [
+                'delivery_id' => $latestDeliveryId,
                 'order_id' => $orderId,
-                'revision_number' => $newRevisionNo,
                 'revision_note' => $content, 
-                'revision_files' => json_encode($savedFiles[]), // Store as JSON array
+                'revision_files' => json_encode($savedFiles), // Fixed: removed unnecessary array brackets
+                'status' => 'rejected',
                 'created_at' => date('Y-m-d H:i:s')
             ];
     
-            $revisionModel = new OrderRevision();
-            if (!$revisionModel->createRevision($revision)) {
+            if (!$deliveriesModel->updateDelivery($latestDeliveryId, $revision)) {
                 $response->sendJson([
                     'success' => false,
-                    'message' => 'Failed to submit complaint.'
+                    'message' => 'Failed to submit revision request.'
                 ]);
                 return;
             }
@@ -117,5 +138,4 @@ class RevisionController extends BaseController {
                 'message' => 'An error occurred while processing your request: ' . $e->getMessage()
             ]);
         }
-    }
-}
+    }}
