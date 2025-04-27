@@ -156,6 +156,79 @@
             transform: translateY(-1px);
         }
 
+        /* Add these to your existing CSS styles */
+        .user-status {
+            font-size: 0.8em;
+            margin-left: 10px;
+            color: #9ca3af;
+        }
+
+        .user-status.online {
+            color: #10b981;
+        }
+
+        .system-message {
+            text-align: center;
+            color: #6b7280;
+            padding: 10px;
+            font-style: italic;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+            gap: 3px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            display: inline-block;
+            animation: typing 1s infinite ease-in-out alternate;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .message-time {
+            font-size: 0.7em;
+            color: #9ca3af;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message.received .message-time {
+            text-align: left;
+        }
+
+        .message .status-indicator {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 0.7em;
+        }
+
         /* Order Section */
         .order-section {
             flex: 1;
@@ -165,7 +238,7 @@
             gap: 20px;
         }
 
-        .order-section > div {
+        .order-section>div {
             background-color: #ffffff;
             border: 1px solid #e5e7eb;
             border-radius: 10px;
@@ -295,105 +368,105 @@
             color: #b91c1c !important;
         }
 
-            /* Deliveries section */
+        /* Deliveries section */
         .deliveries-section {
-          margin-top: 24px;
+            margin-top: 24px;
         }
-        
+
         .section-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
         }
-        
+
         .section-heading {
-          font-size: 24px;
-          font-weight: 600;
+            font-size: 24px;
+            font-weight: 600;
         }
-        
+
         table {
-          width: 100%;
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-          overflow: hidden;
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
-        
+
         thead {
-          background-color: #e5e7eb;
+            background-color: #e5e7eb;
         }
-        
+
         th {
-          padding: 12px 24px;
-          text-align: left;
-          color: #4b5563;
-          font-size: 14px;
-          text-transform: uppercase;
-          font-weight: 600;
+            padding: 12px 24px;
+            text-align: left;
+            color: #4b5563;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
-        
+
         td {
-          padding: 12px 24px;
-          text-align: left;
-          color: #4b5563;
-          font-size: 14px;
-          font-weight: 300;
-          border-bottom: 1px solid #e5e7eb;
+            padding: 12px 24px;
+            text-align: left;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 300;
+            border-bottom: 1px solid #e5e7eb;
         }
-        
+
         tr:hover {
-          background-color: #f9fafb;
+            background-color: #f9fafb;
         }
-        
+
         .badge {
-          padding: 4px 12px;
-          border-radius: 9999px;
-          font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
         }
-        
+
         .badge-success {
-          background-color: #d1fae5;
-          color: #065f46;
-        }
-        
-        .badge-danger {
-          background-color: #fee2e2;
-          color: #991b1b;
+            background-color: #d1fae5;
+            color: #065f46;
         }
 
         .badge-danger {
-          background-color: #fee2e2;
-          color: #991b1b;
+            background-color: #fee2e2;
+            color: #991b1b;
         }
 
-            /* Buttons */
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Buttons */
         .btn {
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-          border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
         }
-        
+
         .btn-primary {
-          background-color: #2563eb;
-          color: white;
+            background-color: #2563eb;
+            color: white;
         }
-        
+
         .btn-primary:hover {
-          background-color: #1d4ed8;
+            background-color: #1d4ed8;
         }
-        
+
         .btn-secondary {
-          background-color: #9333ea;
-          color: white;
+            background-color: #9333ea;
+            color: white;
         }
-        
+
         .btn-secondary:hover {
-          background-color: #7e22ce;
+            background-color: #7e22ce;
         }
-        
+
 
         /* Delivery Form */
         .delivery-form {
@@ -671,9 +744,8 @@
         .popup .close-btn:hover,
         .cancel-popup .close-btn:hover,
         .delivery-popup .close-btn:hover,
-        .accept-popup .close-btn:hover
-        .complaint-popup .close-btn:hover {
-            color:rgb(84, 118, 174);
+        .accept-popup .close-btn:hover .complaint-popup .close-btn:hover {
+            color: rgb(84, 118, 174);
             transform: none;
         }
 
@@ -814,6 +886,7 @@
     <div class="container">
         <div class="content">
             <div class="main-content">
+                <!-- Replace the current chat section with this -->
                 <div class="chat-section">
                     <div class="chat-header">
                         <div class="user">
@@ -821,11 +894,16 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <span class="username" id="username"></span>
+                            <span class="user-status" id="userStatus">Offline</span>
                         </div>
                     </div>
                     <div class="chat-box" id="chatBox">
-                        <div class="message received">Hello</div>
-                        <div class="message received">Hi</div>
+                        <!-- Chat messages will be added here -->
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
                     <div class="chat-input">
                         <textarea id="messageInput" placeholder="Type a message..."></textarea>
@@ -881,56 +959,56 @@
 
             <!-- Modified Deliverables Section -->
             <!-- Deliveries Section -->
-          <div class="deliveries-section">
-            <div class="section-header">
-              <h2 class="section-heading">Deliveries</h2>
+            <div class="deliveries-section">
+                <div class="section-header">
+                    <h2 class="section-heading">Deliveries</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Revision Count</th>
+                            <th>File</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                video3.mp4
+                                <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
+                            </td>
+                            <td>
+                                <span class="badge badge-success">Accepted</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                video2.mp4
+                                <button class="btn btn-primary ml-2" onclick="downloadFile('video1.mp4')">Download</button>
+                            </td>
+                            <td>
+                                <span class="badge badge-danger">Rejected</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                video1.mp4
+                                <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
+                            </td>
+                            <td>
+                                <span class="badge badge-danger">Rejected</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Revision Count</th>
-                  <th>File</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody">
-                <tr>
-                  <td>3</td>
-                  <td>
-                    video3.mp4
-                    <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
-                  </td>
-                  <td>
-                    <span class="badge badge-success">Accepted</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    video2.mp4
-                    <button class="btn btn-primary ml-2" onclick="downloadFile('video1.mp4')">Download</button>
-                  </td>
-                  <td>
-                    <span class="badge badge-danger">Rejected</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    video1.mp4
-                    <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
-                  </td>
-                  <td>
-                    <span class="badge badge-danger">Rejected</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
     </div>
 
-        <!-- Complain Popup -->
+    <!-- Complain Popup -->
     <div class="complaint-popup" id="complaintPopup">
         <button class="complaintSupport" id="closeComplaintPopup">&times;</button>
         <h4>Complaint</h4>
@@ -1001,7 +1079,7 @@
         <p>Are you sure you want to accept the last rivision?.</p>
         <button id="cancelAccept">No</button>
         <button id="yesAccept">Yes</button>
-        
+
     </div>
 
     <!-- Request Rivision Popup -->
@@ -1042,519 +1120,524 @@
     <div class="backdrop" id="backdrop"></div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const username = document.getElementById('username');
-        const chatBox = document.getElementById('chatBox');
-        const sellerName = document.getElementById('sellerName');
-        const orderDate = document.getElementById('orderDate');
-        const orderDue = document.getElementById('orderDue');
-        const countdown = document.getElementById('countdown');
-        const acceptPopup = document.getElementById('acceptPopup');
-        const reviewPopup = document.getElementById('reviewPopup');
-        // const stars = document.getElementById('stars');
-        const reviewComment = document.getElementById('reviewComment');
-        const cancelPopup = document.getElementById('cancelPopup');
-        const deliveryPopup = document.getElementById('deliveryPopup');
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        const progressBar = document.getElementById('progressBar');
-        const deliverablesList = document.getElementById('deliverablesList');
-        const deliverableCount = document.getElementById('deliverableCount');
-        const backdrop = document.getElementById('backdrop');
-        const imagePreviewModal = document.getElementById('imagePreviewModal');
-        const previewImage = document.getElementById('previewImage');
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = document.getElementById('username');
+            const chatBox = document.getElementById('chatBox');
+            const sellerName = document.getElementById('sellerName');
+            const orderDate = document.getElementById('orderDate');
+            const orderDue = document.getElementById('orderDue');
+            const countdown = document.getElementById('countdown');
+            const acceptPopup = document.getElementById('acceptPopup');
+            const reviewPopup = document.getElementById('reviewPopup');
+            // const stars = document.getElementById('stars');
+            const reviewComment = document.getElementById('reviewComment');
+            const cancelPopup = document.getElementById('cancelPopup');
+            const deliveryPopup = document.getElementById('deliveryPopup');
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const progressBar = document.getElementById('progressBar');
+            const deliverablesList = document.getElementById('deliverablesList');
+            const deliverableCount = document.getElementById('deliverableCount');
+            const backdrop = document.getElementById('backdrop');
+            const imagePreviewModal = document.getElementById('imagePreviewModal');
+            const previewImage = document.getElementById('previewImage');
 
-        // Extract orderId from the URL
-        const pathSegments = window.location.pathname.split('/');
-        const orderId = pathSegments[pathSegments.length - 1];
-        let serviceId = null;
-        // Get the last segment of the URL
+            // Extract orderId from the URL
+            const pathSegments = window.location.pathname.split('/');
+            const orderId = pathSegments[pathSegments.length - 1];
+            let serviceId = null;
+            // Get the last segment of the URL
 
-        // Show image preview modal
-        function showImagePreview(imgUrl) {
-            previewImage.src = imgUrl;
-            imagePreviewModal.classList.add('active');
-            backdrop.classList.add('active');
-        }
-        
-        // Close image preview
-        document.getElementById('closeImagePreview').addEventListener('click', function() {
-            imagePreviewModal.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Fetch order details
-        async function fetchOrderDetails() {
-            try {
-                const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
-
-                console.log('Order details:', result);
-                
-                serviceId = result.data.order.service_id;
-                console.log(serviceId);
-                
-
-                // Render order details
-                username.textContent = result.data.user.name;
-                sellerName.textContent = result.data.user.name;
-                orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
-
-                // Calculate due date
-                const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
-                const deliveryDays = result.data.promise.delivery_days;
-                const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
-                orderDue.textContent = dueDate.toLocaleString();
-
-                // Start countdown
-                startCountdown(dueDate, createdDate);
-
-                // Render chat messages (if applicable)
-                if (result.data.messages) {
-                    result.data.messages.forEach(message => {
-                        const messageElement = document.createElement('div');
-                        messageElement.classList.add('message', message.type);
-                        messageElement.textContent = message.text;
-                        chatBox.appendChild(messageElement);
-                    });
-                }
-
-                // For demo purposes, also fetch deliverables here
-                // In production, replace with real API call
-                //renderDeliverables(mockDeliverables);
-
-            } catch (error) {
-                console.error('Error fetching order details:', error);
-                // For demo purposes, show mock deliverables even if API fails
-                //renderDeliverables(mockDeliverables);
-            }
-        }
-
-        async function submitReview() {
-        // Get star rating by counting the number of active stars
-        const activeStars = document.querySelectorAll('.stars i.active');
-        const rating = activeStars.length;
-        console.log('rating', rating);
-        
-        
-        const response = await fetch('/api/create-review', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                order_id: orderId, 
-                reviewText: reviewComment.value,
-                rating: rating  // Adding the star rating to the request
-            }),
-        });
-
-        if (response.success) {
-            console.log('Review Created Successfully.');
-        } else {
-            console.error('Failed to create review:', response.statusText);
-        }
-    }
-
-        //Countdown Starts
-
-        function startCountdown(dueDate, createdDate) {
-            const countdownElement = document.getElementById('countdown');
-            const totalDuration = dueDate - createdDate;
-            
-            const interval = setInterval(() => {
-                const now = new Date().getTime();
-                const timeLeft = dueDate - now;
-                
-                // Update progress bar
-                const progressPercentage = 100 - Math.min(100, Math.max(0, (timeLeft / totalDuration) * 100));
-                progressBar.style.width = `${progressPercentage}%`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    countdownElement.innerText = 'Delivery Time Reached!';
-                    // document.getElementById('deliverNow').disabled = false;
-                    
-                    daysEl.textContent = '0';
-                    hoursEl.textContent = '0';
-                    minutesEl.textContent = '0';
-                    secondsEl.textContent = '0';
-                } else {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                    // Update timer values
-                    daysEl.textContent = days;
-                    hoursEl.textContent = hours;
-                    minutesEl.textContent = minutes;
-                    secondsEl.textContent = seconds;
-                    
-                    countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
-                }
-            }, 1000);
-        }
-
-        //Request Revision
-        
-        async function deliverNow() {
-            const deliveryNotes = document.getElementById('deliveryNotes');
-            const fileInput = document.getElementById('uploadSection');
-            const formData = new FormData();
-            
-            // Make sure orderId is defined
-            if (typeof orderId === 'undefined' || !orderId) {
-                console.error('Order ID is not defined');
-                return;
+            // Show image preview modal
+            function showImagePreview(imgUrl) {
+                previewImage.src = imgUrl;
+                imagePreviewModal.classList.add('active');
+                backdrop.classList.add('active');
             }
 
-            // Validate input
-            if (!deliveryNotes.value.trim()) {
-                alert('Please enter notes of previous revision');
-                return;
-            }
-
-            // Append text fields
-            formData.append('order_id', orderId);
-            formData.append('delivery_notes', deliveryNotes.value);
-
-            // Append files
-            for (let i = 0; i < fileInput.files.length; i++) {
-                formData.append('revision_photos[]', fileInput.files[i]);
-            }
-
-            try {
-                // Make sure this URL matches your backend route
-                const response = await fetch('/api/request-revision', {
-                    method: 'POST',
-                    body: formData,
-                    // No Content-Type header needed for FormData
-                });
-
-                console.log(response);                
-
-                // Check if the response is valid JSON
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Server didn't return JSON. Got: " + await response.text());
-                }
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert('Revision Requested successfully');
-                    // Close popup and reset form
-                    document.getElementById('complaintPopup').style.display = 'none';
-                    complaintNotes.value = '';
-                    fileInput.value = '';
-                    document.getElementById('previewContainer').innerHTML = '';
-                } else {
-                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
-                }
-            } catch (error) {
-                console.error('Error submitting complaint:', error);
-                alert('Error submitting complaint: ' + error.message);
-            }
-        }
-
-        // Deliver Now button
-        document.getElementById('deliverNow').addEventListener('click', () => {
-            deliveryPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('submitDelivery').addEventListener('click', () => {
-            deliverNow();
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.rempve('active');
-        });
-
-        // Close delivery popup
-        document.getElementById('closeDeliveryPopup').addEventListener('click', () => {
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('cancelDelivery').addEventListener('click', () => {
-            deliveryPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Event listeners for review and cancel popups
-        document.getElementById('reviewOrder').addEventListener('click', () => {
-            reviewPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('submitReview').addEventListener('click', () => {
-            submitReview();
-            reviewPopup.classList.remove('active'); 
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('closePopup').addEventListener('click', () => {
-            reviewPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Event listeners for accept and cancel popups
-        document.getElementById('acceptOrder').addEventListener('click', () => {
-            acceptPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('closeAcceptPopup').addEventListener('click', () => {
-            acceptPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('cancelAccept').addEventListener('click', () => {
-            acceptPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('yesAccept').addEventListener('click', () => {
-            yesAccept();
-            acceptPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Event listeners for order cancellation popups
-        document.getElementById('cancelOrder').addEventListener('click', () => {
-            cancelPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('closeCancelPopup').addEventListener('click', () => {
-            cancelPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-
-        // Event listeners for complaint popups
-        document.getElementById('Complaint').addEventListener('click', () => {
-            complaintPopup.classList.add('active');
-            backdrop.classList.add('active');
-        });
-
-        document.getElementById('closeComplaintPopup').addEventListener('click', () => {
-            complaintPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('cancelComplaint').addEventListener('click', () => {
-            complaintPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        document.getElementById('submitComplaint').addEventListener('click', () => {
-            submitComplaint()
-            complaintPopup.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        // Star rating functionality
-        const stars = document.querySelectorAll('.stars i');
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = star.getAttribute('data-rating');
-                stars.forEach(s => {
-                    if (s.getAttribute('data-rating') <= rating) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
+            // Close image preview
+            document.getElementById('closeImagePreview').addEventListener('click', function() {
+                imagePreviewModal.classList.remove('active');
+                backdrop.classList.remove('active');
             });
-        });
 
-        /*// Submit review
-        document.getElementById('submitReview').addEventListener('click', () => {
-            // Get star rating
-            const stars = document.querySelectorAll('.stars .fa-star.active');
-            const rating = stars.length;
-            
-            // Get review text (added this part)
-            const reviewText = document.getElementById('reviewText').value.trim();
-            
-            // Validate if rating is selected
-            if (rating === 0) {
-                alert('Please select a star rating before submitting');
-                return;
-            }
-            
-            // Prepare data to send to server
-            const reviewData = {
-                rating: rating,
-                reviewText: reviewText,
-                // You might want to include additional data like:
-                // orderId: '12345', // Get this from your order system
-                // date: new Date().toISOString()
-            };
-            
-            // Send data to server (example using fetch API)
-            fetch('/api/submit-review', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(reviewData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            // Fetch order details
+            async function fetchOrderDetails() {
+                try {
+                    const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const result = await response.json();
+
+                    console.log('Order details:', result);
+
+                    // Set service ID
+                    serviceId = result.data.order.service_id;
+
+                    // IMPORTANT: Set the seller ID as the otherUserId for the chat
+                    window.otherUserId = result.data.order.seller_id;
+                    console.log("Set otherUserId (seller):", window.otherUserId);
+
+                    // If the chat is already initialized, update it with the seller_id
+                    if (window.updateChatParticipant) {
+                        window.updateChatParticipant(window.otherUserId);
+                    }
+
+                    // Render order details
+                    username.textContent = result.data.user.name;
+                    sellerName.textContent = result.data.user.name;
+                    orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
+
+                    // Calculate due date
+                    const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
+                    const deliveryDays = result.data.promise.delivery_days;
+                    const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
+                    orderDue.textContent = dueDate.toLocaleString();
+
+                    // Start countdown
+                    startCountdown(dueDate, createdDate);
+
+                    // We don't need to manually render chat messages anymore as order-chat.js will handle it
+
+                } catch (error) {
+                    console.error('Error fetching order details:', error);
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Review submitted successfully:', data);
-                // Close the popup
+            }
+
+            async function submitReview() {
+                // Get star rating by counting the number of active stars
+                const activeStars = document.querySelectorAll('.stars i.active');
+                const rating = activeStars.length;
+                console.log('rating', rating);
+
+
+                const response = await fetch('/api/create-review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        reviewText: reviewComment.value,
+                        rating: rating // Adding the star rating to the request
+                    }),
+                });
+
+                if (response.success) {
+                    console.log('Review Created Successfully.');
+                } else {
+                    console.error('Failed to create review:', response.statusText);
+                }
+            }
+
+            //Countdown Starts
+
+            function startCountdown(dueDate, createdDate) {
+                const countdownElement = document.getElementById('countdown');
+                const totalDuration = dueDate - createdDate;
+
+                const interval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const timeLeft = dueDate - now;
+
+                    // Update progress bar
+                    const progressPercentage = 100 - Math.min(100, Math.max(0, (timeLeft / totalDuration) * 100));
+                    progressBar.style.width = `${progressPercentage}%`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        countdownElement.innerText = 'Delivery Time Reached!';
+                        // document.getElementById('deliverNow').disabled = false;
+
+                        daysEl.textContent = '0';
+                        hoursEl.textContent = '0';
+                        minutesEl.textContent = '0';
+                        secondsEl.textContent = '0';
+                    } else {
+                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                        // Update timer values
+                        daysEl.textContent = days;
+                        hoursEl.textContent = hours;
+                        minutesEl.textContent = minutes;
+                        secondsEl.textContent = seconds;
+
+                        countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                    }
+                }, 1000);
+            }
+
+            //Request Revision
+
+            async function deliverNow() {
+                const deliveryNotes = document.getElementById('deliveryNotes');
+                const fileInput = document.getElementById('uploadSection');
+                const formData = new FormData();
+
+                // Make sure orderId is defined
+                if (typeof orderId === 'undefined' || !orderId) {
+                    console.error('Order ID is not defined');
+                    return;
+                }
+
+                // Validate input
+                if (!deliveryNotes.value.trim()) {
+                    alert('Please enter notes of previous revision');
+                    return;
+                }
+
+                // Append text fields
+                formData.append('order_id', orderId);
+                formData.append('delivery_notes', deliveryNotes.value);
+
+                // Append files
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('revision_photos[]', fileInput.files[i]);
+                }
+
+                try {
+                    // Make sure this URL matches your backend route
+                    const response = await fetch('/api/request-revision', {
+                        method: 'POST',
+                        body: formData,
+                        // No Content-Type header needed for FormData
+                    });
+
+                    console.log(response);
+
+                    // Check if the response is valid JSON
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("Server didn't return JSON. Got: " + await response.text());
+                    }
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('Revision Requested successfully');
+                        // Close popup and reset form
+                        document.getElementById('complaintPopup').style.display = 'none';
+                        complaintNotes.value = '';
+                        fileInput.value = '';
+                        document.getElementById('previewContainer').innerHTML = '';
+                    } else {
+                        alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error submitting complaint:', error);
+                    alert('Error submitting complaint: ' + error.message);
+                }
+            }
+
+            // Deliver Now button
+            document.getElementById('deliverNow').addEventListener('click', () => {
+                deliveryPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
+
+            document.getElementById('submitDelivery').addEventListener('click', () => {
+                deliverNow();
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.rempve('active');
+            });
+
+            // Close delivery popup
+            document.getElementById('closeDeliveryPopup').addEventListener('click', () => {
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            document.getElementById('cancelDelivery').addEventListener('click', () => {
+                deliveryPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Event listeners for review and cancel popups
+            document.getElementById('reviewOrder').addEventListener('click', () => {
+                reviewPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
+
+            document.getElementById('submitReview').addEventListener('click', () => {
+                submitReview();
                 reviewPopup.classList.remove('active');
                 backdrop.classList.remove('active');
-                // Optional: Show success message
-                alert('Thank you for your review!');
-            })
-            .catch(error => {
-                console.error('Error submitting review:', error);
-                alert('There was an error submitting your review. Please try again.');
             });
-        });*/
-        
 
-        // File upload area
-        const uploadArea = document.getElementById('uploadArea');
-        const fileUpload = document.getElementById('fileUpload');
-        const previewContainer = document.getElementById('previewContainer');
-        
-        uploadArea.addEventListener('click', () => {
-            fileUpload.click();
-        });
+            document.getElementById('closePopup').addEventListener('click', () => {
+                reviewPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#4f46e5';
-            uploadArea.style.backgroundColor = '#f5f5ff';
-        });
+            // Event listeners for accept and cancel popups
+            document.getElementById('acceptOrder').addEventListener('click', () => {
+                acceptPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
 
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = '#f9fafb';
-        });
+            document.getElementById('closeAcceptPopup').addEventListener('click', () => {
+                acceptPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = '#f9fafb';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files);
-            }
-        });
+            document.getElementById('cancelAccept').addEventListener('click', () => {
+                acceptPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-        fileUpload.addEventListener('change', () => {
-            if (fileUpload.files.length > 0) {
-                handleFiles(fileUpload.files);
-            }
-        });
+            document.getElementById('yesAccept').addEventListener('click', () => {
+                yesAccept();
+                acceptPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-        async function submitComplaint() {
-            const complaintType = document.getElementById('complaintType');
-            const complaintNotes = document.getElementById('complaintNotes');
-            const fileInput = document.getElementById('fileUpload');
-            const formData = new FormData();
-            
-            // Make sure orderId is defined
-            if (typeof orderId === 'undefined' || !orderId) {
-                console.error('Order ID is not defined');
-                return;
-            }
+            // Event listeners for order cancellation popups
+            document.getElementById('cancelOrder').addEventListener('click', () => {
+                cancelPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
 
-            // Validate input
-            if (!complaintNotes.value.trim()) {
-                alert('Please enter complaint details');
-                return;
-            }
+            document.getElementById('closeCancelPopup').addEventListener('click', () => {
+                cancelPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-            // Append text fields
-            formData.append('order_id', orderId);
-            formData.append('complaint_type', complaintType.value);
-            formData.append('content', complaintNotes.value);
 
-            // Append files
-            for (let i = 0; i < fileInput.files.length; i++) {
-                formData.append('proofs[]', fileInput.files[i]);
-            }
+            // Event listeners for complaint popups
+            document.getElementById('Complaint').addEventListener('click', () => {
+                complaintPopup.classList.add('active');
+                backdrop.classList.add('active');
+            });
 
-            try {
-                // Make sure this URL matches your backend route
-                const response = await fetch('/api/create-complaint', {
-                    method: 'POST',
-                    body: formData,
-                    // No Content-Type header needed for FormData
+            document.getElementById('closeComplaintPopup').addEventListener('click', () => {
+                complaintPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            document.getElementById('cancelComplaint').addEventListener('click', () => {
+                complaintPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            document.getElementById('submitComplaint').addEventListener('click', () => {
+                submitComplaint()
+                complaintPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
+            // Star rating functionality
+            const stars = document.querySelectorAll('.stars i');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = star.getAttribute('data-rating');
+                    stars.forEach(s => {
+                        if (s.getAttribute('data-rating') <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
                 });
+            });
 
-                console.log(response);                
-
-                // Check if the response is valid JSON
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Server didn't return JSON. Got: " + await response.text());
-                }
-
-                const result = await response.json();
+            /*// Submit review
+            document.getElementById('submitReview').addEventListener('click', () => {
+                // Get star rating
+                const stars = document.querySelectorAll('.stars .fa-star.active');
+                const rating = stars.length;
                 
-                if (result.success) {
-                    alert('Complaint submitted successfully');
-                    // Close popup and reset form
-                    document.getElementById('complaintPopup').style.display = 'none';
-                    complaintNotes.value = '';
-                    fileInput.value = '';
-                    document.getElementById('previewContainer').innerHTML = '';
-                } else {
-                    alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                // Get review text (added this part)
+                const reviewText = document.getElementById('reviewText').value.trim();
+                
+                // Validate if rating is selected
+                if (rating === 0) {
+                    alert('Please select a star rating before submitting');
+                    return;
                 }
-            } catch (error) {
-                console.error('Error submitting complaint:', error);
-                alert('Error submitting complaint: ' + error.message);
-            }
-        }
+                
+                // Prepare data to send to server
+                const reviewData = {
+                    rating: rating,
+                    reviewText: reviewText,
+                    // You might want to include additional data like:
+                    // orderId: '12345', // Get this from your order system
+                    // date: new Date().toISOString()
+                };
+                
+                // Send data to server (example using fetch API)
+                fetch('/api/submit-review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reviewData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Review submitted successfully:', data);
+                    // Close the popup
+                    reviewPopup.classList.remove('active');
+                    backdrop.classList.remove('active');
+                    // Optional: Show success message
+                    alert('Thank you for your review!');
+                })
+                .catch(error => {
+                    console.error('Error submitting review:', error);
+                    alert('There was an error submitting your review. Please try again.');
+                });
+            });*/
 
-        function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        const previewDiv = document.createElement('div');
-                        previewDiv.className = 'preview-image';
-                        
-                        previewDiv.innerHTML = `
+
+            // File upload area
+            const uploadArea = document.getElementById('uploadArea');
+            const fileUpload = document.getElementById('fileUpload');
+            const previewContainer = document.getElementById('previewContainer');
+
+            uploadArea.addEventListener('click', () => {
+                fileUpload.click();
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#4f46e5';
+                uploadArea.style.backgroundColor = '#f5f5ff';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.style.backgroundColor = '#f9fafb';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.style.backgroundColor = '#f9fafb';
+
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            fileUpload.addEventListener('change', () => {
+                if (fileUpload.files.length > 0) {
+                    handleFiles(fileUpload.files);
+                }
+            });
+
+            async function submitComplaint() {
+                const complaintType = document.getElementById('complaintType');
+                const complaintNotes = document.getElementById('complaintNotes');
+                const fileInput = document.getElementById('fileUpload');
+                const formData = new FormData();
+
+                // Make sure orderId is defined
+                if (typeof orderId === 'undefined' || !orderId) {
+                    console.error('Order ID is not defined');
+                    return;
+                }
+
+                // Validate input
+                if (!complaintNotes.value.trim()) {
+                    alert('Please enter complaint details');
+                    return;
+                }
+
+                // Append text fields
+                formData.append('order_id', orderId);
+                formData.append('complaint_type', complaintType.value);
+                formData.append('content', complaintNotes.value);
+
+                // Append files
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('proofs[]', fileInput.files[i]);
+                }
+
+                try {
+                    // Make sure this URL matches your backend route
+                    const response = await fetch('/api/create-complaint', {
+                        method: 'POST',
+                        body: formData,
+                        // No Content-Type header needed for FormData
+                    });
+
+                    console.log(response);
+
+                    // Check if the response is valid JSON
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("Server didn't return JSON. Got: " + await response.text());
+                    }
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('Complaint submitted successfully');
+                        // Close popup and reset form
+                        document.getElementById('complaintPopup').style.display = 'none';
+                        complaintNotes.value = '';
+                        fileInput.value = '';
+                        document.getElementById('previewContainer').innerHTML = '';
+                    } else {
+                        alert('Failed to submit complaint: ' + (result.message || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error submitting complaint:', error);
+                    alert('Error submitting complaint: ' + error.message);
+                }
+            }
+
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].type.startsWith('image/')) {
+                        const reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            const previewDiv = document.createElement('div');
+                            previewDiv.className = 'preview-image';
+
+                            previewDiv.innerHTML = `
                             <img src="${e.target.result}" alt="Screenshot preview">
                             <button class="remove-btn">&times;</button>
                         `;
-                        
-                        previewContainer.appendChild(previewDiv);
-                        
-                        // Add event listener to remove button
-                        previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
-                            previewDiv.remove();
-                        });
+
+                            previewContainer.appendChild(previewDiv);
+
+                            // Add event listener to remove button
+                            previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
+                                previewDiv.remove();
+                            });
+                        }
+
+                        reader.readAsDataURL(files[i]);
                     }
-                    
-                    reader.readAsDataURL(files[i]);
                 }
             }
-        }
 
-        // Initialize
-        fetchOrderDetails();
-    });
+            // Initialize
+            fetchOrderDetails();
+        });
     </script>
+    <script>
+        // Create a global function to get order details from the page
+        window.getOrderChatDetails = function() {
+            return {
+                orderId: '<?php echo $orderId; ?>',
+                otherUserId: window.otherUserId || null
+            };
+        };
+    </script>
+    <script src="/js/order-chat.js"></script>
 </body>
 
 </html>
-
