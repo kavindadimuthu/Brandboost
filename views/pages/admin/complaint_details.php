@@ -644,6 +644,54 @@
             font-size: 0.875rem;
             color: var(--gray-700);
         }
+
+        .hidden {
+            display: none;
+        }
+
+        #resolution-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #resolve-complaint-btn {
+            margin-top: 0.5rem;
+        }
+
+        #resolved-info-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--gray-100);
+            border-radius: var(--radius);
+            border-left: 3px solid var(--success-color);
+        }
+
+        #resolved-info-section .info-item {
+            margin-bottom: 0.75rem;
+        }
+
+        #resolved-info-section .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resolution-notes-display {
+            white-space: pre-line;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -779,46 +827,42 @@
                     <div class="card-body">
                         <form id="admin-actions-form">
                             <div class="form-group">
-                                <label for="complaint-status" class="form-label">Change Status</label>
-                                <select id="complaint-status" class="form-control">
-                                    <option value="open">Open</option>
-                                    <option value="in_progress">Under Review</option>
-                                    <option value="resolved">Resolved</option>
-                                    <option value="closed">Closed</option>
-                                </select>
+                                <button type="button" id="open-complaint-btn" class="btn btn-success btn-block">
+                                    <i class="fas fa-lock-open"></i> Open Complaint
+                                </button>
                             </div>
 
-                            <div class="form-group">
-                                <label for="resolution-notes" class="form-label">Resolution Notes</label>
-                                <textarea id="resolution-notes" class="form-control" placeholder="Add notes about how this complaint was resolved..."></textarea>
+                            <div id="resolution-section" class="hidden">
+                                <div class="form-group">
+                                    <label for="resolution-notes" class="form-label">Resolution Notes</label>
+                                    <textarea id="resolution-notes" class="form-control" 
+                                            placeholder="Add detailed resolution notes..."></textarea>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button type="button" id="resolve-complaint-btn" class="btn btn-success btn-block">
+                                        <i class="fas fa-check-circle"></i> Resolve Complaint
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="btn-group">
-                                <button type="button" id="save-changes-btn" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> Save Changes
-                                </button>
-                                <button type="button" id="close-complaint-btn" class="btn btn-danger">
-                                    <i class="fas fa-times-circle"></i> Close Complaint
-                                </button>
+                            <div id="resolved-info-section" class="hidden">
+                                <div class="info-item">
+                                    <div class="info-label">Resolved By Admin</div>
+                                    <div class="info-value" id="resolved-by-admin">Not available</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Resolution Date</div>
+                                    <div class="info-value" id="resolution-date">Not available</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Resolution Notes</div>
+                                    <div class="info-value resolution-notes-display" id="resolution-notes-display">Not available</div>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
-
-                <!-- <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-reply"></i> Send Response</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="admin-response" class="form-label">Response Message</label>
-                            <textarea id="admin-response" class="form-control" placeholder="Enter your response to this complaint..."></textarea>
-                        </div>
-                        <button type="button" id="send-response-btn" class="btn btn-success btn-block">
-                            <i class="fas fa-paper-plane"></i> Send Response
-                        </button>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
@@ -920,31 +964,68 @@
                     }
                 });
                 
-                // Save changes button
-                document.getElementById('save-changes-btn').addEventListener('click', () => {
-                    saveChanges();
+                // Initialize new UI elements
+                const openComplaintBtn = document.getElementById('open-complaint-btn');
+                const resolveComplaintBtn = document.getElementById('resolve-complaint-btn');
+                const resolutionSection = document.getElementById('resolution-section');
+                const resolutionNotes = document.getElementById('resolution-notes');
+
+                // Toggle resolution section
+                openComplaintBtn.addEventListener('click', () => {
+                    console.log('Open complaint button clicked');
+                    console.log('Complaint id:', complaintId);
+                    submitOpenComplaint(complaintId);
                 });
-                
-                // Close complaint button
-                document.getElementById('close-complaint-btn').addEventListener('click', () => {
-                    confirmStatusChange('closed');
-                });
-                
-                // Confirm status change button
-                document.getElementById('confirm-status-btn').addEventListener('click', () => {
-                    const newStatus = document.getElementById('complaint-status').value;
-                    const statusNotes = document.getElementById('status-notes').value;
+
+                // Handle resolve complaint
+                resolveComplaintBtn.addEventListener('click', () => {
+                    const notes = resolutionNotes.value.trim();
+                    console.log('Resolve complaint button clicked');
+                    console.log('Resolution notes:', notes);
+                    console.log('Complaint id:', complaintId);
                     
-                    updateComplaintStatus(newStatus, statusNotes);
-                });
-                
-                // Status dropdown change event
-                document.getElementById('complaint-status').addEventListener('change', (event) => {
-                    // If they select a new status, ask for confirmation
-                    if (complaintData && event.target.value !== complaintData.status) {
-                        confirmStatusChange(event.target.value);
+                    if (!notes) {
+                        showNotification('Please enter resolution notes before resolving', 'error');
+                        return;
                     }
+
+                    updateComplaintStatus('resolved', notes);
                 });
+            }
+
+            async function submitOpenComplaint(complaintId) {
+                showLoading();
+                
+                try {
+                    const response = await fetch(`/api/update-complaint-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            complaint_id: complaintId,
+                            status: 'open',
+                            previous_status: complaintData.status
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to open complaint');
+                    }
+                    
+                    const data = await response.json();
+                    if (!data.success) {
+                        throw new Error(data.error || 'Failed to open complaint');
+                    }
+                    
+                    showNotification('Complaint opened successfully', 'success');
+                    // Refresh complaint data
+                    fetchComplaintDetails(complaintId);
+                } catch (error) {
+                    showNotification(error.message, 'error');
+                } finally {
+                    hideLoading();
+                }
             }
             
             // Fetch complaint details from API
@@ -1012,15 +1093,54 @@
                 document.getElementById('last-updated').textContent = formatDateTime(complaintData.updated_at);
                 
                 // Set form values
-                document.getElementById('complaint-status').value = complaintData.status;
                 if (complaintData.resolution_notes) {
                     document.getElementById('resolution-notes').value = complaintData.resolution_notes;
+                    document.getElementById('resolution-notes-display').textContent = complaintData.resolution_notes;
                 }
                 
                 // Status badge
                 const statusBadge = document.getElementById('status-badge');
                 statusBadge.textContent = formatStatus(complaintData.status);
                 statusBadge.className = `badge badge-${complaintData.status.replace('_', '-')}`;
+                
+                // Update action buttons based on complaint status
+                const openComplaintBtn = document.getElementById('open-complaint-btn');
+                const resolutionSection = document.getElementById('resolution-section');
+                const resolvedInfoSection = document.getElementById('resolved-info-section');
+                
+                // If complaint is pending, show only the open button
+                if (complaintData.status === 'pending') {
+                    openComplaintBtn.style.display = 'block';
+                    resolutionSection.classList.add('hidden');
+                    resolvedInfoSection.classList.add('hidden');
+                } 
+                // If complaint is open, show resolution section
+                else if (complaintData.status === 'open') {
+                    openComplaintBtn.style.display = 'none';
+                    resolutionSection.classList.remove('hidden');
+                    resolvedInfoSection.classList.add('hidden');
+                }
+                // If complaint is resolved, show resolved info section
+                else if (complaintData.status === 'resolved') {
+                    openComplaintBtn.style.display = 'none';
+                    resolutionSection.classList.add('hidden');
+                    resolvedInfoSection.classList.remove('hidden');
+                    
+                    // Set resolved info
+                    document.getElementById('resolved-by-admin').textContent = 
+                        complaintData.admin && complaintData.admin.username 
+                        ? `${complaintData.admin.username} (ID: ${complaintData.resolved_by_admin_id})` 
+                        : `Admin ID: ${complaintData.resolved_by_admin_id || 'Not available'}`;
+                    
+                    document.getElementById('resolution-date').textContent = 
+                        formatDateTime(complaintData.updated_at || 'Not available');
+                }
+                // If complaint has any other status, hide all sections
+                else {
+                    openComplaintBtn.style.display = 'none';
+                    resolutionSection.classList.add('hidden');
+                    resolvedInfoSection.classList.add('hidden');
+                }
                 
                 // User info - Complainant
                 document.getElementById('complainant-name').textContent = complaintData.complainant?.username || 'Unknown User';
@@ -1103,35 +1223,37 @@
                 showLoading();
                 
                 try {
+                    const requestBody = {
+                        complaint_id: complaintId,
+                        status: newStatus,
+                        previous_status: complaintData.status
+                    };
+
+                    console.log('Request body:', requestBody);
+                    
+                    // Add resolution notes if provided
+                    if (notes) {
+                        requestBody.resolution_notes = notes;
+                    }
+                    
+                    console.log('Request body with notes:', requestBody);
                     const response = await fetch('/api/update-complaint-status', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            complaint_id: complaintId,
-                            status: newStatus,
-                            resolution_notes: notes || undefined,
-                            previous_status: complaintData.status
-                        })
+                        body: JSON.stringify(requestBody)
                     });
-                    
-                    if (!response.ok) {
-                        throw new Error('Failed to update status');
-                    }
+
+                    if (!response.ok) throw new Error('Failed to update status');
                     
                     const data = await response.json();
-                    if (!data.success) {
-                        throw new Error(data.error || 'Failed to update status');
-                    }
                     
-                    // Close modal
-                    statusModal.style.display = 'none';
+                    if (!data.success) throw new Error(data.error || 'Failed to update status');
+
+                    showNotification(`Complaint ${newStatus} successfully!`, 'success');
                     
-                    // Show success message
-                    showNotification(`Status updated to ${formatStatus(newStatus)}`, 'success');
-                    
-                    // Refresh data
+                    // Refresh complaint data
                     fetchComplaintDetails(complaintId);
                 } catch (error) {
                     showNotification(error.message, 'error');
