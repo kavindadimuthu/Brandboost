@@ -119,6 +119,7 @@
             border: none;
             color: white;
         }
+
         /* -------------------- */
 
         input[type="text"],
@@ -301,8 +302,13 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
         }
 
         @media (max-width: 768px) {
@@ -445,24 +451,27 @@
                         <!-- Basic Package -->
                         <div class="package-panel basic">
                             <h3>Basic Package</h3>
+                            <div class="form-group" style="display:none;">
+                                <input type="hidden" name="basic_package_id" id="basic_package_id">
+                            </div>
                             <div class="form-group">
                                 <label>Benefits</label>
-                                <textarea rows="4" placeholder="List the features included in this package..." 
+                                <textarea rows="4" placeholder="List the features included in this package..."
                                     required name="basic_package_benefits"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Delivery Days</label>
-                                <input type="number" min="1" max="30" placeholder="Number of days" 
+                                <input type="number" min="1" max="30" placeholder="Number of days"
                                     required name="basic_package_delivery_days">
                             </div>
                             <div class="form-group">
                                 <label>Revisions</label>
-                                <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                <input type="number" min="0" max="10" placeholder="Number of revisions"
                                     name="basic_package_revisions">
                             </div>
                             <div class="form-group">
                                 <label>Price (USD)</label>
-                                <input type="number" min="5" step="5" placeholder="Enter price" 
+                                <input type="number" min="5" step="5" placeholder="Enter price"
                                     required name="basic_package_price">
                             </div>
                         </div>
@@ -470,24 +479,27 @@
                         <!-- Premium Package -->
                         <div class="package-panel premium">
                             <h3>Premium Package</h3>
+                            <div class="form-group" style="display:none;">
+                                <input type="hidden" name="premium_package_id" id="premium_package_id">
+                            </div>
                             <div class="form-group">
                                 <label>Benefits</label>
-                                <textarea rows="4" placeholder="List the features included in this package..." 
+                                <textarea rows="4" placeholder="List the features included in this package..."
                                     required name="premium_package_benefits"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Delivery Days</label>
-                                <input type="number" min="1" max="30" placeholder="Number of days" 
+                                <input type="number" min="1" max="30" placeholder="Number of days"
                                     required name="premium_package_delivery_days">
                             </div>
                             <div class="form-group">
                                 <label>Revisions</label>
-                                <input type="number" min="0" max="10" placeholder="Number of revisions" 
+                                <input type="number" min="0" max="10" placeholder="Number of revisions"
                                     name="premium_package_revisions">
                             </div>
                             <div class="form-group">
                                 <label>Price (USD)</label>
-                                <input type="number" min="5" step="5" placeholder="Enter price" 
+                                <input type="number" min="5" step="5" placeholder="Enter price"
                                     required name="premium_package_price">
                             </div>
                         </div>
@@ -516,7 +528,7 @@
                 this.element.textContent = message;
                 this.element.className = `notification ${type}`;
                 this.element.style.display = 'block';
-                
+
                 this.timeout = setTimeout(() => {
                     this.hide();
                 }, 3000);
@@ -603,21 +615,21 @@
             }
 
             async loadGigData() {
-                    const pathSegments = window.location.pathname.split('/');
-                    const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+                const pathSegments = window.location.pathname.split('/');
+                const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
 
-                    if (!gigId) {
-                        throw new Error('No gig ID provided');
-                    }
+                if (!gigId) {
+                    throw new Error('No gig ID provided');
+                }
 
-                    const response = await fetch(`/api/service/${gigId}?packages=true&service=true`);
+                const response = await fetch(`/api/service/${gigId}?packages=true&service=true`);
 
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch gig data');
-                    }
+                if (!response.ok) {
+                    throw new Error('Failed to fetch gig data');
+                }
 
-                    const result = await response.json();
-                    console.log(result);
+                const result = await response.json();
+                console.log(result);
                 try {
                     if (result) {
                         this.populateForm(result);
@@ -663,16 +675,17 @@
                 });
 
                 // Populate images
-                this.displayImage(this.mainImagePreview, "/" + service.cover_image, true);
+                this.displayImage(this.mainImagePreview, service.cover_image, true);
                 service.media.forEach(imageUrl => {
                     if (imageUrl !== service.cover_image) {
-                        this.displayImage(this.additionalImagesPreview, "/" + imageUrl);
+                        this.displayImage(this.additionalImagesPreview, imageUrl);
                     }
                 });
 
                 // Populate packages
                 packages.forEach(pkg => {
                     const type = pkg.package_type;
+                    document.querySelector(`[name="${type}_package_id"]`).value = pkg.package_id;
                     document.querySelector(`[name="${type}_package_benefits"]`).value = pkg.benefits;
                     document.querySelector(`[name="${type}_package_delivery_days"]`).value = pkg.delivery_days;
                     document.querySelector(`[name="${type}_package_revisions"]`).value = pkg.revisions;
@@ -730,7 +743,7 @@
 
                 try {
                     const formData = new FormData(this.form);
-                    
+
                     // Add current images data
                     this.addImagesToFormData(formData);
 
@@ -743,34 +756,40 @@
 
                     // Convert delivery formats to JSON
                     const deliveryFormats = Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value);
-                    formData.append('deliveryFormats', JSON.stringify(deliveryFormats)); // Convert to JSON
+                    formData.append('deliveryFormats', JSON.stringify(deliveryFormats));
 
                     // Convert platforms to JSON
                     const platforms = Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value);
-                    formData.append('platforms', JSON.stringify(platforms)); // Convert to JSON
+                    formData.append('platforms', JSON.stringify(platforms));
+
+                    // Structure package data correctly
+                    const basicPackage = {
+                        package_id: document.querySelector('[name="basic_package_id"]').value,
+                        benefits: document.querySelector('[name="basic_package_benefits"]').value,
+                        delivery_days: document.querySelector('[name="basic_package_delivery_days"]').value,
+                        revisions: document.querySelector('[name="basic_package_revisions"]').value,
+                        price: document.querySelector('[name="basic_package_price"]').value
+                    };
+                    
+                    const premiumPackage = {
+                        package_id: document.querySelector('[name="premium_package_id"]').value,
+                        benefits: document.querySelector('[name="premium_package_benefits"]').value,
+                        delivery_days: document.querySelector('[name="premium_package_delivery_days"]').value,
+                        revisions: document.querySelector('[name="premium_package_revisions"]').value,
+                        price: document.querySelector('[name="premium_package_price"]').value
+                    };
+
+                    formData.append('packages[basic]', JSON.stringify(basicPackage));
+                    formData.append('packages[premium]', JSON.stringify(premiumPackage));
 
                     const pathSegments = window.location.pathname.split('/');
-                    const gigId = pathSegments[pathSegments.length - 1]; // Get the last segment
+                    const gigId = pathSegments[pathSegments.length - 1];
                     formData.append('id', gigId);
 
-                    // Log the data to be sent to the backend for debugging
-                    console.log('Data to be sent to the backend:', {
-                        title: document.getElementById('gigTitle').value,
-                        description: document.getElementById('gigDescription').value,
-                        serviceType: document.getElementById('serviceType').value,
-                        deliveryFormats: Array.from(this.form.querySelectorAll('input[name="delivery_formats"]:checked')).map(input => input.value),
-                        platforms: Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value),
-                        tags: tags,
-                        mainImage: this.mainImageInput.files.length > 0 ? this.mainImageInput.files[0].name : null,
-                        additionalImages: Array.from(this.additionalImagesInput.files).map(file => file.name),
-                        removedImages: this.removedImages, // Log removed images
-                        packages: Array.from(document.querySelectorAll('.package-panel')).map(panel => ({
-                            benefits: panel.querySelector('textarea[name$="_package_benefits"]').value,
-                            deliveryDays: panel.querySelector('input[name$="_package_delivery_days"]').value,
-                            revisions: panel.querySelector('input[name$="_package_revisions"]').value,
-                            price: panel.querySelector('input[name$="_package_price"]').value,
-                        })),
-                    });
+                    // Logging formdata for debugging
+                    for (const [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
 
                     // Make API call to update gig
                     const response = await fetch(`/api/update-gig/${gigId}`, {
@@ -792,7 +811,6 @@
                     this.notification.show('Failed to update gig. Please try again.', 'error');
                 }
             }
-
             addImagesToFormData(formData) {
                 if (this.mainImageInput.files.length > 0) {
                     formData.append('mainImage', this.mainImageInput.files[0]);
@@ -812,4 +830,5 @@
         });
     </script>
 </body>
+
 </html>

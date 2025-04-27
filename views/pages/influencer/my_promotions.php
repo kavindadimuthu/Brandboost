@@ -629,7 +629,7 @@
                     row.innerHTML = `
                         <td>
                             <div class="promotion-title-cell" onclick="window.location.href='/services/${promotion.service_id}'" style="cursor: pointer;">
-                                <img src="/${promotion.cover_image}" class="promotion-thumb" alt="${promotion.title}">
+                                <img src="${promotion.cover_image}" class="promotion-thumb" alt="${promotion.title}">
                                 <span class="promotion-title">${promotion.title}</span>
                             </div>
                         </td>
