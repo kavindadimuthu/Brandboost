@@ -1191,6 +1191,61 @@
             transition: all 0.2s;
             margin-bottom: 8px;
         }
+                /* Add this to your existing style section */
+        .gig-preview {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .gig-card {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .gig-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .gig-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gig-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .gig-info h5 {
+            margin: 0 0 8px 0;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .gig-category {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .gig-price {
+            margin-top: auto;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #111827;
+        }
     </style>
 </head>
 
@@ -1280,6 +1335,21 @@
                         <p><strong>Date:</strong> <span id="orderDate"></span></p>
                         <p><strong>Due:</strong> <span id="orderDue"></span></p>
                     </div>
+                    <div class="gig-preview">
+                    <h4>Gig Details</h4>
+                    <div class="gig-card">
+                        <div class="gig-image">
+                            <img id="gigImage" src="" alt="Gig image">
+                        </div>
+                        <div class="gig-info">
+                            <h5 id="gigTitle">Loading gig title...</h5>
+                            <!-- <p id="gigCategory" class="gig-category">Category</p> -->
+                            <div class="gig-price">
+                                <span id="gigPrice">LKR0.00</span>
+                            </div>
+                        </div>
+                    </div>
+          </div>
                     <div class="support-section">
                         <h4>Support</h4>
                         <button id="Complaint">Complaint</button>
@@ -2369,6 +2439,96 @@
                 }
             }
 
+
+            async function loadGigDetails() {
+    try {
+        const response = await fetch(`/api/order/${orderId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch order details');
+        }
+        
+        const result1 = await response.json();
+        console.log('Order details:', result1);
+
+        const id = result1.data.order.service_id;
+        console.log('Service ID:', id);
+
+        const response2 = await fetch(`/api/service/${id}`);
+        if (!response2.ok) {
+            throw new Error('Failed to fetch service details');
+        }
+
+        const result = await response2.json();
+        console.log('Gig details:', result);
+        
+        // Update gig image
+        const gigImage = document.getElementById('gigImage');
+        if (result.cover_image) {
+            let imageUrl;
+            
+            // Handle different possible formats of cover_image
+            if (typeof result.cover_image === 'string') {
+                // Direct string path
+                if (result.cover_image.startsWith('[') || result.cover_image.startsWith('{')) {
+                    // It's a JSON string, need to parse
+                    try {
+                        const parsed = JSON.parse(result.cover_image);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            imageUrl = parsed[0];
+                        } else {
+                            imageUrl = parsed.path || parsed.url || parsed;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing cover_image JSON:', e);
+                        imageUrl = result.cover_image;
+                    }
+                } else {
+                    // Simple string path
+                    imageUrl = result.cover_image;
+                }
+            } else if (Array.isArray(result.cover_image) && result.cover_image.length > 0) {
+                // Array format
+                imageUrl = result.cover_image[0];
+            } else if (typeof result.cover_image === 'object') {
+                // Object format
+                imageUrl = result.cover_image.path || result.cover_image.url;
+            }
+            
+            // Ensure the path starts with a slash
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                imageUrl = '/' + imageUrl;
+            }
+            
+            console.log('Setting gig image URL:', imageUrl);
+            gigImage.src = imageUrl;
+        } else {
+            gigImage.src = '/assets/cover_image/default-gig.jpg';
+        }
+            
+        // Update gig title
+        // Create link to gig page
+        const gigTitle = document.getElementById('gigTitle');
+        const serviceLink = document.createElement('a');
+        serviceLink.href = `/services/${id}`;
+        serviceLink.textContent = result.title || 'No title available';
+        serviceLink.style.textDecoration = 'none';
+        serviceLink.style.color = '#111827';
+        serviceLink.style.fontWeight = '600';
+        serviceLink.style.display = 'block';
+        serviceLink.target = '_blank'; // Open in new tab
+        gigTitle.innerHTML = ''; // Clear existing content
+        gigTitle.appendChild(serviceLink);
+        
+        document.getElementById('gigPrice').textContent = "LKR " + (result1.data.promise.price || 'Price not available');
+
+
+            
+    } catch (error) {
+        console.error('Error loading gig details:', error);
+        document.getElementById('gigTitle').textContent = 'Error loading gig details';
+        document.getElementById('gigImage').src = '/assets/cover_image/default-gig.jpg';
+    }
+}
 
             // Close delivery details popup
             document.getElementById('closeDetailsPopup').addEventListener('click', () => {
