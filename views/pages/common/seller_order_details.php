@@ -18,7 +18,9 @@
 
         .container {
             display: flex;
-            margin: 0px 300px;
+            /* margin: 0px 200px; */
+            margin: auto;
+            max-width: 1200px;
         }
 
         .content {
