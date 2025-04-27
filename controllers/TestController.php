@@ -535,7 +535,11 @@ class TestController extends BaseController
         }
     }
 
-
+    public function getUsers($req, $res){
+        $userModel = $this->model("Users\User");
+        $user = $userModel->getUserById(2);
+        error_log(print_r($user, true));
+    }
 
 
 

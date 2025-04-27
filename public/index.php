@@ -38,6 +38,7 @@ $app->router->get('/reset-password', 'GuestController@resetPassword'); // Reset 
 // ==================================
 // Businessman routes
 // ==================================
+$app->router->get('/polonnaruwa/nethsilu', 'GuestController@nethsilupreview');
 $app->router->get('/businessman/orders-list', 'BusinessmanController@ordersList');
 $app->router->get('/businessman/order-details/{id}', 'BusinessmanController@orderDetails');
 $app->router->get('/businessman/request-order', 'BusinessmanController@requestOrder');
@@ -157,6 +158,7 @@ $app->router->get('/api/user-count', 'GetCountController@getUserCountsSummary');
 // ==================================
 $app->router->get('/api/services', 'ServiceController@getServiceList'); // Get Service List
 $app->router->get('/api/service/{id}', 'ServiceController@getServiceProfile'); // Get Service Profile
+$app->router->get('/api/get-all-users', 'TestController@getUsers'); // Create Service
 
 $app->router->get('/api/service-count', 'GetCountController@getServiceCountsSummary'); 
 // ** gigs specific routes

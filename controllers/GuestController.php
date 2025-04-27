@@ -9,6 +9,10 @@ use app\core\Helpers\AuthHelper;
 
 class GuestController extends BaseController
 {
+    public function nethsilupreview($req, $res)
+    {
+        $this->renderPage('pages/businessman/nethsilu');
+    }
     public function home($req, $res)
     {
         $this->renderLayout('main', 'pages/guest/landing');
