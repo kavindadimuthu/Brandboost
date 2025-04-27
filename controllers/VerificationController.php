@@ -3,9 +3,13 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
-use app\core\Helpers\AuthHelper;
 use app\core\Request;
 use app\core\Response;
+
+// Utility Imports
+use app\core\Helpers\AuthHelper;
+
+// Model Imports
 use app\models\Actions\Verification;
 
 class VerificationController extends BaseController {
@@ -89,66 +93,7 @@ class VerificationController extends BaseController {
             'pagination' => $result['pagination']
         ], 200);
     }
-    
-    /**
-     * Update the status of a verification request.
-     * 
-     * @param Request $request The HTTP request object.
-     * @param Response $response The response object.
-     * @return void JSON response with the result of the operation.
-     */
-    public function updateVerificationStatus($request, $response) {
-        $user = AuthHelper::getCurrentUser();
-        if ($user['role'] !== 'admin') {
-            return $response->sendJson(['error' => 'Unauthorized'], 403);
-        }
-        
-        $data = $request->getParsedBody();
-        $id = $data['id'] ?? null;
-        $type = $data['type'] ?? null;
-        $status = $data['status'] ?? null;
-        
-        if (!$id || !$type || !$status) {
-            return $response->sendJson(['error' => 'Missing required fields'], 400);
-        }
-        
-        if (!in_array($status, ['verified', 'rejected'])) {
-            return $response->sendJson(['error' => 'Invalid status value'], 400);
-        }
-        
-        $verificationModel = new Verification();
-        
-        if ($type === 'business') {
-            $updateQuery = "UPDATE businessman SET br_status = :status WHERE user_id = :id";
-            $result = $verificationModel->executeCustomQuery($updateQuery, [
-                ':status' => $status,
-                ':id' => $id
-            ]);
-        } else if ($type === 'social_media') {
-            $updateQuery = "UPDATE influencer_social_account SET link_status = :status WHERE account_id = :id";
-            $result = $verificationModel->executeCustomQuery($updateQuery, [
-                ':status' => $status,
-                ':id' => $id
-            ]);
-        } else {
-            return $response->sendJson(['error' => 'Invalid verification type'], 400);
-        }
-        
-        if ($result === false) {
-            return $response->sendJson(['error' => 'Failed to update verification status'], 500);
-        }
-        
-        return $response->sendJson([
-            'success' => true,
-            'message' => 'Verification status updated successfully'
-        ], 200);
-    }
 
-
-
-
-
-    // ...existing code...
     /**
      * Get detailed information about a single verification request.
      * 
@@ -220,6 +165,60 @@ class VerificationController extends BaseController {
             'data' => $formattedDetails
         ], 200);
     }
+    
+    /**
+     * Update the status of a verification request.
+     * 
+     * @param Request $request The HTTP request object.
+     * @param Response $response The response object.
+     * @return void JSON response with the result of the operation.
+     */
+    public function updateVerificationStatus($request, $response) {
+        $user = AuthHelper::getCurrentUser();
+        if ($user['role'] !== 'admin') {
+            return $response->sendJson(['error' => 'Unauthorized'], 403);
+        }
+        
+        $data = $request->getParsedBody();
+        $id = $data['id'] ?? null;
+        $type = $data['type'] ?? null;
+        $status = $data['status'] ?? null;
+        
+        if (!$id || !$type || !$status) {
+            return $response->sendJson(['error' => 'Missing required fields'], 400);
+        }
+        
+        if (!in_array($status, ['verified', 'rejected'])) {
+            return $response->sendJson(['error' => 'Invalid status value'], 400);
+        }
+        
+        $verificationModel = new Verification();
+        
+        if ($type === 'business') {
+            $updateQuery = "UPDATE businessman SET br_status = :status WHERE user_id = :id";
+            $result = $verificationModel->executeCustomQuery($updateQuery, [
+                ':status' => $status,
+                ':id' => $id
+            ]);
+        } else if ($type === 'social_media') {
+            $updateQuery = "UPDATE influencer_social_account SET link_status = :status WHERE account_id = :id";
+            $result = $verificationModel->executeCustomQuery($updateQuery, [
+                ':status' => $status,
+                ':id' => $id
+            ]);
+        } else {
+            return $response->sendJson(['error' => 'Invalid verification type'], 400);
+        }
+        
+        if ($result === false) {
+            return $response->sendJson(['error' => 'Failed to update verification status'], 500);
+        }
+        
+        return $response->sendJson([
+            'success' => true,
+            'message' => 'Verification status updated successfully'
+        ], 200);
+    }
 
     /**
      * Format verification details based on type for consistent frontend display.
@@ -261,5 +260,4 @@ class VerificationController extends BaseController {
             ]);
         }
     }
-// ...existing code...
 }

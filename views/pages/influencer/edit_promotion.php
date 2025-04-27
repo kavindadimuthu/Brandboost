@@ -445,6 +445,9 @@
                         <!-- Basic Package -->
                         <div class="package-panel basic">
                             <h3>Basic Package</h3>
+                            <div class="form-group" style="display:none;">
+                                <input type="hidden" name="basic_package_id" id="basic_package_id">
+                            </div>
                             <div class="form-group">
                                 <label>Benefits</label>
                                 <textarea rows="4" placeholder="List the features included in this package..." 
@@ -470,6 +473,9 @@
                         <!-- Premium Package -->
                         <div class="package-panel premium">
                             <h3>Premium Package</h3>
+                            <div class="form-group" style="display:none;">
+                                <input type="hidden" name="premium_package_id" id="premium_package_id">
+                            </div>
                             <div class="form-group">
                                 <label>Benefits</label>
                                 <textarea rows="4" placeholder="List the features included in this package..." 
@@ -663,16 +669,17 @@
                 });
 
                 // Populate images
-                this.displayImage(this.mainImagePreview, "/" + service.cover_image, true);
+                this.displayImage(this.mainImagePreview, service.cover_image, true);
                 service.media.forEach(imageUrl => {
                     if (imageUrl !== service.cover_image) {
-                        this.displayImage(this.additionalImagesPreview, "/" + imageUrl);
+                        this.displayImage(this.additionalImagesPreview, imageUrl);
                     }
                 });
 
                 // Populate packages
                 packages.forEach(pkg => {
                     const type = pkg.package_type;
+                    document.querySelector(`[name="${type}_package_id"]`).value = pkg.package_id;
                     document.querySelector(`[name="${type}_package_benefits"]`).value = pkg.benefits;
                     document.querySelector(`[name="${type}_package_delivery_days"]`).value = pkg.delivery_days;
                     document.querySelector(`[name="${type}_package_revisions"]`).value = pkg.revisions;
@@ -748,6 +755,26 @@
                     // Convert platforms to JSON
                     const platforms = Array.from(this.form.querySelectorAll('input[name="platforms"]:checked')).map(input => input.value);
                     formData.append('platforms', JSON.stringify(platforms)); // Convert to JSON
+
+                    // Structure package data correctly
+                    const basicPackage = {
+                        package_id: document.querySelector('[name="basic_package_id"]').value,
+                        benefits: document.querySelector('[name="basic_package_benefits"]').value,
+                        delivery_days: document.querySelector('[name="basic_package_delivery_days"]').value,
+                        revisions: document.querySelector('[name="basic_package_revisions"]').value,
+                        price: document.querySelector('[name="basic_package_price"]').value
+                    };
+                    
+                    const premiumPackage = {
+                        package_id: document.querySelector('[name="premium_package_id"]').value,
+                        benefits: document.querySelector('[name="premium_package_benefits"]').value,
+                        delivery_days: document.querySelector('[name="premium_package_delivery_days"]').value,
+                        revisions: document.querySelector('[name="premium_package_revisions"]').value,
+                        price: document.querySelector('[name="premium_package_price"]').value
+                    };
+
+                    formData.append('packages[basic]', JSON.stringify(basicPackage));
+                    formData.append('packages[premium]', JSON.stringify(premiumPackage));
 
                     const pathSegments = window.location.pathname.split('/');
                     const promotionId = pathSegments[pathSegments.length - 1]; // Get the last segment

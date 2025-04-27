@@ -4,9 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My promotions</title>
+    <title>My Promotions | BrandBoost</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4169E1;
+            --primary-dark: #3557C0;
+            --secondary: #8A2BE2;
+            --white: #ffffff;
+            --light-bg: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --danger: #dc3545;
+            --success: #2dce89;
+            --warning: #fb6340;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,30 +36,55 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--gray-700);
+            line-height: 1.5;
         }
 
         .hero {
-            background: linear-gradient(135deg, #4169E1, #8A2BE2);
-            color: white;
-            padding: 20px 20px;
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 40px 0;
             position: relative;
-            margin-bottom: 40px;
+            overflow: hidden;
         }
 
-        .hero-container{
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+            transform: rotate(-20deg);
+        }
+
+        .hero-container {
             max-width: 1200px;
             margin: auto;
-            /* display: flex;
+            padding: 0 20px;
+            position: relative;
+            display: flex;
             justify-content: space-between;
-            align-items: center; */
+            align-items: center;
+        }
+
+        .hero-content {
+            text-align: left;
         }
 
         .hero h1 {
-            font-size: 36px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
             margin-bottom: 20px;
         }
 
@@ -47,30 +94,32 @@
             padding: 0 20px;
         }
 
-        .packages-button {
-            background: white;
-            color: #4169E1;
-            border: none;
-            padding: 15px 35px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .packages-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        .page-content {
+            margin-top: -30px;
+            position: relative;
+            z-index: 1;
         }
 
         .orders-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             padding: 30px;
             margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .orders-container h2 {
+            font-size: 1.3rem;
+            color: var(--gray-700);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .orders-container h2 i {
+            margin-right: 10px;
+            color: var(--primary);
         }
 
         .orders-table {
@@ -82,58 +131,172 @@
         .orders-table th {
             text-align: left;
             padding: 16px;
-            background: #f8f9fa;
-            color: #4169E1;
+            background: var(--gray-100);
+            color: var(--gray-700);
             font-weight: 600;
-            border-bottom: 2px solid #e9ecef;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--gray-200);
         }
 
         .orders-table td {
             text-align: left;
             padding: 16px;
-            border-bottom: 1px solid #e9ecef;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--gray-200);
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: none;
         }
 
         .orders-table tr:hover td {
-            background-color: #f8f9fa;
+            background-color: var(--gray-100);
         }
 
-        .promotion-title-cell{
+        .promotion-title-cell {
             display: flex;
             align-items: center;
             transition: transform 0.2s ease;
+            gap: 15px;
         }
-        .promotion-title-cell:hover{
+        
+        .promotion-title-cell:hover {
             transform: scale(1.01);
         }
 
         .promotion-thumb {
-            width: 70px;
-            height: 50px;
+            width: 80px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 6px;
-            margin-right: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .promotion-title {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: rgba(45, 206, 137, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background-color: rgba(251, 99, 64, 0.1);
+            color: var(--warning);
+        }
+
+        .status-paused {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .price-column {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .date-column {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
 
         .action-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: #4169E1;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            padding: 8px;
-            margin: 0 5px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--gray-500);
         }
 
-        .action-btn:hover {
-            color: #8A2BE2;
+        .edit-btn:hover {
+            background-color: rgba(65, 105, 225, 0.1);
+            color: var(--primary);
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .view-btn:hover {
+            background-color: rgba(45, 206, 137, 0.1);
+            color: var(--success);
+        }
+
+        .create-btn {
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .create-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .create-btn i {
+            font-size: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--gray-600);
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Modal Styles */
-
         .modal {
             display: flex;
             justify-content: center;
@@ -143,85 +306,219 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-content {
-            text-align: center;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
             width: 90%;
-            transform: translateY(-50%);
-            top: 50%;
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: rgba(220, 53, 69, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .modal-icon i {
+            font-size: 30px;
+            color: var(--danger);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: var(--gray-700);
+            font-size: 1.3rem;
         }
 
         .modal-content p {
-            margin: 0 0 20px;
-            font-size: 1.1em;
-            color: #333;
+            margin: 0 0 30px;
+            font-size: 1rem;
+            color: var(--gray-500);
+            line-height: 1.6;
         }
 
-        #confirmDelete, #cancelDelete {
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-btn {
             padding: 12px 25px;
-            border-radius: 12px;
+            border-radius: var(--border-radius);
             font-weight: 600;
+            font-size: 0.95rem;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
+            transition: var(--transition);
         }
 
-        #confirmDelete {
-            background: #4169E1;
-            color: white;
+        .confirm-btn {
+            background: var(--danger);
+            color: var(--white);
         }
 
-        #cancelDelete {
-            background: #dc3545;
-            color: white;
+        .confirm-btn:hover {
+            background: #c82333;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
         }
 
-        #confirmDelete:hover, #cancelDelete:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        .cancel-btn {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .cancel-btn:hover {
+            background: var(--gray-200);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .search-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
         }
 
         @media (max-width: 768px) {
-            .hero {
-                padding: 40px 20px;
+            .hero-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
             }
             
-            .orders-container {
-                padding: 15px;
+            .hero {
+                padding: 30px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
             }
 
-            .orders-table th, .orders-table td {
+            .orders-container {
+                padding: 20px 15px;
+                overflow-x: auto;
+            }
+            
+            .orders-table {
+                min-width: 800px;
+            }
+            
+            .orders-table th, 
+            .orders-table td {
                 padding: 12px;
+            }
+
+            .action-buttons {
+                flex-direction: row;
+            }
+            
+        }
+
+        @media (max-width: 480px) {
+            .hero-container {
+                padding: 0 15px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 
 <body>
-<div class="hero">
+    <div class="hero">
         <div class="hero-container">
-            <h1>My Promotions</h1>
-            <button class="packages-button" onclick="window.location.href='/influencer/add-promotion'">+ Create Promotion</button>
+            <div class="hero-content">
+                <h1><i class="fas fa-bullhorn"></i> My Promotions</h1>
+                <p>Manage and track all your promotions in one place.</p>
+            </div>
+            <button class="create-btn" onclick="window.location.href='/influencer/add-promotion'">
+                <i class="fas fa-plus"></i> Create New Promotion
+            </button>
         </div>
     </div>
 
-
-<div class="container">
+    <div class="container page-content">
         <div class="orders-container">
+            <div class="search-filters">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchPromotions" placeholder="Search promotions...">
+                </div>
+            </div>
+
             <table class="orders-table" id="promotions-table">
-                <!-- Keep existing table structure -->
                 <thead>
                     <tr>
                         <th>Promotion</th>
@@ -234,112 +531,184 @@
                     </tr>
                 </thead>
                 <tbody id="ordersTableBody">
-                        <!-- promotions will be displayed here -->
-                        <script>
-                            document.addEventListener('DOMContentLoaded', async () => {
-                                try {
-                                    const queryParams = new URLSearchParams({
-                                        current_user: true
-                                    });
-
-                                    const response = await fetch(`/api/services?${queryParams}`);
-                                    const result = await response.json();
-
-                                    const promotions = result.services;
-
-                                    console.log(promotions);
-                                    
-
-                                    const tableBody = document.getElementById('ordersTableBody');
-                                    tableBody.innerHTML = ''; // Clear existing table content
-
-                                    if (promotions.length > 0) {
-                                        promotions.forEach(promotion => {
-
-                                            // Ensure packages are present and handle package data correctly
-                                            // const basicPackage = promotion.package;
-                                            const basicPackage = promotion.packages.find(pkg => pkg.package_type === 'basic');
-                                            // const basicPackage = promotion.packages.find(pkg => pkg.package_type === 'basic');
-                                            const premiumPackage = promotion.packages.find(pkg => pkg.package_type === 'premium');
-
-                                            const row = document.createElement('tr');
-
-                                            // Dynamically populate the table row
-                                            row.innerHTML = `
-                                                <td onclick="window.location.href='/services/${promotion.service_id}'" style="cursor: pointer;">
-                                                    <div class="promotion-title-cell">
-                                                        <img src="/${promotion.cover_image}" class="promotion-thumb me-2" alt="thumbnail">
-                                                        ${promotion.title}
-                                                    </div>
-                                                </td>
-                                                <td>${basicPackage ? basicPackage.price : 'N/A'}</td>
-                                                <td>${premiumPackage ? premiumPackage.price : 'N/A'}</td>
-                                                <td>${new Date(promotion.updated_at).toLocaleDateString()}</td>
-                                                <td>${new Date(promotion.created_at).toLocaleDateString()}</td>
-                                                <td>${promotion.status || 'Active'}</td> <!-- Handle if promotion status is missing -->
-                                                <td>
-                                                    <button onclick="window.location.href='/influencer/edit-promotion/${promotion.service_id}'" class="action-btn"><i class="fas fa-edit"></i></button>
-                                                    <button onclick="confirmDelete(${promotion.service_id})" class="action-btn"><i class="fas fa-trash"></i></button>
-                                                </td>
-                                            `;
-
-                                            // Append the new row to the table
-                                            tableBody.appendChild(row);
-                                        });
-                                    } else {
-                                        // If no promotions are found, show a message
-                                        const row = document.createElement('tr');
-                                        row.innerHTML = '<td colspan="5">No promotions found.</td>';
-                                        tableBody.appendChild(row);
-                                    }
-                                } catch (error) {
-                                    console.error('Error fetching promotions:', error);
-                                }
-                            });
-                        </script>
+                    <!-- Empty state placeholder, will be replaced by JS -->
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <h3>Loading your promotions...</h3>
+                                <p>Please wait while we fetch your promotion data.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- Delete Modal -->
-    <div id="deleteModal" class="modal" style="display: none;">
+    <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <p>Are you sure you want to delete this item?</p>
-            <button id="confirmDelete">Yes</button>
-            <button id="cancelDelete">No</button>
+            <div class="modal-icon">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3>Delete Promotion</h3>
+            <p>Are you sure you want to delete this promotion? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="cancelDelete" class="modal-btn cancel-btn">Cancel</button>
+                <button id="confirmDelete" class="modal-btn confirm-btn">Yes, Delete</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let selectedpromotionId = null;
+        let selectedPromotionId = null;
+        let allPromotions = [];
 
-        function confirmDelete(serviceId) {
-            selectedpromotionId = serviceId;
-            console.log('Selected promotion ID:', selectedpromotionId);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchPromotions();
+            
+            // Add event listener for search
+            document.getElementById('searchPromotions').addEventListener('input', filterPromotions);
+        });
 
-            document.getElementById('deleteModal').style.display = 'block';
+        async function fetchPromotions() {
+            try {
+                const queryParams = new URLSearchParams({
+                    current_user: true
+                });
+
+                const response = await fetch(`/api/services?${queryParams}`);
+                const result = await response.json();
+
+                allPromotions = result.services || [];
+                
+                // Render promotions
+                renderPromotions(allPromotions);
+                
+                console.log('Promotions loaded:', allPromotions);
+            } catch (error) {
+                console.error('Error fetching promotions:', error);
+                
+                // Show error state
+                const tableBody = document.getElementById('ordersTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <h3>Couldn't load promotions</h3>
+                                <p>An error occurred while loading your promotions. Please try refreshing the page.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
-        async function deletepromotion() {
-            if (selectedpromotionId !== null) {
-                console.log('Deleting promotion ID:', selectedpromotionId);
+        function renderPromotions(promotions) {
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = ''; // Clear existing table content
 
-                // const response = await fetch(`/api/delete-promotion/45`);
-                // const response = await fetch(`/api/delete-promotion/${selectedpromotionId}`, {
-                //         method: 'DELETE'
-                //     });
-                // services = await response.json();
+            if (promotions.length > 0) {
+                promotions.forEach(promotion => {
+                    // Find packages
+                    const basicPackage = promotion.packages.find(pkg => pkg.package_type === 'basic');
+                    const premiumPackage = promotion.packages.find(pkg => pkg.package_type === 'premium');
+                    
+                    // Format status
+                    const status = promotion.status || 'Active';
+                    const statusClass = 
+                        status.toLowerCase() === 'active' ? 'status-active' : 
+                        status.toLowerCase() === 'pending' ? 'status-pending' : 
+                        'status-paused';
 
-                // console.log(services)
+                    const row = document.createElement('tr');
+
+                    // Dynamically populate the table row
+                    row.innerHTML = `
+                        <td>
+                            <div class="promotion-title-cell" onclick="window.location.href='/services/${promotion.service_id}'" style="cursor: pointer;">
+                                <img src="${promotion.cover_image}" class="promotion-thumb" alt="${promotion.title}">
+                                <span class="promotion-title">${promotion.title}</span>
+                            </div>
+                        </td>
+                        <td class="price-column">$${basicPackage ? basicPackage.price : 'N/A'}</td>
+                        <td class="price-column">$${premiumPackage ? premiumPackage.price : 'N/A'}</td>
+                        <td class="date-column">${formatDate(promotion.updated_at)}</td>
+                        <td class="date-column">${formatDate(promotion.created_at)}</td>
+                        <td><span class="status-badge ${statusClass}">${status}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button onclick="window.location.href='/influencer/edit-promotion/${promotion.service_id}'" class="action-btn edit-btn" title="Edit Promotion">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="confirmDelete(${promotion.service_id})" class="action-btn delete-btn" title="Delete Promotion">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    // Append the new row to the table
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // If no promotions are found, show a message
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-bullhorn"></i>
+                                <h3>No promotions found</h3>
+                                <p>You haven't created any promotions yet. Get started by creating your first promotion.</p>
+                                <button class="create-btn" onclick="window.location.href='/influencer/add-promotion'">
+                                    <i class="fas fa-plus"></i> Create Your First Promotion
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function filterPromotions(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderPromotions(allPromotions);
+                return;
+            }
+            
+            const filteredPromotions = allPromotions.filter(promotion => 
+                promotion.title.toLowerCase().includes(searchTerm)
+            );
+            
+            renderPromotions(filteredPromotions);
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function confirmDelete(serviceId) {
+            selectedPromotionId = serviceId;
+            console.log('Selected Promotion ID:', selectedPromotionId);
+
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        async function deletePromotion() {
+            if (selectedPromotionId !== null) {
+                console.log('Deleting Promotion ID:', selectedPromotionId);
 
                 try {
-                    // const response = await fetch(`/api/delete-promotion/45`);
-                    const response = await fetch(`/api/delete-promotion/${selectedpromotionId}`, {
+                    const response = await fetch(`/api/delete-promotion/${selectedPromotionId}`, {
                         method: 'GET'
                     });
 
-                    console.log(response)
+                    console.log(response);
 
                     if (response.ok) {
                         location.reload();
@@ -349,32 +718,25 @@
                 } catch (error) {
                     console.error('Error deleting promotion:', error);
                 } finally {
-                    selectedpromotionId = null; // Reset selected promotion ID
-                    document.getElementById('deleteModal').style.display = 'none'; // Hide modal
+                    selectedPromotionId = null; // Reset selected promotion ID
+                    document.getElementById('deleteModal').classList.remove('show');
                 }
             }
         }
 
-        // const tableBody = document.querySelector('#promotions-table tbody');
-
-        // tableBody.addEventListener('click', function (event) {
-        //     const cell = event.target.closest('td');
-        //     if (cell) {
-        //         const promotionId = cell.getAttribute('data-promotion-id');
-        //         handleRowClick(promotionId);
-        //     }
-        // });
-
-        // function handleRowClick(promotionId) {
-        //     console.log('Row clicked, Verification ID:');
-        //     window.location.href = '/services/' + promotionId;
-        // }
-
         // Add event listeners to the confirm and cancel buttons
-        document.getElementById('confirmDelete').addEventListener('click', deletepromotion);
+        document.getElementById('confirmDelete').addEventListener('click', deletePromotion);
         document.getElementById('cancelDelete').addEventListener('click', () => {
-            selectedpromotionId = null;
-            document.getElementById('deleteModal').style.display = 'none'; // Hide modal
+            selectedPromotionId = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+                selectedPromotionId = null;
+            }
         });
     </script>
 </body>
