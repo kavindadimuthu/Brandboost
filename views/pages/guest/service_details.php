@@ -1215,25 +1215,20 @@
     }
     
     function switchTab(plan) {
-      // Update active tab UI
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
-      
-      // Re-fetch current API data and re-render the pricing content
-      const pathSegments = window.location.pathname.split('/');
-      const serviceID = pathSegments[pathSegments.length - 1];
-      
-      fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`)
-        .then(response => response.json())
-        .then(result => {
-          renderPricingContent(plan, result);
-        })
-        .catch(error => {
-          console.error('Error fetching service data for tab switch:', error);
-        });
-    }
+  // Update active tab UI
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
+  
+  // Get service ID from the URL path segments (this is the actual service ID)
+  const pathSegments = window.location.pathname.split('/');
+  const serviceId = pathSegments[pathSegments.length - 1];
+  const serviceType = gigData.serviceType;
+  
+  // Render the selected pricing plan
+  renderPricingContent(plan, serviceId, serviceType);
+}
   </script>
 </body>
 </html>

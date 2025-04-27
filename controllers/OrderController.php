@@ -541,7 +541,7 @@ class OrderController extends BaseController
                 'package_id' => $packageId,
                 'custom_package_id' => $customPackageId,
                 'payment_type' => $paymentType,
-                'remained_revisions' => $packageData['revisions'] ?? 0,
+                'remained_revisions' => ($packageData['revisions'] ?? 0) + 1,
                 'order_status' => 'pending',
                 'created_at' => date('Y-m-d H:i:s')
             ];

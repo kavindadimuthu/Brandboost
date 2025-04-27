@@ -102,4 +102,13 @@ class User extends BaseModel
         return $this->read(['account_status' => $status], $options);
     }
 
+    public function emailExists(string $email): bool
+    {
+        $query = "SELECT COUNT(*) FROM {$this->table} WHERE email = :email";
+        $params = [':email' => $email];
+        
+        $count = $this->executeCustomQuery($query, $params);
+        return $count > 0;
+    }
+
 }
