@@ -100,38 +100,6 @@
             z-index: 1;
         }
 
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: var(--gray-500);
-            font-size: 0.9rem;
-        }
-
         .orders-container {
             background: var(--white);
             border-radius: var(--border-radius);
@@ -432,12 +400,6 @@
             background: var(--gray-200);
         }
 
-        @media (max-width: 992px) {
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
         @media (max-width: 768px) {
             .hero-container {
                 flex-direction: column;
@@ -475,9 +437,6 @@
                 flex-direction: row;
             }
             
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 480px) {
@@ -552,21 +511,6 @@
     </div>
 
     <div class="container page-content">
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number" id="totalGigs">0</div>
-                <div class="stat-label">Total Gigs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="activeGigs">0</div>
-                <div class="stat-label">Active Gigs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="avgPrice">$0</div>
-                <div class="stat-label">Avg. Basic Price</div>
-            </div>
-        </div>
-
         <div class="orders-container">
             <div class="search-filters">
                 <div class="search-input">
@@ -640,9 +584,6 @@
 
                 allGigs = result.services || [];
                 
-                // Update stats
-                updateStats(allGigs);
-                
                 // Render gigs
                 renderGigs(allGigs);
                 
@@ -663,30 +604,6 @@
                         </td>
                     </tr>
                 `;
-            }
-        }
-
-        function updateStats(gigs) {
-            document.getElementById('totalGigs').textContent = gigs.length;
-            
-            const activeGigs = gigs.filter(gig => gig.status === 'Active' || !gig.status).length;
-            document.getElementById('activeGigs').textContent = activeGigs;
-            
-            if (gigs.length > 0) {
-                // Calculate average basic price
-                let totalBasicPrice = 0;
-                let validPricesCount = 0;
-                
-                gigs.forEach(gig => {
-                    const basicPackage = gig.packages.find(pkg => pkg.package_type === 'basic');
-                    if (basicPackage && basicPackage.price) {
-                        totalBasicPrice += parseFloat(basicPackage.price);
-                        validPricesCount++;
-                    }
-                });
-                
-                const avgPrice = validPricesCount > 0 ? totalBasicPrice / validPricesCount : 0;
-                document.getElementById('avgPrice').textContent = '$' + avgPrice.toFixed(2);
             }
         }
 
@@ -713,7 +630,7 @@
                     row.innerHTML = `
                         <td>
                             <div class="gig-title-cell" onclick="window.location.href='/services/${gig.service_id}'" style="cursor: pointer;">
-                                <img src="/${gig.cover_image}" class="gig-thumb" alt="${gig.title}">
+                                <img src="${gig.cover_image}" class="gig-thumb" alt="${gig.title}">
                                 <span class="gig-title">${gig.title}</span>
                             </div>
                         </td>
