@@ -3,9 +3,13 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use app\core\BaseController;
-use app\core\Helpers\AuthHelper;
 use app\core\Request;
 use app\core\Response;
+
+// Utility Imports
+use app\core\Helpers\AuthHelper;
+
+// Model Imports
 use app\models\Communication\Notification;
 
 class NotificationController extends BaseController {
@@ -18,13 +22,6 @@ class NotificationController extends BaseController {
             header('Location: /login');
             exit;
         }
-    }
-    
-    /**
-     * Display the notifications page
-     */
-    public function index($req, $res) {
-        $this->renderLayout('main', 'pages/common/notifications');
     }
     
     /**
