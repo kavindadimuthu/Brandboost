@@ -87,12 +87,54 @@ class GuestController extends BaseController
 
     public function register($req, $res)
     {
+        if (AuthHelper::isLoggedIn()) {
+            $user = AuthHelper::getCurrentUser();
+            // Redirect to the user's dashboard according to their role
+            switch ($user['role']) {
+                case 'admin':
+                    header("Location: /admin/dashboard");
+                    break;
+                case 'businessman':
+                    header("Location: /services");
+                    break;
+                case 'influencer':
+                    header("Location: /influencer/dashboard");
+                    break;
+                case 'designer':
+                    header("Location: /designer/dashboard");
+                    break;
+                default:
+                    header("Location: /auth/login?error=Invalid%20role");
+                    break;
+            }
+        }
         $this->renderPage('pages/guest/register');
     }
     public function registerForm($req, $res)
     {
         $param = $req->getParam('role');
 
+        if (AuthHelper::isLoggedIn()) {
+            $user = AuthHelper::getCurrentUser();
+            // Redirect to the user's dashboard according to their role
+            switch ($user['role']) {
+                case 'admin':
+                    header("Location: /admin/dashboard");
+                    break;
+                case 'businessman':
+                    header("Location: /services");
+                    break;
+                case 'influencer':
+                    header("Location: /influencer/dashboard");
+                    break;
+                case 'designer':
+                    header("Location: /designer/dashboard");
+                    break;
+                default:
+                    header("Location: /auth/login?error=Invalid%20role");
+                    break;
+            }
+        }
         $this->renderPage('pages/guest/registerForm', $data = [$param]);
     }
 
@@ -137,39 +179,48 @@ class GuestController extends BaseController
     // error pages
     public function error404($req, $res)
     {
-        $this->renderPage('pages/error_pages/404');
+        $this->renderPage('pages/status_pages/404');
     }
     public function error403($req, $res)
     {
-        $this->renderPage('pages/error_pages/403');
+        $this->renderPage('pages/status_pages/403');
     }
     public function error401($req, $res)
     {
-        $this->renderPage('pages/error_pages/401');
+        $this->renderPage('pages/status_pages/401');
     }
     public function error500($req, $res)
     {
-        $this->renderPage('pages/error_pages/500');
+        $this->renderPage('pages/status_pages/500');
     }
     public function error503($req, $res)
     {
-        $this->renderPage('pages/error_pages/503');
+        $this->renderPage('pages/status_pages/503');
     }
 
     // payment error or success
     public function paymentError($req, $res)
     {
-        $this->renderPage('pages/error_pages/payment_error');
+        $this->renderPage('pages/status_pages/payment_error');
     }
     public function paymentSuccess($req, $res)
     {
-        $this->renderPage('pages/error_pages/payment_success');
+        $this->renderPage('pages/status_pages/payment_success');
     }
 
     // account suspended or deactivated
     public function accountSuspended($req, $res)
     {
-        $this->renderPage('pages/error_pages/account_suspended');
+        $this->renderPage('pages/status_pages/account_suspended');
+    }
+
+    public function registrationPending($req, $res)
+    {
+        $this->renderPage('pages/status_pages/registration_pending');
+    }
+    public function registrationFailed($req, $res)
+    {
+        $this->renderPage('pages/status_pages/registration_failed');
     }
 
 }

@@ -125,6 +125,9 @@ $app->router->get('/payment-success', 'GuestController@paymentSuccess'); // Paym
 // Account Suspended or Deactivated
 $app->router->get('/account-suspended', 'GuestController@accountSuspended'); // Account Suspended Page
 
+$app->router->get('/registration-pending', 'GuestController@registrationPending'); // Account Suspended Page
+$app->router->get('/registration-failed', 'GuestController@registrationFailed'); // Account Suspended Page
+
 
 // ==================================
 // Authentication Routes
@@ -145,10 +148,14 @@ $app->router->get('/auth/logout', 'AuthController@logout'); // Logout
 // ==================================
 $app->router->get('/api/users', 'UserController@getUserList'); // Get Users list
 $app->router->get('/api/user/{id}', 'UserController@getUserProfile'); // Get User Profile
-$app->router->post('/api/register', 'UserController@createUser'); // Register/Create User
 $app->router->post('/api/update-user', 'UserController@updateUserProfile'); // Update User Profile
 $app->router->post('/api/update-user-account-status', 'UserController@updateUserAccountStatus'); // Update User account status
 $app->router->post('/api/change-password', 'AuthController@changePassword'); // Change Password
+
+// ** User Registration **
+$app->router->post('/api/register', 'RegistrationController@createUser'); // Register/Create User
+$app->router->get('/verify-email', 'RegistrationController@verifyEmail');
+$app->router->post('/resend-verification', 'RegistrationController@resendVerificationEmail');
 
 $app->router->get('/api/user-count', 'GetCountController@getUserCountsSummary'); 
 
