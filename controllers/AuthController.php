@@ -100,7 +100,10 @@ class AuthController extends BaseController {
         ];
 
         $redirectUrl = $dashboardRoutes[$user['role']] ?? '/dashboard';
-        $response->redirect($redirectUrl);
+        $response->sendJson([
+            'message' => 'Login successful.',
+            'redirect_url' => $redirectUrl
+        ]);
     }
 
     /**
