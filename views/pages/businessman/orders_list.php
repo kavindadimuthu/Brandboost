@@ -470,6 +470,47 @@
                 width: 100%;
             }
         }
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .search-container .fa-search {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -510,6 +551,10 @@
                 </div>
             </div>
         </div>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by service or provider name">
+        </div>
 
         <div class="orders-container">
             <table class="orders-table">
@@ -541,7 +586,8 @@
             orders: [],
             filteredOrders: [],
             sortField: 'created_at',
-            sortDirection: 'desc'
+            sortDirection: 'desc',
+            searchTerm: ''
         };
 
         // Function to load data into the table
@@ -609,6 +655,45 @@
                 }
             });
         }
+                // Initialize the page
+                document.addEventListener('DOMContentLoaded', () => {
+                    setupSearch();
+                    loadOrdersData();
+                });
+
+                // Handle search input
+                function setupSearch() {
+                    const searchInput = document.getElementById('searchInput');
+                    let debounceTimeout;
+                    
+                    searchInput.addEventListener('input', (e) => {
+                        clearTimeout(debounceTimeout);
+                        
+                        debounceTimeout = setTimeout(() => {
+                            state.searchTerm = e.target.value.trim();
+                            filterOrders();
+                        }, 300); // Debounce for 300ms
+                    });
+                }
+
+                function filterOrders() {
+                if (!state.searchTerm) {
+                    state.filteredOrders = [...state.orders];
+                } else {
+                    const term = state.searchTerm.toLowerCase();
+                    state.filteredOrders = state.orders.filter(order => {
+                        try {
+                            const jsonData = JSON.parse(order.promise.accepted_service);
+                            return order.seller.name.toLowerCase().includes(term) || 
+                                (jsonData && jsonData.title && jsonData.title.toLowerCase().includes(term)) ||
+                                (jsonData && jsonData.serviceType && jsonData.serviceType.toLowerCase().includes(term));
+                        } catch (error) {
+                            return false;
+                        }
+                    });
+                }
+                renderOrders();
+            }
         
         // Render orders to table
         function renderOrders() {
