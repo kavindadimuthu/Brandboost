@@ -746,13 +746,6 @@
           <div class="seller-details">
             <span class="seller-name"></span>
             <div class="rating">
-              <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
               <span></span>
             </div>
           </div>
@@ -874,6 +867,44 @@
         const result = await response.json();
         
         console.log(result);
+
+        let total= result.reviews ? result.reviews.length : 0;
+
+        var rating1 = 0;
+        var rating2 = 0;
+        var rating3 = 0;
+        var rating4 = 0;
+        var rating5 = 0;
+
+        for (let i = 0; i < result.reviews.length; i++) {
+          var rate = result.reviews[i].rating;
+
+          if (rate == 1){
+            rating1++;
+          } else if (rate == 2){
+            rating2++;
+          } else if (rate == 3){
+            rating3++;
+          } else if (rate == 4){
+            rating4++;
+          } else if (rate == 5){
+            rating5++;
+          } else {
+            continue;
+          }
+        }
+        const totalrate = rating1 + rating2 + rating3 + rating4 + rating5;
+        const rateave = (rating1*1 + rating2*2 + rating3*3 + rating4*4 + rating5*5)/totalrate;
+
+        let rounded5 = parseFloat((rating5/totalrate*100).toFixed(1));
+        let rounded4 = parseFloat((rating4/totalrate*100).toFixed(1));
+        let rounded3 = parseFloat((rating3/totalrate*100).toFixed(1));
+
+        const percentages = {
+          distribution : {5: rounded5, 4: rounded4, 3: rounded3}, 
+          rateave, 
+          total
+        };
     
         // Map platforms to icons for easier reference
         const platformIcons = {
@@ -888,11 +919,11 @@
     
         // Render all UI components
         renderBreadcrumb(result);
-        renderGigHeader(result);
+        renderGigHeader(result, percentages);
         renderMediaPreview(result);
         renderAboutSection(result);
         renderPlatforms(result, platformIcons);
-        renderReviewsSection(result);
+        renderReviewsSection(result, percentages);
         renderTags(result);
         renderPricingContent(currentPlan, result);
     
@@ -927,10 +958,10 @@
       document.querySelector('.breadcrumb').innerHTML = breadcrumbHtml;
     }
     
-    function renderGigHeader(result) {
+    function renderGigHeader(result, percentages) {
       // Default review stats
       const reviewCount = result.reviews ? result.reviews.length : 0;
-      const reviewRating = 4.8; // Default or calculate based on reviews if available
+      const reviewRating = parseFloat(percentages.rateave.toFixed(1)); // Default or calculate based on reviews if available
       
       document.querySelector('.gig-title').textContent = result.title;
       document.querySelector('.seller-avatar').src = result.user.profile_picture || '/assets/images/default-avatar.png';
@@ -1040,24 +1071,14 @@
       document.querySelector('.platform-grid').innerHTML = platformsHtml;
     }
     
-    function renderReviewsSection(result) {
-      // Default review stats if not available
-      const reviewStats = {
-        average: 4.8,
-        total: result.reviews ? result.reviews.length : 0,
-        distribution: {
-          5: 80,
-          4: 15,
-          3: 5
-        }
-      };
+    function renderReviewsSection(result, percentages) {
       
       // Update ratings overview
-      document.querySelector('.average-score').textContent = reviewStats.average.toFixed(1);
-      document.querySelector('.total-reviews').textContent = `from ${reviewStats.total} reviews`;
+      document.querySelector('.average-score').textContent = percentages.rateave.toFixed(1);
+      document.querySelector('.total-reviews').textContent = `from ${percentages.total} reviews`;
       
       // Update rating bars
-      Object.entries(reviewStats.distribution).forEach(([stars, percentage]) => {
+      Object.entries(percentages.distribution).forEach(([stars, percentage]) => {
         const selector = `.rating-bars:nth-child(${6 - parseInt(stars)})`;
         const ratingBar = document.querySelector(selector);
         if (ratingBar) {
@@ -1215,20 +1236,25 @@
     }
     
     function switchTab(plan) {
-  // Update active tab UI
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
-  
-  // Get service ID from the URL path segments (this is the actual service ID)
-  const pathSegments = window.location.pathname.split('/');
-  const serviceId = pathSegments[pathSegments.length - 1];
-  const serviceType = gigData.serviceType;
-  
-  // Render the selected pricing plan
-  renderPricingContent(plan, serviceId, serviceType);
-}
+      // Update active tab UI
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`.tab:${plan === 'premium' ? 'last-child' : 'first-child'}`).classList.add('active');
+      
+      // Re-fetch current API data and re-render the pricing content
+      const pathSegments = window.location.pathname.split('/');
+      const serviceID = pathSegments[pathSegments.length - 1];
+      
+      fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`)
+        .then(response => response.json())
+        .then(result => {
+          renderPricingContent(plan, result);
+        })
+        .catch(error => {
+          console.error('Error fetching service data for tab switch:', error);
+        });
+    }
   </script>
 </body>
 </html>
