@@ -444,6 +444,7 @@
             z-index: 1000;
             overflow: hidden;
             transition: all 0.3s ease;
+            padding: 20px;
         }
 
         .delivery-popup.active {
@@ -1890,75 +1891,108 @@
             // Add this inside the try block of your fetchOrderDetails function, right after rendering order details:
             // Add this to your fetchOrderDetails function after loading initial data
             async function fetchOrderDetails() {
+    try {
+        const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
 
-                try {
-                    const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+        console.log('Order details:', result);
+
+        const response2 = await fetch(`/api/user/${result.data.order.customer_id}`);
+        const seller = await response2.json();
+
+        // IMPORTANT: Set this variable before anything else
+        window.otherUserId = result.data.order.customer_id;
+        console.log("Set otherUserId:", window.otherUserId);
+
+        // If the chat is already initialized, update it with the customer_id
+        if (window.updateChatParticipant) {
+            window.updateChatParticipant(window.otherUserId);
+        }
+
+        // Render order details
+        username.textContent = seller.name;
+        orderedBy.textContent = seller.name;
+        orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
+
+        // Calculate due date
+        const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
+        const deliveryDays = result.data.promise.delivery_days;
+        const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
+        orderDue.textContent = dueDate.toLocaleString();
+
+        // Check if order is already cancelled
+        const isCancelled = result.data.order.status === 'cancelled' ||
+            result.data.order.cancellation_status === 'accepted';
+            
+        // NEW: Check if order is accepted
+        const isAccepted = result.data.order.status === 'accepted' || 
+            result.data.order.order_status === 'completed';
+
+        if (isCancelled) {
+            // Hide time left section content
+            document.querySelector('.timer-display').style.display = 'none';
+            document.querySelector('.timer-progress').style.display = 'none';
+            document.getElementById('deliverNow').style.display = 'none';
+
+            // Show "Order Cancelled" message
+            const timeLeftCard = document.querySelector('.time-card');
+            timeLeftCard.innerHTML = '<div class="cancelled-order-message">Order Cancelled</div>';
+            timeLeftCard.style.backgroundColor = '#fee2e2';
+
+            // Hide cancellation request section if visible
+            document.getElementById('cancellationRequestSection').style.display = 'none';
+
+            // Hide cancel order button
+            document.getElementById('cancelOrder').style.display = 'none';
+        } 
+        // NEW: Handle accepted orders
+        else if (isAccepted) {
+            // Hide time left section content
+            document.querySelector('.timer-display').style.display = 'none';
+            document.querySelector('.timer-progress').style.display = 'none';
+            document.getElementById('deliverNow').style.display = 'none';
+            
+            // Show "Order Accepted" message
+            const timeLeftCard = document.querySelector('.time-card');
+            timeLeftCard.innerHTML = '<div class="order-accepted-message">Order Accepted</div>';
+            timeLeftCard.style.backgroundColor = '#dcfce7'; // Light green background
+            
+            // Hide cancel order button since the order is already accepted
+            document.getElementById('cancelOrder').style.display = 'none';
+            
+            // Add CSS for the accepted message if it doesn't exist
+            if (!document.querySelector('style').textContent.includes('.order-accepted-message')) {
+                const styleTag = document.createElement('style');
+                styleTag.textContent = `
+                    .order-accepted-message {
+                        color: #16a34a;
+                        font-size: 1.2em;
+                        font-weight: 600;
+                        padding: 20px;
+                        text-align: center;
                     }
-                    const result = await response.json();
+                `;
+                document.head.appendChild(styleTag);
+            }
+        }
+        else {
+            // Start countdown for active orders
+            startCountdown(dueDate, createdDate);
 
-                    console.log('Order details:', result);
+            // Check for cancellation request
+            checkCancellationRequest(result.data);
 
-                    const response2 = await fetch(`/api/user/${result.data.order.customer_id}`);
+            // Update cancel button visibility
+            updateCancelButtonVisibility(result.data);
+        }
 
-                    const seller = await response2.json();
-
-                    // IMPORTANT: Set this variable before anything else
-                    window.otherUserId = result.data.order.customer_id;
-                    console.log("Set otherUserId:", window.otherUserId);
-
-                    // If the chat is already initialized, update it with the customer_id
-                    if (window.updateChatParticipant) {
-                        window.updateChatParticipant(window.otherUserId);
-                    }
-
-                    // Render order details
-                    username.textContent = seller.name;
-                    orderedBy.textContent = seller.name;
-                    orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
-
-                    // Calculate due date
-                    const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
-                    const deliveryDays = result.data.promise.delivery_days;
-                    const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
-                    orderDue.textContent = dueDate.toLocaleString();
-
-                    // Check if order is already cancelled
-                    const isCancelled = result.data.order.status === 'cancelled' ||
-                        result.data.order.cancellation_status === 'accepted';
-
-                    if (isCancelled) {
-                        // Hide time left section content
-                        document.querySelector('.timer-display').style.display = 'none';
-                        document.querySelector('.timer-progress').style.display = 'none';
-                        document.getElementById('deliverNow').style.display = 'none';
-
-                        // Show "Order Cancelled" message
-                        const timeLeftCard = document.querySelector('.time-card');
-                        timeLeftCard.innerHTML = '<div class="cancelled-order-message">Order Cancelled</div>';
-                        timeLeftCard.style.backgroundColor = '#fee2e2';
-
-                        // Hide cancellation request section if visible
-                        document.getElementById('cancellationRequestSection').style.display = 'none';
-
-                        // Hide cancel order button
-                        document.getElementById('cancelOrder').style.display = 'none';
-                    } else {
-                        // Start countdown for active orders
-                        startCountdown(dueDate, createdDate);
-
-                        // Check for cancellation request
-                        checkCancellationRequest(result.data);
-
-                        // Update cancel button visibility
-                        updateCancelButtonVisibility(result.data);
-                    }
-
-                    // Add CSS for cancelled message if it doesn't exist
-                    if (!document.querySelector('style').textContent.includes('.cancelled-order-message')) {
-                        const styleTag = document.createElement('style');
-                        styleTag.textContent = `
+        // Add CSS for cancelled message if it doesn't exist
+        if (!document.querySelector('style').textContent.includes('.cancelled-order-message')) {
+            const styleTag = document.createElement('style');
+            styleTag.textContent = `
                 .cancelled-order-message {
                     color: #b91c1c;
                     font-size: 1.2em;
@@ -1967,18 +2001,18 @@
                     text-align: center;
                 }
             `;
-                        document.head.appendChild(styleTag);
-                    }
+            document.head.appendChild(styleTag);
+        }
 
-                    // Render chat messages (if applicable)
-                    if (result.data.messages) {
-                        // (existing chat message rendering code)
-                    }
+        // Render chat messages (if applicable)
+        if (result.data.messages) {
+            // (existing chat message rendering code)
+        }
 
-                } catch (error) {
-                    console.error('Error fetching order details:', error);
-                }
-            }
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+    }
+}
 
             // Updated function to load order requirements and display files properly
             async function loadOrderRequirements() {
@@ -3066,7 +3100,7 @@
             // Initialize
             fetchOrderDetails();
             loadDeliveryData();
-            // Add this to the initialization section at the bottom
+            loadGigDetails()
             loadOrderRequirements();
         });
     </script>

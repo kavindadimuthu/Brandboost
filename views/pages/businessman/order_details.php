@@ -1126,6 +1126,61 @@
             cursor: pointer;
             font-size: 1.2em;
         }
+
+            .gig-preview {
+        margin-top: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .gig-card {
+        display: flex;
+        gap: 16px;
+        margin-top: 12px;
+    }
+
+    .gig-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .gig-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .gig-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .gig-info h5 {
+        margin: 0 0 8px 0;
+        font-size: 1.05em;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .gig-category {
+        font-size: 0.85em;
+        color: #6b7280;
+        margin-bottom: 12px;
+    }
+
+    .gig-price {
+        margin-top: auto;
+        font-weight: 600;
+        font-size: 1.1em;
+        color: #111827;
+    }
     </style>
 </head>
 
@@ -1184,17 +1239,52 @@
                                 <div class="timer-bar" id="progressBar"></div>
                             </div>
                         </div>
-                        <div id="countdown"></div>
-                        <button id="request-revision">Request Rivision</button>
-                        <button class="accept-button" id="acceptOrder">Accept</button>
-                        <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
+                        <!-- <div id="countdown"></div> -->
+                        <button id="request-revision"  style="display: none;">Request Revision</button>
+                        <button class="accept-button" id="acceptOrder"  style="display: none;">Accept</button>
+                        <button class="cancel-button" id="cancelOrder" style="display: none;">Request order cancellation</button>
                     </div>
+                    <!-- Add this right after the cancel-button -->
+                    <div class="cancellation-request" id="cancellationRequestSection" style="display: none;">
+                        <h4>Order Cancellation Request</h4>
+                        <div class="cancellation-details">
+                            <p class="cancellation-reason"><strong>Reason:</strong> <span id="cancellationReason"></span></p>
+                        </div>
+                        <div class="cancellation-actions">
+                            <button class="accept-button" id="acceptCancellation">Accept Cancellation</button>
+                            <button class="decline-button" id="declineCancellation">Decline</button>
+                        </div>
+                    </div>
+                    <div class="cancellation-request" id="cancellationRequestSectionSender" style="display: none;">
+                        <h4>Order Cancellation Request</h4>
+                        <div class="cancellation-details">
+                            <p class="cancellation-reason"><strong>Reason:</strong> <span id="cancellationReasonSendert"></span></p>
+                        </div>
+                        <div class="cancellation-actions">
+                            <button class="decline-button" id="declineCancellationSender">Cancel</button>
+                        </div>
+                    </div>      
                     <div class="order-details">
                         <h4>Order Details</h4>
                         <p><strong>Seller:</strong> <span id="sellerName"></span></p>
                         <p><strong>Date:</strong> <span id="orderDate"></span></p>
                         <p><strong>Due:</strong> <span id="orderDue"></span></p>
                     </div>
+                    <div class="gig-preview">
+                    <h4>Gig Details</h4>
+                    <div class="gig-card">
+                        <div class="gig-image">
+                            <img id="gigImage" src="" alt="Gig image">
+                        </div>
+                        <div class="gig-info">
+                            <h5 id="gigTitle">Loading gig title...</h5>
+                            <!-- <p id="gigCategory" class="gig-category">Category</p> -->
+                            <div class="gig-price">
+                                <span id="gigPrice">LKR0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     <div class="support-section">
                         <h4>Support</h4>
                         <button id="Complaint">Complaint</button>
@@ -1374,7 +1464,7 @@
 
     <!-- Accept Popup -->
     <div class="accept-popup" id="acceptPopup">
-        <button class="close-btn" id="closeAcceptPopup" align="right">&times;</button>
+        <button class="close-btn" id="closeAcceptPopup" style="align:right">&times;</button>
         <p>Are you sure you want to accept the last rivision?.</p>
         <button id="cancelAccept">No</button>
         <button id="yesAccept">Yes</button>
@@ -1449,6 +1539,36 @@
             let serviceId = null;
             // Get the last segment of the URL
 
+
+            function updateCancelButtonVisibility(orderData) {
+                const cancelButton = document.getElementById('cancelOrder');
+                // Show the button only if there's no cancellation reason
+                if (orderData && orderData.order && !orderData.order.order_cancellation_reason) {
+                    cancelButton.style.display = 'block';
+                } else {
+                    cancelButton.style.display = 'none';
+                }
+            }
+            function updateAcceptButtonVisibility(orderData) {
+                const acceptButton = document.getElementById('request-revision');
+                // Show the button only if there's no cancellation reason
+                if (orderData && orderData.order && !orderData.order.order_cancellation_reason) {
+                    acceptButton.style.display = 'block';
+                } else {
+                    acceptButton.style.display = 'none';
+                }
+            }
+
+            function updaterevisionButtonVisibility(orderData) {
+                const acceptButton = document.getElementById('acceptOrder');
+                // Show the button only if there's no cancellation reason
+                if (orderData && orderData.order && !orderData.order.order_cancellation_reason) {
+                    acceptButton.style.display = 'block';
+                } else {
+                    acceptButton.style.display = 'none';
+                }
+            }
+
             // Show image preview modal
             function showImagePreview(imgUrl) {
                 previewImage.src = imgUrl;
@@ -1462,51 +1582,448 @@
                 backdrop.classList.remove('active');
             });
 
-            // Fetch order details
-            async function fetchOrderDetails() {
+            // Request cancellation
+            document.getElementById('requestCancel').addEventListener('click', async () => {
+                const cancelReason = document.getElementById('cancelReason').value;
+
+                // Validate input
+                if (!cancelReason.trim()) {
+                    alert('Please provide a reason for cancellation');
+                    return;
+                }
+
+                // console.log('Cancellation reason:', cancelReason);
+                // console.log('Order ID:', orderId);
+
                 try {
-                    const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+                    // Create FormData to match the controller's expected format
+                    const formData = new FormData();
+                    formData.append('order_id', orderId);
+                    formData.append('order_cancellation_reason', cancelReason);
+
+                    console.log('FormData:', formData.get('order_id'), formData.get('order_cancellation_reason'));
+
+                    // Make sure this URL matches your backend route
+                    const response = await fetch('/api/order-cancellation', {
+                        method: 'POST',
+                        body: formData
+                    });
+
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error(`Server responded with status: ${response.status}`);
                     }
+
                     const result = await response.json();
 
-                    console.log('Order details:', result);
-
-                    // Set service ID
-                    serviceId = result.data.order.service_id;
-
-                    // IMPORTANT: Set the seller ID as the otherUserId for the chat
-                    window.otherUserId = result.data.order.seller_id;
-                    console.log("Set otherUserId (seller):", window.otherUserId);
-
-                    // If the chat is already initialized, update it with the seller_id
-                    if (window.updateChatParticipant) {
-                        window.updateChatParticipant(window.otherUserId);
+                    if (result.success) {
+                        alert('Cancellation request submitted successfully');
+                    } else {
+                        alert('Failed to submit cancellation request: ' + result.message);
                     }
 
-                    // Render order details
-                    username.textContent = result.data.user.name;
-                    sellerName.textContent = result.data.user.name;
-                    orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
+                } catch (error) {
+                    console.error('Error submitting cancellation:', error);
+                    alert('Failed to submit cancellation request. Please try again.');
+                }
 
-                    // Calculate due date
-                    const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
-                    const deliveryDays = result.data.promise.delivery_days;
-                    const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
-                    orderDue.textContent = dueDate.toLocaleString();
+                cancelPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
 
-                    // Start countdown
-                    startCountdown(dueDate, createdDate);
+            function checkCancellationRequest(orderData) {
+                // Get the cancellation section
+                const cancellationSection = document.getElementById('cancellationRequestSection');
+                const cancellationSectionSender = document.getElementById('cancellationRequestSectionSender');
+                // Check if the order has already been cancelled and accepted
+                if (orderData && orderData.order && orderData.order.cancellation_acceptancy === 'yes') {
+                    // Hide the cancellation section
+                    cancellationSection.style.display = 'none';
 
-                    // We don't need to manually render chat messages anymore as order-chat.js will handle it
+                    // Hide time left section content
+                    document.querySelector('.timer-display').style.display = 'none';
+                    document.querySelector('.timer-progress').style.display = 'none';
+                    document.getElementById('deliverNow').style.display = 'none';
 
-            } catch (error) {
-                console.error('Error fetching order details:', error);
-                // For demo purposes, show mock deliverables even if API fails
-                //renderDeliverables(mockDeliverables);
+                    // Show "Order Cancelled" message
+                    const timeLeftCard = document.querySelector('.time-card');
+                    timeLeftCard.innerHTML = '<div class="cancelled-order-message">Order Cancelled</div>';
+                    timeLeftCard.style.backgroundColor = '#fee2e2';
+
+                    // Hide cancel order button
+                    document.getElementById('cancelOrder').style.display = 'none';
+                    return;
+                }
+
+                // Check if there is an order cancellation reason
+                if (orderData && orderData.order && orderData.order.order_cancellation_reason) {
+                    // Show the cancellation section       
+                    if (orderData.order.cancellation_requested_by === 'businessman') {
+                        cancellationSectionSender.style.display = 'block';
+                    } else {
+                        cancellationSection.style.display = 'block';
+                    }
+
+                    // Set the reason
+                    document.getElementById('cancellationReason').textContent = orderData.order.order_cancellation_reason;
+                    document.getElementById('cancellationReasonSendert').textContent = orderData.order.order_cancellation_reason;
+
+                    // Set the time if available
+                    if (orderData.order.cancellation_requested_at) {
+                        document.getElementById('cancellationTime').textContent =
+                            new Date(orderData.order.cancellation_requested_at.replace(' ', 'T')).toLocaleString();
+                    } else {
+                        document.getElementById('cancellationTime').textContent = 'Unknown';
+                    }
+                } else {
+                    // Hide the section if no cancellation reason
+                    cancellationSection.style.display = 'none';
+                    cancellationSectionSender.style.display = 'none'
+                }
+            }
+
+            document.getElementById('acceptCancellation').addEventListener('click', async () => {
+                if (confirm('Are you sure you want to accept this cancellation request? This action cannot be undone.')) {
+                    try {
+                        const formData = new FormData();
+                        formData.append('order_id', orderId);
+                        formData.append('status', 'accepted');
+
+                        // Log individual FormData entries for better debugging
+                        console.log('Form data:');
+                        for (let [key, value] of formData.entries()) {
+                            console.log(`${key}: ${value}`);
+                        }
+
+                        const response = await fetch('/api/respond-to-cancellation', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        console.log('Response:', result); // Log the response for debugging
+
+                        if (result.success) {
+                            alert(result.message);
+
+                            // Hide cancellation request section
+                            document.getElementById('cancellationRequestSection').style.display = 'none';
+
+                            // Hide time left section content
+                            document.querySelector('.timer-display').style.display = 'none';
+                            document.querySelector('.timer-progress').style.display = 'none';
+                            document.getElementById('deliverNow').style.display = 'none';
+
+                            // Show "Order Cancelled" message
+                            const timeLeftCard = document.querySelector('.time-card');
+                            timeLeftCard.innerHTML = '<div class="cancelled-order-message">Order Cancelled</div>';
+                            timeLeftCard.style.backgroundColor = '#fee2e2';
+
+                            // Add CSS for the cancelled message if it doesn't exist
+                            if (!document.querySelector('style').textContent.includes('.cancelled-order-message')) {
+                                const styleTag = document.createElement('style');
+                                styleTag.textContent = `
+                        .cancelled-order-message {
+                            color: #b91c1c;
+                            font-size: 1.2em;
+                            font-weight: 600;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                    `;
+                                document.head.appendChild(styleTag);
+                            }
+                        } else {
+                            alert('Failed to accept cancellation request: ' + result.message);
+                        }
+                    } catch (error) {
+                        console.error('Error accepting cancellation:', error);
+                        alert('Failed to accept cancellation request. Please try again.');
+                    }
+                }
+            });
+
+            document.getElementById('declineCancellation').addEventListener('click', async () => {
+                if (confirm('Are you sure you want to decline this cancellation request?')) {
+                    try {
+                        const formData = new FormData();
+                        formData.append('order_id', orderId);
+                        formData.append('status', 'declined');
+
+                        const response = await fetch('/api/respond-to-cancellation', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            alert('Cancellation request declined');
+                            document.getElementById('cancellationRequestSection').style.display = 'none';
+                        } else {
+                            alert('Failed to decline cancellation request: ' + result.message);
+                        }
+                    } catch (error) {
+                        console.error('Error declining cancellation:', error);
+                        alert('Failed to decline cancellation request. Please try again.');
+                    }
+                }
+            });
+
+            document.getElementById('declineCancellationSender').addEventListener('click', async () => {
+                if (confirm('Are you sure you want to decline this cancellation request?')) {
+                    try {
+                        const formData = new FormData();
+                        formData.append('order_id', orderId);
+                        formData.append('status', 'declined');
+
+                        const response = await fetch('/api/respond-to-cancellation', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            alert('Cancellation request declined');
+                            document.getElementById('cancellationRequestSection').style.display = 'none';
+                        } else {
+                            alert('Failed to decline cancellation request: ' + result.message);
+                        }
+                    } catch (error) {
+                        console.error('Error declining cancellation:', error);
+                        alert('Failed to decline cancellation request. Please try again.');
+                    }
+                }
+            });
+
+            // Fetch order details
+            async function fetchOrderDetails() {
+    try {
+        const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
+
+        console.log('Order details:', result);
+
+        // Set service ID
+        serviceId = result.data.order.service_id;
+
+        // IMPORTANT: Set the seller ID as the otherUserId for the chat
+        window.otherUserId = result.data.order.seller_id;
+        console.log("Set otherUserId (seller):", window.otherUserId);
+
+        // If the chat is already initialized, update it with the seller_id
+        if (window.updateChatParticipant) {
+            window.updateChatParticipant(window.otherUserId);
+        }
+
+        // Render order details
+        username.textContent = result.data.user.name;
+        sellerName.textContent = result.data.user.name;
+        orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
+
+        // Calculate due date
+        const createdDate = new Date(result.data.order.created_at.replace(' ', 'T'));
+        const deliveryDays = result.data.promise.delivery_days;
+        const dueDate = new Date(createdDate.getTime() + deliveryDays * 24 * 60 * 60 * 1000);
+        orderDue.textContent = dueDate.toLocaleString();
+
+        // Check if order is already cancelled
+        const isCancelled = result.data.order.status === 'cancelled' ||
+            result.data.order.cancellation_status === 'accepted' ||
+            (result.data.order.cancellation_acceptancy === 'yes');
+        
+        // Check if order is already accepted
+        const isAccepted = result.data.order.status === 'accepted' || 
+            result.data.order.order_status === 'completed';
+
+        if (isCancelled) {
+            // Hide time left section content
+            document.querySelector('.timer-display').style.display = 'none';
+            document.querySelector('.timer-progress').style.display = 'none';
+            
+            // Hide request revision and accept buttons
+            document.getElementById('request-revision').style.display = 'none';
+            document.getElementById('acceptOrder').style.display = 'none';
+
+            // Show "Order Cancelled" message
+            const timeLeftCard = document.querySelector('.time-card');
+            timeLeftCard.innerHTML = '<div class="cancelled-order-message">Order Cancelled</div>';
+            timeLeftCard.style.backgroundColor = '#fee2e2';
+
+            // Hide cancellation request section if visible
+            document.getElementById('cancellationRequestSection').style.display = 'none';
+
+            // Hide cancel order button
+            document.getElementById('cancelOrder').style.display = 'none';
+        } 
+        // NEW: Handle accepted orders
+        else if (isAccepted) {
+            // Hide the timer display
+            document.querySelector('.timer-display').style.display = 'none';
+            document.querySelector('.timer-progress').style.display = 'none';
+            
+            // Hide the buttons
+            document.getElementById('request-revision').style.display = 'none';
+            document.getElementById('acceptOrder').style.display = 'none';
+            document.getElementById('cancelOrder').style.display = 'none';
+            
+            // Show "Order Accepted" message in green
+            const timeLeftCard = document.querySelector('.time-card');
+            timeLeftCard.innerHTML = '<div class="order-accepted-message">Order Accepted</div>';
+            timeLeftCard.style.backgroundColor = '#dcfce7'; // Light green background
+            
+            // Add CSS for the accepted message if it doesn't exist
+            if (!document.querySelector('style').textContent.includes('.order-accepted-message')) {
+                const styleTag = document.createElement('style');
+                styleTag.textContent = `
+                    .order-accepted-message {
+                        color: #16a34a;
+                        font-size: 1.2em;
+                        font-weight: 600;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                `;
+                document.head.appendChild(styleTag);
             }
         }
+        else {
+            // Start countdown for active orders
+            startCountdown(dueDate, createdDate);
+
+            // Check for cancellation request
+            checkCancellationRequest(result.data);
+
+            // Update cancel button visibility
+            updateCancelButtonVisibility(result.data);
+            updateAcceptButtonVisibility(result.data);
+            updaterevisionButtonVisibility(result.data);
+        }
+
+        // Add CSS for cancelled message if it doesn't exist
+        if (!document.querySelector('style').textContent.includes('.cancelled-order-message')) {
+            const styleTag = document.createElement('style');
+            styleTag.textContent = `
+                .cancelled-order-message {
+                    color: #b91c1c;
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    padding: 20px;
+                    text-align: center;
+                }
+            `;
+            document.head.appendChild(styleTag);
+        }
+
+        // Rest of your existing code...
+
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+    }
+}
+
+        async function loadGigDetails() {
+    try {
+        const response = await fetch(`/api/order/${orderId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch order details');
+        }
+        
+        const result1 = await response.json();
+        console.log('Order details:', result1);
+
+        const id = result1.data.order.service_id;
+        console.log('Service ID:', id);
+
+        const response2 = await fetch(`/api/service/${id}`);
+        if (!response2.ok) {
+            throw new Error('Failed to fetch service details');
+        }
+
+        const result = await response2.json();
+        console.log('Gig details:', result);
+        
+        // Update gig image
+        const gigImage = document.getElementById('gigImage');
+        if (result.cover_image) {
+            let imageUrl;
+            
+            // Handle different possible formats of cover_image
+            if (typeof result.cover_image === 'string') {
+                // Direct string path
+                if (result.cover_image.startsWith('[') || result.cover_image.startsWith('{')) {
+                    // It's a JSON string, need to parse
+                    try {
+                        const parsed = JSON.parse(result.cover_image);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            imageUrl = parsed[0];
+                        } else {
+                            imageUrl = parsed.path || parsed.url || parsed;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing cover_image JSON:', e);
+                        imageUrl = result.cover_image;
+                    }
+                } else {
+                    // Simple string path
+                    imageUrl = result.cover_image;
+                }
+            } else if (Array.isArray(result.cover_image) && result.cover_image.length > 0) {
+                // Array format
+                imageUrl = result.cover_image[0];
+            } else if (typeof result.cover_image === 'object') {
+                // Object format
+                imageUrl = result.cover_image.path || result.cover_image.url;
+            }
+            
+            // Ensure the path starts with a slash
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                imageUrl = '/' + imageUrl;
+            }
+            
+            console.log('Setting gig image URL:', imageUrl);
+            gigImage.src = imageUrl;
+        } else {
+            gigImage.src = '/assets/cover_image/default-gig.jpg';
+        }
+            
+        // Update gig title
+        // Create link to gig page
+        const gigTitle = document.getElementById('gigTitle');
+        const serviceLink = document.createElement('a');
+        serviceLink.href = `/services/${id}`;
+        serviceLink.textContent = result.title || 'No title available';
+        serviceLink.style.textDecoration = 'none';
+        serviceLink.style.color = '#111827';
+        serviceLink.style.fontWeight = '600';
+        serviceLink.style.display = 'block';
+        serviceLink.target = '_blank'; // Open in new tab
+        gigTitle.innerHTML = ''; // Clear existing content
+        gigTitle.appendChild(serviceLink);
+        
+        document.getElementById('gigPrice').textContent = "LKR " + (result1.data.promise.price || 'Price not available');
+            
+    } catch (error) {
+        console.error('Error loading gig details:', error);
+        document.getElementById('gigTitle').textContent = 'Error loading gig details';
+        document.getElementById('gigImage').src = '/assets/cover_image/default-gig.jpg';
+    }
+}
 
         // Updated function to load order requirements and display files properly
         async function loadOrderRequirements() {
@@ -1741,52 +2258,100 @@
 }
 
 
-
-    async function updateStatus() {
-        // Make sure orderId is defined
-        if (typeof orderId === 'undefined' || !orderId) {
-                console.error('Order ID is not defined');
-                return;
-            }
-
-        console.log('Updating status for order:', orderId);
+// Update the yesAccept click handler function
+document.getElementById('yesAccept').addEventListener('click', async () => {
+    try {
+        // Call the API to update the status
+        const result = await updateStatus();
         
-        $updated_status = 'accepted';
-        $order_updated_status = 'completed';
-
-        const updateData = {
-            order_id: orderId,
-            status: $updated_status,
-            order_status : $order_updated_status
-        };
-
-        try {
-            const response = await fetch('/api/update-delivery-status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updateData)
-            });
-            console.log('Response:', response);
-           
-            const result = await response.json();
-            if (!result.success) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        // If API call was successful, update UI
+        if (result && result.success) {
+            // Hide the timer display
+            document.querySelector('.timer-display').style.display = 'none';
+            document.querySelector('.timer-progress').style.display = 'none';
+            
+            // Hide the buttons
+            document.getElementById('request-revision').style.display = 'none';
+            document.getElementById('acceptOrder').style.display = 'none';
+            document.getElementById('cancelOrder').style.display = 'none';
+            
+            // Show "Order Accepted" message in green
+            const timeLeftCard = document.querySelector('.time-card');
+            timeLeftCard.innerHTML = '<div class="order-accepted-message">Order Accepted</div>';
+            timeLeftCard.style.backgroundColor = '#dcfce7'; // Light green background
+            
+            // Add CSS for the accepted message if it doesn't exist
+            if (!document.querySelector('style').textContent.includes('.order-accepted-message')) {
+                const styleTag = document.createElement('style');
+                styleTag.textContent = `
+                    .order-accepted-message {
+                        color: #16a34a;
+                        font-size: 1.2em;
+                        font-weight: 600;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                `;
+                document.head.appendChild(styleTag);
             }
-
-            console.log('Status updated successfully:', result);
-
-            // Update the status in the UI
-            document.getElementById('status').textContent = $updated_status;
-
-            // Close the popup
-            document.getElementById('deliveryDetailsPopup').classList.remove('active');
-            document.getElementById('backdrop').classList.remove('active');
-        } catch (error) {
-            console.error('Error updating status:', error);
         }
-    }    
+        
+        // Close the popup
+        acceptPopup.classList.remove('active');
+        backdrop.classList.remove('active');
+    } catch (error) {
+        console.error('Error accepting order:', error);
+        alert('There was an error accepting the order. Please try again.');
+        
+        // Close the popup
+        acceptPopup.classList.remove('active');
+        backdrop.classList.remove('active');
+    }
+});
+
+
+async function updateStatus() {
+    // Make sure orderId is defined
+    if (typeof orderId === 'undefined' || !orderId) {
+        console.error('Order ID is not defined');
+        return { success: false, message: 'Order ID is not defined' };
+    }
+
+    console.log('Updating status for order:', orderId);
+    
+    $updated_status = 'accepted';
+    $order_updated_status = 'completed';
+
+    const updateData = {
+        order_id: orderId,
+        status: $updated_status,
+        order_status: $order_updated_status
+    };
+
+    try {
+        const response = await fetch('/api/update-delivery-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        });
+        console.log('Response:', response);
+       
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Status updated successfully:', result);
+        
+        // Return the result to the calling function
+        return result;
+    } catch (error) {
+        console.error('Error updating status:', error);
+        throw error;
+    }
+}    
     
 
 function showDeliveryDetails(data) {
@@ -2379,7 +2944,8 @@ if (data.content_link) {
         fetchOrderDetails();
         loadOrderRequirements();
         loadDeliveryData();
-        showDeliveryDetails(data);
+
+        loadGigDetails();
     });
     </script>
     <script>
