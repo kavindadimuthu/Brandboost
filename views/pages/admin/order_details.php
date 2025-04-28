@@ -895,7 +895,7 @@
                         </div>
                     </div>
 
-                    
+
 
                     <!-- Tabs for different sections -->
                     <div class="tabs" id="orderDetailsTabs">
@@ -991,38 +991,21 @@
                             <div class="card-body">
                                 <form id="adminActionsForm">
                                     <input type="hidden" name="order_id" id="form-order-id">
+                                    
+                                    <!-- Cancel Order Button -->
                                     <div class="form-group">
-                                        <label for="orderStatus" class="form-label">Change Order Status</label>
-                                        <div class="input-group">
-                                            <select class="form-control" id="orderStatus" name="order_status">
-                                                <option value="">Select status...</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="in_progress">In Progress</option>
-                                                <option value="completed">Completed</option>
-                                                <option value="canceled">Cancelled</option>
-                                                <option value="disputed">Disputed</option>
-                                            </select>
-                                            <button type="submit" id="saveChangesBtn" class="btn btn-primary" style="margin-left: 0.2rem;">
-                                                <i class="fas fa-save"></i> Save
-                                            </button>
-                                        </div>
+                                        <button type="button" id="cancelOrderBtn" class="btn btn-danger" style="width: 100%;">
+                                            <i class="fas fa-ban"></i> Cancel Order & Process Refund
+                                        </button>
+                                        <small class="text-muted mt-2 d-block">This action will cancel the order and refund the buyer.</small>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="refundAmount" class="form-label">Issue Refund</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="refundAmount" name="refund_amount" placeholder="Amount" step="0.01" min="0">
-                                            <button type="button" id="refundBtn" class="btn btn-warning" style="margin-left: 0.2rem;">
-                                                <i class="fas fa-money-bill-wave"></i> Process Refund
-                                            </button>
-                                        </div>
-                                        <small class="text-muted" id="max-refund">Max refund: $0.00</small>
-                                    </div>
-                                    <div id="dispute-action-container" style="margin-top: 10px; display: none;">
+                                    
+                                    <div id="dispute-action-container" style="margin-top: 15px; display: none;">
                                         <button type="button" id="resolveDisputeBtn" class="btn btn-success" style="width: 100%;">
                                             <i class="fas fa-check-circle"></i> Mark Dispute as Resolved
                                         </button>
                                     </div>
+                                    
                                     <div style="margin-top: 20px; display: flex; justify-content: space-between; gap: 0.5rem;">
                                         <div class="dropdown" style="margin-bottom: 10px; position: relative; width: 100%;">
                                             <button type="button" class="btn btn-danger" id="actOnBuyerBtn" style="width: 100%;">
@@ -1187,13 +1170,14 @@
             // Set remaining revisions
             document.getElementById('remaining-revisions').textContent = order.remained_revisions || 0;
 
-            // Set max refund amount
-            document.getElementById('max-refund').textContent = `Max refund: ${formatPrice(promise.price || 0)}`;
-            document.getElementById('refundAmount').setAttribute('max', promise.price || 0);
-
-            // Set order status dropdown
-            const orderStatusSelect = document.getElementById('orderStatus');
-            orderStatusSelect.value = order.order_status;
+            // These elements have been removed, so we need to remove the code or handle conditionally
+            // REMOVE OR COMMENT OUT THESE LINES:
+            // document.getElementById('max-refund').textContent = `Max refund: ${formatPrice(promise.price || 0)}`;
+            // document.getElementById('refundAmount').setAttribute('max', promise.price || 0);
+            
+            // REMOVE OR COMMENT OUT THIS CODE:
+            // const orderStatusSelect = document.getElementById('orderStatus');
+            // orderStatusSelect.value = order.order_status;
 
             // Show/hide dispute resolution button
             const disputeActionContainer = document.getElementById('dispute-action-container');
@@ -1658,32 +1642,13 @@
 
         // Setup form handlers
         function setupFormHandlers() {
-            // Form submission handler
-            document.getElementById('adminActionsForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const data = {};
-
-                formData.forEach((value, key) => {
-                    if (value) data[key] = value;
-                });
-
-                // Send API request to update order
-                updateOrder(data);
-            });
-
-            // Refund button handler
-            document.getElementById('refundBtn').addEventListener('click', function() {
-                const amount = document.getElementById('refundAmount').value;
-                if (!amount || amount <= 0) {
-                    showNotification('Please enter a valid refund amount', 'error');
-                    return;
-                }
-
-                if (confirm(`Are you sure you want to issue a refund of $${amount}?`)) {
-                    // In a real implementation, this would call a refund API
-                    showNotification(`Refund of $${amount} processed successfully`, 'success');
+            // Handle order cancellation
+            document.getElementById('cancelOrderBtn').addEventListener('click', function() {
+                const orderId = document.getElementById('form-order-id').value;
+                
+                if (confirm('Are you sure you want to cancel this order and process a refund? This action cannot be undone.')) {
+                    // Call the API to cancel the order and process refund
+                    cancelOrder(orderId);
                 }
             });
 
@@ -1762,6 +1727,41 @@
                     // Close the dropdown
                     document.getElementById('sellerActionMenu').style.display = 'none';
                 });
+            });
+        }
+
+        // Function to cancel order and process refund
+        function cancelOrder(orderId) {
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('order_id', orderId);
+            formData.append('status', 'accepted'); // 'accepted' triggers cancellation and refund in the API
+            formData.append('responder', 'admin'); // Assuming the responder is admin for cancellation
+
+            // Call the API to cancel the order
+            fetch('/api/respond-to-cancellation', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to cancel order');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    showNotification('Order cancelled and refund processed successfully', 'success');
+                    
+                    // Refresh order data to update the status display
+                    fetchOrderDetails(orderId);
+                } else {
+                    showNotification('Error: ' + (result.message || 'Failed to cancel order'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error cancelling order: ' + error.message, 'error');
             });
         }
 

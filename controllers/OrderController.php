@@ -22,6 +22,7 @@ use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
 use app\models\Actions\Complaint;
 use app\models\Communication\Notification;
+use app\models\Actions\Action;
 
 class OrderController extends BaseController
 {
@@ -853,6 +854,7 @@ class OrderController extends BaseController
 
             $orderId = $_POST['order_id'] ?? null;
             $status = $_POST['status'] ?? null;
+            $responder = $_POST['responder'] ?? null; // 'admin' or not specified
 
             // Validate required fields
             if (!$orderId || !$status) {
@@ -909,9 +911,9 @@ class OrderController extends BaseController
                 error_log("Orderrrrrrrr status updated to 'canceled' for order ID: $orderId, result: " . ($result ? 'success' : 'failure'));
 
                 if ($result) {
+                    // Refund the customer - assuming you have a refund process in place
                     $transaction = new Transaction();
                     $refund_time = date('Y-m-d H:i:s');
-
 
                     $returned_transaction = $transaction->getTransactionsByOrderId($orderId);
                     error_log("Returned transaction: " . json_encode($returned_transaction));
@@ -934,6 +936,52 @@ class OrderController extends BaseController
                 }
 
                 if ($result && $transaction_result && $wallet_result) {
+                    
+                    // Send notification to the customer about cancellation acceptance
+                    $notificationModel = new Notification();
+                    $notificationDataForCustomer = [
+                        'generated_by' => 'system',
+                        'admin_id' => null,
+                        'receiver_id' => $order['customer_id'],
+                        'generation_note' => "Order cancellation - Order ID #" .  $orderId,
+                        'notification' => "Your order has been canceled. Refunded amount: " . $transaction_amount,
+                        'read_status' => 'unread',
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+
+                    if (!$notificationModel->create($notificationDataForCustomer)) {
+                        error_log('Failed to create notification for the customer.');
+                    }
+
+                    // Send notification to the seller about cancellation acceptance
+                    $notificationDataForSeller = [
+                        'generated_by' => 'system',
+                        'admin_id' => null,
+                        'receiver_id' => $order['seller_id'],
+                        'generation_note' => "Order cancellation - Order ID #" .  $orderId,
+                        'notification' => "Your order has been canceled.",
+                        'read_status' => 'unread',
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    if (!$notificationModel->create($notificationDataForSeller)) {
+                        error_log('Failed to create notification for the seller.');
+                    }
+
+                    // Log in admin action logs if responder is admin
+                    if ($responder === 'admin') {
+                        $adminActionModel = new Action();
+                        $actionData = [
+                            'admin_id' => $user['user_id'],
+                            'user_id' => $order['customer_id'],
+                            'order_id' => $orderId,
+                            'action_type' => 'order_canceled',
+                            'action_note' => "Order cancellation accepted by admin. Refunded amount: " . $transaction_amount,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ];
+                        $adminActionModel->create($actionData);
+                    }
+
+                    // Send success response
                     $response->sendJson([
                         'success' => true,
                         'message' => 'Cancellation request accepted successfully and refunded!'
