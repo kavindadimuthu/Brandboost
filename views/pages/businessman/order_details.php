@@ -1666,9 +1666,52 @@
 
 
 
-async function updateStatus() {
+    async function updateStatus() {
+        // Make sure orderId is defined
+        if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
+
+        console.log('Updating status for order:', orderId);
+        
+        $updated_status = 'accepted';
+        $order_updated_status = 'completed';
+
+        const updateData = {
+            order_id: orderId,
+            status: $updated_status,
+            order_status : $order_updated_status
+        };
+
+        try {
+            const response = await fetch('/api/update-delivery-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+            console.log('Response:', response);
+           
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            console.log('Status updated successfully:', result);
+
+            // Update the status in the UI
+            document.getElementById('status').textContent = $updated_status;
+
+            // Close the popup
+            document.getElementById('deliveryDetailsPopup').classList.remove('active');
+            document.getElementById('backdrop').classList.remove('active');
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    }    
     
-}
 
 function showDeliveryDetails(data) {
     console.log('Showing delivery details:', data);
@@ -1778,7 +1821,7 @@ if (data.content_link) {
         
 
         // Handle revision media
-if(data.revision_note){
+    if(data.revision_note){
         console.log('Showing revision details:', data);
     
     // Populate main details with fallbacks for missing data

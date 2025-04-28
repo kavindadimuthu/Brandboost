@@ -72,61 +72,82 @@ class RevisionController extends BaseController {
 
             $orderModel = new Orders();
             $returnedOrder = $orderModel->getOrderById($orderId);
+            $remainRevision = $returnedOrder['remained_revisions'];
             $reportedUserId = $returnedOrder['seller_id'];
 
-            $deliveriesModel = new OrderDeliveries();
-            $returnedDelivery = $deliveriesModel->getDeliveriesByOrder($orderId);
-
-            // Check if there are any deliveries
-            if (empty($returnedDelivery) || !is_array($returnedDelivery)) {
+            if($remainRevision==0){
                 $response->sendJson([
                     'success' => false,
-                    'message' => 'No deliveries found for this order.'
+                    'message' => 'No revisions left.'
                 ]);
                 return;
-            }
+            }else{
 
-            // Find the latest delivery by ID
-            $latestDelivery = null;
-            $latestDeliveryId = 0;
+                $deliveriesModel = new OrderDeliveries();
+                $returnedDelivery = $deliveriesModel->getDeliveriesByOrder($orderId);
 
-            foreach ($returnedDelivery as $delivery) {
-                if (isset($delivery['delivery_id']) && $delivery['delivery_id'] > $latestDeliveryId) {
-                    $latestDeliveryId = $delivery['delivery_id'];
-                    $latestDelivery = $delivery;
+                // Check if there are any deliveries
+                if (empty($returnedDelivery) || !is_array($returnedDelivery)) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'No deliveries found for this order.'
+                    ]);
+                    return;
                 }
-            }
 
-            if (!$latestDelivery) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Could not determine the latest delivery.'
-                ]);
-                return;
-            }
+                // Find the latest delivery by ID
+                $latestDelivery = null;
+                $latestDeliveryId = 0;
 
-            // Save Revision request in DB
-            $revision = [
-                'delivery_id' => $latestDeliveryId,
-                'order_id' => $orderId,
-                'revision_note' => $content, 
-                'revision_files' => json_encode($savedFiles), // Fixed: removed unnecessary array brackets
-                'status' => 'rejected',
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-    
-            if (!$deliveriesModel->updateDelivery($latestDeliveryId, $revision)) {
+                foreach ($returnedDelivery as $delivery) {
+                    if (isset($delivery['delivery_id']) && $delivery['delivery_id'] > $latestDeliveryId) {
+                        $latestDeliveryId = $delivery['delivery_id'];
+                        $latestDelivery = $delivery;
+                    }
+                }
+
+                if (!$latestDelivery) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'Could not determine the latest delivery.'
+                    ]);
+                    return;
+                }
+
+                // Save Revision request in DB
+                $revision = [
+                    'delivery_id' => $latestDeliveryId,
+                    'order_id' => $orderId,
+                    'revision_note' => $content, 
+                    'revision_files' => json_encode($savedFiles), // Fixed: removed unnecessary array brackets
+                    'status' => 'rejected',
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+
+                $previous_delivery_status = 'rejected';
+
+                foreach ($returnedDelivery as $delivery) {
+                    if (isset($delivery['delivery_id'])) {
+                        $previous_deliveries_rejected = $deliveriesModel->updateDelivery($delivery['delivery_id'], ['status' => $previous_delivery_status]);
+                    }
+                }
+
+        
+                if (!$deliveriesModel->updateDelivery($latestDeliveryId, $revision) || !$previous_deliveries_rejected) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'Failed to submit revision request.'
+                    ]);
+                    return;
+                }
+        
                 $response->sendJson([
-                    'success' => false,
-                    'message' => 'Failed to submit revision request.'
+                    'success' => true,
+                    'message' => 'Revision requested successfully.'
                 ]);
-                return;
+
+
             }
-    
-            $response->sendJson([
-                'success' => true,
-                'message' => 'Revision requested successfully.'
-            ]);
             
         } catch (\Exception $e) {
             // Log the error
