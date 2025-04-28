@@ -493,17 +493,15 @@
                     <small>Include your process, what clients will receive, and your unique value proposition</small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group"style="display: none;">
                     <label>Delivery Formats</label>
                     <div class="checkbox-group" id="deliveryFormats">
-                        <!-- Delivery format checkboxes will be inserted here by JavaScript -->
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="serviceType">Service Type</label>
                     <select id="serviceType" name="serviceType" required>
-                        <!-- Service types will be inserted here by JavaScript -->
                     </select>
                 </div>
 
@@ -903,15 +901,15 @@
                     return false;
                 }
 
-                if (!serviceType) {
-                    this.showError('Please select a service type');
-                    return false;
-                }
+                // if (!serviceType) {
+                //     this.showError('Please select a service type');
+                //     return false;
+                // }
 
-                if (deliveryFormats.length === 0) {
-                    this.showError('Please select at least one delivery format');
-                    return false;
-                }
+                // if (deliveryFormats.length === 0) {
+                //     this.showError('Please select at least one delivery format');
+                //     return false;
+                // }
 
                 if (platforms.length === 0) {
                     this.showError('Please select at least one platform');
