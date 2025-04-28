@@ -9,26 +9,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <!-- Custom styles -->
     <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --pending-color: #f97316;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
         /* CSS Reset */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f8fa;
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
         }
 
-        /* Layout */
         .container {
-            width: 100%;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            /* padding: 0 10px; */
+            padding: 0 1rem;
         }
 
         .grid {
@@ -41,6 +62,52 @@
             .grid {
                 grid-template-columns: 2fr 1fr;
             }
+        }
+
+        /* Add these styles to the existing CSS in the header */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            color: var(--gray-500);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+
+        .description-content {
+            background-color: var(--gray-50);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            white-space: pre-line;
+            line-height: 1.6;
+            font-size: 0.875rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h2 i {
+            color: var(--primary-color);
         }
 
         /* Cards */
@@ -134,14 +201,33 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .header {
+            font-size: 0.875rem;
+            color: var(--gray-600);
         }
 
         .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--gray-600);
             list-style: none;
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            font-size: 0.875rem;
+            text-decoration: none;
+            color: var(--gray-600);
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
         }
 
         .breadcrumb li {
@@ -152,23 +238,59 @@
         .breadcrumb li:after {
             content: '>';
             margin-left: 5px;
-            color: #6c757d;
         }
 
         .breadcrumb li:last-child:after {
             content: '';
         }
 
-        /* Badge & Status */
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
+        .page-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        /* Badge & Status */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .badge-pending {
+            background-color: var(--pending-color);
+            color: white;
+        }
+
+        .badge-in-progress {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .badge-completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-canceled {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .badge-disputed {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* badge types */
         .badge-warning {
             background-color: #ffc107;
             color: #212529;
@@ -274,7 +396,8 @@
 
         .btn-primary {
             color: #fff;
-            background-color: #3a86ff;
+            /* background-color: #3a86ff; */
+            background-color: var(--primary-color);
             border-color: #3a86ff;
         }
 
@@ -295,12 +418,15 @@
         }
 
         .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
+            /* color: #fff; */
+            color: #dc3545;
+            /* background-color: #dc3545; */
+            background-color: #fff;
             border-color: #dc3545;
         }
 
         .btn-danger:hover {
+            color: #fff;
             background-color: #c82333;
             border-color: #bd2130;
         }
@@ -317,7 +443,8 @@
         }
 
         .btn-outline-primary {
-            color: #3a86ff;
+            /* color: #3a86ff; */
+            color: var(--primary-color);
             background-color: transparent;
             border-color: #3a86ff;
         }
@@ -344,7 +471,9 @@
         }
 
         .btn-group {
+            width: 100%;
             display: flex;
+            justify-content: space-between;
             gap: 5px;
         }
 
@@ -407,32 +536,73 @@
             }
         }
 
-        /* Profile Card */
-        .profile-card {
+        /* User profile styles */
+        .user-profile {
             display: flex;
             align-items: center;
-            padding: 15px;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .profile-img {
-            width: 60px;
-            height: 60px;
+        .user-profile:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .user-avatar {
+            width: 3.5rem;
+            height: 3.5rem;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 15px;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
         }
 
-        .profile-details {
+        .user-details {
             flex: 1;
         }
 
-        .profile-role {
-            font-size: 0.8rem;
-            background-color: #e9ecef;
-            padding: 3px 8px;
-            border-radius: 12px;
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role {
             display: inline-block;
-            margin-bottom: 5px;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            background-color: var(--gray-100);
+            border-radius: 9999px;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .user-id {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .user-profile {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: center;
+            }
+
+            .user-avatar {
+                margin-bottom: 0.75rem;
+                margin-right: 0;
+            }
+
+            .user-details {
+                width: 100%;
+                text-align: center;
+            }
         }
 
         /* Timeline */
@@ -459,12 +629,13 @@
         .timeline-item:before {
             content: '';
             position: absolute;
-            left: -30px;
-            top: 5px;
+            left: -25px;
+            top: 15px;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: #3a86ff;
+            /* background-color: #3a86ff; */
+            background-color: var(--primary-color);
         }
 
         .timeline-date {
@@ -539,8 +710,8 @@
             padding: 10px 15px;
             cursor: pointer;
             border: 1px solid transparent;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
             margin-bottom: -1px;
             font-weight: 500;
         }
@@ -660,10 +831,14 @@
     <div class="container">
         <div class="header">
             <ul class="breadcrumb">
-                <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="/admin/orders">Orders</a></li>
                 <li>Order Details</li>
             </ul>
+            <div class="user-info">
+                <img alt="Admin" src="https://storage.googleapis.com/a1aa/image/sh0djlbBORIiKpa1H4WzsuqnYbqkqqh0GXDnxykdWDDdfy6JA.jpg" />
+                <span id="admin-name"><?php echo $_SESSION['user']['username'] ?></span>
+            </div>
         </div>
 
         <div id="loading" class="loading">
@@ -671,10 +846,10 @@
         </div>
 
         <div id="order-content" style="display: none;">
-            <div class="header">
-                <h2>Order Details</h2>
-                <div id="order-status-badge"></div>
-            </div>
+            <h1 class="page-title">
+                Order #<span id="order-id">Loading...</span>
+                <span id="order-status-badge" class="badge">Loading...</span>
+            </h1>
 
             <div class="grid">
                 <!-- Main content column -->
@@ -682,43 +857,45 @@
                     <!-- Order Summary Card -->
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h3>🧾 Order Summary</h3>
+                            <h2><i class="fas fa-clipboard-list"></i> Order Summary</h2>
                             <span class="text-muted" id="order-id-span"></span>
                         </div>
                         <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Order Title</p>
-                                    <p class="mb-1" id="order-title">Loading...</p>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Order Title</div>
+                                    <div class="info-value" id="order-title">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Service Type</p>
-                                    <p class="mb-1" id="service-type">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Service Type</div>
+                                    <div class="info-value" id="service-type">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Order Date</p>
-                                    <p class="mb-1" id="order-date">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Order Date</div>
+                                    <div class="info-value" id="order-date">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Delivery Date</p>
-                                    <p class="mb-1" id="delivery-date">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Delivery Date</div>
+                                    <div class="info-value" id="delivery-date">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Price</p>
-                                    <p class="mb-1" id="order-price">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Price</div>
+                                    <div class="info-value" id="order-price">Loading...</div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <p class="mb-1 text-muted">Payment Status</p>
-                                    <p class="mb-1" id="payment-status">Loading...</p>
+                                <div class="info-item">
+                                    <div class="info-label">Payment Status</div>
+                                    <div class="info-value" id="payment-status">Loading...</div>
                                 </div>
                             </div>
 
-                            <div class="alert alert-light">
-                                <p class="mb-1 text-muted">Delivery Requirements</p>
+                            <div class="description-content" style="margin-top: 20px;">
+                                <p class="info-label">Delivery Requirements</p>
                                 <p id="delivery-requirements">Loading...</p>
                             </div>
                         </div>
                     </div>
+
+
 
                     <!-- Tabs for different sections -->
                     <div class="tabs" id="orderDetailsTabs">
@@ -805,102 +982,86 @@
 
                 <!-- Sidebar column for profiles and actions -->
                 <div>
-                    <!-- Admin Actions Panel -->
-                    <div class="card admin-actions">
-                        <div class="card-header" style="background-color: #3a86ff; color: white;">
-                            <h3>🛠️ Admin Actions</h3>
-                        </div>
-                        <div class="card-body">
-                            <form id="adminActionsForm">
-                                <input type="hidden" name="order_id" id="form-order-id">
-
-                                <div class="form-group">
-                                    <label for="orderStatus" class="form-label">Change Order Status</label>
-                                    <select class="form-control" id="orderStatus" name="order_status">
-                                        <option value="">Select status...</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="in_progress">In Progress</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="canceled">Cancelled</option>
-                                        <option value="disputed">Disputed</option>
-                                    </select>
-                                </div>
-
-                                <hr style="margin: 20px 0;">
-
-                                <div class="form-group">
-                                    <label for="refundAmount" class="form-label">Issue Refund</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="refundAmount" name="refund_amount" placeholder="Amount" step="0.01" min="0">
-                                        <button type="button" class="btn btn-warning" id="refundBtn">Process Refund</button>
+                    <div style="position: sticky; top: 1rem;">
+                        <!-- Admin Actions Panel -->
+                        <div class="card" >
+                            <div class="card-header">
+                                <h2><i class="fas fa-tools"></i> Admin Actions</h2>
+                            </div>
+                            <div class="card-body">
+                                <form id="adminActionsForm">
+                                    <input type="hidden" name="order_id" id="form-order-id">
+                                    
+                                    <!-- Cancel Order Button -->
+                                    <div class="form-group">
+                                        <button type="button" id="cancelOrderBtn" class="btn btn-danger" style="width: 100%;">
+                                            <i class="fas fa-ban"></i> Cancel Order & Process Refund
+                                        </button>
+                                        <small class="text-muted mt-2 d-block">This action will cancel the order and refund the buyer.</small>
                                     </div>
-                                    <small class="text-muted" id="max-refund">Max refund: $0.00</small>
-                                </div>
-
-                                <div style="margin-top: 20px;">
-                                    <div id="dispute-action-container" style="margin-bottom: 10px; display: none;">
-                                        <button type="button" class="btn btn-success" id="resolveDisputeBtn" style="width: 100%;">Mark Dispute as Resolved</button>
+                                    
+                                    <div id="dispute-action-container" style="margin-top: 15px; display: none;">
+                                        <button type="button" id="resolveDisputeBtn" class="btn btn-success" style="width: 100%;">
+                                            <i class="fas fa-check-circle"></i> Mark Dispute as Resolved
+                                        </button>
                                     </div>
-
-                                    <div class="btn-group" style="display: flex; margin-bottom: 10px;">
-                                        <div class="dropdown" style="flex: 1; margin-right: 5px; position: relative;">
-                                            <button type="button" class="btn btn-outline-danger" id="actOnBuyerBtn" style="width: 100%;">
-                                                Act on Buyer <i class="fas fa-caret-down"></i>
+                                    
+                                    <div style="margin-top: 20px; display: flex; justify-content: space-between; gap: 0.5rem;">
+                                        <div class="dropdown" style="margin-bottom: 10px; position: relative; width: 100%;">
+                                            <button type="button" class="btn btn-danger" id="actOnBuyerBtn" style="width: 100%;">
+                                                <i class="fas fa-user-times"></i> Act on Buyer
                                             </button>
-                                            <div class="dropdown-menu" id="buyerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid #dee2e6; border-radius: 4px; width: 100%; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                                                <a href="#" class="dropdown-item buyer-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: #333;">
+                                            <div class="dropdown-menu" id="buyerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid var(--gray-300); border-radius: var(--radius); width: 100%; z-index: 10; box-shadow: var(--shadow);">
+                                                <a href="#" class="dropdown-item buyer-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800);">
                                                     <i class="fas fa-ban text-warning"></i> Block Buyer
                                                 </a>
-                                                <a href="#" class="dropdown-item buyer-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: #333; border-top: 1px solid #dee2e6;">
+                                                <a href="#" class="dropdown-item buyer-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800); border-top: 1px solid var(--gray-200);">
                                                     <i class="fas fa-user-slash text-danger"></i> Ban Buyer
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="dropdown" style="flex: 1; margin-left: 5px; position: relative;">
-                                            <button type="button" class="btn btn-outline-danger" id="actOnSellerBtn" style="width: 100%;">
-                                                Act on Seller <i class="fas fa-caret-down"></i>
+                                        <div class="dropdown" style="position: relative; width: 100%;">
+                                            <button type="button" class="btn btn-danger" id="actOnSellerBtn" style="width: 100%;">
+                                                <i class="fas fa-user-times"></i> Act on Seller
                                             </button>
-                                            <div class="dropdown-menu" id="sellerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid #dee2e6; border-radius: 4px; width: 100%; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                                                <a href="#" class="dropdown-item seller-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: #333;">
+                                            <div class="dropdown-menu" id="sellerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid var(--gray-300); border-radius: var(--radius); width: 100%; z-index: 10; box-shadow: var(--shadow);">
+                                                <a href="#" class="dropdown-item seller-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800);">
                                                     <i class="fas fa-ban text-warning"></i> Block Seller
                                                 </a>
-                                                <a href="#" class="dropdown-item seller-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: #333; border-top: 1px solid #dee2e6;">
+                                                <a href="#" class="dropdown-item seller-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800); border-top: 1px solid var(--gray-200);">
                                                     <i class="fas fa-user-slash text-danger"></i> Ban Seller
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary" id="saveChangesBtn" style="width: 100%;">Save Changes</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Buyer Profile Card -->
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h3>👤 Buyer Profile</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="profile-card" id="buyer-profile">
-                                <div class="loading">
-                                    <div class="spinner"></div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Seller Profile Card -->
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h3>👤 Seller Profile</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="profile-card" id="seller-profile">
-                                <div class="loading">
-                                    <div class="spinner"></div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                            <!-- Buyer Profile Card -->
+                            <div class="card" style="flex: 1; min-width: 300px;">
+                                <div class="card-header">
+                                    <h2><i class="fas fa-user-check"></i> Buyer Details</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="user-profile" id="buyer-profile">
+                                        <div class="loading">
+                                            <div class="spinner"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Seller Profile Card -->
+                            <div class="card" style="flex: 1; min-width: 300px;">
+                                <div class="card-header">
+                                    <h2><i class="fas fa-store"></i> Seller Details</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="user-profile" id="seller-profile">
+                                        <div class="loading">
+                                            <div class="spinner"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -983,13 +1144,14 @@
             const acceptedService = JSON.parse(promise.accepted_service || '{}');
             const requestedService = JSON.parse(promise.requested_service || '{}');
 
-            // Set order ID
+            // Set order ID in page title
+            document.getElementById('order-id').textContent = order.order_id;
             document.getElementById('order-id-span').textContent = `Order #${order.order_id}`;
 
-            // Set order status
-            const statusElement = document.getElementById('order-status-badge');
-            statusElement.className = `badge ${getStatusBadgeClass(order.order_status)}`;
-            statusElement.textContent = capitalizeFirstLetter(order.order_status);
+            // Set order status badge in page title
+            const statusBadge = document.getElementById('order-status-badge');
+            statusBadge.className = `badge badge-${order.order_status.replace('_', '-')}`;
+            statusBadge.textContent = capitalizeFirstLetter(order.order_status);
 
             // Set order summary details
             document.getElementById('order-title').textContent = acceptedService.title || 'N/A';
@@ -1008,13 +1170,14 @@
             // Set remaining revisions
             document.getElementById('remaining-revisions').textContent = order.remained_revisions || 0;
 
-            // Set max refund amount
-            document.getElementById('max-refund').textContent = `Max refund: ${formatPrice(promise.price || 0)}`;
-            document.getElementById('refundAmount').setAttribute('max', promise.price || 0);
-
-            // Set order status dropdown
-            const orderStatusSelect = document.getElementById('orderStatus');
-            orderStatusSelect.value = order.order_status;
+            // These elements have been removed, so we need to remove the code or handle conditionally
+            // REMOVE OR COMMENT OUT THESE LINES:
+            // document.getElementById('max-refund').textContent = `Max refund: ${formatPrice(promise.price || 0)}`;
+            // document.getElementById('refundAmount').setAttribute('max', promise.price || 0);
+            
+            // REMOVE OR COMMENT OUT THIS CODE:
+            // const orderStatusSelect = document.getElementById('orderStatus');
+            // orderStatusSelect.value = order.order_status;
 
             // Show/hide dispute resolution button
             const disputeActionContainer = document.getElementById('dispute-action-container');
@@ -1375,21 +1538,25 @@
                 .then(buyer => {
                     if (buyer) {
                         container.innerHTML = `
-                            <img src="/${buyer.profile_picture}" alt="Buyer profile" class="profile-img">
-                            <div class="profile-details">
-                                <h4 style="margin: 0 0 5px 0;">${buyer.name || 'Unknown'}</h4>
-                                <span class="profile-role">Business</span>
-                                <p style="margin: 10px 0; font-size: 14px;">Member since: ${buyer.created_at ? formatDate(buyer.created_at) : 'N/A'}</p>
-                                <a href="/admin/user-profile/${buyer.user_id}" class="btn btn-outline-primary btn-sm">View Profile</a>
-                            </div>
-                        `;
+                    <img src="/${buyer.profile_picture || 'https://via.placeholder.com/70'}" alt="Buyer" class="user-avatar">
+                    <div class="user-details">
+                        <div class="user-name">${buyer.name || buyer.username || 'Unknown'}</div>
+                        <div class="user-role">Business</div>
+                        <div class="user-id">User ID: ${buyer.user_id || order.customer_id}</div>
+                        <div>${buyer.email || ''}</div>
+                        <div style="margin-top: 0.5rem;">
+                            <a href="/admin/user-profile/${buyer.user_id || order.customer_id}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-external-link-alt"></i> View Profile
+                            </a>
+                        </div>
+                    </div>
+                `;
                     } else {
                         container.innerHTML = `
-                            <p class="text-muted text-center">Buyer information not available</p>
-                        `;
+                    <div class="text-muted text-center" style="width: 100%;">Buyer information not available</div>
+                `;
                     }
                 });
-
         }
 
         async function fetchBuyerProfile(userId) {
@@ -1414,27 +1581,31 @@
 
             // Extract service type
             const acceptedService = JSON.parse(promise.accepted_service || '{}');
-            const serviceType = acceptedService.serviceType || 'Unknown';
+            const serviceType = acceptedService.service_type || 'Unknown';
 
             fetchSellerProfile(order.seller_id)
                 .then(seller => {
                     if (seller) {
                         container.innerHTML = `
-                            <img src="/${seller.profile_picture}" alt="Seller profile" class="profile-img">
-                            <div class="profile-details">
-                                <h4 style="margin: 0 0 5px 0;">${seller.name}</h4>
-                                <span class="profile-role">${serviceType === 'promotion' ? 'Influencer' : 'Designer'}</span>
-                                <p style="margin: 10px 0; font-size: 14px;">Member since: ${formatDate(seller.created_at)}</p>
-                                <a href="/admin/user-profile/${seller.user_id}" class="btn btn-outline-primary btn-sm">View Profile</a>
-                            </div>
-                        `;
+                    <img src="/${seller.profile_picture || 'https://via.placeholder.com/70'}" alt="Seller" class="user-avatar">
+                    <div class="user-details">
+                        <div class="user-name">${seller.name || seller.username || 'Unknown'}</div>
+                        <div class="user-role">${serviceType === 'promotion' ? 'Influencer' : 'Designer'}</div>
+                        <div class="user-id">User ID: ${seller.user_id || order.seller_id}</div>
+                        <div>${seller.email || ''}</div>
+                        <div style="margin-top: 0.5rem;">
+                            <a href="/admin/user-profile/${seller.user_id || order.seller_id}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-external-link-alt"></i> View Profile
+                            </a>
+                        </div>
+                    </div>
+                `;
                     } else {
                         container.innerHTML = `
-                        <p class="text-muted text-center">Seller information not available</p>
-                    `;
+                    <div class="text-muted text-center" style="width: 100%;">Seller information not available</div>
+                `;
                     }
                 });
-
         }
 
         async function fetchSellerProfile(userId) {
@@ -1471,32 +1642,13 @@
 
         // Setup form handlers
         function setupFormHandlers() {
-            // Form submission handler
-            document.getElementById('adminActionsForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const data = {};
-
-                formData.forEach((value, key) => {
-                    if (value) data[key] = value;
-                });
-
-                // Send API request to update order
-                updateOrder(data);
-            });
-
-            // Refund button handler
-            document.getElementById('refundBtn').addEventListener('click', function() {
-                const amount = document.getElementById('refundAmount').value;
-                if (!amount || amount <= 0) {
-                    showNotification('Please enter a valid refund amount', 'error');
-                    return;
-                }
-
-                if (confirm(`Are you sure you want to issue a refund of $${amount}?`)) {
-                    // In a real implementation, this would call a refund API
-                    showNotification(`Refund of $${amount} processed successfully`, 'success');
+            // Handle order cancellation
+            document.getElementById('cancelOrderBtn').addEventListener('click', function() {
+                const orderId = document.getElementById('form-order-id').value;
+                
+                if (confirm('Are you sure you want to cancel this order and process a refund? This action cannot be undone.')) {
+                    // Call the API to cancel the order and process refund
+                    cancelOrder(orderId);
                 }
             });
 
@@ -1575,6 +1727,41 @@
                     // Close the dropdown
                     document.getElementById('sellerActionMenu').style.display = 'none';
                 });
+            });
+        }
+
+        // Function to cancel order and process refund
+        function cancelOrder(orderId) {
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('order_id', orderId);
+            formData.append('status', 'accepted'); // 'accepted' triggers cancellation and refund in the API
+            formData.append('responder', 'admin'); // Assuming the responder is admin for cancellation
+
+            // Call the API to cancel the order
+            fetch('/api/respond-to-cancellation', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to cancel order');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    showNotification('Order cancelled and refund processed successfully', 'success');
+                    
+                    // Refresh order data to update the status display
+                    fetchOrderDetails(orderId);
+                } else {
+                    showNotification('Error: ' + (result.message || 'Failed to cancel order'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error cancelling order: ' + error.message, 'error');
             });
         }
 

@@ -243,105 +243,38 @@ class OrderController extends BaseController
         $includeSeller = $queryParams['include_seller'] ?? false;
         
 
-        // Pagination parameters
-        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 100;
-        $offset = isset($queryParams['offset']) ? (int)$queryParams['offset'] : 0;
-        
-        // Sorting parameters
-        $sortBy = $queryParams['sort_by'] ?? 'created_at';
-        $orderDir = strtoupper($queryParams['order_dir'] ?? 'DESC');
-        $allowedSortColumns = [
-            'order_id',
-            'service_id',
-            'customer_id',
-            'seller_id',
-            'payment_type',
-            'delivered_date',
-            'order_status',
-            'created_at'
-        ];
-        
-        // Validate and sanitize sort parameters
-        if (!in_array($sortBy, $allowedSortColumns)) {
-            $sortBy = 'created_at';
-        }
-        if (!in_array($orderDir, ['ASC', 'DESC'])) {
-            $orderDir = 'DESC';
-        }
-
-        // Set base conditions
         $conditions = [];
-        
-        // If user is a businessman, only show their orders
         if(AuthHelper::getCurrentUser()['role'] == 'businessman'){
             $userId = AuthHelper::getCurrentUser()['user_id'] ?? null;
             $conditions['customer_id'] = $userId;
         }
-        
+        error_log("User ID: " . ($userId ?? 'null'));
+
+        error_log($includeCustomer);
+
         // Extract filter conditions from query parameters
         if (!empty($queryParams['customer_id'])) {
             $conditions['customer_id'] = $queryParams['customer_id'];
         }
-        if (!empty($queryParams['seller_id'])) {
-            $conditions['seller_id'] = $queryParams['seller_id'];
-        }
         if (!empty($queryParams['order_status'])) {
             $conditions['order_status'] = $queryParams['order_status'];
         }
-        if (!empty($queryParams['payment_type'])) {
-            $conditions['payment_type'] = $queryParams['payment_type'];
-        }
-        
-        // Date range filtering
-        if (!empty($queryParams['date_from'])) {
-            $conditions['created_at >='] = $queryParams['date_from'];
-        }
-        if (!empty($queryParams['date_to'])) {
-            $conditions['created_at <='] = $queryParams['date_to'] . ' 23:59:59';
-        }
-        
-        // Search functionality
-        $search = $queryParams['search'] ?? '';
-        if (!empty($search)) {
-            // Add search conditions - this will need to be implemented in the Orders model
-            $conditions['search'] = $search;
-        }
-        
-        // Log conditions for debugging
-        error_log("Order List Conditions: " . print_r($conditions, true));
-
-        // Options for fetching orders
-        $options = [
-            'limit' => $limit,
-            'offset' => $offset,
-            'order_by' => $sortBy,
-            'order_dir' => $orderDir
-        ];
+        // if (!empty($queryParams['date_from'])) {
+        //     $conditions['date_from'] = $queryParams['date_from'];
+        // }
+        // if (!empty($queryParams['date_to'])) {
+        //     $conditions['date_to'] = $queryParams['date_to'];
+        // }
+        error_log("Conditions: " );
+        error_log(print_r($conditions, true));
 
         // Fetch orders based on conditions
-        $orders = $orderModel->read($conditions, $options);
-        
-        // Get total count for pagination
-        $totalOrders = $orderModel->count($conditions);
-        
-        // Prepare pagination metadata
-        $totalPages = ceil($totalOrders / $limit);
-        $currentPage = floor($offset / $limit) + 1;
-        $pagination = [
-            'total_records' => $totalOrders,
-            'total_pages' => $totalPages,
-            'current_page' => $currentPage,
-            'limit' => $limit,
-            'offset' => $offset,
-        ];
+        $orders = $orderModel->read($conditions);
 
-        // If no orders found, return appropriate response
         if (empty($orders)) {
             $response->sendJson([
-                'success' => true,
-                'message' => 'No orders found matching the specified conditions.',
-                'data' => [],
-                'pagination' => $pagination
+                'success' => false,
+                'message' => 'No orders found matching the specified conditions.'
             ]);
             return;
         }
@@ -350,34 +283,30 @@ class OrderController extends BaseController
 
         // Fetch promises and customers for each order
         foreach ($orders as $order) {
-            // Get the promise data for this order
             $promise = $orderPromiseModel->getPromiseByOrderId($order['order_id']);
             $order['promise'] = $promise;
 
-            // Include customer details if requested
             if ($includeCustomer) {
+                error_log("entered into loop");
                 $customer = $userModel->getUserById($order['customer_id']);
                 $order['customer'] = $customer;
             }
 
-            // Include seller details if requested
             if ($includeSeller) {
                 $service = $serviceModel->getServiceById($order['service_id']);
-                if ($service) {
-                    $seller = $userModel->getUserById($service['user_id']);
-                    $order['seller'] = $seller;
-                }
+                $seller = $userModel->getUserById($service['user_id']);
+                $order['seller'] = $seller;
             }
 
             $orderList[] = $order;
         }
+        // error_log(print_r($orderList, true));
 
-        // Return the response with data and pagination
+        // Return the response
         $response->sendJson([
             'success' => true,
             'message' => 'Order list retrieved successfully.',
-            'data' => $orderList,
-            'pagination' => $pagination
+            'data' => $orderList
         ]);
     }
 
@@ -653,47 +582,17 @@ class OrderController extends BaseController
                     'created_at' => date('Y-m-d H:i:s')
                 ];
             }
-            // If order is for a promotion, status is pending and for a gig, status is in_progress
-            if($serviceData['service_type'] == 'gig'){
-                $orderData = [
-                    'customer_id' => $customerId,
-                    'seller_id' => $serviceData['user_id'],
-                    'service_id' => $serviceId,
-                    'package_id' => $packageId,
-                    'custom_package_id' => $customPackageId,
-                    'payment_type' => $paymentType,
-                    'remained_revisions' => ($packageData['revisions'] ?? 0) + 1,
-                    'order_status' => 'in_progress',
-                    'created_at' => date('Y-m-d H:i:s')
-                ];
-            }
-            else{
-                $orderData = [
-                    'customer_id' => $customerId,
-                    'seller_id' => $serviceData['user_id'],
-                    'service_id' => $serviceId,
-                    'package_id' => $packageId,
-                    'custom_package_id' => $customPackageId,
-                    'payment_type' => $paymentType,
-                    'remained_revisions' => ($packageData['revisions'] ?? 0) + 1,
-                    'order_status' => 'pending',
-                    'created_at' => date('Y-m-d H:i:s')
-                ];
-            }
-
-
-
-            // $orderData = [
-            //     'customer_id' => $customerId,
-            //     'seller_id' => $serviceData['user_id'],
-            //     'service_id' => $serviceId,
-            //     'package_id' => $packageId,
-            //     'custom_package_id' => $customPackageId,
-            //     'payment_type' => $paymentType,
-            //     'remained_revisions' => ($packageData['revisions'] ?? 0) + 1,
-            //     'order_status' => 'pending',
-            //     'created_at' => date('Y-m-d H:i:s')
-            // ];
+            $orderData = [
+                'customer_id' => $customerId,
+                'seller_id' => $serviceData['user_id'],
+                'service_id' => $serviceId,
+                'package_id' => $packageId,
+                'custom_package_id' => $customPackageId,
+                'payment_type' => $paymentType,
+                'remained_revisions' => ($packageData['revisions'] ?? 0) + 1,
+                'order_status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
 
             error_log("Order dataaaaaaaa: " . json_encode($orderData, JSON_PRETTY_PRINT));
 
@@ -1015,7 +914,7 @@ class OrderController extends BaseController
             }
 
             // Validate status is either 'accepted' or 'declined'
-            if (!in_array($status, ['accepted', 'declined', 'initial_influencer_acceptance'])) {
+            if (!in_array($status, ['accepted', 'declined'])) {
                 $response->sendJson([
                     'success' => false,
                     'message' => 'Invalid status. Must be either "accepted" or "declined".'
@@ -1049,7 +948,7 @@ class OrderController extends BaseController
             }
             error_log("Responding to cancellation request for order ID: $orderId, status: $status");
             // Update order based on response
-            if ($status === 'accepted' || $status === 'initial_influencer_acceptance') {
+            if ($status === 'accepted') {
                 // Accept the cancellation - update order status to cancelled
                 $updateData = [
                     'order_status' => 'canceled',
@@ -1175,133 +1074,4 @@ class OrderController extends BaseController
     }
 
 
-    /**
-     * Update order status to in_progress for initial influencer acceptance
-     * 
-     * This function handles the specific case when an influencer accepts a pending order
-     * 
-     * @param Request $request The incoming request object
-     * @param Response $response The response object to return data
-     * @return void JSON response indicating success or failure
-     */
-    public function updateOrderStatus($request, $response): void
-    {
-        try {
-            // Check authentication
-            $sellerId = AuthHelper::getCurrentUser()['user_id'] ?? null;
-            if (!$sellerId) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Unauthorized access: user not authenticated.'
-                ], 401);
-                return;
-            }
-
-            // Extract data from the request
-            $requestData = $request->getParsedBody();
-            $orderId = $requestData['order_id'] ?? null;
-            $newStatus = $requestData['status'] ?? null;
-
-            // Validate required fields
-            if (!$orderId || !$newStatus) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Missing required fields: order_id and status.'
-                ], 400);
-                return;
-            }
-
-            // Validate status value
-            $validStatuses = ['in_progress', 'completed', 'canceled'];
-            if (!in_array($newStatus, $validStatuses)) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Invalid status value. Allowed values: in_progress, completed, canceled.'
-                ], 400);
-                return;
-            }
-
-            // Initialize models
-            $orderModel = new Orders();
-
-            // Get the order to verify ownership
-            $order = $orderModel->getOrderById($orderId);
-            
-            if (!$order) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Order not found.'
-                ], 404);
-                return;
-            }
-
-            // Check if the user is the seller of this order
-            if ($order['seller_id'] != $sellerId) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'You are not authorized to update this order.'
-                ], 403);
-                return;
-            }
-
-            // Update the order status
-            $updateData = [
-                'order_status' => $newStatus
-            ];
-
-            $result = $orderModel->updateOrderById($orderId, $updateData);
-
-            if ($result) {
-                // Create notification for the buyer
-                $notificationModel = new Notification();
-                
-                // Different notification based on the new status
-                $notificationMessage = "";
-                $notificationNote = "";
-                
-                switch ($newStatus) {
-                    case 'in_progress':
-                        $notificationMessage = "Your order has been accepted and is now in progress.";
-                        $notificationNote = "Order status updated to In Progress";
-                        break;
-                    case 'completed':
-                        $notificationMessage = "Your order has been marked as completed.";
-                        $notificationNote = "Order status updated to Completed";
-                        break;
-                    case 'canceled':
-                        $notificationMessage = "Your order has been canceled.";
-                        $notificationNote = "Order status updated to Canceled";
-                        break;
-                }
-                
-                $notificationData = [
-                    'generated_by' => 'system',
-                    'admin_id' => null,
-                    'receiver_id' => $order['customer_id'],
-                    'generation_note' => $notificationNote . " - Order ID #" . $orderId,
-                    'notification' => $notificationMessage,
-                    'read_status' => 'unread',
-                    'created_at' => date('Y-m-d H:i:s')
-                ];
-                
-                $notificationModel->create($notificationData);
-                
-                $response->sendJson([
-                    'success' => true,
-                    'message' => 'Order status updated successfully to ' . $newStatus . '.'
-                ]);
-            } else {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Failed to update order status.'
-                ], 500);
-            }
-        } catch (\Exception $e) {
-            error_log("Error in updateOrderStatus: " . $e->getMessage());
-            $response->sendJson([
-                'success' => false,
-                'message' => 'Internal server error: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 }

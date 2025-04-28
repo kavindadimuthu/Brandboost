@@ -232,76 +232,6 @@
             min-height: 300px;
         }
 
-        /* Stats cards */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .stats-cards>a{
-            text-decoration: none;
-        
-        }
-
-        .stat-card {
-            background-color: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-
-        .stat-icon.signups {
-            background-color: rgba(99, 102, 241, 0.1);
-            color: var(--primary-color);
-        }
-
-        .stat-icon.ongoing {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: var(--info-color);
-        }
-
-        .stat-icon.pending {
-            background-color: rgba(245, 158, 11, 0.1);
-            color: var(--warning-color);
-        }
-
-        .stat-icon.disputes {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: var(--danger-color);
-        }
-
-        .stat-content {
-            flex: 1;
-        }
-
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-800);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--gray-600);
-        }
-
         /* Action logs section */
         .action-logs {
             background-color: white;
@@ -484,10 +414,6 @@
             .charts-container {
                 grid-template-columns: 1fr;
             }
-
-            .stats-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         @media (max-width: 768px) {
@@ -496,10 +422,6 @@
             }
 
             .summary-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-cards {
                 grid-template-columns: 1fr;
             }
 
@@ -535,10 +457,6 @@
                     </div>
                     <div class="card-label">Total Users</div>
                     <div class="card-value" id="total-users-card">0</div>
-                    <!-- <div class="card-trend trend-up">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>12.5% from last month</span>
-                    </div> -->
                 </div>
                 
                 <div class="summary-card gigs">
@@ -547,10 +465,6 @@
                     </div>
                     <div class="card-label">Active Services</div>
                     <div class="card-value" id="total-services-card">0</div>
-                    <div class="card-trend trend-up">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>8.3% from last month</span>
-                    </div>
                 </div>
                 
                 <div class="summary-card orders">
@@ -559,10 +473,6 @@
                     </div>
                     <div class="card-label">Completed Orders</div>
                     <div class="card-value" id="complete-orders-card">0</div>
-                    <div class="card-trend trend-up">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>2.15% from last month</span>
-                    </div>
                 </div>
                 
                 <div class="summary-card revenue">
@@ -571,10 +481,6 @@
                     </div>
                     <div class="card-label">Total Revenue</div>
                     <div class="card-value" id="total-revenue-card">$193,000</div>
-                    <div class="card-trend trend-up">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>35% from last month</span>
-                    </div>
                 </div>
             </div>
 
@@ -598,57 +504,6 @@
                     </div>
                     <div id="user-chart" class="chart-content"></div>
                 </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="stats-cards">
-                <a href="/admin/users-list">
-                    <div class="stat-card">
-                        <div class="stat-icon signups">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="new-signups-today">0</div>
-                            <div class="stat-label">New Signups Today</div>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="/admin/orders-list">
-                    <div class="stat-card">
-                        <div class="stat-icon ongoing">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="ongoing-orders">0</div>
-                            <div class="stat-label">Ongoing Orders</div>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="/admin/verifications-list">
-                    <div class="stat-card">
-                        <div class="stat-icon pending">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="pending-approvals">0</div>
-                            <div class="stat-label">Pending Approvals</div>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="/admin/complaints-list">
-                    <div class="stat-card">
-                        <div class="stat-icon disputes">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="active-disputes">0</div>
-                            <div class="stat-label">Active Disputes</div>
-                        </div>
-                    </div>
-                </a>
             </div>
 
             <!-- Admin Action Logs -->

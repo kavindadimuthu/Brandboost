@@ -753,30 +753,18 @@
                 <div class="info-card">
                     <h3>Total Orders</h3>
                     <div class="value" id="totalOrders">-</div>
-                    <div class="trend up">
-                        <i class="fas fa-arrow-up"></i> 12% from last month
-                    </div>
                 </div>
                 <div class="info-card">
                     <h3>Pending Orders</h3>
                     <div class="value" id="pendingOrders">-</div>
-                    <div class="trend down">
-                        <i class="fas fa-arrow-down"></i> 5% from last month
-                    </div>
                 </div>
                 <div class="info-card">
                     <h3>Completed Orders</h3>
                     <div class="value" id="completedOrders">-</div>
-                    <div class="trend up">
-                        <i class="fas fa-arrow-up"></i> 8% from last month
-                    </div>
                 </div>
                 <div class="info-card">
                     <h3>Total Revenue</h3>
                     <div class="value" id="totalRevenue">-</div>
-                    <div class="trend up">
-                        <i class="fas fa-arrow-up"></i> 15% from last month
-                    </div>
                 </div>
             </div>
 

@@ -116,7 +116,6 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            /* overflow: hidden; */
         }
 
         .card-header {
@@ -135,12 +134,7 @@
         }
 
         /* Typography */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
+        h1, h2, h3, h4, h5, h6 {
             margin-bottom: 10px;
             font-weight: 600;
             line-height: 1.2;
@@ -204,11 +198,6 @@
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--gray-200);
-        }
-
-        .header {
-            font-size: 0.875rem;
-            color: var(--gray-600);
         }
 
         .breadcrumb {
@@ -351,32 +340,6 @@
             font-weight: 500;
         }
 
-        .form-control {
-            display: block;
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            transition: border-color 0.15s ease-in-out;
-        }
-
-        .form-control:focus {
-            border-color: #80bdff;
-            outline: 0;
-        }
-
-        select.form-control {
-            height: 38px;
-        }
-
-        textarea.form-control {
-            resize: vertical;
-        }
-
         /* Buttons */
         .btn {
             display: inline-block;
@@ -396,7 +359,6 @@
 
         .btn-primary {
             color: #fff;
-            /* background-color: #3a86ff; */
             background-color: var(--primary-color);
             border-color: #3a86ff;
         }
@@ -418,9 +380,7 @@
         }
 
         .btn-danger {
-            /* color: #fff; */
             color: #dc3545;
-            /* background-color: #dc3545; */
             background-color: #fff;
             border-color: #dc3545;
         }
@@ -431,19 +391,15 @@
             border-color: #bd2130;
         }
 
-        .btn-warning {
-            color: #212529;
-            background-color: #ffc107;
-            border-color: #ffc107;
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
+        .btn-danger:disabled, .btn-danger.disabled {
+            color: #dc3545;
+            background-color: #fff;
+            border-color: #dc3545;
+            opacity: 0.65;
+            cursor: not-allowed;
         }
 
         .btn-outline-primary {
-            /* color: #3a86ff; */
             color: var(--primary-color);
             background-color: transparent;
             border-color: #3a86ff;
@@ -454,86 +410,9 @@
             background-color: #3a86ff;
         }
 
-        .btn-outline-danger {
-            color: #dc3545;
-            background-color: transparent;
-            border-color: #dc3545;
-        }
-
-        .btn-outline-danger:hover {
-            color: #fff;
-            background-color: #dc3545;
-        }
-
         .btn-sm {
             padding: 5px 10px;
             font-size: 12px;
-        }
-
-        .btn-group {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-        }
-
-        /* Input groups */
-        .input-group {
-            display: flex;
-            position: relative;
-        }
-
-        .input-group .form-control {
-            flex: 1;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-
-        .input-group-text {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            text-align: center;
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 4px 0 0 4px;
-        }
-
-        .input-group .btn {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        /* Grid Layout */
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -10px;
-            margin-left: -10px;
-        }
-
-        .col {
-            flex: 1 0 0%;
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-
-        .col-6 {
-            flex: 0 0 50%;
-            max-width: 50%;
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-
-        @media (max-width: 767px) {
-            .col-6 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
         }
 
         /* User profile styles */
@@ -605,135 +484,6 @@
             }
         }
 
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline:before {
-            content: '';
-            position: absolute;
-            left: 9px;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background-color: #e3e6f0;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: -25px;
-            top: 15px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            /* background-color: #3a86ff; */
-            background-color: var(--primary-color);
-        }
-
-        .timeline-date {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        /* Chat Messages */
-        .message {
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            max-width: 80%;
-        }
-
-        .message-sender {
-            background-color: #e9ecef;
-            margin-right: auto;
-        }
-
-        .message-receiver {
-            background-color: #d4edda;
-            margin-left: auto;
-        }
-
-        .message-time {
-            font-size: 0.75rem;
-            color: #6c757d;
-            display: block;
-            text-align: right;
-        }
-
-        /* Admin Actions */
-        .admin-actions {
-            /* position: sticky; */
-            top: 20px;
-        }
-
-        /* Star Rating */
-        .star-rating {
-            color: #ffc107;
-        }
-
-        /* File Items */
-        .file-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 8px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
-
-        .file-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            color: #6c757d;
-        }
-
-        .file-name {
-            flex: 1;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 20px;
-        }
-
-        .tab-link {
-            padding: 10px 15px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-top-left-radius: 0.75rem;
-            border-top-right-radius: 0.75rem;
-            margin-bottom: -1px;
-            font-weight: 500;
-        }
-
-        .tab-link:hover {
-            background-color: #f8f9fa;
-        }
-
-        .tab-link.active {
-            color: #495057;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
         /* Notification */
         .notification {
             position: fixed;
@@ -788,41 +538,9 @@
         }
 
         @media (max-width: 767px) {
-            .admin-actions {
-                position: static;
+            .grid {
+                grid-template-columns: 1fr;
             }
-
-            .tabs {
-                flex-wrap: wrap;
-            }
-
-            .tab-link {
-                flex: 1 0 auto;
-                text-align: center;
-            }
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table th,
-        table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #dee2e6;
-        }
-
-        table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        table tr:hover {
-            background-color: #f8f9fa;
         }
     </style>
 </head>
@@ -894,97 +612,13 @@
                             </div>
                         </div>
                     </div>
-
-
-
-                    <!-- Tabs for different sections -->
-                    <div class="tabs" id="orderDetailsTabs">
-                        <div class="tab-link active" data-tab="deliveries">Deliveries</div>
-                        <div class="tab-link" data-tab="conversation">Conversation</div>
-                        <div class="tab-link" data-tab="attachments">Attachments</div>
-                        <div class="tab-link" data-tab="timeline">Timeline</div>
-                        <div class="tab-link" data-tab="reviews">Reviews</div>
-                    </div>
-
-                    <!-- Tab content -->
-                    <div id="tabsContainer">
-                        <!-- Deliveries Tab -->
-                        <div id="deliveries" class="tab-content active">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="mb-3 text-muted">
-                                        Revisions Remaining:
-                                        <span class="badge badge-info" id="remaining-revisions">0</span>
-                                    </p>
-
-                                    <div id="deliveries-container">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Conversation Tab -->
-                        <div id="conversation" class="tab-content">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div id="conversation-container">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Attachments Tab -->
-                        <div id="attachments" class="tab-content">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div id="attachments-container">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Timeline Tab -->
-                        <div id="timeline" class="tab-content">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="timeline" id="timeline-container">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Reviews Tab -->
-                        <div id="reviews" class="tab-content">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div id="reviews-container">
-                                        <div class="loading">
-                                            <div class="spinner"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Sidebar column for profiles and actions -->
                 <div>
                     <div style="position: sticky; top: 1rem;">
                         <!-- Admin Actions Panel -->
-                        <div class="card" >
+                        <div class="card">
                             <div class="card-header">
                                 <h2><i class="fas fa-tools"></i> Admin Actions</h2>
                             </div>
@@ -1005,39 +639,12 @@
                                             <i class="fas fa-check-circle"></i> Mark Dispute as Resolved
                                         </button>
                                     </div>
-                                    
-                                    <div style="margin-top: 20px; display: flex; justify-content: space-between; gap: 0.5rem;">
-                                        <div class="dropdown" style="margin-bottom: 10px; position: relative; width: 100%;">
-                                            <button type="button" class="btn btn-danger" id="actOnBuyerBtn" style="width: 100%;">
-                                                <i class="fas fa-user-times"></i> Act on Buyer
-                                            </button>
-                                            <div class="dropdown-menu" id="buyerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid var(--gray-300); border-radius: var(--radius); width: 100%; z-index: 10; box-shadow: var(--shadow);">
-                                                <a href="#" class="dropdown-item buyer-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800);">
-                                                    <i class="fas fa-ban text-warning"></i> Block Buyer
-                                                </a>
-                                                <a href="#" class="dropdown-item buyer-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800); border-top: 1px solid var(--gray-200);">
-                                                    <i class="fas fa-user-slash text-danger"></i> Ban Buyer
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown" style="position: relative; width: 100%;">
-                                            <button type="button" class="btn btn-danger" id="actOnSellerBtn" style="width: 100%;">
-                                                <i class="fas fa-user-times"></i> Act on Seller
-                                            </button>
-                                            <div class="dropdown-menu" id="sellerActionMenu" style="display: none; position: absolute; background-color: white; border: 1px solid var(--gray-300); border-radius: var(--radius); width: 100%; z-index: 10; box-shadow: var(--shadow);">
-                                                <a href="#" class="dropdown-item seller-action" data-action="blocked" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800);">
-                                                    <i class="fas fa-ban text-warning"></i> Block Seller
-                                                </a>
-                                                <a href="#" class="dropdown-item seller-action" data-action="banned" style="padding: 8px 16px; display: block; text-decoration: none; color: var(--gray-800); border-top: 1px solid var(--gray-200);">
-                                                    <i class="fas fa-user-slash text-danger"></i> Ban Seller
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                         </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                        
+                        <!-- User Profiles -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
                             <!-- Buyer Profile Card -->
                             <div class="card" style="flex: 1; min-width: 300px;">
                                 <div class="card-header">
@@ -1051,6 +658,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <!-- Seller Profile Card -->
                             <div class="card" style="flex: 1; min-width: 300px;">
                                 <div class="card-header">
@@ -1077,7 +685,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the gig ID from the URL path
+            // Get the order ID from the URL path
             const pathSegments = window.location.pathname.split('/');
             const orderId = pathSegments[pathSegments.length - 1]; // Get the last segment
 
@@ -1096,9 +704,6 @@
 
             // Fetch order details from API
             fetchOrderDetails(orderId);
-
-            // Tab switching functionality
-            setupTabs();
 
             // Setup form submission
             setupFormHandlers();
@@ -1123,8 +728,9 @@
                         document.getElementById('loading').style.display = 'none';
                         document.getElementById('order-content').style.display = 'block';
 
-                        // Load all tab data
-                        loadTabData(orderData);
+                        // Load profile data
+                        loadBuyerProfile(orderData);
+                        loadSellerProfile(orderData);
                     } else {
                         showNotification('Error: ' + data.message, 'error');
                     }
@@ -1167,18 +773,6 @@
             // Set delivery requirements
             document.getElementById('delivery-requirements').textContent = requestedService.requirements || 'No specific requirements provided';
 
-            // Set remaining revisions
-            document.getElementById('remaining-revisions').textContent = order.remained_revisions || 0;
-
-            // These elements have been removed, so we need to remove the code or handle conditionally
-            // REMOVE OR COMMENT OUT THESE LINES:
-            // document.getElementById('max-refund').textContent = `Max refund: ${formatPrice(promise.price || 0)}`;
-            // document.getElementById('refundAmount').setAttribute('max', promise.price || 0);
-            
-            // REMOVE OR COMMENT OUT THIS CODE:
-            // const orderStatusSelect = document.getElementById('orderStatus');
-            // orderStatusSelect.value = order.order_status;
-
             // Show/hide dispute resolution button
             const disputeActionContainer = document.getElementById('dispute-action-container');
             if (order.order_status === 'disputed') {
@@ -1186,347 +780,14 @@
             } else {
                 disputeActionContainer.style.display = 'none';
             }
-        }
 
-        // Load data for all tabs
-        function loadTabData(data) {
-            loadDeliveriesTab(data);
-            loadConversationTab(data);
-            loadAttachmentsTab(data);
-            loadTimelineTab(data);
-            loadReviewsTab(data);
-            loadBuyerProfile(data);
-            loadSellerProfile(data);
-        }
-
-        // Load deliveries tab content
-        function loadDeliveriesTab(data) {
-            const container = document.getElementById('deliveries-container');
-
-            // For demo purposes, using mock data
-            // In a real implementation, this would come from an API
-            const mockDeliveries = [{
-                    'id': 1,
-                    'delivery_date': '2025-04-15 09:30:00',
-                    'notes': 'First draft as requested',
-                    'files': ['design_v1.pdf', 'preview.jpg']
-                },
-                {
-                    'id': 2,
-                    'delivery_date': '2025-04-17 14:20:00',
-                    'notes': 'Revised version with requested changes',
-                    'files': ['design_v2.pdf', 'preview_updated.jpg']
-                }
-            ];
-
-            if (mockDeliveries.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-light text-center">
-                        <p>No deliveries yet</p>
-                    </div>
-                `;
-                return;
+            // Disable cancel button if order is already canceled
+            const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+            if (order.order_status === 'canceled') {
+                cancelOrderBtn.disabled = true;
+                cancelOrderBtn.classList.add('disabled');
+                cancelOrderBtn.innerHTML = '<i class="fas fa-ban"></i> Order Already Canceled';
             }
-
-            let html = '';
-
-            mockDeliveries.forEach(delivery => {
-                let filesHtml = '';
-
-                delivery.files.forEach(file => {
-                    filesHtml += `
-                        <div class="file-item">
-                            <span class="file-icon">
-                                <i class="far fa-file"></i>
-                            </span>
-                            <span class="file-name">${file}</span>
-                            <a href="#" class="btn btn-primary btn-sm">Download</a>
-                        </div>
-                    `;
-                });
-
-                html += `
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span>Delivery #${delivery.id}</span>
-                                <span class="text-muted">${formatDateTime(delivery.delivery_date)}</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p>${delivery.notes}</p>
-                            
-                            <div style="margin-top: 15px;">
-                                <p style="font-weight: 600; margin-bottom: 10px;">Files:</p>
-                                ${filesHtml}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Load conversation tab content
-        function loadConversationTab(data) {
-            const container = document.getElementById('conversation-container');
-            const order = data.order;
-            const user = data.user || {};
-
-            // Mock conversation data
-            // In a real implementation, this would come from an API
-            const mockConversation = [{
-                    'sender_id': order.customer_id,
-                    'message': 'Hi, I need this design by next week.',
-                    'timestamp': '2025-04-10 14:32:00'
-                },
-                {
-                    'sender_id': 'seller',
-                    'message': 'Sure, I can do that. Let me know if you have specific requirements.',
-                    'timestamp': '2025-04-10 15:05:00'
-                },
-                {
-                    'sender_id': order.customer_id,
-                    'message': 'I want it to be blue and minimalist.',
-                    'timestamp': '2025-04-10 15:10:00'
-                }
-            ];
-
-            if (mockConversation.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-light text-center">
-                        <p>No messages yet</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '<div class="conversation-wrapper">';
-
-            mockConversation.forEach(message => {
-                const isBuyer = message.sender_id === order.customer_id;
-                const messageClass = isBuyer ? 'message-sender' : 'message-receiver';
-                const senderName = isBuyer ? (user.username || 'Buyer') : 'Seller';
-
-                html += `
-                    <div class="message ${messageClass}">
-                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                            <span style="font-weight: 600;">${senderName}</span>
-                        </div>
-                        <p>${message.message}</p>
-                        <span class="message-time">
-                            ${formatDateTime(message.timestamp)}
-                        </span>
-                    </div>
-                `;
-            });
-
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        // Load attachments tab content
-        function loadAttachmentsTab(data) {
-            const container = document.getElementById('attachments-container');
-            const order = data.order;
-            const user = data.user || {};
-
-            // Mock attachments data
-            // In a real implementation, this would come from an API
-            const mockAttachments = [{
-                    'filename': 'reference.jpg',
-                    'uploaded_by': order.customer_id,
-                    'upload_date': '2025-04-09 10:15:00'
-                },
-                {
-                    'filename': 'brief.pdf',
-                    'uploaded_by': order.customer_id,
-                    'upload_date': '2025-04-09 10:17:00'
-                }
-            ];
-
-            if (mockAttachments.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-light text-center">
-                        <p>No attachments found</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>File</th>
-                            <th>Uploaded By</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            mockAttachments.forEach(attachment => {
-                const uploaderName = attachment.uploaded_by === order.customer_id ? (user.username || 'Buyer') : 'Seller';
-
-                html += `
-                    <tr>
-                        <td>
-                            <div style="display: flex; align-items: center;">
-                                <i class="far fa-file" style="margin-right: 10px;"></i>
-                                ${attachment.filename}
-                            </div>
-                        </td>
-                        <td>${uploaderName}</td>
-                        <td>${formatDateTime(attachment.upload_date)}</td>
-                        <td>
-                            <a href="#" class="btn btn-primary btn-sm">Download</a>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            html += `
-                    </tbody>
-                </table>
-            `;
-
-            container.innerHTML = html;
-        }
-
-        // Load timeline tab content
-        function loadTimelineTab(data) {
-            const container = document.getElementById('timeline-container');
-            const order = data.order;
-
-            // Mock timeline data
-            // In a real implementation, this would come from an API
-            const mockTimeline = [{
-                    'event': 'Order created',
-                    'timestamp': order.created_at
-                },
-                {
-                    'event': 'Order accepted',
-                    'timestamp': new Date(new Date(order.created_at).getTime() + 86400000).toISOString()
-                },
-                {
-                    'event': 'First delivery',
-                    'timestamp': '2025-04-15 09:30:00'
-                },
-                {
-                    'event': 'Revision requested',
-                    'timestamp': '2025-04-16 11:20:00'
-                },
-                {
-                    'event': 'Revised delivery',
-                    'timestamp': '2025-04-17 14:20:00'
-                }
-            ];
-
-            if (mockTimeline.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-light text-center">
-                        <p>No timeline events</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-
-            mockTimeline.forEach(event => {
-                html += `
-                    <div class="timeline-item">
-                        <div style="font-weight: 600;">${event.event}</div>
-                        <div class="timeline-date">
-                            ${formatDateTime(event.timestamp)}
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Load reviews tab content
-        function loadReviewsTab(data) {
-            const container = document.getElementById('reviews-container');
-
-            // Mock reviews data
-            // In a real implementation, this would come from an API
-            const mockReviews = {
-                'buyer': {
-                    'rating': 4.5,
-                    'comment': 'Great work, just needed a few tweaks but overall very satisfied!',
-                    'date': '2025-04-19 16:45:00'
-                },
-                'seller': {
-                    'rating': 5,
-                    'comment': 'Clear requirements and prompt communication. Would work with again!',
-                    'date': '2025-04-19 17:30:00'
-                }
-            };
-
-            if (!mockReviews.buyer && !mockReviews.seller) {
-                container.innerHTML = `
-                    <div class="alert alert-light text-center">
-                        <p>No reviews yet</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-
-            // Buyer's review
-            if (mockReviews.buyer) {
-                html += `
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4 style="margin: 0;">Buyer's Review</h4>
-                        </div>
-                        <div class="card-body">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <div class="star-rating">
-                                    ${generateStarRating(mockReviews.buyer.rating)}
-                                    <span style="margin-left: 10px;">${mockReviews.buyer.rating}/5</span>
-                                </div>
-                                <small class="text-muted">
-                                    ${formatDate(mockReviews.buyer.date)}
-                                </small>
-                            </div>
-                            <p>${mockReviews.buyer.comment}</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // Seller's review
-            if (mockReviews.seller) {
-                html += `
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 style="margin: 0;">Seller's Review</h4>
-                        </div>
-                        <div class="card-body">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <div class="star-rating">
-                                    ${generateStarRating(mockReviews.seller.rating)}
-                                    <span style="margin-left: 10px;">${mockReviews.seller.rating}/5</span>
-                                </div>
-                                <small class="text-muted">
-                                    ${formatDate(mockReviews.seller.date)}
-                                </small>
-                            </div>
-                            <p>${mockReviews.seller.comment}</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
         }
 
         // Load buyer profile
@@ -1538,23 +799,23 @@
                 .then(buyer => {
                     if (buyer) {
                         container.innerHTML = `
-                    <img src="/${buyer.profile_picture || 'https://via.placeholder.com/70'}" alt="Buyer" class="user-avatar">
-                    <div class="user-details">
-                        <div class="user-name">${buyer.name || buyer.username || 'Unknown'}</div>
-                        <div class="user-role">Business</div>
-                        <div class="user-id">User ID: ${buyer.user_id || order.customer_id}</div>
-                        <div>${buyer.email || ''}</div>
-                        <div style="margin-top: 0.5rem;">
-                            <a href="/admin/user-profile/${buyer.user_id || order.customer_id}" class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-external-link-alt"></i> View Profile
-                            </a>
-                        </div>
-                    </div>
-                `;
+                            <img src="/${buyer.profile_picture || 'https://via.placeholder.com/70'}" alt="Buyer" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">${buyer.name || buyer.username || 'Unknown'}</div>
+                                <div class="user-role">Business</div>
+                                <div class="user-id">User ID: ${buyer.user_id || order.customer_id}</div>
+                                <div>${buyer.email || ''}</div>
+                                <div style="margin-top: 0.5rem;">
+                                    <a href="/admin/user-profile/${buyer.user_id || order.customer_id}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt"></i> View Profile
+                                    </a>
+                                </div>
+                            </div>
+                        `;
                     } else {
                         container.innerHTML = `
-                    <div class="text-muted text-center" style="width: 100%;">Buyer information not available</div>
-                `;
+                            <div class="text-muted text-center" style="width: 100%;">Buyer information not available</div>
+                        `;
                     }
                 });
         }
@@ -1587,23 +848,23 @@
                 .then(seller => {
                     if (seller) {
                         container.innerHTML = `
-                    <img src="/${seller.profile_picture || 'https://via.placeholder.com/70'}" alt="Seller" class="user-avatar">
-                    <div class="user-details">
-                        <div class="user-name">${seller.name || seller.username || 'Unknown'}</div>
-                        <div class="user-role">${serviceType === 'promotion' ? 'Influencer' : 'Designer'}</div>
-                        <div class="user-id">User ID: ${seller.user_id || order.seller_id}</div>
-                        <div>${seller.email || ''}</div>
-                        <div style="margin-top: 0.5rem;">
-                            <a href="/admin/user-profile/${seller.user_id || order.seller_id}" class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-external-link-alt"></i> View Profile
-                            </a>
-                        </div>
-                    </div>
-                `;
+                            <img src="/${seller.profile_picture || 'https://via.placeholder.com/70'}" alt="Seller" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">${seller.name || seller.username || 'Unknown'}</div>
+                                <div class="user-role">${serviceType === 'promotion' ? 'Influencer' : 'Designer'}</div>
+                                <div class="user-id">User ID: ${seller.user_id || order.seller_id}</div>
+                                <div>${seller.email || ''}</div>
+                                <div style="margin-top: 0.5rem;">
+                                    <a href="/admin/user-profile/${seller.user_id || order.seller_id}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt"></i> View Profile
+                                    </a>
+                                </div>
+                            </div>
+                        `;
                     } else {
                         container.innerHTML = `
-                    <div class="text-muted text-center" style="width: 100%;">Seller information not available</div>
-                `;
+                            <div class="text-muted text-center" style="width: 100%;">Seller information not available</div>
+                        `;
                     }
                 });
         }
@@ -1622,28 +883,12 @@
             }
         }
 
-        // Setup tab switching functionality
-        function setupTabs() {
-            const tabLinks = document.querySelectorAll('.tab-link');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabLinks.forEach(tabLink => {
-                tabLink.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabLinks.forEach(tab => tab.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-
-                    // Add active class to current tab
-                    this.classList.add('active');
-                    document.getElementById(this.dataset.tab).classList.add('active');
-                });
-            });
-        }
-
         // Setup form handlers
         function setupFormHandlers() {
             // Handle order cancellation
             document.getElementById('cancelOrderBtn').addEventListener('click', function() {
+                if (this.disabled) return;
+                
                 const orderId = document.getElementById('form-order-id').value;
                 
                 if (confirm('Are you sure you want to cancel this order and process a refund? This action cannot be undone.')) {
@@ -1667,67 +912,6 @@
                     }
                 });
             }
-
-            // Toggle dropdown menus for buyer and seller actions
-            document.getElementById('actOnBuyerBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('buyerActionMenu').style.display =
-                    document.getElementById('buyerActionMenu').style.display === 'none' ? 'block' : 'none';
-                // Hide the other dropdown if open
-                document.getElementById('sellerActionMenu').style.display = 'none';
-            });
-
-            document.getElementById('actOnSellerBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('sellerActionMenu').style.display =
-                    document.getElementById('sellerActionMenu').style.display === 'none' ? 'block' : 'none';
-                // Hide the other dropdown if open
-                document.getElementById('buyerActionMenu').style.display = 'none';
-            });
-
-            // Hide dropdowns when clicking elsewhere
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('#actOnBuyerBtn') && !e.target.closest('#buyerActionMenu')) {
-                    document.getElementById('buyerActionMenu').style.display = 'none';
-                }
-                if (!e.target.closest('#actOnSellerBtn') && !e.target.closest('#sellerActionMenu')) {
-                    document.getElementById('sellerActionMenu').style.display = 'none';
-                }
-            });
-
-            // Handle buyer action menu clicks
-            const buyerActions = document.querySelectorAll('.buyer-action');
-            buyerActions.forEach(action => {
-                action.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const actionType = this.dataset.action;
-                    const buyerId = orderData.order.customer_id;
-
-                    if (confirm(`Are you sure you want to ${actionType} this buyer?`)) {
-                        updateUserAccountStatus(buyerId, actionType);
-                    }
-
-                    // Close the dropdown
-                    document.getElementById('buyerActionMenu').style.display = 'none';
-                });
-            });
-
-            // Handle seller action menu clicks
-            const sellerActions = document.querySelectorAll('.seller-action');
-            sellerActions.forEach(action => {
-                action.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const actionType = this.dataset.action;
-                    const sellerId = orderData.order.seller_id;
-
-                    if (confirm(`Are you sure you want to ${actionType} this seller?`)) {
-                        updateUserAccountStatus(sellerId, actionType);
-                    }
-
-                    // Close the dropdown
-                    document.getElementById('sellerActionMenu').style.display = 'none';
-                });
-            });
         }
 
         // Function to cancel order and process refund
@@ -1768,108 +952,32 @@
         // Update order via API
         function updateOrder(data, successMessage = 'Order updated successfully') {
             fetch('/api/update-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update order');
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        showNotification(successMessage, 'success');
-
-                        // Refresh order data
-                        fetchOrderDetails(data.order_id);
-                    } else {
-                        showNotification('Error: ' + result.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Error updating order', 'error');
-                });
-        }
-
-        // Function to update user account status
-        function updateUserAccountStatus(userId, status) {
-            fetch(`/api/update-user-account-status?id=${userId}&status=${status}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update user account status');
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        showNotification(`User has been ${status} successfully`, 'success');
-                    } else {
-                        showNotification('Error: ' + result.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Error updating user account status', 'error');
-                });
-        }
-
-        // Add admin note (mock implementation)
-        function addAdminNote(noteText) {
-            const container = document.getElementById('admin-notes-container');
-            const noNotesMessage = container.querySelector('.text-muted.text-center');
-
-            if (noNotesMessage) {
-                noNotesMessage.remove();
-            }
-
-            const now = new Date();
-            const formattedDate = formatDateTime(now.toISOString());
-
-            const noteElement = document.createElement('div');
-            noteElement.style.padding = '15px';
-            noteElement.style.marginBottom = '15px';
-            noteElement.style.backgroundColor = '#f8f9fa';
-            noteElement.style.borderRadius = '5px';
-
-            noteElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="font-weight: 600;">Admin User</span>
-                    <small class="text-muted">${formattedDate}</small>
-                </div>
-                <p style="margin: 0;">${noteText}</p>
-            `;
-
-            container.insertBefore(noteElement, container.firstChild);
-            document.getElementById('adminNote').value = '';
-
-            showNotification('Note added successfully', 'success');
-        }
-
-        // Generate star rating HTML
-        function generateStarRating(rating) {
-            let html = '';
-
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    html += '<i class="fas fa-star"></i>';
-                } else if (i <= rating + 0.5) {
-                    html += '<i class="fas fa-star-half-alt"></i>';
-                } else {
-                    html += '<i class="far fa-star"></i>';
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update order');
                 }
-            }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    showNotification(successMessage, 'success');
 
-            return html;
+                    // Refresh order data
+                    fetchOrderDetails(data.order_id);
+                } else {
+                    showNotification('Error: ' + result.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error updating order', 'error');
+            });
         }
 
         // Helper Functions
@@ -1903,23 +1011,6 @@
         function capitalizeFirstLetter(string) {
             if (!string) return '';
             return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
-        function getStatusBadgeClass(status) {
-            switch (status.toLowerCase()) {
-                case 'pending':
-                    return 'badge-warning';
-                case 'in_progress':
-                    return 'badge-info';
-                case 'completed':
-                    return 'badge-success';
-                case 'canceled':
-                    return 'badge-danger';
-                case 'disputed':
-                    return 'badge-danger';
-                default:
-                    return 'badge-secondary';
-            }
         }
 
         // Show notification

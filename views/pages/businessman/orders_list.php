@@ -34,10 +34,10 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background-color: var(--light-bg);
             color: var(--gray-700);
             line-height: 1.5;
@@ -47,7 +47,7 @@
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--white);
-            padding: 40px 0;
+            padding: 80px 0;
             position: relative;
             overflow: hidden;
         }
@@ -72,7 +72,22 @@
         }
 
         .hero-content {
-            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .hero-left {
+            flex: 9;
+        }
+
+        .hero-right {
+            flex: 7;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: flex-end;
         }
 
         .hero h1 {
@@ -88,52 +103,83 @@
             font-size: 1.1rem;
             opacity: 0.9;
             max-width: 600px;
+            margin-top: 5px;
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px 20px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         /* Main Container */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: -30px auto 40px;
             padding: 0 20px;
-        }
-
-        .page-content {
-            margin-top: -30px;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
-        /* Stats Grid */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+        /* Order Controls */
+        .order-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
         }
 
-        .stat-card {
-            background-color: var(--white);
+        .sort-container {
+            position: relative;
+            width: 220px;
+        }
+
+        .sort-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-200);
             border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--box-shadow);
+            background-color: var(--white);
+            appearance: none;
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            cursor: pointer;
             transition: var(--transition);
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
         }
 
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
+        .sort-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             color: var(--gray-500);
-            font-size: 0.9rem;
+            pointer-events: none;
         }
 
         /* Orders Container */
@@ -143,35 +189,7 @@
             box-shadow: var(--box-shadow);
             padding: 30px;
             margin-bottom: 40px;
-        }
-
-        .search-container {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .search-container i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-400);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border: 1px solid var(--gray-200);
-            border-radius: var(--border-radius);
-            font-size: 0.95rem;
-            transition: var(--transition);
-            background-color: var(--white);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+            overflow: hidden;
         }
 
         /* Orders Table */
@@ -189,6 +207,32 @@
             font-weight: 600;
             font-size: 0.9rem;
             border-bottom: 2px solid var(--gray-200);
+            position: relative;
+        }
+
+        .orders-table th.sortable {
+            cursor: pointer;
+        }
+
+        .orders-table th.sortable:hover {
+            background-color: var(--gray-200);
+        }
+
+        .orders-table th.sortable::after {
+            content: "⇅";
+            position: absolute;
+            right: 10px;
+            opacity: 0.5;
+        }
+
+        .orders-table th.sorted-asc::after {
+            content: "↑";
+            opacity: 1;
+        }
+
+        .orders-table th.sorted-desc::after {
+            content: "↓";
+            opacity: 1;
         }
 
         .orders-table td {
@@ -210,12 +254,13 @@
             background-color: var(--primary-light);
             transform: translateY(-2px);
             cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
         }
 
         /* Status Badges */
         .status {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: 600;
@@ -260,6 +305,13 @@
             font-weight: 600;
             color: var(--primary);
             font-size: 1rem;
+            overflow: hidden;
+        }
+
+        .provider-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .provider-name {
@@ -276,6 +328,22 @@
             font-weight: 500;
         }
 
+        .date-display {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-primary {
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .date-secondary {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
         .price {
             font-weight: 600;
             color: var(--gray-700);
@@ -284,24 +352,25 @@
         /* Empty and Loading States */
         .empty-state, .loading-state {
             text-align: center;
-            padding: 50px 0;
+            padding: 60px 0;
         }
 
         .empty-state i, .loading-state i {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: var(--gray-300);
             margin-bottom: 20px;
         }
 
         .empty-state-text {
             color: var(--gray-500);
-            font-size: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
         .spinner {
             display: inline-block;
-            width: 3rem;
-            height: 3rem;
+            width: 3.5rem;
+            height: 3.5rem;
             border: 3px solid rgba(94, 114, 228, 0.1);
             border-radius: 50%;
             border-top-color: var(--primary);
@@ -313,16 +382,32 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
+            .hero-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-right {
+                justify-content: flex-start;
+                width: 100%;
             }
         }
 
         @media (max-width: 768px) {
             .hero {
-                padding: 30px 0;
+                padding: 60px 0;
             }
             
             .hero h1 {
@@ -339,15 +424,20 @@
             }
             
             .orders-table {
-                min-width: 800px;
-            }
-            
-            .stats-container {
-                grid-template-columns: 1fr;
+                min-width: 900px;
             }
             
             .service-title {
                 max-width: 180px;
+            }
+
+            .hero-stat {
+                min-width: 120px;
+                padding: 12px 15px;
+            }
+
+            .hero-stat-number {
+                font-size: 1.5rem;
             }
         }
 
@@ -358,6 +448,26 @@
             
             .container {
                 padding: 0 15px;
+                margin-top: -20px;
+            }
+
+            .hero-right {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .hero-stat {
+                flex: 1;
+                min-width: 100px;
+            }
+
+            .order-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .sort-container {
+                width: 100%;
             }
         }
     </style>
@@ -366,46 +476,50 @@
     <div class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1><i class="fas fa-shopping-bag"></i> My Orders</h1>
-                <p>Track and manage your orders from influencers and designers.</p>
+                <div class="hero-left">
+                    <h1><i class="fas fa-shopping-bag"></i> My Orders</h1>
+                    <p>Track and manage your orders from influencers and designers. View order status, delivery times, and complete history.</p>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="totalOrders">0</div>
+                        <div class="hero-stat-label">Total Orders</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="activeOrders">0</div>
+                        <div class="hero-stat-label">Active Orders</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="completedOrders">0</div>
+                        <div class="hero-stat-label">Completed</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container page-content">
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number" id="totalOrders">0</div>
-                <div class="stat-label">Total Orders</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="activeOrders">0</div>
-                <div class="stat-label">Active Orders</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="completedOrders">0</div>
-                <div class="stat-label">Completed Orders</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalSpent">₹0</div>
-                <div class="stat-label">Total Spent</div>
+    <div class="container">
+        <div class="order-controls">
+            <div class="sort-container">
+                <select id="sortSelect" class="sort-select">
+                    <option value="created_at_desc">Newest First</option>
+                    <option value="created_at_asc">Oldest First</option>
+                </select>
+                <div class="sort-icon">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
         </div>
 
         <div class="orders-container">
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search by service or provider name">
-            </div>
-            
             <table class="orders-table">
                 <thead>
                     <tr>
-                        <th>Influencer/Designer</th>
-                        <th>Service Type</th>
+                        <th>Provider</th>
                         <th>Service</th>
-                        <th>Due On</th>
-                        <th>Total</th>
+                        <th>Order Date</th>
+                        <th>Delivery</th>
+                        <th>Price</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -426,7 +540,8 @@
         const state = {
             orders: [],
             filteredOrders: [],
-            searchTerm: ''
+            sortField: 'created_at',
+            sortDirection: 'desc'
         };
 
         // Function to load data into the table
@@ -442,6 +557,7 @@
                 if (result.success !== false) {
                     state.orders = result.data;
                     state.filteredOrders = [...state.orders];
+                    sortOrders();
                     renderOrders();
                     updateStats();
                 } else {
@@ -465,6 +581,35 @@
             }
         }
         
+        // Sort orders based on the current sort field and direction
+        function sortOrders() {
+            state.filteredOrders.sort((a, b) => {
+                let valueA, valueB;
+                
+                // Extract values based on sort field
+                if (state.sortField === 'created_at') {
+                    valueA = new Date(a.created_at);
+                    valueB = new Date(b.created_at);
+                } else if (state.sortField === 'price') {
+                    valueA = parseFloat(a.promise.price.replace(/[^0-9.]/g, '')) || 0;
+                    valueB = parseFloat(b.promise.price.replace(/[^0-9.]/g, '')) || 0;
+                } else if (state.sortField === 'delivery_days') {
+                    valueA = parseInt(a.promise.delivery_days) || 999;
+                    valueB = parseInt(b.promise.delivery_days) || 999;
+                } else {
+                    valueA = a[state.sortField];
+                    valueB = b[state.sortField];
+                }
+                
+                // Compare values based on sort direction
+                if (state.sortDirection === 'asc') {
+                    return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+                } else {
+                    return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+                }
+            });
+        }
+        
         // Render orders to table
         function renderOrders() {
             const tableBody = document.getElementById('ordersTableBody');
@@ -475,6 +620,9 @@
                         <td colspan="6" class="empty-state">
                             <i class="fas fa-inbox"></i>
                             <p class="empty-state-text">No orders found</p>
+                            <a href="/businessman/request-order" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Place New Order
+                            </a>
                         </td>
                     </tr>`;
                 return;
@@ -482,22 +630,50 @@
             
             tableBody.innerHTML = '';
             
-            state.filteredOrders.forEach(order => {
+            state.filteredOrders.forEach((order, index) => {
                 try {
                     const jsonData = JSON.parse(order.promise.accepted_service);
                     const row = document.createElement('tr');
                     const providerInitials = getProviderInitials(order.seller.name);
                     const statusClass = order.order_status.toLowerCase().replace(' ', '-');
                     
+                    // Format dates
+                    const orderDate = new Date(order.created_at);
+                    const formattedDate = orderDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    const formattedTime = orderDate.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    // Set animation delay based on index
+                    row.classList.add('fade-in');
+                    row.style.animationDelay = `${index * 0.05}s`;
+                    
                     row.innerHTML = `
                         <td>
                             <div class="provider-info">
-                                <div class="provider-avatar">${providerInitials}</div>
+                                <div class="provider-avatar">
+                                    ${order.seller.profile_pic 
+                                        ? `<img src="${order.seller.profile_pic}" alt="${order.seller.name}">` 
+                                        : providerInitials}
+                                </div>
                                 <span class="provider-name">${order.seller.name}</span>
                             </div>
                         </td>
-                        <td>${jsonData ? jsonData.service_type : 'N/A'}</td>
-                        <td><div class="service-title">${jsonData ? jsonData.title : 'N/A'}</div></td>
+                        <td>
+                            <div class="service-title">${jsonData ? jsonData.title : 'N/A'}</div>
+                            <small>${jsonData ? jsonData.service_type : 'Service'}</small>
+                        </td>
+                        <td>
+                            <div class="date-display">
+                                <span class="date-primary">${formattedDate}</span>
+                                <span class="date-secondary">${formattedTime}</span>
+                            </div>
+                        </td>
                         <td>${formatDeliveryDays(order.promise.delivery_days)}</td>
                         <td><span class="price">${order.promise.price}</span></td>
                         <td><span class="status ${statusClass}">${order.order_status}</span></td>
@@ -519,7 +695,7 @@
             // Total orders
             document.getElementById('totalOrders').textContent = state.orders.length;
             
-            // Active orders (in progress)
+            // Active orders (in progress or pending)
             const activeOrders = state.orders.filter(order => 
                 order.order_status.toLowerCase().includes('in progress') || 
                 order.order_status.toLowerCase().includes('pending')
@@ -531,21 +707,9 @@
                 order.order_status.toLowerCase().includes('completed')
             ).length;
             document.getElementById('completedOrders').textContent = completedOrders;
-            
-            // Total spent 
-            const totalSpent = state.orders.reduce((sum, order) => {
-                const price = order.promise.price;
-                if (!price) return sum;
-                
-                // Extract numerical value from price string (assumes format like "LKR 10 000")
-                const priceNumber = parseFloat(price.replace(/[^0-9.]/g, ''));
-                return isNaN(priceNumber) ? sum : sum + priceNumber;
-            }, 0);
-            
-            document.getElementById('totalSpent').textContent = `₹${totalSpent.toLocaleString()}`;
         }
         
-        // Get provider initials for avatar
+        // Get provider initials for avatar fallback
         function getProviderInitials(name) {
             if (!name) return '?';
             return name.split(' ')
@@ -566,44 +730,23 @@
             return `${days} Days`;
         }
         
-        // Filter orders based on search term
-        function filterOrders() {
-            if (!state.searchTerm) {
-                state.filteredOrders = [...state.orders];
-            } else {
-                const term = state.searchTerm.toLowerCase();
-                state.filteredOrders = state.orders.filter(order => {
-                    try {
-                        const jsonData = JSON.parse(order.promise.accepted_service);
-                        return order.seller.name.toLowerCase().includes(term) || 
-                               (jsonData && jsonData.title && jsonData.title.toLowerCase().includes(term)) ||
-                               (jsonData && jsonData.serviceType && jsonData.serviceType.toLowerCase().includes(term));
-                    } catch (error) {
-                        return false;
-                    }
-                });
-            }
-            renderOrders();
-        }
-
-        // Handle search input
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            let debounceTimeout;
+        // Handle sort selection change
+        function handleSortChange() {
+            const sortSelect = document.getElementById('sortSelect');
             
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(debounceTimeout);
+            sortSelect.addEventListener('change', (e) => {
+                const [field, direction] = e.target.value.split('_');
+                state.sortField = field;
+                state.sortDirection = direction;
                 
-                debounceTimeout = setTimeout(() => {
-                    state.searchTerm = e.target.value.trim();
-                    filterOrders();
-                }, 300); // Debounce for 300ms
+                sortOrders();
+                renderOrders();
             });
         }
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
-            setupSearch();
+            handleSortChange();
             loadOrdersData();
         });
     </script>
