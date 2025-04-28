@@ -858,31 +858,24 @@
   </div>
 
   <script>
-    let gigData;
-    let currentPlan = 'standard';
-
+        let currentPlan = 'standard';
+    
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         // Get the service ID from the URL path
         const pathSegments = window.location.pathname.split('/');
         const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
-
+    
         if (!serviceID) {
           throw new Error('Service ID is required in the URL');
         }
-
+    
         const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true`);
-        console.log("Response is: ", response);
         const result = await response.json();
-
+        
         console.log(result);
-
-        // Get service ID and type for action buttons
-        const serviceId = result.service_id;
-        const serviceType = result.service_type;
-        const serviceTypeName = serviceType.charAt(0).toUpperCase() + serviceType.slice(1) + 's';
-
-        // Map platforms to icons
+    
+        // Map platforms to icons for easier reference
         const platformIcons = {
           'facebook': 'fab fa-facebook',
           'instagram': 'fab fa-instagram',
@@ -892,90 +885,20 @@
           'tiktok': 'fab fa-tiktok',
           'pinterest': 'fab fa-pinterest'
         };
-
-        // Calculate review statistics if reviews exist
-        let reviewStats = {
-          average: 4.8,
-          total: 0,
-          distribution: {
-            5: 80,
-            4: 15,
-            3: 5
-          }
-        };
-
-        if (result.reviews && result.reviews.length > 0) {
-          // Calculate actual review statistics here if needed
-          reviewStats.total = result.reviews.length;
-        }
-
-        // Parse data for display
-        gigData = {
-          breadcrumb: {
-            categories: ["Services", serviceTypeName]
-          },
-          serviceType: serviceType,
-          gig: {
-            title: result.title,
-            seller: {
-              name: result.user.name,
-              avatar: result.user.profile_picture,
-              rating: reviewStats.average,
-              reviewCount: reviewStats.total
-            },
-            media: {
-              images: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)],
-              thumbnails: [`/${result.cover_image}`, ...result.media.map(path => `/${path}`)]
-            },
-            about: {
-              description: result.description
-            },
-            platforms: Array.isArray(result.platforms)
-              ? result.platforms
-              : JSON.parse(result.platforms || '[]'),
-            platformIcons: platformIcons,
-            reviews: {
-              stats: reviewStats,
-              list: result.reviews || []
-            },
-            tags: Array.isArray(result.tags)
-              ? result.tags
-              : JSON.parse(result.tags || '[]'),
-            pricing: {
-              standard: {
-                packageId: result.packages[0].package_id,
-                duration: `${result.packages[0].delivery_days} days`,
-                revisions: `${result.packages[0].revisions} revisions`,
-                features: result.packages[0].benefits.split(',').map(item => item.trim()).filter(item => item),
-                price: `LKR ${result.packages[0].price}`
-              },
-              premium: {
-                packageId: result.packages[1].package_id,
-                duration: `${result.packages[1].delivery_days} days`,
-                revisions: `${result.packages[1].revisions} revisions`,
-                features: result.packages[1].benefits.split(',').map(item => item.trim()).filter(item => item),
-                price: `LKR ${result.packages[1].price}`
-              }
-            }
-          }
-        };
-
-        console.log('gig data ', gigData);
-        
-
+    
         // Render all UI components
-        renderBreadcrumb();
-        renderGigHeader();
-        renderMediaPreview();
-        renderAboutSection();
-        renderPlatforms();
-        renderReviewsSection();
-        renderTags();
-        renderPricingContent(currentPlan, serviceId, serviceType);
-
+        renderBreadcrumb(result);
+        renderGigHeader(result);
+        renderMediaPreview(result);
+        renderAboutSection(result);
+        renderPlatforms(result, platformIcons);
+        renderReviewsSection(result);
+        renderTags(result);
+        renderPricingContent(currentPlan, result);
+    
         // Set up image navigation
-        setupImageNavigation();
-
+        setupImageNavigation(result);
+    
       } catch (error) {
         console.error('Error fetching service data:', error);
         document.body.innerHTML = `
@@ -989,71 +912,84 @@
         `;
       }
     });
-
-    function renderBreadcrumb() {
+    
+    function renderBreadcrumb(result) {
+      const serviceType = result.service_type;
+      const serviceTypeName = serviceType.charAt(0).toUpperCase() + serviceType.slice(1) + 's';
+      
       const breadcrumbHtml = `
         <ul>
           <li><a href="/"><i class="fas fa-home"></i></a></li>
-          ${gigData.breadcrumb.categories.map(category =>
-            `<li><a href="/services">${category}</a></li>`
-          ).join('')}
+          <li><a href="/services">Services</a></li>
+          <li><a href="/services">${serviceTypeName}</a></li>
         </ul>
       `;
       document.querySelector('.breadcrumb').innerHTML = breadcrumbHtml;
     }
-
-    function renderGigHeader() {
-      const { title, seller } = gigData.gig;
-      document.querySelector('.gig-title').textContent = title;
-      document.querySelector('.seller-avatar').src = seller.avatar || '/assets/images/default-avatar.png';
-      document.querySelector('.seller-name').textContent = seller.name;
-      document.querySelector('.rating span').textContent = `${seller.rating} (${seller.reviewCount || 0} Reviews)`;
+    
+    function renderGigHeader(result) {
+      // Default review stats
+      const reviewCount = result.reviews ? result.reviews.length : 0;
+      const reviewRating = 4.8; // Default or calculate based on reviews if available
+      
+      document.querySelector('.gig-title').textContent = result.title;
+      document.querySelector('.seller-avatar').src = result.user.profile_picture || '/assets/images/default-avatar.png';
+      document.querySelector('.seller-name').textContent = result.user.name;
+      document.querySelector('.rating span').textContent = `${reviewRating} (${reviewCount} Reviews)`;
     }
-
-    function renderMediaPreview() {
-      const { images, thumbnails } = gigData.gig.media;
+    
+    function renderMediaPreview(result) {
+      const coverImage = result.cover_image;
+      const mediaImages = result.media || [];
       
       // Set the main preview image
       const previewImage = document.querySelector('.preview-image');
-      previewImage.src = images[0].substring(1); // Remove first '/' character
-      previewImage.alt = gigData.gig.title
-
+      previewImage.src = coverImage;
+      previewImage.alt = result.title;
+    
+      // Create all images array including cover
+      const allImages = [coverImage, ...mediaImages];
+    
       // Create thumbnail images
-      const thumbnailsHtml = thumbnails.map((thumb, index) => `
-        <img src="${thumb.substring(1)}" alt="Preview ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+      const thumbnailsHtml = allImages.map((image, index) => `
+        <img src="${image}" alt="Preview ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
       `).join('');
       
       document.querySelector('.thumbnails').innerHTML = thumbnailsHtml;
     }
-
-    function setupImageNavigation() {
+    
+    function setupImageNavigation(result) {
       const thumbnails = document.querySelectorAll('.thumbnail');
       const previewImage = document.querySelector('.preview-image');
       let currentImageIndex = 0;
-
+      
+      const coverImage = result.cover_image;
+      const mediaImages = result.media || [];
+      const allImages = [coverImage, ...mediaImages];
+    
       // Thumbnail click handler
       thumbnails.forEach((thumbnail, index) => {
         thumbnail.addEventListener('click', () => {
-          previewImage.src = gigData.gig.media.images[index].substring(1);
+          previewImage.src = allImages[index];
           currentImageIndex = index;
           updateActiveThumbnail(index);
         });
       });
-
+    
       // Previous button click handler
       document.querySelector('.prev-button').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
-        previewImage.src = gigData.gig.media.images[currentImageIndex].substring(1);
+        currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+        previewImage.src = allImages[currentImageIndex];
         updateActiveThumbnail(currentImageIndex);
       });
-
+    
       // Next button click handler
       document.querySelector('.next-button').addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
-        previewImage.src = gigData.gig.media.images[currentImageIndex].substring(1);
+        currentImageIndex = (currentImageIndex + 1) % allImages.length;
+        previewImage.src = allImages[currentImageIndex];
         updateActiveThumbnail(currentImageIndex);
       });
-
+    
       // Update active thumbnail styling
       function updateActiveThumbnail(activeIndex) {
         thumbnails.forEach((thumb, i) => {
@@ -1065,15 +1001,21 @@
         });
       }
     }
-
-    function renderAboutSection() {
-      const { description } = gigData.gig.about;
-      const aboutHtml = `<p>${description}</p>`;
+    
+    function renderAboutSection(result) {
+      const aboutHtml = `<p>${result.description}</p>`;
       document.querySelector('.about-content').innerHTML = aboutHtml;
     }
-
-    function renderPlatforms() {
-      const { platforms, platformIcons } = gigData.gig;
+    
+    function renderPlatforms(result, platformIcons) {
+      let platforms = [];
+      
+      // Handle platforms depending on format returned
+      if (result.platforms) {
+        platforms = Array.isArray(result.platforms) 
+          ? result.platforms 
+          : JSON.parse(result.platforms || '[]');
+      }
       
       if (!platforms || platforms.length === 0) {
         document.querySelector('.platform-grid').innerHTML = `
@@ -1097,16 +1039,25 @@
       
       document.querySelector('.platform-grid').innerHTML = platformsHtml;
     }
-
-    function renderReviewsSection() {
-      const { stats, list } = gigData.gig.reviews;
+    
+    function renderReviewsSection(result) {
+      // Default review stats if not available
+      const reviewStats = {
+        average: 4.8,
+        total: result.reviews ? result.reviews.length : 0,
+        distribution: {
+          5: 80,
+          4: 15,
+          3: 5
+        }
+      };
       
       // Update ratings overview
-      document.querySelector('.average-score').textContent = stats.average.toFixed(1);
-      document.querySelector('.total-reviews').textContent = `from ${stats.total} reviews`;
+      document.querySelector('.average-score').textContent = reviewStats.average.toFixed(1);
+      document.querySelector('.total-reviews').textContent = `from ${reviewStats.total} reviews`;
       
       // Update rating bars
-      Object.entries(stats.distribution).forEach(([stars, percentage]) => {
+      Object.entries(reviewStats.distribution).forEach(([stars, percentage]) => {
         const selector = `.rating-bars:nth-child(${6 - parseInt(stars)})`;
         const ratingBar = document.querySelector(selector);
         if (ratingBar) {
@@ -1116,8 +1067,8 @@
       });
       
       // Show reviews or empty state
-      if (list && list.length > 0) {
-        const reviewsHtml = list.map(review => {
+      if (result.reviews && result.reviews.length > 0) {
+        const reviewsHtml = result.reviews.map(review => {
           // Format date if available
           const reviewDate = review.created_at ? new Date(review.created_at).toLocaleDateString() : '';
           const rating = review.rating || 5;
@@ -1153,9 +1104,16 @@
         `;
       }
     }
-
-    function renderTags() {
-      const { tags } = gigData.gig;
+    
+    function renderTags(result) {
+      let tags = [];
+      
+      // Handle tags depending on format returned
+      if (result.tags) {
+        tags = Array.isArray(result.tags) 
+          ? result.tags 
+          : JSON.parse(result.tags || '[]');
+      }
       
       if (!tags || tags.length === 0) {
         document.querySelector('.tags-container').innerHTML = `
@@ -1170,14 +1128,33 @@
       const tagsHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
       document.querySelector('.tags-container').innerHTML = tagsHtml;
     }
-
-    function renderPricingContent(plan, serviceId, serviceType) {
+    
+    function renderPricingContent(plan, result) {
       currentPlan = plan; // Update current plan state
-      const data = gigData.gig.pricing[plan];
+      
+      // Safely access package data
+      const packages = result.packages || [];
+      if (packages.length < 2) {
+        console.error('Missing package data');
+        return;
+      }
+      
+      // Select the appropriate package for the current plan (0 = standard, 1 = premium)
+      const packageIndex = plan === 'standard' ? 0 : 1;
+      const packageData = packages[packageIndex];
+      
+      // Parse features
+      const features = packageData.benefits
+        .split(',')
+        .map(item => item.trim())
+        .filter(item => item);
+      
+      const serviceId = result.service_id;
+      const serviceType = result.service_type;
       const isGig = serviceType === 'gig';
       
       // Generate features list HTML
-      const featuresHtml = data.features.map(feature => `
+      const featuresHtml = features.map(feature => `
         <div class="feature-item">
           <div class="feature-icon">
             <i class="fas fa-check-circle"></i>
@@ -1189,9 +1166,7 @@
       // Generate button text and icons based on service type
       const primaryBtnText = isGig ? "Order Now" : "Request to Order";
       const primaryBtnIcon = isGig ? "fas fa-shopping-cart" : "fas fa-paper-plane";
-      const primaryBtnUrl = isGig 
-        ? `/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}`
-        : `/businessman/place-order?service_id=${serviceId}&package_id=${data.packageId}`;
+      const primaryBtnUrl = `/businessman/place-order?service_id=${serviceId}&package_id=${packageData.package_id}`;
       
       // Custom package button only for promotions
       const customPackageBtn = !isGig 
@@ -1207,11 +1182,11 @@
         <div class="time-info">
           <div class="time-item">
             <i class="far fa-clock"></i>
-            ${data.duration}
+            ${packageData.delivery_days} days
           </div>
           <div class="time-item">
             <i class="fas fa-sync-alt"></i>
-            ${data.revisions}
+            ${packageData.revisions} revisions
           </div>
         </div>
         
@@ -1219,7 +1194,7 @@
           ${featuresHtml}
         </div>
         
-        <div class="price">${data.price}</div>
+        <div class="price">LKR ${packageData.price}</div>
         
         <button class="action-button primary-button" onclick="window.location.href='${primaryBtnUrl}'">
           <i class="${primaryBtnIcon}"></i> ${primaryBtnText}
@@ -1238,7 +1213,7 @@
       
       document.getElementById('pricing-content').innerHTML = content;
     }
-
+    
     function switchTab(plan) {
   // Update active tab UI
   document.querySelectorAll('.tab').forEach(tab => {

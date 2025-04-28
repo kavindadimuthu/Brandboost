@@ -117,6 +117,15 @@ class GetCountController extends BaseController{
         $influencersCount = $userModel->count(['role' => 'influencer']);
         $designersCount = $userModel->count(['role' => 'designer']);
         
+        // Get new signups count if sinceTime parameter exists
+        $sinceTime = $request->getQueryParams()['sinceTime'] ?? null;
+        $newSignupsCount = 0;
+        
+        if ($sinceTime) {
+            // Count users registered since the given time
+            $newSignupsCount = $userModel->count(['created_at >=' => $sinceTime]);
+        }
+        
         // Return the counts
         $response->sendJson([
             'success' => true,
@@ -124,10 +133,58 @@ class GetCountController extends BaseController{
                 'total' => $totalUsers,
                 'businessmen' => $businessmenCount,
                 'influencers' => $influencersCount,
-                'designers' => $designersCount
+                'designers' => $designersCount,
+                'newSignupsToday' => $newSignupsCount
             ]
         ]);
     }
+
+
+    public function getComplaintCountsSummary($request, $response): void {
+        if ($request->getMethod() !== 'GET') {
+            $response->setStatusCode(405);
+            $response->sendError('Method Not Allowed');
+            return;
+        }
+        
+        // Safer user role checking
+        try {
+            $currentUser = AuthHelper::getCurrentUser();
+            if (!$currentUser || !isset($currentUser['role']) || $currentUser['role'] !== 'admin') {
+                $response->sendError('Unauthorized', 401);
+                return;
+            }
+            
+            // Retrieve the Complaint model
+            $complaintModel = $this->model('Actions\Complaint');
+            
+            // Get total complaints count
+            $totalComplaints = $complaintModel->count();
+            
+            // Get counts by status
+            $openCount = $complaintModel->count(['status' => 'open']);
+            $pendingCount = $complaintModel->count(['status' => 'pending']);
+            $resolvedCount = $complaintModel->count(['status' => 'resolved']);
+
+            error_log("Total Complaints: $totalComplaints, Open: $openCount, Pending: $pendingCount, Resolved: $resolvedCount");
+            
+            // Return the counts
+            $response->sendJson([
+                'success' => true,
+                'counts' => [
+                    'total' => $totalComplaints,
+                    'pending' => $pendingCount,	
+                    'open' => $openCount,
+                    'resolved' => $resolvedCount
+                ]
+            ]);
+        } catch (\Exception $e) {
+            error_log('Error in getComplaintCountsSummary: ' . $e->getMessage());
+            $response->setStatusCode(500);
+            $response->sendJson(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+
 
 }
 
