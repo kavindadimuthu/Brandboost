@@ -17,6 +17,7 @@ use app\models\Orders\OrderDeliveries;
 use app\models\Orders\OrderPromises;
 use app\models\Services\Service;
 use app\models\Services\ServicePackage;
+use app\models\Services\ServiceCustomPackage;
 use app\models\Users\User;
 use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
@@ -499,6 +500,7 @@ class OrderController extends BaseController
         $orderPromisesModel = new OrderPromises();
         $serviceModel = new Service();
         $servicePackageModel = new ServicePackage();
+        $serviceCustomPackageModel = new ServiceCustomPackage();
         $transactionModel = new Transaction();
         $walletModel = new Wallet();
         $orderDeliveriesModel = new OrderDeliveries();
@@ -508,6 +510,8 @@ class OrderController extends BaseController
         $paymentType = $requestData['payment_type'];
         $packageId = $requestData['package_id'] ?? null;
         $customPackageId = $requestData['custom_package_id'] ?? null;
+
+        error_log("customPackageIddddddddddddddd: " . $customPackageId);
 
         // Parse promises if provided
         $promises = [];
@@ -523,17 +527,45 @@ class OrderController extends BaseController
 
         // Fetch service and package data
         $serviceData = $serviceModel->getServiceById($serviceId);
-        $packageData = $servicePackageModel->getPackageById($packageId);
-
-        if (!$serviceData || !$packageData) {
-            return $response->sendJson([
-                'success' => false,
-                'message' => 'Invalid service or package ID.'
-            ], 400);
+        if($customPackageId){
+            $customPackageData = $serviceCustomPackageModel->getCustomPackageById($customPackageId);
+            error_log("packageIDDDDDDDaDD: " . $customPackageId);
+            if(!$customPackageData){
+                return $response->sendJson([
+                    'success' => false,
+                    'message' => 'Invalid custom package ID.'
+                ], 400);
+            }
         }
+        else{
+            $packageData = $servicePackageModel->getPackageById($packageId);
+        }
+
+        
+
+
+        // if (!$serviceData || !$packageData) {
+        //     return $response->sendJson([
+        //         'success' => false,
+        //         'message' => 'Invalid service or package ID.'
+        //     ], 400);
+        // }
 
         try {
             // Prepare order data
+            if ($customPackageId) {
+                $orderData = [
+                    'customer_id' => $customerId,
+                    'seller_id' => $serviceData['user_id'],
+                    'service_id' => $serviceId,
+                    'package_id' => $packageId,
+                    'custom_package_id' => $customPackageId,
+                    'payment_type' => $paymentType,
+                    'remained_revisions' => ($custompackageData['revisions'] ?? 0) + 1,
+                    'order_status' => 'pending',
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+            }
             $orderData = [
                 'customer_id' => $customerId,
                 'seller_id' => $serviceData['user_id'],
@@ -545,6 +577,8 @@ class OrderController extends BaseController
                 'order_status' => 'pending',
                 'created_at' => date('Y-m-d H:i:s')
             ];
+
+            error_log("Order dataaaaaaaa: " . json_encode($orderData, JSON_PRETTY_PRINT));
 
             // Create the order
             if (!$orderModel->createOrder($orderData)) {

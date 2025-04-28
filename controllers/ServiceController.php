@@ -157,7 +157,7 @@ class ServiceController extends BaseController
         // $serviceId = $queryParams['service_id'] ?? null;
         $serviceId = $queryParams['id'] ?? null;
         $includeAnalytics = $queryParams['include_analytics'] ?? false;
-        $includecustomPackages = $queryParams['include_custom_packages'] ?? false;
+        $customPackageId = $queryParams['custom_package_id'] ?? false;
         $includeUser =  $queryParams['include_user'] ?? false;
 
         // Validate required parameter
@@ -198,9 +198,14 @@ class ServiceController extends BaseController
         }
 
         // Include custom package requests (if any)
-        if ($includecustomPackages) {
-            $customPackages = $serviceCustomPackageModel->getCustomPackagesByServiceId($serviceId);
-            $service['custom_packages'] = $customPackages;
+        if ($customPackageId) {
+            $customPackage = $serviceCustomPackageModel->getCustomPackageById($customPackageId);
+            if ($customPackage) {
+                $service['custom_package'] = $customPackage;
+            } else {
+                $service['custom_package'] = 'No custom package found.';
+            }
+                
         }
 
         // Include user details if requested

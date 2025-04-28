@@ -823,10 +823,10 @@
                     // Only show buttons for accepted requests
                     const actionButtons = statusDisplay === 'accepted' ? `
                         <div class="request-actions">
-                            <a href="/businessman/place-order?request_id=${request.custom_package_id}" class="btn btn-primary">
+                            <a onclick="window.location.href='/businessman/place-order?service_id=${request.service_id}&custom_package_id=${request.custom_package_id}'" class="btn btn-primary">
                                 <i class="fas fa-shopping-cart"></i> Place Order
                             </a>
-<button class="btn btn-danger" onclick="rejectRequest(${request.custom_package_id})">
+                    <button class="btn btn-danger" onclick="rejectRequest(${request.custom_package_id})">
                                 <i class="fas fa-times"></i> Cancel
                             </button>
                         </div>
