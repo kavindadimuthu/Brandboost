@@ -498,7 +498,7 @@
                         <th>Buyer</th>
                         <th>Gig</th>
                         <th>Due On</th>
-                        <th>Total</th>
+                        <th>Total (LKR)</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -541,7 +541,7 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        incomeCard.textContent = `$${parseFloat(data.total_earnings).toLocaleString()}`;
+                        incomeCard.textContent = `LKR ${parseFloat(data.total_earnings).toLocaleString()}`;
                         // Also fetch monthly income data for the chart
                         fetchMonthlyIncome();
                     } else {
@@ -682,14 +682,14 @@
                     yaxis: {
                         labels: {
                             formatter: function (value) {
-                                return '$' + value.toFixed(0);
+                                return 'LKR' + ' ' + value.toFixed(0);
                             }
                         }
                     },
                     tooltip: {
                         y: {
                             formatter: function(value) {
-                                return '$' + value.toLocaleString();
+                                return 'LKR'+ ' ' + value.toLocaleString();
                             }
                         }
                     },
@@ -887,7 +887,7 @@
                         </td>
                         <td><div class="gig-title">${order.gig}</div></td>
                         <td>${formatDate(order.dueOn)}</td>
-                        <td><span class="price">$${order.total}</span></td>
+                        <td><span class="price">${order.total}</span></td>
                         <td><span class="status ${statusClass}">${order.status}</span></td>
                     `;
 
