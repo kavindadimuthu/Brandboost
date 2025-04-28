@@ -1098,9 +1098,9 @@
             <div class="review-card">
               <div class="review-header">
                 <div class="reviewer">
-                  <img src="${review.avatar || '/assets/images/default-avatar.png'}" alt="${review.name}" class="reviewer-avatar">
+                  <img src="${review.user.profile_picture || '/assets/images/default-avatar.png'}" alt="${review.name}" class="reviewer-avatar">
                   <div class="reviewer-details">
-                    <div class="reviewer-name">${review.name}</div>
+                    <div class="reviewer-name">${review.user.name}</div>
                     <div class="review-date">${reviewDate}</div>
                   </div>
                 </div>
