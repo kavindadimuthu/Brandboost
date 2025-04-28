@@ -21,6 +21,7 @@ use app\models\Users\User;
 use app\models\Payments\Transaction;
 use app\models\Payments\Wallet;
 use app\models\Actions\Complaint;
+use app\models\Communication\Notification;
 
 class OrderController extends BaseController
 {
@@ -588,6 +589,23 @@ class OrderController extends BaseController
                     'message' => 'Failed to create associated promises.'
                 ]);
                 return;
+            }
+
+            // Create notification for the seller
+            $notificationModel = new Notification();
+
+            $notificationData = [
+                'generated_by' => 'system',
+                'admin_id' => null,
+                'receiver_id' => $serviceData['user_id'],
+                'generation_note' => "New order created by customer : " .  AuthHelper::getCurrentUser()['username'],
+                'notification' => "You have a new order for service : " . "\"" . $serviceData['title'] . "\""  ,
+                'read_status' => 'unread',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            if (!$notificationModel->create($notificationData)) {
+                error_log('Failed to create notification for the seller.');
             }
 
             // Create initial transaction (customer -> system)
