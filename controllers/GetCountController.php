@@ -27,14 +27,30 @@ class GetCountController extends BaseController{
             $response->sendError('Unauthorized', 401);
             return;
         }
+
+        $loggedInUserRole = AuthHelper::getCurrentUser()['role'];
+        error_log("Logged in user role: $loggedInUserRole");
+        $sellerId = null;
+
+        if ($loggedInUserRole !== 'admin') {
+            $sellerId = AuthHelper::getCurrentUser()['user_id'];
+        }
+        error_log("Seller ID: $sellerId");
         
         $orderModel = $this->model('Orders\Orders');
 
-        $totalOrders = $orderModel->count();
-        $completedCount = $orderModel->count(['order_status' => 'completed']);
-        $pendingCount = $orderModel->count(['order_status' => 'pending']);
-        $inProgressCount = $orderModel->count(['order_status' => 'in_progress']);
-        $canceledCount = $orderModel->count(['order_status' => 'canceled']);
+        if ($sellerId) {
+            $totalOrders = $orderModel->count(['seller_id' => $sellerId]);
+            $completedCount = $orderModel->count(['seller_id' => $sellerId, 'order_status' => 'completed']);
+            $pendingCount = $orderModel->count(['seller_id' => $sellerId, 'order_status' => 'pending']);
+            $inProgressCount = $orderModel->count(['seller_id' => $sellerId, 'order_status' => 'in_progress']);
+        } else {
+            $totalOrders = $orderModel->count();
+            $completedCount = $orderModel->count(['order_status' => 'completed']);
+            $pendingCount = $orderModel->count(['order_status' => 'pending']);
+            $inProgressCount = $orderModel->count(['order_status' => 'in_progress']);
+            $canceledCount = $orderModel->count(['order_status' => 'canceled']);
+        }   
 
         error_log("Total Orders: $totalOrders, Completed: $completedCount, Pending: $pendingCount, In Progress: $inProgressCount, Canceled: $canceledCount");
         // Return the counts

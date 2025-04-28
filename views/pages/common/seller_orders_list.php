@@ -426,7 +426,7 @@
                 <div class="stat-label">Completed Orders</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalRevenue">$0</div>
+                <div class="stat-number" id="totalRevenue">0</div>
                 <div class="stat-label">Total Revenue</div>
             </div>
         </div>
@@ -551,7 +551,7 @@
                     </td>
                     <td><div class="gig-title">${order.gig}</div></td>
                     <td>${formatDate(order.dueOn)}</td>
-                    <td><span class="price">$${order.total}</span></td>
+                    <td><span class="price">${order.total}</span></td>
                     <td><span class="status ${statusClass}">${order.status}</span></td>
                 `;
                 
@@ -562,6 +562,14 @@
         
         // Update dashboard stats
         function updateStats(orders) {
+            // //api call to get the counts
+            // const response = await fetch('/api/orders/counts', { 
+            //     method: 'GET'                 
+            // });
+
+            // const OrderResult = await response.json();
+            // console.log('OrderResult:', OrderResult);
+            
             // Total orders
             document.getElementById('totalOrders').textContent = orders.length;
             
@@ -577,12 +585,17 @@
                 order.status.toLowerCase() === 'completed'
             ).length;
             document.getElementById('completedOrders').textContent = completedOrders;
+
+            console.log("state of orders", orders);
             
             // Total revenue from completed orders
             const totalRevenue = orders
                 .filter(order => order.status.toLowerCase() === 'completed')
-                .reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
-            document.getElementById('totalRevenue').textContent = '$' + totalRevenue.toFixed(2);
+                .reduce((sum, order) => {
+                    const value = parseFloat(order.total || 0);
+                    return sum + (isNaN(value) ? 0 : value);
+                }, 0);
+            document.getElementById('totalRevenue').textContent = 'LKR ' + totalRevenue.toFixed(2);
         }
         
         // Get buyer initials for avatar

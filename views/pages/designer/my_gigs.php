@@ -523,8 +523,8 @@
                 <thead>
                     <tr>
                         <th>Gig</th>
-                        <th>Basic Price</th>
-                        <th>Premium Price</th>
+                        <th>Basic Price (LKR)</th>
+                        <th>Premium Price (LKR)</th>
                         <th>Updated</th>
                         <th>Created</th>
                         <th>Status</th>
@@ -634,8 +634,8 @@
                                 <span class="gig-title">${gig.title}</span>
                             </div>
                         </td>
-                        <td class="price-column">$${basicPackage ? basicPackage.price : 'N/A'}</td>
-                        <td class="price-column">$${premiumPackage ? premiumPackage.price : 'N/A'}</td>
+                        <td class="price-column">${basicPackage ? basicPackage.price : 'N/A'}</td>
+                        <td class="price-column">${premiumPackage ? premiumPackage.price : 'N/A'}</td>
                         <td class="date-column">${formatDate(gig.updated_at)}</td>
                         <td class="date-column">${formatDate(gig.created_at)}</td>
                         <td><span class="status-badge ${statusClass}">${status}</span></td>
