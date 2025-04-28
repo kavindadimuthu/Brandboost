@@ -334,6 +334,21 @@
             color: white;
         }
 
+        .badge-complaint_open {
+            background-color: var(--gray-800);
+            color: white;
+        }
+
+        .badge-complaint_resolved {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-other {
+            background-color: var(--success-color);
+            color: white;
+        }
+
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -742,10 +757,12 @@
                 <button class="status-filter-btn active" data-type="all">All Types</button>
                 <button class="status-filter-btn" data-type="user_banned">User Banned</button>
                 <button class="status-filter-btn" data-type="user_blocked">User Blocked</button>
-                <button class="status-filter-btn" data-type="user_inactive">User Inactive</button>
                 <button class="status-filter-btn" data-type="user_active">User Active</button>
                 <button class="status-filter-btn" data-type="order_reversed">Order Reversed</button>
                 <button class="status-filter-btn" data-type="order_canceled">Order Canceled</button>
+                <button class="status-filter-btn" data-type="complaint_open">Complaint Open</button>
+                <button class="status-filter-btn" data-type="complaint_resolved">Complaint Resolved</button>
+                <button class="status-filter-btn" data-type="other">Other</button>
             </div>
 
             <div class="card">
@@ -831,7 +848,7 @@
                                 <th data-sort="admin_id">Admin <i class="fas fa-sort"></i></th>
                                 <th data-sort="action_type">Action Type <i class="fas fa-sort"></i></th>
                                 <th data-sort="user_id">User ID <i class="fas fa-sort"></i></th>
-                                <th data-sort="order_id">Order ID <i class="fas fa-sort"></i></th>
+                                <!-- <th data-sort="order_id">Order ID <i class="fas fa-sort"></i></th> -->
                                 <th>Action Note</th>
                                 <th data-sort="created_at">Date <i class="fas fa-sort"></i></th>
                             </tr>
@@ -1083,123 +1100,9 @@
                     }
                 } catch (error) {
                     console.error('Error fetching actions:', error);
-                    // Use mock data for demo if API call fails
-                    useMockData();
                 } finally {
                     hideLoading();
                 }
-            }
-
-            function useMockData() {
-                // Mock data for demo when API is not available
-                const mockActions = [
-                    {
-                        action_id: 1,
-                        admin_id: 1,
-                        user_id: 3,
-                        order_id: null,
-                        action_type: "order_reversed",
-                        action_note: "Order reversed due to dispute.",
-                        created_at: "2025-01-06T03:10:21"
-                    },
-                    {
-                        action_id: 2,
-                        admin_id: 2,
-                        user_id: 4,
-                        order_id: null,
-                        action_type: "order_canceled",
-                        action_note: "Customer requested cancellation.",
-                        created_at: "2025-01-06T03:10:21"
-                    },
-                    {
-                        action_id: 3,
-                        admin_id: 4,
-                        user_id: 43,
-                        order_id: null,
-                        action_type: "user_inactive",
-                        action_note: "User account status changed to inactive",
-                        created_at: "2025-04-17T12:59:13"
-                    },
-                    {
-                        action_id: 4,
-                        admin_id: 4,
-                        user_id: 43,
-                        order_id: null,
-                        action_type: "user_active",
-                        action_note: "User account status changed to active",
-                        created_at: "2025-04-17T13:03:51"
-                    },
-                    {
-                        action_id: 5,
-                        admin_id: 4,
-                        user_id: 41,
-                        order_id: null,
-                        action_type: "user_blocked",
-                        action_note: "User account status changed to blocked",
-                        created_at: "2025-04-18T01:45:04"
-                    }
-                ];
-
-                // Filter the mock data based on current filters
-                let filteredActions = [...mockActions];
-
-                if (state.filters.type !== 'all') {
-                    filteredActions = filteredActions.filter(a => a.action_type === state.filters.type);
-                }
-
-                if (state.filters.search) {
-                    const search = state.filters.search.toLowerCase();
-                    filteredActions = filteredActions.filter(a =>
-                        a.action_id.toString().includes(search) ||
-                        a.action_type?.toLowerCase().includes(search) ||
-                        a.action_note?.toLowerCase().includes(search) ||
-                        (a.user_id && a.user_id.toString().includes(search)) ||
-                        (a.admin_id && a.admin_id.toString().includes(search))
-                    );
-                }
-
-                // Apply date filters if set
-                if (state.filters.dateFrom) {
-                    const fromDate = new Date(state.filters.dateFrom);
-                    filteredActions = filteredActions.filter(a => new Date(a.created_at) >= fromDate);
-                }
-
-                if (state.filters.dateTo) {
-                    const toDate = new Date(state.filters.dateTo);
-                    toDate.setHours(23, 59, 59, 999); // End of day
-                    filteredActions = filteredActions.filter(a => new Date(a.created_at) <= toDate);
-                }
-
-                // Sort the mock data
-                filteredActions.sort((a, b) => {
-                    let aValue = a[state.sort.field];
-                    let bValue = b[state.sort.field];
-
-                    if (state.sort.field === 'created_at') {
-                        aValue = new Date(aValue).getTime();
-                        bValue = new Date(bValue).getTime();
-                    }
-
-                    if (state.sort.order === 'asc') {
-                        return aValue > bValue ? 1 : -1;
-                    } else {
-                        return aValue < bValue ? 1 : -1;
-                    }
-                });
-
-                // Paginate the results
-                const start = (state.currentPage - 1) * state.itemsPerPage;
-                const end = start + parseInt(state.itemsPerPage);
-
-                // Set mock data and pagination info
-                state.actions = filteredActions.slice(start, end);
-                state.totalItems = filteredActions.length;
-                state.totalPages = Math.ceil(filteredActions.length / state.itemsPerPage);
-
-                // Render the UI with mock data
-                renderActions();
-                renderPagination();
-                updateCounter();
             }
 
             function updateFilterIndicator() {

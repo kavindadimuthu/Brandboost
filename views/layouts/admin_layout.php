@@ -490,7 +490,7 @@ php
     <!-- Mobile Header -->
     <div class="mobile-header">
         <div class="mobile-logo">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-bolt"></i>
             <span>BrandBoost Admin</span>
         </div>
         <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation menu">
@@ -506,7 +506,7 @@ php
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-icon">
-                    <i class="fas fa-shield-alt"></i>
+                    <i class="fas fa-bolt"></i>
                 </div>
                 <h1 class="logo-text">BrandBoost</h1>
             </div>

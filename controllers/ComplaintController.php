@@ -286,9 +286,6 @@ class ComplaintController extends BaseController {
         $complaintId = $body['complaint_id'] ?? null;
         $status = $body['status'] ?? null;
         $resolutionNotes = $body['resolution_notes'] ?? null;
-
-        error_log("fvwrfbwrbwbb");
-        error_log(print_r($body, true)); // Debugging line
         
         if (!$complaintId || !$status) {
             return $response->sendJson(['error' => 'Complaint ID and status are required'], 400);
@@ -301,6 +298,13 @@ class ComplaintController extends BaseController {
         }
         
         $disputeModel = $this->model('Actions\Complaint');
+
+        // Check if the complaint exists and get current details
+        $complaint = $disputeModel->getComplaintById($complaintId);
+        if (!$complaint) {
+            return $response->sendJson(['error' => 'Complaint not found'], 404);
+        }
+        
         $updateData = [
             'status' => $status,
             'updated_at' => date('Y-m-d H:i:s')
@@ -324,17 +328,6 @@ class ComplaintController extends BaseController {
         
         // Log the admin action
         $actionModel = $this->model('Actions\Action');
-        // $actionData = [
-        //     'admin_id' => $user['user_id'],
-        //     'action_type' => 'complaint_status_update',
-        //     'entity_type' => 'complaint',
-        //     'entity_id' => $complaintId,
-        //     'details' => json_encode([
-        //         'status' => $status,
-        //         'previous_status' => $body['previous_status'] ?? 'unknown'
-        //     ]),
-        //     'created_at' => date('Y-m-d H:i:s')
-        // ];
         $actionData = [
             'admin_id' => $user['user_id'],
             'action_type' => 'complaint ' . $status,
@@ -342,6 +335,24 @@ class ComplaintController extends BaseController {
             'created_at' => date('Y-m-d H:i:s')
         ];
         $actionModel->create($actionData);
+
+        // Send notification to the complainant
+        $notificationModel = $this->model('Communication\Notification');
+
+        $notificationData = [
+            'generated_by' => 'admin',
+            'admin_id' => $user['user_id'],
+            'receiver_id' => $complaint['complainant_user_id'],
+            'generation_note' => 'Complaint status updated',
+            'notification' => 'Your complaint #'. $complaintId . ' has been updated to: ' . $status,
+            'read_status' => 'unread',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        // Create notification in the database
+        if(!$notificationModel->create($notificationData)){
+            error_log('Failed to create notification for complaint status update.');
+        }
         
         return $response->sendJson([
             'success' => true,

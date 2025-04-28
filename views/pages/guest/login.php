@@ -639,7 +639,7 @@
         }
 
         // Form submission
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Validate all fields
@@ -656,52 +656,108 @@
             submitButton.disabled = true;
             submitButton.textContent = 'Signing In...';
 
-            // Create data object for submission
-            const formData = {
-                email: email.value.trim(),
-                password: password.value
-            };
+            try {
+                // Create data object for submission
+                const formData = {
+                    email: email.value.trim(),
+                    password: password.value
+                };
 
-            // Send the data using fetch API
-            fetch('/auth/login', {
+                // Send the data using fetch API
+                const response = await fetch('/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(data => {
-                            throw new Error(data.message || 'Login failed');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Success - redirect to dashboard or appropriate page
-                    window.location.href = data.redirect || '/login';
-                })
-                .catch(error => {
-                    // Show error message
-                    if (error.message.toLowerCase().includes('password')) {
-                        password.classList.add('error');
-                        passwordError.textContent = error.message;
-                        passwordError.style.display = 'block';
-                    } else if (error.message.toLowerCase().includes('email')) {
-                        email.classList.add('error');
-                        emailError.textContent = error.message;
-                        emailError.style.display = 'block';
-                    } else {
-                        // General error
-                        alert(error.message);
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    // Handle different error status codes
+                    if (response.status === 401) {
+                        throw new Error('Invalid email or password');
+                    } 
+                    if (response.status === 403) {
+                        window.location.href = data.redirect || '/account-suspended';
+                        throw new Error('Account is inactive or suspended');
                     }
                     
-                    // Reset button state
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                });
+                    // Handle error messages from server
+                    throw new Error(data.message || data.error || 'Login failed');
+                }
+                
+                // Success - redirect to dashboard or appropriate page
+                window.location.href = data.redirect_url || '/dashboard';
+                
+            } catch (error) {
+                // Display error messages based on error content
+                displayErrorMessage(error.message);
+            } finally {
+                // Reset button state regardless of success/failure
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
         });
+
+        /**
+         * Displays error messages in the appropriate location based on error content
+         * @param {string} errorMessage - The error message to display
+         */
+        function displayErrorMessage(errorMessage) {
+            const message = errorMessage.toLowerCase();
+            
+            // Clear previous errors first
+            clearErrorMessages();
+            
+            if (message.includes('password')) {
+                password.classList.add('error');
+                passwordError.textContent = errorMessage;
+                passwordError.style.display = 'block';
+            } else if (message.includes('email')) {
+                email.classList.add('error');
+                emailError.textContent = errorMessage;
+                emailError.style.display = 'block';
+            } else {
+                // General error using a more user-friendly approach than alert()
+                const formContainer = document.querySelector('.auth-form');
+                const formHeader = document.querySelector('.form-header');
+                
+                // Create general error element if it doesn't exist
+                let generalError = document.getElementById('generalError');
+                if (!generalError) {
+                    generalError = document.createElement('div');
+                    generalError.id = 'generalError';
+                    generalError.className = 'error-message';
+                    generalError.style.display = 'block';
+                    generalError.style.marginBottom = '1rem';
+                    generalError.style.padding = '0.75rem';
+                    generalError.style.backgroundColor = 'rgba(245, 54, 92, 0.1)';
+                    generalError.style.borderRadius = '5px';
+                    formContainer.insertBefore(generalError, formHeader.nextSibling);
+                }
+                
+                generalError.textContent = errorMessage;
+            }
+        }
+
+        /**
+         * Clears all error messages and styling
+         */
+        function clearErrorMessages() {
+            // Reset form field errors
+            email.classList.remove('error');
+            password.classList.remove('error');
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            // Remove general error if it exists
+            const generalError = document.getElementById('generalError');
+            if (generalError) {
+                generalError.style.display = 'none';
+            }
+        }
     </script>
 </body>
 

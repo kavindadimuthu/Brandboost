@@ -51,6 +51,12 @@ class AuthController extends BaseController {
             return;
         }
 
+        // Check if the user is blobked or banned
+        if ($user['account_status'] === 'blocked' || $user['account_status'] === 'banned') {
+            $response->sendError('Your account is blocked or banned.', 403);
+            return;
+        }
+
         // Set session data for the authenticated user
         if ($user['role'] === 'admin') {
             $loggedUser['user_id'] = $user['admin_id'];
