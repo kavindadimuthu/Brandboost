@@ -653,8 +653,7 @@
             
             SERVICE_TYPES: [
                 { value: 'graphic_design', label: 'Graphic Design' },
-                { value: 'web_development', label: 'Web Development' },
-                { value: 'digital_marketing', label: 'Digital Marketing' }
+                { value: 'web_development', label: 'Video editing' }
             ],
             
             PLATFORMS: [
