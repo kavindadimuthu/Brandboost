@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Package Request - Brandboost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Global Styles */
         :root {
-            --primary: #4169E1;
-            --secondary: #8A2BE2;
-            --text-dark: #333;
-            --text-light: #666;
-            --bg-light: #f8f9fa;
-            --white: #fff;
+            --primary: #3b82f6;
+            --primary-dark: #7c3aed;
+            --primary-light: #dbeafe;
+            --secondary: #7c3aed;
+            --text-dark: #1e293b;
+            --text-medium: #475569;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --bg-subtle: #f1f5f9;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --warning: #f59e0b;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -22,232 +37,494 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             color: var(--text-dark);
+            background-color: var(--bg-light);
+            padding-bottom: 60px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 0 20px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-dark);
+        }
+
+        h1 {
+            font-size: 1.875rem;
+            letter-spacing: -0.025em;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Layout */
+        .app-wrapper {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 24px;
         }
 
         /* Page Header */
         .page-header {
-            /* background: linear-gradient(135deg, var(--primary), var(--secondary)); */
             background: var(--white);
-            /* color: var(--white); */
-            /* color: var(--primary); */
-            max-width: 1200px;
-            margin:  auto;
-            /* padding: 0px 20px; */
-            /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
-            border-radius: 20px;
-            /* text-align: center; */
+            border-radius: 12px;
+            padding: 24px 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
         }
 
         .page-header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .page-header h1::before {
+            content: "\f1d8";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-medium);
+            font-size: 1.05rem;
+            margin-bottom: 0;
+            padding-left: 36px;
         }
 
         /* Main Content Layout */
         .content-wrapper {
-            max-width: 1200px;
-            margin: 0 auto 3rem;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            /* margin-top: 40px; */
+            grid-template-columns: 5fr 7fr;
+            gap: 32px;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 32px;
+            background-color: var(--bg-subtle);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h2 {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header h2.original::before {
+            content: "\f071";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 12px;
+            color: var(--warning);
+        }
+
+        .card-header h2.customize::before {
+            content: "\f304";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .card-body {
+            padding: 24px 32px;
         }
 
         /* Request Details Section */
-        .request-details {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
         .detail-group {
             margin-bottom: 24px;
+            position: relative;
+        }
+
+        .detail-group:last-child {
+            margin-bottom: 0;
         }
 
         .detail-group h3 {
-            color: var(--primary);
-            font-size: 18px;
+            color: var(--text-medium);
+            font-size: 0.875rem;
             margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            display: flex;
+            align-items: center;
         }
 
         .detail-group p {
-            color: var(--text-light);
+            color: var(--text-dark);
+            white-space: pre-line;
+            background-color: var(--bg-subtle);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0;
         }
 
         /* Modification Form */
-        .modification-form {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
         .form-group {
             margin-bottom: 24px;
         }
 
-        .form-group label {
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
             display: block;
             margin-bottom: 8px;
-            color: var(--primary);
+            color: var(--text-medium);
             font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e1e1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+            background-color: var(--white);
         }
 
         .form-control:focus {
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
             outline: none;
         }
 
         .original-value {
-            font-style: italic;
-            color: var(--text-light);
-            font-size: 14px;
-            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            padding: 6px 12px;
+            background-color: var(--bg-subtle);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-medium);
+        }
+
+        .original-value::before {
+            content: "\f05a";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 8px;
+            color: var(--text-medium);
         }
 
         /* Button Styles */
-        .submit-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            padding: 15px 35px;
-            font-size: 18px;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 0.95rem;
             font-weight: 600;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-lg {
+            padding: 12px 24px;
+            font-size: 1rem;
+        }
+
+        .btn-block {
             width: 100%;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        .btn-icon {
+            margin-right: 8px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .content-wrapper {
-                grid-template-columns: 1fr;
-            }
+        /* Form Actions */
+        .form-actions {
+            margin-top: 32px;
+            display: flex;
+            justify-content: flex-end;
+        }
 
-            .page-header h1 {
-                font-size: 28px;
-            }
+        /* Status Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        .badge-success {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .badge-waiting {
+            background-color: var(--primary-light);
+            color: var(--primary);
         }
 
         /* Error States */
         .form-control.error {
-            border-color: #dc3545;
+            border-color: var(--danger);
+            background-color: var(--danger-light);
         }
 
         .error-message {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 4px;
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 6px;
             display: none;
         }
+
+        .error-message::before {
+            content: "\f071";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 6px;
+        }
+
+        /* Additional Styles */
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .price-input {
+            position: relative;
+        }
+
+        .price-input::before {
+            content: "LKR";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-medium);
+            font-weight: 600;
+        }
+
+        .price-input input {
+            padding-left: 50px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                margin-bottom: 24px;
+            }
+
+            .page-header {
+                padding: 20px 24px;
+            }
+
+            .card-header, .card-body {
+                padding: 20px 24px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .page-header p {
+                font-size: 0.95rem;
+                padding-left: 32px;
+            }
+
+            .card-header h2 {
+                font-size: 1.125rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+        .description-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    line-height: 1.7;
+    padding: 12px 16px;
+    border-left: 3px solid var(--primary);
+}
     </style>
 </head>
 <body>
-    <header class="page-header">
-        <div class="container">
+    <div class="app-wrapper">
+        <header class="page-header">
             <h1>Custom Package Request</h1>
             <p>Review and modify the package details based on client requirements</p>
-        </div>
-    </header>
+        </header>
 
-    <div class="">
         <div class="content-wrapper">
             <!-- Read-only Request Details -->
-            <section class="request-details">
-                <h2>Original Request Details</h2>
-                <div class="detail-group">
-                    <h3>Promotion Title</h3>
-                    <p id="original-title">Website Design Package</p>
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="original">Original Request Details</h2>
                 </div>
-                <div class="detail-group">
-                    <h3>Promotion Description</h3>
-                    <p id="original-description">Complete website design including homepage, about page, and contact form</p>
-                </div>
-                <div class="detail-group">
-                    <h3>Benefits Requested</h3>
-                    <p id="original-benefits">- Responsive design
-                        - SEO optimization
-                        - Social media integration
-                        - Contact form setup
-                    </p>
-                </div>
-                <div class="detail-group">
-                    <h3>Delivery Days</h3>
-                    <p id="original-delivery">14 days</p>
-                </div>
-                <div class="detail-group">
-                    <h3>Revisions</h3>
-                    <p id="original-revisions">3 revisions</p>
-                </div>
-                <div class="detail-group">
-                    <h3>Price Requested</h3>
-                    <p id="original-price">LKR5000</p>
-                </div>
-                <div class="detail-group">
-                    <h3>Created Date</h3>
-                    <p id="created-date">January 5, 2025</p>
+                <div class="card-body">
+                    <div class="detail-group">
+                        <h3>Promotion Title</h3>
+                        <p id="original-title">Website Design Package</p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Promotion Description</h3>
+                        <p id="original-description" class="description-content">Complete website design including homepage, about page, and contact form</p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Benefits Requested</h3>
+                        <p id="original-benefits">- Responsive design
+                            - SEO optimization
+                            - Social media integration
+                            - Contact form setup
+                        </p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Delivery Days</h3>
+                        <p id="original-delivery">14 days</p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Revisions</h3>
+                        <p id="original-revisions">3 revisions</p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Price Requested</h3>
+                        <p id="original-price">LKR 5,000</p>
+                    </div>
+                    <div class="detail-group">
+                        <h3>Created Date</h3>
+                        <p id="created-date">January 5, 2025</p>
+                    </div>
                 </div>
             </section>
 
             <!-- Modification Form -->
-            <section class="modification-form">
-                <h2>Customize Package Offer</h2>
-                <form id="offerForm" onsubmit="return validateForm(event)">
-                    <div class="form-group">
-                        <label for="modified-benefits">Modified Benefits</label>
-                        <textarea id="modified-benefits" class="form-control" rows="6" placeholder="Enter modified benefits"></textarea>
-                        <p class="original-value">Original: <span id="benefits-original"></span></p>
-                        <p class="error-message" id="benefits-error">Benefits cannot be empty</p>
-                    </div>
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="customize">Customize Package Offer</h2>
+                </div>
+                <div class="card-body">
+                    <form id="offerForm" onsubmit="return validateForm(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="modified-benefits">Benefits</label>
+                            <textarea id="modified-benefits" class="form-control" rows="6" placeholder="Describe the benefits included in this package"></textarea>
+                            <div class="original-value">Original: <span id="benefits-original"></span></div>
+                            <p class="error-message" id="benefits-error">Benefits cannot be empty</p>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="modified-delivery">Modified Delivery Days</label>
-                        <input type="number" id="modified-delivery" class="form-control" min="1" placeholder="Enter number of days">
-                        <p class="original-value">Original: <span id="delivery-original"></span></p>
-                        <p class="error-message" id="delivery-error">Delivery days must be greater than 0</p>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modified-delivery">Delivery Time (Days)</label>
+                            <input type="number" id="modified-delivery" class="form-control" min="1" placeholder="Enter delivery time in days">
+                            <div class="original-value">Original: <span id="delivery-original"></span></div>
+                            <p class="error-message" id="delivery-error">Delivery days must be greater than 0</p>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="modified-revisions">Modified Revisions</label>
-                        <input type="number" id="modified-revisions" class="form-control" min="0" placeholder="Enter number of revisions">
-                        <p class="original-value">Original: <span id="revisions-original"></span></p>
-                        <p class="error-message" id="revisions-error">Number of revisions must be valid</p>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modified-revisions">Revisions</label>
+                            <input type="number" id="modified-revisions" class="form-control" min="0" placeholder="Enter number of revisions">
+                            <div class="original-value">Original: <span id="revisions-original"></span></div>
+                            <p class="error-message" id="revisions-error">Number of revisions must be valid</p>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="modified-price">Modified Price (LKR)</label>
-                        <input type="number" id="modified-price" class="form-control" min="0" step="0.01" placeholder="Enter price">
-                        <p class="original-value">Original: <span id="price-original"></span></p>
-                        <p class="error-message" id="price-error">Price must be greater than 0</p>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modified-price">Price</label>
+                            <div class="price-input">
+                                <input type="number" id="modified-price" class="form-control" min="0" step="0.01" placeholder="Enter price in LKR">
+                            </div>
+                            <div class="original-value">Original: <span id="price-original"></span></div>
+                            <p class="error-message" id="price-error">Price must be greater than 0</p>
+                        </div>
 
-                    <button type="submit" class="submit-btn">Submit Custom Package Offer</button>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                <i class="fas fa-paper-plane btn-icon"></i>
+                                Submit Custom Package Offer
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </section>
         </div>
     </div>
@@ -258,29 +535,51 @@
             const urlParams = new URLSearchParams(window.location.search);
             const customPackageId = urlParams.get('request_id'); // Get the request_id parameter
     
-            // Fetch the custom package data from the backend
-            const response = await fetch(`/api/custom-package/${customPackageId}`);
-            const data = await response.json();
-    
-            console.log('Custom Package Data:', data);
-            console.log('Custom Package ID:', customPackageId);
-    
-            const originalData = data;
-    
-            // Set original values in the form
-            document.getElementById('modified-benefits').value = originalData.benefits_requested;
-            document.getElementById('modified-delivery').value = originalData.delivery_days_requested;
-            document.getElementById('modified-revisions').value = originalData.revisions_requested;
-            document.getElementById('modified-price').value = originalData.price_requested;
-    
-            // Display original values
-            document.getElementById('benefits-original').textContent = originalData.benefits_requested;
-            document.getElementById('delivery-original').textContent = originalData.delivery_days_requested + ' days';
-            document.getElementById('revisions-original').textContent = originalData.revisions_requested + ' revisions';
-            document.getElementById('price-original').textContent = 'LKR' + originalData.price_requested;
-    
-            document.getElementById('original-title').textContent = originalData.service.title;
-            document.getElementById('original-description').textContent = originalData.service.description;
+            try {
+                // Fetch the custom package data from the backend
+                const response = await fetch(`/api/custom-package/${customPackageId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch package data');
+                }
+                
+                const data = await response.json();
+                console.log('Custom Package Data:', data);
+        
+                const originalData = data;
+        
+                // Set original values in the form
+                document.getElementById('modified-benefits').value = originalData.benefits_requested;
+                document.getElementById('modified-delivery').value = originalData.delivery_days_requested;
+                document.getElementById('modified-revisions').value = originalData.revisions_requested;
+                document.getElementById('modified-price').value = originalData.price_requested;
+        
+                // Format and display original values
+                document.getElementById('benefits-original').textContent = originalData.benefits_requested;
+                document.getElementById('delivery-original').textContent = originalData.delivery_days_requested + ' days';
+                document.getElementById('revisions-original').textContent = originalData.revisions_requested + ' revisions';
+                document.getElementById('price-original').textContent = 'LKR ' + 
+                    Number(originalData.price_requested).toLocaleString('en-US');
+        
+                document.getElementById('original-title').textContent = originalData.service.title;
+                document.getElementById('original-description').textContent = originalData.service.description;
+                document.getElementById('original-price').textContent = 'LKR ' + 
+                    Number(originalData.price_requested).toLocaleString('en-US');
+                
+                // Format the creation date nicely
+                if (originalData.created_at) {
+                    const createdDate = new Date(originalData.created_at);
+                    document.getElementById('created-date').textContent = 
+                        createdDate.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                }
+            } catch (error) {
+                console.error('Error fetching package data:', error);
+                alert('Failed to load package details. Please try again later.');
+            }
         });
     
         // Form validation and submission
@@ -344,21 +643,47 @@
             const urlParams = new URLSearchParams(window.location.search);
             const customPackageId = urlParams.get('request_id');
     
-            const response = await fetch(`/api/update-custom-package/${customPackageId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+            try {
+                const response = await fetch(`/api/update-custom-package/${customPackageId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
     
-            const data = await response.json();
-            console.log(data);
+                const data = await response.json();
+                console.log(data);
     
-            if (data.success) {
-                alert('Custom package offer submitted successfully!');
-            } else {
-                alert('Failed to submit custom package offer.');
+                if (data.success) {
+                    // Show a success message
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'alert alert-success';
+                    successMessage.innerHTML = '<strong>Success!</strong> Custom package offer has been submitted.';
+                    successMessage.style.padding = '12px 16px';
+                    successMessage.style.marginBottom = '20px';
+                    successMessage.style.backgroundColor = 'var(--success-light)';
+                    successMessage.style.color = 'var(--success)';
+                    successMessage.style.borderRadius = '8px';
+                    
+                    const formEl = document.getElementById('offerForm');
+                    formEl.parentNode.insertBefore(successMessage, formEl);
+                    
+                    // Disable the submit button
+                    document.querySelector('.btn-primary').disabled = true;
+                    document.querySelector('.btn-primary').textContent = 'Offer Submitted';
+                    
+                    // Scroll to top of form
+                    window.scrollTo({
+                        top: successMessage.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    alert('Failed to submit custom package offer.');
+                }
+            } catch (error) {
+                console.error('Error submitting package offer:', error);
+                alert('An error occurred while submitting your offer. Please try again.');
             }
         }
     </script>

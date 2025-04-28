@@ -458,7 +458,7 @@
                     <i class="fas fa-dollar-sign feature-icon"></i>
                     <div>
                         <div class="feature-label">Price</div>
-                        <div class="feature-value price">$0</div>
+                        <div class="feature-value price">$500</div>
                     </div>
                 </div>
             </div>
@@ -515,6 +515,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const serviceId = urlParams.get('service_id');
         const packageId = urlParams.get('package_id');
+        const customPackageId = urlParams.get('custom_package_id');
+        console.log('customPackageIddddddddd:', customPackageId);
 
         // File Upload Handling
         const dropZone = document.getElementById('dropZone');
@@ -529,7 +531,13 @@
         // Fetch service details
         async function fetchServiceDetails(serviceId) {
             try {
-                const response = await fetch(`/api/service/${serviceId}?service=true&packages=true&include_user=true`);
+                let response;
+                if(customPackageId) {
+                    response = await fetch(`/api/service/${serviceId}?service=true&packages=true&include_user=true&custom_package_id=${customPackageId}`);
+                } else {
+                    response = await fetch(`/api/service/${serviceId}?service=true&packages=true&include_user=true`);
+                }
+                
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`API Error: ${errorText}`);
@@ -546,28 +554,59 @@
 
         // Update gig features with package details
         function updateGigFeatures(data) {
-            const packageDetails = data.packages.find(pkg => pkg.package_id == packageId);
-            if (packageDetails) {
-                currentPackageDetails = packageDetails;
-                
-                // Update visible elements
-                document.querySelector('.feature-value.delivery-time').textContent = `${packageDetails.delivery_days} Days`;
-                document.querySelector('.feature-value.revisions').textContent = `${packageDetails.revisions} Revisions`;
-                document.querySelector('.feature-value.price').textContent = `$${packageDetails.price}`;
-                document.getElementById('escrowAmount').textContent = packageDetails.price;
-                
-                // Update release date
-                const releaseDate = new Date();
-                releaseDate.setDate(releaseDate.getDate() + parseInt(packageDetails.delivery_days));
-                document.getElementById('releaseDate').textContent = releaseDate.toLocaleDateString();
+    if(packageId) {
+        const packageDetails = data.packages.find(pkg => pkg.package_id == packageId);
+        if (packageDetails) {
+            currentPackageDetails = packageDetails;
+            console.log('Package Detailsssssss:', packageDetails);
+            
+            // Update visible elements
+            document.querySelector('.feature-value.delivery-time').textContent = `${packageDetails.delivery_days} Days`;
+            document.querySelector('.feature-value.revisions').textContent = `${packageDetails.revisions} Revisions`;
+            document.querySelector('.feature-value.price').textContent = `$${packageDetails.price}`;
+            console.log('packageDetails.price:', packageDetails.price);
+            document.getElementById('escrowAmount').textContent = packageDetails.price;
+            
+            // Update release date
+            const releaseDate = new Date();
+            releaseDate.setDate(releaseDate.getDate() + parseInt(packageDetails.delivery_days));
+            document.getElementById('releaseDate').textContent = releaseDate.toLocaleDateString();
 
-                // Update package badge
-                const badgeElement = document.querySelector('.badge');
-                badgeElement.textContent = packageDetails.package_type === 'basic' 
-                    ? 'Basic Package' 
-                    : 'Premium Package';
-            }
+            // Update package badge
+            const badgeElement = document.querySelector('.badge');
+            badgeElement.textContent = packageDetails.package_type === 'basic' 
+                ? 'Basic Package' 
+                : 'Premium Package';
         }
+    } 
+    else if(customPackageId) {
+        const customPackageDetail = data.custom_package;
+        console.log('Custom Package Details:', customPackageDetail);
+        if (customPackageDetail) {
+            currentPackageDetails = customPackageDetail;
+
+            console.log('Custom Package Details:', customPackageDetail);
+            
+            // Update visible elements
+            document.querySelector('.feature-value.delivery-time').textContent = `${customPackageDetail.delivery_days_requested} Days`;
+            document.querySelector('.feature-value.revisions').textContent = `${customPackageDetail.revisions_requested} Revisions`;
+            document.querySelector('.feature-value.price').textContent = `${customPackageDetail.price_requested}`;
+            console.log('customPackageDetail.price_requested:', customPackageDetail.price_requested);
+            document.getElementById('escrowAmount').textContent = customPackageDetail.price_requested;
+            
+            // Update release date
+            const releaseDate = new Date();
+            releaseDate.setDate(releaseDate.getDate() + parseInt(customPackageDetail.delivery_days));
+            document.getElementById('releaseDate').textContent = releaseDate.toLocaleDateString();
+
+            // Update package badge
+            const badgeElement = document.querySelector('.badge');
+            badgeElement.textContent = 'Custom Package';
+        }
+    }
+}
+
+        
 
         // File handling events
         dropZone.addEventListener('click', () => fileInput.click());
@@ -676,7 +715,11 @@
                     }
                 });
                 formData.append('service_id', serviceId);
-                formData.append('package_id', packageId);
+                if (customPackageId) {
+                    formData.append('custom_package_id', customPackageId);
+                } else {
+                    formData.append('package_id', packageId);
+                }
                 formData.append('payment_type', paymentMethod);
                 
                 // Add payment details based on selected method

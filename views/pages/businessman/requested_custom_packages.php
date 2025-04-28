@@ -556,6 +556,114 @@
                 gap: 10px;
             }
         }
+        /* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    color: var(--danger);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.detail-group {
+    margin-bottom: 20px;
+}
+
+.detail-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+
+.detail-value {
+    color: var(--gray-700);
+    line-height: 1.6;
+    padding: 10px;
+    background-color: var(--gray-100);
+    border-radius: 8px;
+}
+
+.view-details-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    background: none;
+    border: 1px solid var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+}
+
+.view-details-btn:hover {
+    background: var(--primary-light);
+}
     </style>
 </head>
 
@@ -607,6 +715,20 @@
             <div class="loading">
                 <div class="spinner"></div>
                 <p>Loading your custom package requests...</p>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Request Details -->
+    <div class="modal-overlay" id="requestDetailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Request Details</h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Details will be populated dynamically -->
             </div>
         </div>
     </div>
@@ -701,10 +823,10 @@
                     // Only show buttons for accepted requests
                     const actionButtons = statusDisplay === 'accepted' ? `
                         <div class="request-actions">
-                            <a href="/businessman/place-order?request_id=${request.custom_package_id}" class="btn btn-primary">
+                            <a onclick="window.location.href='/businessman/place-order?service_id=${request.service_id}&custom_package_id=${request.custom_package_id}'" class="btn btn-primary">
                                 <i class="fas fa-shopping-cart"></i> Place Order
                             </a>
-                            <button class="btn btn-danger" onclick="rejectRequest(${request.custom_package_id})">
+                    <button class="btn btn-danger" onclick="rejectRequest(${request.custom_package_id})">
                                 <i class="fas fa-times"></i> Cancel
                             </button>
                         </div>
@@ -742,6 +864,10 @@
                                     ${keywords.map(keyword => `<span class="tag">${keyword}</span>`).join('')}
                                     <span class="tag"><i class="fas fa-tag"></i> Custom</span>
                                 </div>
+                                
+                                <button class="view-details-btn" onclick="openRequestDetails(${JSON.stringify(request).replace(/"/g, '&quot;')})">
+                                    <i class="fas fa-eye"></i> View Details
+                                </button>
                             </div>
                             
                             <div class="request-side">
@@ -799,6 +925,129 @@
                 location.reload();
             }
         }
+
+        // Add these functions to your existing script
+
+// Function to open the request details modal
+function openRequestDetails(requestData) {
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const modal = document.getElementById('requestDetailModal');
+    
+    // Set the modal title
+    modalTitle.textContent = requestData.service_title || 'Request Details';
+    
+    // Format the creation date
+    const createdDate = new Date(requestData.created_at);
+    const formattedCreatedDate = createdDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    // Build the modal content with all available request data
+    const detailsHTML = `
+        <div class="detail-group">
+            <span class="detail-label">Status</span>
+            <div class="detail-value">
+                <div class="request-status status-${requestData.status || 'pending'}" style="display: inline-flex; margin: 0;">
+                    <i class="fas fa-${requestData.status === 'accepted' ? 'check-circle' : requestData.status === 'rejected' ? 'times-circle' : 'clock'}"></i> 
+                    ${requestData.status ? requestData.status.charAt(0).toUpperCase() + requestData.status.slice(1) : 'Pending'}
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Service Title</span>
+            <div class="detail-value">${requestData.service_title || 'N/A'}</div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Requested Benefits</span>
+            <div class="detail-value">${requestData.benefits_requested || 'N/A'}</div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Requested Budget</span>
+            <div class="detail-value">LKR ${Number(requestData.price_requested || 0).toLocaleString()}</div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Requested Delivery Time</span>
+            <div class="detail-value">${requestData.delivery_days_requested || 'N/A'} days</div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Created On</span>
+            <div class="detail-value">${formattedCreatedDate}</div>
+        </div>
+        
+        <div class="detail-group">
+            <span class="detail-label">Request ID</span>
+            <div class="detail-value">${requestData.custom_package_id || 'N/A'}</div>
+        </div>
+        
+        ${requestData.creator_notes ? `
+        <div class="detail-group">
+            <span class="detail-label">Creator Notes</span>
+            <div class="detail-value">${requestData.creator_notes}</div>
+        </div>
+        ` : ''}
+        
+        ${requestData.revision_limit ? `
+        <div class="detail-group">
+            <span class="detail-label">Revision Limit</span>
+            <div class="detail-value">${requestData.revision_limit} revisions</div>
+        </div>
+        ` : ''}
+        
+        ${requestData.requirements ? `
+        <div class="detail-group">
+            <span class="detail-label">Special Requirements</span>
+            <div class="detail-value">${requestData.requirements}</div>
+        </div>
+        ` : ''}
+    `;
+    
+    modalBody.innerHTML = detailsHTML;
+    
+    // Show the modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+}
+
+// Function to close the modal
+function closeRequestDetails() {
+    const modal = document.getElementById('requestDetailModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+}
+
+// Add to your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', async () => {
+    // Your existing code...
+    
+    // Set up the close modal event
+    document.getElementById('closeModal').addEventListener('click', closeRequestDetails);
+    
+    // Close the modal when clicking on the overlay (outside the modal)
+    document.getElementById('requestDetailModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeRequestDetails();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && document.getElementById('requestDetailModal').classList.contains('active')) {
+            closeRequestDetails();
+        }
+    });
+    
+    // Your existing code continues...
+});
     </script>
 </body>
 </html>

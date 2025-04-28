@@ -496,7 +496,7 @@
                                 <span class="provider-name">${order.seller.name}</span>
                             </div>
                         </td>
-                        <td>${jsonData ? jsonData.serviceType : 'N/A'}</td>
+                        <td>${jsonData ? jsonData.service_type : 'N/A'}</td>
                         <td><div class="service-title">${jsonData ? jsonData.title : 'N/A'}</div></td>
                         <td>${formatDeliveryDays(order.promise.delivery_days)}</td>
                         <td><span class="price">${order.promise.price}</span></td>
