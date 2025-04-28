@@ -34,7 +34,12 @@ class OrderController extends BaseController
      * @param Response $response The response object to return data.
      * @return void JSON response with the list of orders.
      */
-    public function getOrderListByAdmin($request, $response)
+    public function updateDeliveryStatus($request, $response){
+        
+    }
+
+    
+     public function getOrderListByAdmin($request, $response)
     {
 
         // Parse request parameters

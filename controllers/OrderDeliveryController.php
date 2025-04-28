@@ -10,6 +10,8 @@ use app\core\Response;
 // Utility Imports
 use app\core\Helpers\AuthHelper;
 use app\core\Utils\FileHandler;
+use app\models\Orders\Orders;
+use app\models\Orders\OrderDeliveries;
 
 
 class OrderDeliveryController extends BaseController
@@ -337,11 +339,19 @@ class OrderDeliveryController extends BaseController
     public function updateDeliveryStatus($request, $response): void
     {
         try {
+            error_log("=== Starting updateDeliveryStatus ===");
             // Parse request body
             $requestData = $request->getParsedBody();
+            // $requestData = $_POST;
+            error_log("Request data is: " );
+            error_log(print_r($requestData, true));
+            // error_log($_POST);
+            $orderId = $requestData['order_id'];
+            $status = $requestData['status'];
+            $orderStatus = $requestData['order_status'];
 
             // Validate required fields
-            if (empty($requestData['delivery_id']) || empty($requestData['status'])) {
+            if (empty($orderId) || empty($status)) {
                 $response->sendJson([
                     'success' => false,
                     'message' => 'Missing required fields: delivery_id and status are required.'
@@ -349,46 +359,82 @@ class OrderDeliveryController extends BaseController
                 return;
             }
 
-            // Validate status value
-            $validStatuses = ['delivered', 'revision_requested', 'completed', 'rejected'];
-            if (!in_array($requestData['status'], $validStatuses)) {
-                $response->sendJson([
-                    'success' => false,
-                    'message' => 'Invalid status value. Allowed values: ' . implode(', ', $validStatuses)
-                ], 400);
-                return;
-            }
 
-            // Initialize models
-            $deliveryModel = $this->model('Orders\OrderDeliveries');
+            $orderModel = new Orders();
+            $returnedOrder = $orderModel->getOrderById($orderId);
 
+            $deliveriesModel = new OrderDeliveries();
+            $returnedDelivery = $deliveriesModel->getDeliveriesByOrder($orderId);
+
+            
+
+
+                // Check if there are any deliveries
+                if (empty($returnedDelivery) || !is_array($returnedDelivery)) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'No deliveries found for this order.'
+                    ]);
+                    return;
+                }
+                // Find the latest delivery by ID
+                $latestDelivery = null;
+                $latestDeliveryId = 0;
+
+                foreach ($returnedDelivery as $delivery) {
+                    if (isset($delivery['delivery_id']) && $delivery['delivery_id'] > $latestDeliveryId) {
+                        $latestDeliveryId = $delivery['delivery_id'];
+                        $latestDelivery = $delivery;
+                    }
+                }
+
+                
+
+
+                if (!$latestDelivery) {
+                    $response->sendJson([
+                        'success' => false,
+                        'message' => 'Could not determine the latest delivery.'
+                    ]);
+                    return;
+                }
+
+            
             // Get the delivery
-            $deliveryData = $deliveryModel->getDeliveryById($requestData['delivery_id']);
+            $deliveryData = $deliveriesModel->getDeliveryById($latestDeliveryId);
             if (!$deliveryData) {
                 $response->sendError('Delivery not found.', 404);
                 return;
             }
 
-            // Update delivery status
-            $updated = $deliveryModel->updateDelivery($requestData['delivery_id'], [
-                'status' => $requestData['status'],
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
 
-            if (!$updated) {
+
+            // Update delivery status
+            $updatedDelivery = $deliveriesModel->updateDelivery($latestDeliveryId, ['status' => $status]);
+
+            $updatedOrder = $orderModel->updateOrderById($orderId, ['order_status' => $orderStatus]);
+
+
+
+            if (!$updatedDelivery || !$updatedOrder) {
                 $response->sendJson([
                     'success' => false,
-                    'message' => 'Failed to update delivery status.'
+                    'message' => 'Failed to accept delivery status.'
                 ], 500);
                 return;
             }
 
+
+
             // Return success response
             $response->sendJson([
                 'success' => true,
-                'message' => 'Delivery status updated successfully.',
+                'message' => 'Delivery status updated successfully and accepted the delivery!!.',
                 'status' => $requestData['status']
             ]);
+
+            error_log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+
         } catch (\Throwable $e) {
             error_log("Error in updateDeliveryStatus: " . $e->getMessage());
             error_log("File: " . $e->getFile() . " Line: " . $e->getLine());

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<UPDATED_CODE><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -368,103 +368,350 @@
             color: #b91c1c !important;
         }
 
-        /* Deliveries section */
-        .deliveries-section {
+        /* Add CSS for Requirements Section */
+        .requirements-section {
             margin-top: 24px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        .section-header {
+        .requirements-section h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .requirements-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .requirements-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .requirement-description, 
+        .requirement-files {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .requirement-description h4, 
+        .requirement-files h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 12px 0;
+        }
+
+        .description-content {
+            white-space: pre-line;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .files-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .files-list img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .files-list .file-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+        }
+
+        .files-list .file-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* For non-image files */
+        .files-list .file-icon {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .files-list .file-icon i {
+            font-size: 36px;
+            color: #6b7280;
+        }
+
+        .file-item:hover {
+            border-color: #4f46e5;
+            background-color: #f5f5ff;
+        }
+
+        .file-item i {
+            margin-right: 8px;
+            color: #4f46e5;
+        }
+
+        .file-item a {
+            color: #4b5563;
+            text-decoration: none;
+        }
+
+        .file-item a:hover {
+            color: #4f46e5;
+        }
+
+        .no-files {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* Deliverables Section - Redesigned as Table */
+        .deliverables-section {
+            margin-top: 24px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .deliverables-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
-        }
-
-        .section-heading {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-
-        thead {
-            background-color: #e5e7eb;
-        }
-
-        th {
-            padding: 12px 24px;
-            text-align: left;
-            color: #4b5563;
-            font-size: 14px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        td {
-            padding: 12px 24px;
-            text-align: left;
-            color: #4b5563;
-            font-size: 14px;
-            font-weight: 300;
+            padding-bottom: 12px;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        tr:hover {
+        .deliverables-header h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .deliverables-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .deliverables-table th,
+        .deliverables-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .deliverables-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+
+        .deliverables-table tr:hover {
+            background-color: #f9fafb;
+            cursor: pointer;
+        }
+
+        .status-delivered {
+            color: #065f46;
+            background-color: #d1fae5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }
+
+        .status-revision {
+            color: #92400e;
+            background-color: #fef3c7;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }
+
+        /* delivery details popup */
+        .delivery-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            width: 90%;
+            z-index: 1000;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .delivery-popup.active {
+            display: block;
+            animation: popIn 0.3s forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translate(-50%, -48%); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
             background-color: #f9fafb;
         }
 
-        .badge {
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 12px;
+        .popup-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
         }
 
-        .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-danger {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-
-        .badge-danger {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
+        .close-btn {
+            background: none;
             border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
         }
 
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
+        .close-btn:hover {
+            color: #111827;
+            background-color: #f3f4f6;
         }
 
-        .btn-primary:hover {
-            background-color: #1d4ed8;
+        .popup-content {
+            padding: 24px;
         }
 
-        .btn-secondary {
-            background-color: #9333ea;
-            color: white;
+        .popup-media {
+            width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
         }
 
-        .btn-secondary:hover {
-            background-color: #7e22ce;
+        .delivery-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #111827;
+        }
+
+        .revision-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .revision-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #111827;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .revision-item {
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 3px solid #4f46e5;
+        }
+
+        .revision-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-delivered {
+            color: #065f46;
+            background-color: #d1fae5;
+        }
+
+        .status-revision {
+            color: #92400e;
+            background-color: #fef3c7;
+        }
+
+        .status-pending {
+            color: #1e40af;
+            background-color: #dbeafe;
         }
 
 
@@ -938,7 +1185,7 @@
                             </div>
                         </div>
                         <div id="countdown"></div>
-                        <button id="deliverNow">Request Rivision</button>
+                        <button id="request-revision">Request Rivision</button>
                         <button class="accept-button" id="acceptOrder">Accept</button>
                         <button class="cancel-button" id="cancelOrder">Request order cancellation</button>
                     </div>
@@ -959,54 +1206,106 @@
 
             <!-- Modified Deliverables Section -->
             <!-- Deliveries Section -->
-            <div class="deliveries-section">
-                <div class="section-header">
-                    <h2 class="section-heading">Deliveries</h2>
+            <div class="requirements-section">
+                <h3>Order Requirements</h3>
+                <div class="requirements-content">
+                    <div class="requirement-description">
+                        <h4>Description</h4>
+                        <div class="description-content" id="orderDescription">Loading...</div>
+                    </div>
+                    
+                    <div class="requirement-files">
+                        <h4>Attached Files</h4>
+                        <div class="files-list" id="orderFiles">
+                            <div class="loading-files">Loading files...</div>
+                        </div>
+                    </div>
                 </div>
-                <table>
+            </div>
+
+            <!-- Redesigned Deliverables Section -->
+            <div class="deliverables-section">
+                <div class="deliverables-header">
+                    <h3>Deliverables</h3>
+                    <span id="deliverableCount">2 items</span>
+                </div>
+                <table class="deliverables-table">
                     <thead>
                         <tr>
-                            <th>Revision Count</th>
-                            <th>File</th>
+                            <th>Delivery #</th>
+                            <th>Delivery Note</th>
+                            <th>Delivered Time</th>
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody id="ordersTableBody">
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                video3.mp4
-                                <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
-                            </td>
-                            <td>
-                                <span class="badge badge-success">Accepted</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                video2.mp4
-                                <button class="btn btn-primary ml-2" onclick="downloadFile('video1.mp4')">Download</button>
-                            </td>
-                            <td>
-                                <span class="badge badge-danger">Rejected</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                video1.mp4
-                                <button class="btn btn-primary ml-2" onclick="downloadFile('video2.mp4')">Download</button>
-                            </td>
-                            <td>
-                                <span class="badge badge-danger">Rejected</span>
-                            </td>
-                        </tr>
+                    <tbody>
+                        
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- Delivery Details Popup -->
+    <div class="delivery-popup" id="deliveryDetailsPopup">
+            <div class="popup-header">
+                <h3>Delivery Details</h3>
+                <button class="close-btn" id="closeDetailsPopup">&times;</button>
+            </div>
+            <div class="popup-content">
+                <img class="popup-media" id="popupMedia" src="" alt="Delivery Media">
+                
+                <div class="delivery-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Delivery Number</div>
+                        <div class="detail-value" id="popupNumber">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value">
+                            <span class="status-badge" id="popupStatusBadge">
+                                <span id="popupStatus">-</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Delivered Time</div>
+                        <div class="detail-value" id="popupTime">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Content Link</div>
+                        <div class="detail-value" id="popupLink">-</div>
+                    </div>
+                </div>
+                
+                <div class="detail-item" style="grid-column: 1 / span 2;">
+                    <div class="detail-label">Delivery Note</div>
+                    <div class="detail-value" id="popupNote">-</div>
+                </div>
+                
+                <div class="revision-section" id="revisionSection">
+                    <h4>Revision Requests</h4>
+                    <img class="popup-media" id="popupRevisionMedia" src="" alt="Delivery Media">
+                    <div id="revisionList">
+                        <div class="revision-item">
+                            <div class="detail-item">
+                                <div class="detail-label">Revision Number</div>
+                                <div class="detail-value" id="popupRevisionNumber">-</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Requested On</div>
+                                <div class="detail-value" id="popupRevisionTime">-</div>
+                            </div>
+                            <div class="detail-item" style="margin-top: 12px;">
+                                <div class="detail-label">Revision Note</div>
+                                <div class="detail-value" id="popupRevisionNote">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     <!-- Complain Popup -->
     <div class="complaint-popup" id="complaintPopup">
@@ -1087,8 +1386,8 @@
         <button class="close-btn" id="closeDeliveryPopup">&times;</button>
         <h4>Request Rivision</h4>
         <div class="form-group">
-            <label for="deliveryNotes">Notes</label>
-            <textarea id="deliveryNotes" placeholder="Any additional information about your previous rivision..."></textarea>
+            <label for="revisionNotes">Notes</label>
+            <textarea id="revisionNotes" placeholder="Any additional information about your previous rivision..."></textarea>
         </div>
         <div class="form-group">
             <label>Proofs</label>
@@ -1097,7 +1396,7 @@
                     <i class="fas fa-chart-bar"></i>
                     <h4>Upload Screenshots and videos</h4>
                     <p>Upload engagement metrics, reach, impressions, etc. (JPG, PNG)</p>
-                    <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*" />
+                    <input type="file" id="fileUploadSection" style="display: none;" multiple accept="image/*" />
                 </div>
                 <div class="preview-images" id="previewContainer">
                     <!-- Preview images will appear here -->
@@ -1106,7 +1405,7 @@
         </div>
         <div class="form-buttons">
             <button class="cancel-btn" id="cancelDelivery">Cancel</button>
-            <button class="submit-btn" id="submitDelivery">Request</button>
+            <button class="submit-btn" id="request">Request</button>
         </div>
     </div>
 
@@ -1202,10 +1501,484 @@
 
                     // We don't need to manually render chat messages anymore as order-chat.js will handle it
 
-                } catch (error) {
-                    console.error('Error fetching order details:', error);
+            } catch (error) {
+                console.error('Error fetching order details:', error);
+                // For demo purposes, show mock deliverables even if API fails
+                //renderDeliverables(mockDeliverables);
+            }
+        }
+
+        // Updated function to load order requirements and display files properly
+        async function loadOrderRequirements() {
+            try {
+                // Use the same API endpoint as fetchOrderDetails
+                const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const result = await response.json();
+                console.log('Requirements data from order details:', result);
+                
+                // Check if we have the promise and requested_service data
+                if (result.data?.promise?.requested_service) {
+                    let serviceData = {};
+                    
+                    try {
+                        // Parse the JSON string from requested_service
+                        if (typeof result.data.promise.requested_service === 'string') {
+                            serviceData = JSON.parse(result.data.promise.requested_service);
+                        } else {
+                            serviceData = result.data.promise.requested_service;
+                        }
+                        
+                        // Update description section with the parsed description
+                        const descElement = document.getElementById('orderDescription');
+                        if (serviceData.description) {
+                            descElement.textContent = serviceData.description;
+                        } else if (serviceData.requirements) {
+                            descElement.textContent = serviceData.requirements;
+                        } else {
+                            descElement.textContent = 'No description provided';
+                            descElement.classList.add('no-files');
+                        }
+                        descElement.style.whiteSpace = 'pre-line'; // Preserve line breaks
+                        
+                        // Update files section
+                        const filesContainer = document.getElementById('orderFiles');
+                        filesContainer.innerHTML = ''; // Clear loading state
+                        
+                        // Check for project_documents in promise data (primary source for files)
+                        let filesList = [];
+                        
+                        if (result.data.promise && result.data.promise.project_documents) {
+                            try {
+                                if (typeof result.data.promise.project_documents === 'string') {
+                                    filesList = JSON.parse(result.data.promise.project_documents);
+                                } else if (Array.isArray(result.data.promise.project_documents)) {
+                                    filesList = result.data.promise.project_documents;
+                                }
+                            } catch (e) {
+                                console.error('Error parsing project_documents JSON:', e);
+                            }
+                        }
+                        
+                        // Display files if we have any
+        if (Array.isArray(filesList) && filesList.length > 0) {
+            console.log('Files from database:', filesList);
+            
+            filesList.forEach((file, index) => {
+                // Handle different file data structures, including JSON string representation
+                let fileUrl = '';
+                
+                if (typeof file === 'string') {
+                    // If it's a simple string, use it directly
+                    if (file.startsWith('[') && file.endsWith(']')) {
+                        // This is a stringified array with a single element
+                        try {
+                            const parsed = JSON.parse(file);
+                            fileUrl = parsed[0];
+                        } catch (e) {
+                            // If parsing fails, use the string as is but remove brackets
+                            fileUrl = file.substring(1, file.length - 1);
+                        }
+                    } else {
+                        fileUrl = file;
+                    }
+                    
+                    // Handle escaped slashes in the URL
+                    fileUrl = fileUrl.replace(/\\\//g, '/');
+                } else if (file && (file.url || file.path)) {
+                    // If it's an object with url or path property
+                    fileUrl = file.url || file.path;
+                }
+                
+                // Handle final path formatting
+                if (fileUrl && !fileUrl.startsWith('http') && !fileUrl.startsWith('/')) {
+                    fileUrl = '/' + fileUrl;
+                }
+                
+                const fileName = (file && file.name) ? file.name : `File ${index + 1}`;
+                
+                if (fileUrl) {
+                    console.log(`Processing file ${index}: ${fileUrl}`);
+                    
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    // Check if it's an image file by extension
+                    const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(fileUrl);
+                    
+                    if (isImage) {
+                        // For images, show a thumbnail with a link to the full image
+                        fileItem.innerHTML = `
+                            <div class="file-thumbnail">
+                                <img src="${fileUrl}" alt="${fileName}" onclick="window.open('${fileUrl}', '_blank')">
+                            </div>
+                            <a href="${fileUrl}" target="_blank">${fileName}</a>
+                        `;
+                    } else {
+                        // For non-image files, show the regular file icon
+                        fileItem.innerHTML = `
+                            <i class="fas fa-file-alt"></i>
+                            <a href="${fileUrl}" target="_blank">${fileName}</a>
+                        `;
+                    }
+                    
+                    filesContainer.appendChild(fileItem);
+                }
+            });
+        } else {
+            filesContainer.innerHTML = '<div class="no-files">No files attached to this order</div>';
+        }
+                        
+                    } catch (error) {
+                        console.error('Error parsing requested_service JSON:', error);
+                        document.getElementById('orderDescription').textContent = 'Error loading requirements';
+                        document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error parsing requirements data</div>';
+                    }
+                } else {
+                    console.log('No requested_service data found in promise');
+                    document.getElementById('orderDescription').textContent = 'No requirements found';
+                    document.getElementById('orderFiles').innerHTML = '<div class="no-files">No files attached</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading requirements:', error);
+                document.getElementById('orderDescription').textContent = 'Error loading requirements';
+                document.getElementById('orderFiles').innerHTML = '<div class="no-files">Error loading files</div>';
+            }
+        }
+
+        async function loadDeliveryData() {
+    try {
+        const url = `/api/delivery/${orderId}`;
+        console.log('Fetching delivery data from:', url);
+        
+        const response = await fetch(url);
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error response:', errorText);
+            throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+        }
+        
+        let data = await response.json();
+        console.log('Delivery data received:', data);
+        
+        // Handle different response formats
+        let deliveries = Array.isArray(data) ? data : (data.data || []);
+        
+        const tbody = document.querySelector(".deliverables-table tbody");
+        tbody.innerHTML = ''; // Clear existing rows
+        
+        if (deliveries.length === 0) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = '<td colspan="4">No deliveries found</td>';
+            tbody.appendChild(tr);
+            
+            // Update the deliverable count
+            document.getElementById('deliverableCount').textContent = '0 items';
+            return;
+        }
+        
+        deliveries.forEach((delivery, index) => {
+            // Process delivery files to ensure data structure is consistent
+            if (delivery.deliveries && typeof delivery.deliveries === 'string') {
+                try {
+                    if (delivery.deliveries.startsWith('[') || delivery.deliveries.startsWith('{')) {
+                        delivery.files = JSON.parse(delivery.deliveries);
+                    } else {
+                        delivery.files = [{ path: delivery.deliveries }];
+                    }
+                } catch (e) {
+                    console.error('Error parsing deliveries JSON:', e);
+                    delivery.files = [{ path: delivery.deliveries }];
                 }
             }
+            
+            const tr = document.createElement("tr");
+            tr.className = "delivery-row";
+            tr.dataset.delivery = JSON.stringify(delivery);
+            
+            tr.innerHTML = `
+                <td>${delivery.delivery_id || delivery['Delivery #'] || index + 1}</td>
+                <td>${delivery.delivery_note || delivery.description || delivery['Delivery Note'] || 'No note provided'}</td>
+                <td>${delivery.delivered_at || delivery.deliveredTime || delivery['Delivered Time'] || 'N/A'}</td>
+                <td>
+                <span class="${delivery.status === 'Delivered' || delivery.status === 'delivered' ? 'status-delivered' : 'status-revision'}">
+                    ${delivery.status || 'Pending'}
+                </span>
+                </td>
+            `;
+            
+            // Add event listener for showing delivery details
+            tr.addEventListener('click', function() {
+                const deliveryData = JSON.parse(this.dataset.delivery);
+                showDeliveryDetails(deliveryData);
+                
+                // Make sure to show the popup and backdrop
+                document.getElementById('deliveryDetailsPopup').classList.add('active');
+                document.getElementById('backdrop').classList.add('active');
+            });
+            
+            tbody.appendChild(tr);
+        });
+        
+        // Update the deliverable count
+        document.getElementById('deliverableCount').textContent = `${deliveries.length} item${deliveries.length !== 1 ? 's' : ''}`;
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        
+        // Show more user-friendly error message in the table
+        const tbody = document.querySelector(".deliverables-table tbody");
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="4">Error loading deliveries: ${error.message}</td></tr>`;
+        }
+    }
+}
+
+
+
+    async function updateStatus() {
+        // Make sure orderId is defined
+        if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
+
+        console.log('Updating status for order:', orderId);
+        
+        $updated_status = 'accepted';
+        $order_updated_status = 'completed';
+
+        const updateData = {
+            order_id: orderId,
+            status: $updated_status,
+            order_status : $order_updated_status
+        };
+
+        try {
+            const response = await fetch('/api/update-delivery-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+            console.log('Response:', response);
+           
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            console.log('Status updated successfully:', result);
+
+            // Update the status in the UI
+            document.getElementById('status').textContent = $updated_status;
+
+            // Close the popup
+            document.getElementById('deliveryDetailsPopup').classList.remove('active');
+            document.getElementById('backdrop').classList.remove('active');
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    }    
+    
+
+function showDeliveryDetails(data) {
+    console.log('Showing delivery details:', data);
+    
+    // Populate main details with fallbacks for missing data
+    document.getElementById('popupNumber').textContent = data.delivery_id || 'N/A';
+    document.getElementById('popupNote').textContent = data.delivery_note || 'No notes provided';
+    document.getElementById('popupTime').textContent = data.delivered_at || 'N/A';
+    
+    // Set status and appropriate class
+    const statusElement = document.getElementById('popupStatus');
+    const statusBadge = document.getElementById('popupStatusBadge');
+    const status = data.status || 'Pending';
+    
+    statusElement.textContent = status;
+    
+    // Remove all existing status classes and add the appropriate one
+    statusBadge.className = 'status-badge';
+    if (status.toLowerCase() === 'delivered') {
+        statusBadge.classList.add('status-delivered');
+    } else if (status.toLowerCase().includes('revision')) {
+        statusBadge.classList.add('status-revision');
+    } else {
+        statusBadge.classList.add('status-pending');
+    }
+    
+    // Set content link if available
+    const linkElement = document.getElementById('popupLink');
+if (data.content_link) {
+    // Check if the URL already has http:// or https:// prefix
+    let url = data.content_link;
+    if (!url.match(/^https?:\/\//i)) {
+        // If no protocol is specified, prepend https://
+        url = 'https://' + url;
+    }
+    linkElement.innerHTML = `<a href="${url}" target="_blank">${data.content_link}</a>`;
+} else {
+    linkElement.textContent = 'Not provided';
+}
+    
+    // Handle file display
+    const mediaElement = document.getElementById('popupMedia');
+    
+    try {
+        // Try to get files from data structure
+        let filePath = null;
+        
+        // Check if we have files property with array
+        if (data.files && Array.isArray(data.files) && data.files.length > 0) {
+            const fileObj = data.files[0];
+            filePath = fileObj.url || fileObj.path || null;
+            console.log('Found file in files array:', filePath);
+        }
+        // Check if we have deliveries as JSON string that needs parsing
+        else if (typeof data.deliveries === 'string') {
+            try {
+                // First try to parse as JSON
+                if (data.deliveries.startsWith('[') || data.deliveries.startsWith('{')) {
+                    const parsedFiles = JSON.parse(data.deliveries);
+                    if (Array.isArray(parsedFiles) && parsedFiles.length > 0) {
+                        const fileObj = parsedFiles[0];
+                        filePath = fileObj.url || fileObj.path || parsedFiles[0];
+                        console.log('Parsed deliveries JSON successfully:', filePath);
+                    }
+                } else {
+                    // Treat as a direct file path
+                    filePath = data.deliveries;
+                    console.log('Using deliveries as direct path:', filePath);
+                }
+            } catch (e) {
+                console.error('Failed to parse deliveries JSON:', e);
+                // Use as a direct path
+                filePath = data.deliveries;
+            }
+        }
+        
+        // If we found a file path, display it
+        if (filePath) {
+            // Format the path properly
+            if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+                // External URL - use as is
+                mediaElement.src = filePath;
+            } else {
+                // Internal path - ensure proper formatting
+                if (!filePath.startsWith('/')) {
+                    filePath = '/' + filePath;
+                }
+                mediaElement.src = filePath;
+            }
+            mediaElement.style.display = 'block';
+            console.log('Displaying file:', mediaElement.src);
+        } else {
+            // Fallback to screenshots if available
+            if (data.screenshots && data.screenshots.length > 0) {
+                mediaElement.src = data.screenshots[0];
+                mediaElement.style.display = 'block';
+                console.log('Displaying screenshot:', data.screenshots[0]);
+            } else {
+                mediaElement.style.display = 'none';
+                console.log('No media found to display');
+            }
+        }
+    } catch (error) {
+        console.error('Error handling media display:', error);
+        mediaElement.style.display = 'none';
+    }
+        
+
+        // Handle revision media
+    if(data.revision_note){
+        console.log('Showing revision details:', data);
+    
+    // Populate main details with fallbacks for missing data
+    document.getElementById('popupRevisionNumber').textContent = data.revision_number || 'N/A';
+    document.getElementById('popupRevisionNote').textContent = data.revision_note || 'No notes provided';
+    document.getElementById('popupRevisionTime').textContent = data.delivered_at || 'N/A';
+
+    
+    
+
+    // Handle revision file display
+    const revisionMediaElement = document.getElementById('popupRevisionMedia');
+    
+    try {
+        // Try to get files from data structure
+        let revisionFilePath = null;
+        
+        // Check if we have files property with array
+        if (data.revision_files && Array.isArray(data.revision_files) && data.revision_files.length > 0) {
+            const fileObj = data.revision_files[0];
+            revisionFilePath = fileObj.url || fileObj.path || null;
+            console.log('Found file in revision_files array:', revisionFilePath);
+        }
+        // Check if we have revision_files as JSON string that needs parsing
+        else if (typeof data.revision_files === 'string') {
+            try {
+                // First try to parse as JSON
+                if (data.revision_files.startsWith('[') || data.revision_files.startsWith('{')) {
+                    const parsedFiles = JSON.parse(data.revision_files);
+                    if (Array.isArray(parsedFiles) && parsedFiles.length > 0) {
+                        const fileObj = parsedFiles[0];
+                        revisionFilePath = fileObj.url || fileObj.path || parsedFiles[0];
+                        console.log('Parsed revision_files JSON successfully:', revisionFilePath);
+                    }
+                } else {
+                    // Treat as a direct file path
+                    revisionFilePath = data.revision_files;
+                    console.log('Using revision_files as direct path:', revisionFilePath);
+                }
+            } catch (e) {
+                console.error('Failed to parse revision_files JSON:', e);
+                // Use as a direct path
+                revisionFilePath = data.revision_files;
+            }
+        }
+        
+        // If we found a file path, display it
+        if (revisionFilePath) {
+            // Format the path properly
+            if (revisionFilePath.startsWith('http://') || revisionFilePath.startsWith('https://')) {
+                // External URL - use as is
+                revisionMediaElement.src = revisionFilePath;
+            } else {
+                // Internal path - ensure proper formatting
+                if (!revisionFilePath.startsWith('/')) {
+                    revisionFilePath = '/' + revisionFilePath;
+                }
+                revisionMediaElement.src = revisionFilePath;
+            }
+            revisionMediaElement.style.display = 'block';
+            console.log('Displaying revision file:', revisionMediaElement.src);
+        } else {
+            // Fallback to revision screenshots if available
+            if (data.revision_screenshots && data.revision_screenshots.length > 0) {
+                revisionMediaElement.src = data.revision_screenshots[0];
+                revisionMediaElement.style.display = 'block';
+                console.log('Displaying revision screenshot:', data.revision_screenshots[0]);
+            } else {
+                revisionMediaElement.style.display = 'none';
+                console.log('No revision media found to display');
+            }
+        }
+    } catch (error) {
+        console.error('Error handling revision media display:', error);
+        revisionMediaElement.style.display = 'none';
+    }
+
+    }else{
+        document.getElementById('revisionSection').style.display = 'none';
+    }
+}
 
             async function submitReview() {
                 // Get star rating by counting the number of active stars
@@ -1273,28 +2046,28 @@
                 }, 1000);
             }
 
-            //Request Revision
+        //Request Revision
+        
+        async function requestRevision() {
+            const deliveryNotes = document.getElementById('revisionNotes');
+            const fileInput = document.getElementById('fileUploadSection');
+            const formData = new FormData();
+            
+            // Make sure orderId is defined
+            if (typeof orderId === 'undefined' || !orderId) {
+                console.error('Order ID is not defined');
+                return;
+            }
 
-            async function deliverNow() {
-                const deliveryNotes = document.getElementById('deliveryNotes');
-                const fileInput = document.getElementById('uploadSection');
-                const formData = new FormData();
+            // Validate input
+            if (!revisionNotes.value.trim()) {
+                alert('Please enter notes of previous revision');
+                return;
+            }
 
-                // Make sure orderId is defined
-                if (typeof orderId === 'undefined' || !orderId) {
-                    console.error('Order ID is not defined');
-                    return;
-                }
-
-                // Validate input
-                if (!deliveryNotes.value.trim()) {
-                    alert('Please enter notes of previous revision');
-                    return;
-                }
-
-                // Append text fields
-                formData.append('order_id', orderId);
-                formData.append('delivery_notes', deliveryNotes.value);
+            // Append text fields
+            formData.append('order_id', orderId);
+            formData.append('revision_notes', revisionNotes.value);
 
                 // Append files
                 for (let i = 0; i < fileInput.files.length; i++) {
@@ -1335,17 +2108,17 @@
                 }
             }
 
-            // Deliver Now button
-            document.getElementById('deliverNow').addEventListener('click', () => {
-                deliveryPopup.classList.add('active');
-                backdrop.classList.add('active');
-            });
+        // Deliver Now button
+        document.getElementById('request-revision').addEventListener('click', () => {
+            deliveryPopup.classList.add('active');
+            backdrop.classList.add('active');
+        });
 
-            document.getElementById('submitDelivery').addEventListener('click', () => {
-                deliverNow();
-                deliveryPopup.classList.remove('active');
-                backdrop.classList.rempve('active');
-            });
+        document.getElementById('request').addEventListener('click', () => {
+            requestRevision();
+            deliveryPopup.classList.remove('active');
+            backdrop.classList.rempve('active');
+        });
 
             // Close delivery popup
             document.getElementById('closeDeliveryPopup').addEventListener('click', () => {
@@ -1391,11 +2164,11 @@
                 backdrop.classList.remove('active');
             });
 
-            document.getElementById('yesAccept').addEventListener('click', () => {
-                yesAccept();
-                acceptPopup.classList.remove('active');
-                backdrop.classList.remove('active');
-            });
+        document.getElementById('yesAccept').addEventListener('click', () => {
+            updateStatus();
+            acceptPopup.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
 
             // Event listeners for order cancellation popups
             document.getElementById('cancelOrder').addEventListener('click', () => {
@@ -1425,88 +2198,41 @@
                 backdrop.classList.remove('active');
             });
 
-            document.getElementById('submitComplaint').addEventListener('click', () => {
-                submitComplaint()
-                complaintPopup.classList.remove('active');
-                backdrop.classList.remove('active');
+        document.getElementById('submitComplaint').addEventListener('click', () => {
+            submitComplaint()
+            complaintPopup.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
+
+        document.getElementById('closeDetailsPopup').addEventListener('click', () => {
+            deliveryDetailsPopup.classList.remove('active');
+            backdrop.classList.remove('active');
             });
 
-            // Star rating functionality
-            const stars = document.querySelectorAll('.stars i');
-            stars.forEach(star => {
-                star.addEventListener('click', () => {
-                    const rating = star.getAttribute('data-rating');
-                    stars.forEach(s => {
-                        if (s.getAttribute('data-rating') <= rating) {
-                            s.classList.add('active');
-                        } else {
-                            s.classList.remove('active');
-                        }
-                    });
-                });
-            });
-
-            /*// Submit review
-            document.getElementById('submitReview').addEventListener('click', () => {
-                // Get star rating
-                const stars = document.querySelectorAll('.stars .fa-star.active');
-                const rating = stars.length;
-                
-                // Get review text (added this part)
-                const reviewText = document.getElementById('reviewText').value.trim();
-                
-                // Validate if rating is selected
-                if (rating === 0) {
-                    alert('Please select a star rating before submitting');
-                    return;
-                }
-                
-                // Prepare data to send to server
-                const reviewData = {
-                    rating: rating,
-                    reviewText: reviewText,
-                    // You might want to include additional data like:
-                    // orderId: '12345', // Get this from your order system
-                    // date: new Date().toISOString()
-                };
-                
-                // Send data to server (example using fetch API)
-                fetch('/api/submit-review', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(reviewData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+        // Star rating functionality
+        const stars = document.querySelectorAll('.stars i');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.getAttribute('data-rating');
+                stars.forEach(s => {
+                    if (s.getAttribute('data-rating') <= rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Review submitted successfully:', data);
-                    // Close the popup
-                    reviewPopup.classList.remove('active');
-                    backdrop.classList.remove('active');
-                    // Optional: Show success message
-                    alert('Thank you for your review!');
-                })
-                .catch(error => {
-                    console.error('Error submitting review:', error);
-                    alert('There was an error submitting your review. Please try again.');
                 });
-            });*/
-
-
-            // File upload area
-            const uploadArea = document.getElementById('uploadArea');
-            const fileUpload = document.getElementById('fileUpload');
-            const previewContainer = document.getElementById('previewContainer');
-
-            uploadArea.addEventListener('click', () => {
-                fileUpload.click();
             });
+        });
+        
+
+        // File upload area
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileUploadSection = document.getElementById('fileUploadSection');
+        
+        uploadArea.addEventListener('click', () => {
+            fileUpload.click();
+        });
 
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -1529,11 +2255,36 @@
                 }
             });
 
-            fileUpload.addEventListener('change', () => {
-                if (fileUpload.files.length > 0) {
-                    handleFiles(fileUpload.files);
-                }
-            });
+        uploadSection.addEventListener('click', () => {
+            fileUploadSection.click();
+        });
+
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = '#4f46e5';
+            uploadSection.style.backgroundColor = '#f5f5ff';
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.style.borderColor = '#d1d5db';
+            uploadSection.style.backgroundColor = '#f9fafb';
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = '#d1d5db';
+            uploadSection.style.backgroundColor = '#f9fafb';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        fileUploadSection.addEventListener('change', () => {
+            if (fileUploadSection.files.length > 0) {
+                handleFiles(fileUploadSection.files);
+            }
+        });
 
             async function submitComplaint() {
                 const complaintType = document.getElementById('complaintType');
@@ -1624,9 +2375,12 @@
                 }
             }
 
-            // Initialize
-            fetchOrderDetails();
-        });
+        // Initialize
+        fetchOrderDetails();
+        loadOrderRequirements();
+        loadDeliveryData();
+        showDeliveryDetails(data);
+    });
     </script>
     <script>
         // Create a global function to get order details from the page
