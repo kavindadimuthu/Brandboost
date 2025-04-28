@@ -1369,11 +1369,11 @@
                             option.value = method.id;
                             
                             // Format display text based on method type
-                            if (method.bank_name) {
+                            if (method.payment_type === 'bank') {
                                 option.textContent = `Bank: ${method.bank_name} - ${method.account_number.slice(-4).padStart(method.account_number.length, '*')}`;
                                 option.dataset.type = 'bank';
-                            } else if (method.email) {
-                                option.textContent = `PayPal: ${method.email}`;
+                            } else if (method.payment_type === 'paypal') {
+                                option.textContent = `PayPal: ${method.paypal_email}`;
                                 option.dataset.type = 'paypal';
                             } else {
                                 // Handle other payment method types or unknown types

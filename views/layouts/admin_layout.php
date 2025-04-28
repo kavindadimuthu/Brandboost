@@ -534,7 +534,6 @@ php
                                 <i class="fas fa-user"></i>
                             </span>
                             <span class="link-text">Users</span>
-                            <span class="badge">23</span>
                         </a>
                     </li>
                     <li class="nav-item" data-page="verifications">
@@ -551,7 +550,6 @@ php
                                 <i class="fas fa-exclamation-circle"></i>
                             </span>
                             <span class="link-text">Complaints</span>
-                            <span class="badge">5</span>
                         </a>
                     </li>
                     <li class="nav-item" data-page="orders">

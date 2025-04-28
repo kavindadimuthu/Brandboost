@@ -157,6 +157,7 @@ $app->router->post('/api/register', 'RegistrationController@createUser'); // Reg
 $app->router->get('/verify-email', 'RegistrationController@verifyEmail');
 $app->router->post('/resend-verification', 'RegistrationController@resendVerificationEmail');
 
+// Accepts optional query parameter: sinceTime
 $app->router->get('/api/user-count', 'GetCountController@getUserCountsSummary'); 
 
 // ==================================
@@ -227,8 +228,7 @@ $app->router->get('/api/complaints', 'ComplaintController@getComplaintList'); //
 $app->router->get('/api/complaint/{id}', 'ComplaintController@getComplaintDetails'); // Get specific complaint details
 $app->router->post('/api/create-complaint', 'ComplaintController@CreateComplaint'); // Create Complaint
 $app->router->post('/api/update-complaint-status', 'ComplaintController@updateComplaintStatus'); // Update complaint status
-
-
+$app->router->post('/api/complaints-count', 'ComplaintController@getComplaintCountsSummary'); // Get complaint counts summary
 // ==================================
 // Admin actions Management APIs
 // ==================================

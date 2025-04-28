@@ -662,6 +662,11 @@
             try {
                 const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
                 
+                if (!paymentMethod) {
+                    alert('Please select a payment method.');
+                    return;
+                }
+                
                 const formData = new FormData();
                 formData.append('requirements', document.getElementById('requirements').value);
                 formData.append('description', document.getElementById('description').value);
@@ -676,13 +681,33 @@
                 
                 // Add payment details based on selected method
                 if (paymentMethod === 'paypal') {
-                    formData.append('paypal_email', document.getElementById('paypalEmail').value);
-                } else if (paymentMethod === 'credit_card') {
-                    formData.append('card_name', document.getElementById('cardName').value);
-                    formData.append('card_number', document.getElementById('cardNumber').value);
-                    formData.append('card_expiry', document.getElementById('expiryDate').value);
-                    formData.append('card_cvv', document.getElementById('cvv').value);
-                    formData.append('billing_zip', document.getElementById('billingZip').value);
+                    const paypalEmail = document.getElementById('paypalEmail').value;
+                    if (!paypalEmail) {
+                        alert('Please enter your PayPal email.');
+                        return;
+                    } else {
+                        formData.append('paypal_email', paypalEmail);
+                    }
+                    
+                }
+                
+                if (paymentMethod === 'credit_card') {
+                    const cardName = document.getElementById('cardName').value;
+                    const cardNumber = document.getElementById('cardNumber').value;
+                    const expiryDate = document.getElementById('expiryDate').value;
+                    const cvv = document.getElementById('cvv').value;
+                    const billingZip = document.getElementById('billingZip').value;
+
+                    if (!cardName || !cardNumber || !expiryDate || !cvv || !billingZip) {
+                        alert('Please fill in all credit card details.');
+                        return;
+                    } else {
+                        formData.append('card_name', cardName);
+                        formData.append('card_number', cardNumber);
+                        formData.append('card_expiry', expiryDate);
+                        formData.append('card_cvv', cvv);
+                        formData.append('billing_zip', billingZip);
+                    }                    
                 }
                 
                 formData.append('promises', JSON.stringify({

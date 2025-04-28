@@ -282,17 +282,20 @@ class ComplaintController extends BaseController {
             return $response->sendJson(['error' => 'Unauthorized'], 403);
         }
         
-        $body = $request->getBody();
+        $body = $request->getParsedBody();
         $complaintId = $body['complaint_id'] ?? null;
         $status = $body['status'] ?? null;
         $resolutionNotes = $body['resolution_notes'] ?? null;
+
+        error_log("fvwrfbwrbwbb");
+        error_log(print_r($body, true)); // Debugging line
         
         if (!$complaintId || !$status) {
             return $response->sendJson(['error' => 'Complaint ID and status are required'], 400);
         }
         
         // Validate status value
-        $validStatuses = ['open', 'in_progress', 'resolved', 'closed'];
+        $validStatuses = ['open', 'pending', 'resolved'];
         if (!in_array($status, $validStatuses)) {
             return $response->sendJson(['error' => 'Invalid status value'], 400);
         }
@@ -304,9 +307,9 @@ class ComplaintController extends BaseController {
         ];
         
         // If status is resolved or closed, add resolution details
-        if ($status === 'resolved' || $status === 'closed') {
-            $updateData['resolved_by_admin_id'] = $user['admin_id'];
-            $updateData['resolution_date'] = date('Y-m-d H:i:s');
+        if ($status === 'resolved') {
+            $updateData['resolved_by_admin_id'] = $user['user_id'];
+            $updateData['updated_at'] = date('Y-m-d H:i:s');
             
             if ($resolutionNotes) {
                 $updateData['resolution_notes'] = $resolutionNotes;
@@ -321,15 +324,21 @@ class ComplaintController extends BaseController {
         
         // Log the admin action
         $actionModel = $this->model('Actions\Action');
+        // $actionData = [
+        //     'admin_id' => $user['user_id'],
+        //     'action_type' => 'complaint_status_update',
+        //     'entity_type' => 'complaint',
+        //     'entity_id' => $complaintId,
+        //     'details' => json_encode([
+        //         'status' => $status,
+        //         'previous_status' => $body['previous_status'] ?? 'unknown'
+        //     ]),
+        //     'created_at' => date('Y-m-d H:i:s')
+        // ];
         $actionData = [
-            'admin_id' => $user['admin_id'],
-            'action_type' => 'complaint_status_update',
-            'entity_type' => 'complaint',
-            'entity_id' => $complaintId,
-            'details' => json_encode([
-                'status' => $status,
-                'previous_status' => $body['previous_status'] ?? 'unknown'
-            ]),
+            'admin_id' => $user['user_id'],
+            'action_type' => 'complaint ' . $status,
+            'action_note' => 'Complaint  ' . $status . ' by admin' . $user['user_id'],	
             'created_at' => date('Y-m-d H:i:s')
         ];
         $actionModel->create($actionData);
@@ -405,8 +414,6 @@ class ComplaintController extends BaseController {
         
         return $formatter($complaint);
     }
-
-        
 
 
 }

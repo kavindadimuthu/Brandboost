@@ -244,10 +244,19 @@ class OrderDeliveryController extends BaseController
                 ['timestamps' => [$deliveryData['delivered_at'], $deliveryData['created_at']]]
             )));
 
+            $revisionData = [
+                'remained_revisions' => isset($orderData['remained_revisions']) && is_numeric($orderData['remained_revisions']) 
+                    ? max(0, (int)$orderData['remained_revisions'] - 1) 
+                    : 0
+            ];
+            error_log("Prepared revision dataaaaaa: " . json_encode($revisionData));
+
             // Create the delivery with detailed error catching
             try {
                 error_log("Attempting to create delivery record in database");
                 $created = $deliveryModel->createDelivery($deliveryData);
+
+                $revision = $orderModel->updateOrderById($orderId, $revisionData);
 
                 if (!$created) {
                     error_log("Database operation failed: createDelivery returned false/null");

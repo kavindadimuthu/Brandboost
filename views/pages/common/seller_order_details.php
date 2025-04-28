@@ -1246,6 +1246,103 @@
             font-size: 1.1em;
             color: #111827;
         }
+        /* Review Popup Enhancements */
+        .popup#reviewPopup {
+            max-width: 450px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .popup#reviewPopup h4 {
+            font-size: 1.3em;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .popup#reviewPopup p {
+            margin-bottom: 14px;
+            color: #4b5563;
+            font-size: 0.95em;
+        }
+
+        .stars {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .stars i {
+            font-size: 2em;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stars i:hover {
+            transform: scale(1.1);
+            color: #fbbf24;
+        }
+
+        .stars i.active {
+            color: #fbbf24;
+        }
+
+        #reviewPopup textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            resize: none;
+            font-family: inherit;
+            margin-bottom: 24px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        #reviewPopup textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        #reviewPopup button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4f46e5;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #reviewPopup button:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        #reviewPopup button:active {
+            transform: translateY(0);
+        }
+
+        #reviewPopup .close-btn {
+            width: auto;
+            height: auto;
+            padding: 8px;
+            background: none;
+            color: #6b7280;
+            box-shadow: none;
+        }
+
+        #reviewPopup .close-btn:hover {
+            background-color: #f3f4f6;
+            color: #111827;
+            transform: none;
+        }
     </style>
 </head>
 
@@ -1413,6 +1510,8 @@
             <i class="fas fa-star" data-rating="4"></i>
             <i class="fas fa-star" data-rating="5"></i>
         </div>
+        <p>Please provide some ideas about review:</p>
+        <textarea id="reviewComment" placeholder="Type your ideas..."></textarea>
         <button id="submitReview">Submit Review</button>
     </div>
 
@@ -1791,6 +1890,7 @@
             // Add this inside the try block of your fetchOrderDetails function, right after rendering order details:
             // Add this to your fetchOrderDetails function after loading initial data
             async function fetchOrderDetails() {
+
                 try {
                     const response = await fetch(`/api/order/${orderId}?order_id=${orderId}&include_user=true`);
                     if (!response.ok) {
@@ -1799,6 +1899,10 @@
                     const result = await response.json();
 
                     console.log('Order details:', result);
+
+                    const response2 = await fetch(`/api/user/${result.data.order.customer_id}`);
+
+                    const seller = await response2.json();
 
                     // IMPORTANT: Set this variable before anything else
                     window.otherUserId = result.data.order.customer_id;
@@ -1810,8 +1914,8 @@
                     }
 
                     // Render order details
-                    username.textContent = result.data.user.name;
-                    orderedBy.textContent = result.data.user.name;
+                    username.textContent = seller.name;
+                    orderedBy.textContent = seller.name;
                     orderDate.textContent = new Date(result.data.order.created_at.replace(' ', 'T')).toLocaleString();
 
                     // Calculate due date
@@ -2544,6 +2648,12 @@
                 backdrop.classList.add('active');
             });
 
+            document.getElementById('submitReview').addEventListener('click', () => {
+                submitReview();
+                reviewPopup.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+
             document.getElementById('closePopup').addEventListener('click', () => {
                 reviewPopup.classList.remove('active');
                 backdrop.classList.remove('active');
@@ -2583,6 +2693,71 @@
                 reviewPopup.classList.remove('active');
                 backdrop.classList.remove('active');
             });
+
+            async function submitReview() {
+                // Get star rating by counting the number of active stars
+                const activeStars = document.querySelectorAll('.stars i.active');
+                const rating = activeStars.length;
+                console.log('rating', rating);
+
+                const response = await fetch('/api/create-review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        reviewText: reviewComment.value,
+                        rating: rating // Adding the star rating to the request
+                    }),
+                });
+
+                if (response.success) {
+                    console.log('Review Created Successfully.');
+                } else {
+                    console.error('Failed to create review:', response.statusText);
+                }
+            }
+
+            //Countdown Starts
+
+            function startCountdown(dueDate, createdDate) {
+                const countdownElement = document.getElementById('countdown');
+                const totalDuration = dueDate - createdDate;
+
+                const interval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const timeLeft = dueDate - now;
+
+                    // Update progress bar
+                    const progressPercentage = 100 - Math.min(100, Math.max(0, (timeLeft / totalDuration) * 100));
+                    progressBar.style.width = `${progressPercentage}%`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        countdownElement.innerText = 'Delivery Time Reached!';
+                        // document.getElementById('deliverNow').disabled = false;
+
+                        daysEl.textContent = '0';
+                        hoursEl.textContent = '0';
+                        minutesEl.textContent = '0';
+                        secondsEl.textContent = '0';
+                    } else {
+                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                        // Update timer values
+                        daysEl.textContent = days;
+                        hoursEl.textContent = hours;
+                        minutesEl.textContent = minutes;
+                        secondsEl.textContent = seconds;
+
+                        countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                    }
+                }, 1000);
+            }
 
             // Request cancellation
             document.getElementById('requestCancel').addEventListener('click', async () => {

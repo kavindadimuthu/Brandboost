@@ -35,6 +35,9 @@ class ReviewController extends BaseController {
 
         error_log(print_r($requestData, 1));
 
+        $user = AuthHelper::getCurrentUser();
+        $role = $user['role'];
+        error_log('Role: ' . $role);
         $id = $requestData['order_id'];
         $orderModel = new Orders();
         $order = $orderModel->getOrderById($id);
@@ -43,12 +46,12 @@ class ReviewController extends BaseController {
             'order_id' => $id,
             'service_id' => $order['service_id'],
             'user_id' => $_SESSION['user']['user_id'],
-            'review_type' => 'review',
+            'review_type' => ($role === 'businessman') ? 'review' : 'feedback',
             'content' => $requestData['reviewText'],
             'rating' => $requestData['rating'],
             'created_at' => date('Y-m-d H:i:s')
-
         ];
+        
 
         $reviewModel = $this->model('Orders\OrderReviewsFeedback');
 
