@@ -717,10 +717,10 @@ use app\core\Helpers\AuthHelper;
                     
                     function connectNotificationSocket() {
                         // Connect to the notification WebSocket server
-                        // notificationSocket = new WebSocket('ws://localhost:8081');
+                        notificationSocket = new WebSocket('ws://localhost:8081');
                         
                         notificationSocket.onopen = function() {
-                            // console.log('Connected to notification server');
+                            console.log('Connected to notification server');
                             notificationRetryCount = 0;
                             
                             // Authenticate with the server using user ID or token
@@ -748,7 +748,7 @@ use app\core\Helpers\AuthHelper;
                                     
                                 case 'auth_failed':
                                     // Authentication failed
-                                    // console.error('Authentication failed with notification server');
+                                    console.error('Authentication failed with notification server');
                                     break;
                                     
                                 case 'notifications_list':
@@ -775,13 +775,13 @@ use app\core\Helpers\AuthHelper;
                                     break;
                                     
                                 case 'error':
-                                    // console.error('Error from notification server:', data.message);
+                                    console.error('Error from notification server:', data.message);
                                     break;
                             }
                         };
                         
                         notificationSocket.onclose = function(event) {
-                            // console.log('Disconnected from notification server');
+                            console.log('Disconnected from notification server');
                             
                             // Attempt to reconnect with backoff
                             if (notificationRetryCount < MAX_RETRY_ATTEMPTS) {
@@ -793,7 +793,7 @@ use app\core\Helpers\AuthHelper;
                         };
                         
                         notificationSocket.onerror = function(error) {
-                            // console.error('WebSocket error:', error);
+                            console.error('WebSocket error:', error);
                         };
                     }
                     
