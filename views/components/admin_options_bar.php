@@ -162,7 +162,13 @@
         border: 1px solid rgba(0, 0, 0, 0.05);
     }
     
-    .admin-action-dropdown:hover .admin-dropdown-content {
+    /* Remove the hover display behavior */
+    /* .admin-action-dropdown:hover .admin-dropdown-content {
+        display: block;
+    } */
+    
+    /* Add this for active dropdown */
+    .admin-dropdown-content.show {
         display: block;
     }
     
@@ -261,10 +267,6 @@
             </button>
             <?php endif; ?> -->
             
-            <button class="admin-action-btn message-btn" data-action="message-user" data-user-id="<?php echo htmlspecialchars($user['user_id'] ?? ''); ?>">
-                <i class="fas fa-bell"></i> Notify User
-            </button>
-            
             <div class="admin-action-dropdown">
                 <button class="admin-action-btn status-change-btn">
                     <i class="fas fa-user-shield"></i> Change Status
@@ -296,6 +298,25 @@
 <!-- Add JavaScript for Admin Bar functionality -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Toggle dropdown visibility when clicking the button
+    const statusChangeBtn = document.querySelector('.status-change-btn');
+    const dropdownContent = document.querySelector('.admin-dropdown-content');
+    
+    if (statusChangeBtn && dropdownContent) {
+        statusChangeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropdownContent.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!statusChangeBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+                dropdownContent.classList.remove('show');
+            }
+        });
+    }
+
     // Handle status change action
     const statusItems = document.querySelectorAll('[data-action="change-status"]');
     statusItems.forEach(item => {
@@ -327,19 +348,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('An error occurred while updating the user status.');
                 });
             }
+            
+            // Close dropdown after selection
+            dropdownContent.classList.remove('show');
         });
     });
-    
-    // Handle message user action
-    const messageBtn = document.querySelector('[data-action="message-user"]');
-    if (messageBtn) {
-        messageBtn.addEventListener('click', function() {
-            const userId = this.getAttribute('data-user-id');
-            // Open message dialog or redirect to messaging interface
-            window.location.href = `/admin/messages/compose?recipient=${userId}`;
-        });
-    }
-    
 });
 </script>
 <?php endif; ?>

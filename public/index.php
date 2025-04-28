@@ -193,7 +193,7 @@ $app->router->get('/api/orders-admin', 'OrderController@getOrderListByAdmin'); /
 $app->router->get('/api/order/{id}', 'OrderController@getOrderProfile'); // Get Order Profile
 $app->router->post('/api/create-order', 'OrderController@createOrder'); // Create Order
 $app->router->post('/api/update-order', 'OrderController@updateOrder'); // Update Order
-
+$app->router->post('/api/update-order-status', 'OrderController@updateOrderStatus'); // Update order status
 
 $app->router->get('/api/orders-count', 'GetCountController@getOrderCountsSummary');
 

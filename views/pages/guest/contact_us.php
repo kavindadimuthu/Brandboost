@@ -303,10 +303,8 @@
         <div class="container">
             <h2>Our Office Location</h2>
             <div class="map-container">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086509374634!2d-122.419415484681!3d37.77492927975971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c5b0b0b0b%3A0x0!2zMzfCsDQ2JzI5LjgiTiAxMjLCsDI1JzA3LjkiVw!5e0!3m2!1sen!2sus!4v1633024800000!5m2!1sen!2sus"
-                    allowfullscreen="" loading="lazy"></iframe>
-                <p>123 CreativeHub St, San Francisco, CA 94103</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.1802043361977!2d79.85857797480945!3d6.902205493097099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25963120b1509%3A0x2db2c18a68712863!2sUniversity%20of%20Colombo%20School%20of%20Computing%20(UCSC)!5e1!3m2!1sen!2slk!4v1745850127649!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p>UCSC Building Complex, 35 Reid Ave, Colombo 00700</p>
                 <p>Hours of Operation: Mon-Fri, 9am-5pm</p>
             </div>
         </div>
@@ -315,18 +313,6 @@
     <section class="faq-section">
         <div class="container">
             <p>For quick answers to common questions, visit our <a href="#">FAQ page</a>.</p>
-        </div>
-    </section>
-
-    <section class="social-media-section">
-        <div class="container">
-            <h2>Follow Us</h2>
-            <div class="social-media-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
         </div>
     </section>
 

@@ -452,7 +452,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdownInterval);
                     // Redirect to dashboard - change this URL as needed
-                    window.location.href = '/dashboard';
+                    window.location.href = '/businessman/orders-list';
                 }
             }, 1000);
             
