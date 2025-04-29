@@ -349,7 +349,7 @@
                     <div class="testimonial-author">
                         <div class="author-avatar">JD</div>
                         <div class="author-details">
-                            <h4>John Doe</h4>
+                            <h4>Kasun Virajith</h4>
                             <p>Business Owner</p>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
                     <div class="testimonial-author">
                         <div class="author-avatar">SS</div>
                         <div class="author-details">
-                            <h4>Sarah Smith</h4>
+                            <h4>Sarah Gunasekara</h4>
                             <p>Social Media Influencer</p>
                         </div>
                     </div>
@@ -373,7 +373,7 @@
                     <div class="testimonial-author">
                         <div class="author-avatar">MJ</div>
                         <div class="author-details">
-                            <h4>Mike Johnson</h4>
+                            <h4>Vishwa Fernando</h4>
                             <p>Graphic Designer</p>
                         </div>
                     </div>

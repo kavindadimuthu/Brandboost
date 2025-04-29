@@ -713,10 +713,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="profile-stats">
-                    <div class="stat-item">
+                    <!-- <div class="stat-item">
                         <div class="stat-value"><?php echo intval($user['total_projects'] ?? 0); ?></div>
                         <div class="stat-label">Projects</div>
-                    </div>
+                    </div> -->
                     <div class="stat-item">
                         <div class="stat-value"><?php echo number_format((float)($user['average_rating'] ?? 0), 1); ?></div>
                         <div class="stat-label">Rating</div>
@@ -1048,13 +1048,13 @@
                 
                 <?php if (in_array($userRole, ['designer', 'influencer'])): ?>
                     <!-- Enhanced Analytics Overview Section -->
-                    <div class="profile-card analytics-section">
+                    <!-- <div class="profile-card analytics-section">
                         <div class="card-header">
                             <h2 class="card-title">Analytics Overview</h2>
                             <span class="insights-badge">Last 30 days</span>
                         </div>
                         <div class="analytics-content">
-                            <!-- Main metrics row -->
+                            Main metrics row
                             <div class="analytics-main-metrics">
                                 <div class="analytics-metric-card">
                                     <div class="metric-icon">
@@ -1098,7 +1098,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 <?php endif; ?>
 
                 <?php if ($userRole === 'businessman'): ?>

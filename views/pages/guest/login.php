@@ -44,6 +44,9 @@
             animation: gradientBG 15s ease infinite;
             position: relative;
             overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
         }
 
         @keyframes gradientBG {
@@ -110,15 +113,15 @@
 
         .auth-container {
             width: 100%;
-            max-width: 1000px;
-            margin: 40px auto;
+            max-width: 1100px;
+            margin: auto;
             display: flex;
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
             background: var(--white);
             height: calc(100vh - 80px);
-            max-height: 650px;
+            max-height: 750px;
             transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
 

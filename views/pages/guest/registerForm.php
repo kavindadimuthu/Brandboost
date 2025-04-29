@@ -44,6 +44,9 @@
             animation: gradientBG 15s ease infinite;
             position: relative;
             overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
         }
 
         /* @keyframes gradientBG {
@@ -164,7 +167,7 @@
 
         .auth-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             display: flex;
             border-radius: var(--border-radius);
@@ -172,7 +175,7 @@
             box-shadow: var(--box-shadow);
             background: var(--white);
             height: calc(100vh - 80px);
-            max-height: 700px;
+            max-height: 800px;
         }
 
         .auth-brand {
