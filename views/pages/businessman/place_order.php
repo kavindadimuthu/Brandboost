@@ -435,10 +435,10 @@
         <!-- Gig Details Card -->
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">Professional Business Plan Writing</h2>
+                <h2 class="card-title"  id="service-title">Professional Business Plan Writing</h2>
                 <span class="badge">Premium Service</span>
             </div>
-            <p style="color: #6b7280; margin-bottom: 20px;">Complete business planning solution for your venture</p>
+            <p style="color: #6b7280; margin-bottom: 20px;" id="service-description">Complete business planning solution for your venture</p>
             <div class="gig-features">
                 <div class="feature-item">
                     <i class="fas fa-clock feature-icon"></i>
@@ -458,7 +458,7 @@
                     <i class="fas fa-dollar-sign feature-icon"></i>
                     <div>
                         <div class="feature-label">Price</div>
-                        <div class="feature-value price">$500</div>
+                        <div class="feature-value-price">$500</div>
                     </div>
                 </div>
             </div>
@@ -545,6 +545,8 @@
                         
                 const result = await response.json();
                 console.log('Service Details:', result);
+                console.log('Service Details title:', result.title);
+                
                 
                 updateGigFeatures(result);
             } catch (error) {
@@ -554,6 +556,10 @@
 
         // Update gig features with package details
         function updateGigFeatures(data) {
+            document.getElementById('service-title').textContent = `${data.title}`;
+            document.getElementById('service-description').textContent = `${data.description}`;
+            console.log('Service Title:', data.title);            
+
     if(packageId) {
         const packageDetails = data.packages.find(pkg => pkg.package_id == packageId);
         if (packageDetails) {
@@ -561,9 +567,10 @@
             console.log('Package Detailsssssss:', packageDetails);
             
             // Update visible elements
+            // document.querySelector('.card-title').textContent = `LKR ${packageDetails.price}`;
             document.querySelector('.feature-value.delivery-time').textContent = `${packageDetails.delivery_days} Days`;
             document.querySelector('.feature-value.revisions').textContent = `${packageDetails.revisions} Revisions`;
-            document.querySelector('.feature-value.price').textContent = `$${packageDetails.price}`;
+            document.querySelector('.feature-value-price').textContent = `LKR ${packageDetails.price}`;
             console.log('packageDetails.price:', packageDetails.price);
             document.getElementById('escrowAmount').textContent = packageDetails.price;
             
