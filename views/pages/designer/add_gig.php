@@ -652,7 +652,7 @@
             ],
             
             SERVICE_TYPES: [
-                { value: 'graphic_design', label: 'Graphic Design' },
+                { value: 'graphic_design', label: 'Post design for Facebook and Instagram' },
                 { value: 'web_development', label: 'Web Development' },
                 { value: 'digital_marketing', label: 'Digital Marketing' }
             ],

@@ -484,15 +484,31 @@ class PaymentController extends BaseController {
             return;
         }
 
-        // $queryParams = $request->getQueryParams();
-        // $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
-        // $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
-        // $status = $queryParams['status'] ?? null;
+        $queryParams = $request->getQueryParams();
+        $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+        $status = $queryParams['status'] ?? null;
 
-        // Ensure reasonable limits
-        // if ($limit > 50) $limit = 50;
-        // if ($page < 1) $page = 1;
-        // $offset = ($page - 1) * $limit;
+        if ($limit > 50) $limit = 50;
+        if ($page < 1) $page = 1;
+        $offset = ($page - 1) * $limit;
+
+         // Build filter options for the model
+         $allowedFilters = ['user_id', 'name', 'email', 'phone', 'bio', 'role', 'professional_title', 'specialties', 'tools', 'location', 'account_status', 'verification_status'];
+
+         // Add filters to the query
+         $filters = [];
+         foreach ($allowedFilters as $filter) {
+             if (isset($queryParams[$filter]) && $queryParams[$filter] !== '') {
+                 $filters[$filter] = $queryParams[$filter];
+             }
+         }
+
+        $options = [
+            'limit' => (int)$limit,
+            'offset' => (int)$offset,
+            'order' => $sortBy . ' ' . (strtolower($orderDir) === 'desc' ? 'desc' : 'asc'),
+        ];
 
         $transactionModel = new Transaction();
         $transactions = $transactionModel->getTransactionsByReceiverId($sellerId);
@@ -506,12 +522,12 @@ class PaymentController extends BaseController {
         $response->sendJson([
             'success' => true,
             'data' => $transactions,
-            // 'pagination' => [
-            //     'page' => $page,
-            //     'limit' => $limit,
-            //     'total' => $totalCount,
-            //     'pages' => ceil($totalCount / $limit)
-            // ]
+            'pagination' => [
+                'page' => $page,
+                'limit' => $limit,
+                'total' => $totalCount,
+                'pages' => ceil($totalCount / $limit)
+            ]
         ]);
     }
 

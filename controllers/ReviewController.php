@@ -49,7 +49,7 @@ class ReviewController extends BaseController {
             'review_type' => ($role === 'businessman') ? 'review' : 'feedback',
             'content' => $requestData['reviewText'],
             'rating' => $requestData['rating'],
-            'created_at' => date('Y-m-d H:i:s')
+            'created_at' => (new DateTime('now', new DateTimeZone('Asia/Colombo')))->format('Y-m-d H:i:s')
         ];
         
 

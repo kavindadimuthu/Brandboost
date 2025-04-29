@@ -983,6 +983,11 @@
                 </h3>
                 <div class="section-actions">
                     <!-- Transaction filter options could go here -->
+                     <input type="date" id="starting-date" class="date-input">
+                     <input type="date" id="ending-date" class="date-input">
+                     <button id="filter-earnings-btn" class="btn btn-secondary btn-fullwidth" style="height: 65%; display: flex; align-items: center;">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
                 </div>
             </div>
             <div class="section-content">
@@ -1098,6 +1103,9 @@
             const endDateInput = document.getElementById('end-date');
             const filterEarningsBtn = document.getElementById('filter-earnings-btn');
             const periodEarnings = document.getElementById('period-earnings');
+            const startDateInput2 = document.getElementById('starting-date');
+            const endDateInput2 = document.getElementById('ending-date');   
+            
             
             // Variables
             let currentBalance = 0;
@@ -1270,19 +1278,19 @@
                         let statusClass = '';
                         let statusIcon = '';
                         
-                        if (tx.status.toLowerCase() === 'completed') {
-                            statusClass = 'status-completed';
-                            statusIcon = 'fa-check-circle';
-                        } else if (tx.status.toLowerCase() === 'pending') {
-                            statusClass = 'status-pending';
-                            statusIcon = 'fa-clock';
-                        } else if (tx.status.toLowerCase() === 'failed') {
-                            statusClass = 'status-failed';
-                            statusIcon = 'fa-times-circle';
-                        } else if (tx.status.toLowerCase() === 'processing') {
-                            statusClass = 'status-processing';
-                            statusIcon = 'fa-sync';
-                        }
+                        // if (tx.status.toLowerCase() === 'completed') {
+                        //     statusClass = 'status-completed';
+                        //     statusIcon = 'fa-check-circle';
+                        // } else if (tx.status.toLowerCase() === 'pending') {
+                        //     statusClass = 'status-pending';
+                        //     statusIcon = 'fa-clock';
+                        // } else if (tx.status.toLowerCase() === 'failed') {
+                        //     statusClass = 'status-failed';
+                        //     statusIcon = 'fa-times-circle';
+                        // } else if (tx.status.toLowerCase() === 'processing') {
+                        //     statusClass = 'status-processing';
+                        //     statusIcon = 'fa-sync';
+                        // }
                         
                         // Format date
                         const date = new Date(tx.created_at);
