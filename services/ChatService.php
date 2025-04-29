@@ -307,7 +307,7 @@ class ChatService implements MessageComponentInterface
             ]);
 
             // Get the newly created room
-            $room = $this->chatRoomModel->readOne([
+            $room = $this->chatRoomModel->read([
                 'order_id' => $orderId,
                 'chat_type' => 'order'
             ]);

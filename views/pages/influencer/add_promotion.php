@@ -592,7 +592,7 @@
                                 name="basic_package_revisions">
                         </div>
                         <div class="form-group">
-                            <label>Price (USD)</label>
+                            <label>Price (LKR)</label>
                             <input type="number" min="5" step="5" placeholder="Enter price" 
                                 required name="basic_package_price">
                         </div>
@@ -620,7 +620,7 @@
                                 name="premium_package_revisions">
                         </div>
                         <div class="form-group">
-                            <label>Price (USD)</label>
+                            <label>Price (LKR)</label>
                             <input type="number" min="5" step="5" placeholder="Enter price" 
                                 required name="premium_package_price">
                         </div>

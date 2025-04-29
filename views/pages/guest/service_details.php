@@ -1074,7 +1074,7 @@
     function renderReviewsSection(result, percentages) {
       
       // Update ratings overview
-      document.querySelector('.average-score').textContent = percentages.rateave.toFixed(1);
+      document.querySelector('.average-score').textContent = percentages.rateave.toFixed(1) || '0.0';
       document.querySelector('.total-reviews').textContent = `from ${percentages.total} reviews`;
       
       // Update rating bars
@@ -1098,9 +1098,9 @@
             <div class="review-card">
               <div class="review-header">
                 <div class="reviewer">
-                  <img src="${review.avatar || '/assets/images/default-avatar.png'}" alt="${review.name}" class="reviewer-avatar">
+                  <img src="${review.user.profile_picture || '/assets/images/default-avatar.png'}" alt="${review.name}" class="reviewer-avatar">
                   <div class="reviewer-details">
-                    <div class="reviewer-name">${review.name}</div>
+                    <div class="reviewer-name">${review.user.name}</div>
                     <div class="review-date">${reviewDate}</div>
                   </div>
                 </div>
@@ -1198,6 +1198,10 @@
       
       // Determine contact text based on service type
       const contactText = isGig ? "Designer" : "Influencer";
+      const contactButton = `
+      <button class="action-button secondary-button" onclick="contactSeller(${result.user.user_id}, '${result.user.name}')">
+        <i class="far fa-comment-dots"></i> Contact ${contactText}
+      </button>`;
       
       const content = `
         <div class="time-info">
@@ -1223,9 +1227,7 @@
         
         ${customPackageBtn}
         
-        <button class="action-button secondary-button" onclick="window.location.href='#'">
-          <i class="far fa-comment-dots"></i> Contact ${contactText}
-        </button>
+        ${contactButton}
         
         <div class="guarantee-text">
           <i class="fas fa-shield-alt"></i> 100% Satisfaction Guarantee
@@ -1254,6 +1256,32 @@
         .catch(error => {
           console.error('Error fetching service data for tab switch:', error);
         });
+    }
+now 
+    function contactSeller(sellerId, sellerName) {
+      // Check if user is logged in (you might need to adjust this based on your auth logic)
+      const sessionToken = getCookie('session_token');
+      
+      if (!sessionToken) {
+        // Redirect to login if not authenticated
+        window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname) + '&action=contact';
+        return;
+      }
+      
+      // Store seller info in localStorage so the chat page can access it
+      localStorage.setItem('contactSellerId', sellerId);
+      localStorage.setItem('contactSellerName', sellerName);
+      
+      // Redirect to chat page
+      window.location.href = '/chat';
+    }
+
+    // Utility function to get cookies
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
     }
   </script>
 </body>

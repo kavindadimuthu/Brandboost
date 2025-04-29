@@ -172,6 +172,7 @@ class ServiceController extends BaseController
         $serviceAnalyticsModel = $this->model('Services\ServiceAnalytics');
         $serviceCustomPackageModel = $this->model('Services\ServiceCustomPackage');
         $serviceReviewModel = $this->model('Orders\OrderReviewsFeedback');
+        $userModel = $this->model('Users\User');
 
         // Fetch the main service details
         $service = $serviceModel->getServiceById($serviceId);
@@ -187,8 +188,15 @@ class ServiceController extends BaseController
         $packages = $servicePackageModel->getPackagesByServiceId($serviceId);
         $service['packages'] = array_values($packages);
 
-        //fetch assiciated reviews for the service
+        //fetch associated reviews for the service
         $reviews = $serviceReviewModel->getByServiceId($serviceId);
+
+        // Fetch associated users for the reviews
+        foreach ($reviews as &$review) {
+            $user = $userModel->getUserById($review['user_id']);
+            $review['user'] = $user;
+        }
+
         $service['reviews'] = array_values($reviews);
 
         // Optionally include analytics data

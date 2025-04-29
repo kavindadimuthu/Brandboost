@@ -702,9 +702,9 @@
                 <select id="sortSelect" class="sort-select">
                     <option value="created_at_desc">Newest First</option>
                     <option value="created_at_asc">Oldest First</option>
-                    <!-- <option value="price_desc">Price: High to Low</option> -->
-                    <!-- <option value="price_asc">Price: Low to High</option> -->
-                    <!-- <option value="delivery_days_asc">Due Date: Soonest First</option> -->
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="delivery_days_asc">Due Date: Soonest First</option>
                 </select>
                 <div class="sort-icon">
                     <i class="fas fa-chevron-down"></i>
