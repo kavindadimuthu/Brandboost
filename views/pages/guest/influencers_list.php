@@ -518,7 +518,14 @@
 
             grid.innerHTML = influencersToRender.map(influencer => `
                 <div class="influencer-card" onclick="window.location.href='/user/${influencer.user_id}'">
-                    <div class="card-cover"></div>
+                    <div class="card-cover">
+                        <img 
+                            src="${influencer.cover_picture || '/api/placeholder/200/200'}" 
+                            alt="${influencer.name}" 
+                            class="profile-image"
+                            onerror="this.onerror=null; this.src='/api/placeholder/200/200';"
+                        >
+                    </div>
                     <div class="profile-image-container">
                         <img 
                             src="${influencer.profile_picture || '/api/placeholder/200/200'}" 
