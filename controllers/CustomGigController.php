@@ -14,7 +14,8 @@ use app\core\Utils\FileHandler;
 use app\models\Orders\Orders;
 
 
-class CustomGigController extends BaseController {
+class CustomGigController extends BaseController
+{
 
     /**
      * Create a review for an order
@@ -51,7 +52,7 @@ class CustomGigController extends BaseController {
             'rating' => $requestData['rating'],
             'created_at' => date('Y-m-d H:i:s')
         ];
-        
+
 
         $reviewModel = $this->model('Orders\OrderReviewsFeedback');
 
@@ -97,7 +98,7 @@ class CustomGigController extends BaseController {
         $orderModel = new Orders();
         $order = $orderModel->getOrderById($id);
 
-        
+
         // Send success response
         $response->sendJson([
             'success' => true,
@@ -111,6 +112,85 @@ class CustomGigController extends BaseController {
             'created_at' => (new DateTime('now', new DateTimeZone('Asia/Colombo')))->format('Y-m-d H:i:s')
         ];
 
-    }
 
+
+
+
+        //
+
+    }
 }
+
+?>
+
+
+<html>
+<body>
+    <script>
+        const state1 = {
+            order_status: ''
+        };
+        const itemsPerPageSelect = document.getElementById('statusfilter');
+
+
+
+        itemsPerPageSelect.addEventListener('change', function() {
+            state1.order_status = this.value;
+            loadOrdersData();
+        });
+
+
+        // Global state
+        const state = {
+            orders: [],
+            filteredOrders: [],
+            searchTerm: ''
+        };
+
+        // Function to load data into the table
+        async function loadOrdersData() {
+            const queryParams = new URLSearchParams({
+
+            });
+            if (state1.order_status) {
+                queryParams.append('order_status', state1.order_status);
+            }
+            console.log("queryyyyy", queryParams);
+
+            const tableBody = document.getElementById('ordersTableBody');
+
+            try {
+                const response = await fetch(`/api/orders?include_seller=true&${queryParams.toString()}`);
+                const result = await response.json();
+
+                console.log('Orders data:', result);
+
+                if (result.success !== false) {
+                    state.orders = result.data;
+                    state.filteredOrders = [...state.orders];
+                    renderOrders();
+                    updateStats();
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <p class="empty-state-text">Error: ${result.message || 'Failed to load orders'}</p>
+                            </td>
+                        </tr>`;
+                }
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p class="empty-state-text">Failed to load orders. Please try again later.</p>
+                        </td>
+                    </tr>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
