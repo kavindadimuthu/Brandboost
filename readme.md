@@ -33,31 +33,6 @@ For detailed information about specific subsystems, refer to:
 
 BrandBoost follows an **MVC (Model-View-Controller)** architectural pattern with a clear separation of concerns:
 
-```mermaid
-graph TD
-  UI[User Interfaces] -->|Sends Requests| ROUTER[Routing Layer (index.php)]
-  ROUTER --> CONTROLLERS
-  CONTROLLERS --> MODELS
-  MODELS --> DB[(Database)]
-  subgraph CONTROLLERS
-    A1[AuthController]
-    A2[OrderController]
-    A3[PaymentController]
-    A4[ServiceController]
-    A5[BusinessmanController]
-    A6[InfluencerController]
-    A7[DesignerController]
-    A8[AdminController]
-  end
-  subgraph UI
-    U1[Businessman UI]
-    U2[Influencer UI]
-    U3[Designer UI]
-    U4[Admin UI]
-    U5[Guest UI]
-  end
-```
-
 **Layers:**
 - **Database**
 - **Models** (e.g., User, Order, Transaction, Service, Wallet)
