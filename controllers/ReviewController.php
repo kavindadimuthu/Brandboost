@@ -48,6 +48,8 @@ class ReviewController extends BaseController {
             'user_id' => $_SESSION['user']['user_id'],
             'review_type' => ($role === 'businessman') ? 'review' : 'feedback',
             'content' => $requestData['reviewText'],
+            //'reason' => $requestData['Reason'],
+            //'type' => $requestData['reviewType'],
             'rating' => $requestData['rating'],
             'created_at' => date('Y-m-d H:i:s')
         ];

@@ -1401,17 +1401,12 @@
     <div class="complaint-popup" id="complaintPopup">
         <button class="complaintSupport" id="closeComplaintPopup">&times;</button>
         <h4>Complaint</h4>
-        <div class="form-group">
-            <label for="complaintType">Complaint Type</label>
-            <select id="complaintType" class="complaint-dropdown">
-                <option value="" disabled selected>Select complaint type...</option>
-                <option value="order_cancellation">Order Cancellation</option>
-                <option value="payment_problem">Payment Problem</option>
-                <option value="service_quality">Service Quality</option>
-                <option value="delivery_issue">Delivery Issue</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
+
+        <!-- <div class="form-group">
+            <label for="complaintReason">Reason</label>
+            <textarea id="complaintReason" placeholder="Reason about your complaint..."></textarea>
+        </div> -->
+
         <div class="form-group">
             <label for="complaintNotes">Notes</label>
             <textarea id="complaintNotes" placeholder="Description about your complaint..."></textarea>
@@ -1423,7 +1418,7 @@
                     <i class="fas fa-chart-bar"></i>
                     <h4>Upload Screenshots and videos</h4>
                     <p>Upload Evidences..... (JPG, PNG, up to 10MB)</p>
-                    <input type="file" id="fileUpload" style="display: none;" multiple accept="image/*,video/mp4" />
+                    <input type="file" id="proofs" style="display: none;" multiple accept="image/*,video/mp4" />
                 </div>
                 <div class="preview-images" id="previewContainer">
                     <!-- Preview images will appear here -->
@@ -1440,6 +1435,7 @@
     <div class="popup" id="reviewPopup">
         <button class="close-btn" id="closePopup">&times;</button>
         <h4>Review Order</h4>
+        
         <p>Please rate your experience with this order:</p>
         <div class="stars" id="stars">
             <i class="fas fa-star" data-rating="1"></i>
@@ -1448,6 +1444,7 @@
             <i class="fas fa-star" data-rating="4"></i>
             <i class="fas fa-star" data-rating="5"></i>
         </div>
+
         <p>Please provide some ideas about review:</p>
         <textarea id="reviewComment" placeholder="Type your ideas..."></textarea>
         <button id="submitReview">Submit Review</button>
@@ -1520,6 +1517,8 @@
             const reviewPopup = document.getElementById('reviewPopup');
             // const stars = document.getElementById('stars');
             const reviewComment = document.getElementById('reviewComment');
+            //const reviewReason = document.getElementById('reviewReason');
+            //const reviewType = document.getElementById('reviewType');
             const cancelPopup = document.getElementById('cancelPopup');
             const deliveryPopup = document.getElementById('deliveryPopup');
             const daysEl = document.getElementById('days');
@@ -2560,6 +2559,8 @@ if (data.content_link) {
                     body: JSON.stringify({
                         order_id: orderId,
                         reviewText: reviewComment.value,
+                        //reviewType: reviewType.value,
+                        //Reason: reviewReason.value,
                         rating: rating // Adding the star rating to the request
                     }),
                 });
@@ -2792,12 +2793,15 @@ if (data.content_link) {
 
         // File upload area
         const uploadArea = document.getElementById('uploadArea');
-        const uploadSection = document.getElementById('uploadSection');
-        const fileUploadSection = document.getElementById('fileUploadSection');
-        
-        uploadArea.addEventListener('click', () => {
-            fileUpload.click();
-        });
+        // The input in the markup has id="proofs" and previews go into #previewContainer
+        const fileInput = document.getElementById('proofs');
+        const previewContainer = document.getElementById('previewContainer');
+
+        // Make the upload area open the hidden file input
+        if (uploadArea && fileInput) {
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
 
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -2819,42 +2823,32 @@ if (data.content_link) {
                     handleFiles(e.dataTransfer.files);
                 }
             });
+        }
 
-        uploadSection.addEventListener('click', () => {
-            fileUploadSection.click();
-        });
+        // Wire the actual file input change to the same handler
+        if (fileInput) {
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    handleFiles(fileInput.files);
+                }
+            });
+        }
 
-        uploadSection.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadSection.style.borderColor = '#4f46e5';
-            uploadSection.style.backgroundColor = '#f5f5ff';
-        });
-
-        uploadSection.addEventListener('dragleave', () => {
-            uploadSection.style.borderColor = '#d1d5db';
-            uploadSection.style.backgroundColor = '#f9fafb';
-        });
-
-        uploadSection.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadSection.style.borderColor = '#d1d5db';
-            uploadSection.style.backgroundColor = '#f9fafb';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files);
-            }
-        });
-
-        fileUploadSection.addEventListener('change', () => {
-            if (fileUploadSection.files.length > 0) {
-                handleFiles(fileUploadSection.files);
-            }
-        });
+        // Also support the revision upload area (uploadSection + fileUploadSection) if present
+        const uploadSection = document.getElementById('uploadSection');
+        const fileUploadSection = document.getElementById('fileUploadSection');
+        if (uploadSection && fileUploadSection) {
+            uploadSection.addEventListener('click', () => fileUploadSection.click());
+            uploadSection.addEventListener('dragover', (e) => { e.preventDefault(); uploadSection.style.borderColor = '#4f46e5'; uploadSection.style.backgroundColor = '#f5f5ff'; });
+            uploadSection.addEventListener('dragleave', () => { uploadSection.style.borderColor = '#d1d5db'; uploadSection.style.backgroundColor = '#f9fafb'; });
+            uploadSection.addEventListener('drop', (e) => { e.preventDefault(); uploadSection.style.borderColor = '#d1d5db'; uploadSection.style.backgroundColor = '#f9fafb'; if (e.dataTransfer.files.length > 0) handleFiles(e.dataTransfer.files); });
+            fileUploadSection.addEventListener('change', () => { if (fileUploadSection.files.length > 0) handleFiles(fileUploadSection.files); });
+        }
 
             async function submitComplaint() {
                 const complaintType = document.getElementById('complaintType');
                 const complaintNotes = document.getElementById('complaintNotes');
-                const fileInput = document.getElementById('fileUpload');
+                const fileInput = document.getElementById('proofs');
                 const formData = new FormData();
 
                 // Make sure orderId is defined
@@ -2871,7 +2865,7 @@ if (data.content_link) {
 
                 // Append text fields
                 formData.append('order_id', orderId);
-                formData.append('complaint_type', complaintType.value);
+                //formData.append('complaint_type', complaintType.value);
                 formData.append('content', complaintNotes.value);
 
                 // Append files

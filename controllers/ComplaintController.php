@@ -189,7 +189,7 @@ class ComplaintController extends BaseController {
             // For multipart/form-data, access directly from $_POST and $_FILES
             $orderId = $_POST['order_id'] ?? null;
             $content = $_POST['content'] ?? null;
-            $complaintType = $_POST['complaint_type'] ?? null;
+            //$complaintType = $_POST['complaint_type'] ?? null;
 
             if (empty($orderId) || empty($content)) {
                 $response->sendJson([
@@ -237,7 +237,7 @@ class ComplaintController extends BaseController {
                 'order_id' => $orderId,
                 'complainant_user_id' => $userId ?? 0,
                 'reported_user_id' => $reportedUserId,
-                'complaint_type' => $complaintType,
+                //'complaint_type' => $complaintType,
                 'description' => $content,
                 'proofs' => json_encode($savedFiles), // Store as JSON array
                 'status' => 'pending',
