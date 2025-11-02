@@ -11,7 +11,6 @@
                 <option value="other">Other</option>
             </select>
 </div>
-
 <!-- 1.2 complaint type dropdown GET (complaints_list) -->
 <th>Type</th>
 
