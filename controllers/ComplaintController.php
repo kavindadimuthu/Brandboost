@@ -191,8 +191,8 @@ class ComplaintController extends BaseController {
             // For multipart/form-data, access directly from $_POST and $_FILES
             $orderId = $_POST['order_id'] ?? null;
             $content = $_POST['content'] ?? null;
-            $complaintType = $_POST['complaint_type'] ?? null;
-            $reason = $_POST['reason'] ?? null;
+            //$complaintType = $_POST['complaint_type'] ?? null;
+            //$reason = $_POST['reason'] ?? null;
 
 
             if (empty($orderId) || empty($content)) {
@@ -245,7 +245,7 @@ class ComplaintController extends BaseController {
                 'order_id' => $orderId,
                 'complainant_user_id' => $userId ?? 0,
                 'reported_user_id' => $reportedUserId,
-                'complaint_type' => $complaintType,
+                //'complaint_type' => $complaintType,
                 //'complaint_reason' => $reason,
                 'description' => $content,
                 'proofs' => json_encode($savedFiles), // Store as JSON array
@@ -387,7 +387,7 @@ class ComplaintController extends BaseController {
                 'complainant_user_id' => $row['complainant_user_id'],
                 'reported_user_id' => $row['reported_user_id'],
                 //'complaint_reason' => $row['complaint_reason'],
-                'complaint_type' => $row['complaint_type'],
+                //'complaint_type' => $row['complaint_type'],
                 'description' => $row['description'],
                 'status' => $row['status'],
                 'is_priority' => (bool)($row['is_priority'] ?? 0),

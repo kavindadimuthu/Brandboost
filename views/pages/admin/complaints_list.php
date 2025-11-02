@@ -767,7 +767,6 @@
                                 <th>ID</th>
                                 <th>Complainant</th>
                                 <th>Reported User</th>
-                                <th>Type</th>
                                 <th>Description</th>
                                 <th>Status</th>
                                 <th>Admin</th>
@@ -1028,9 +1027,6 @@ const filterDropdownBtn = document.getElementById('filterDropdownBtn');
                                     <span class="user-role">Reported</span>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <span class="badge badge-${complaint.complaint_type}">${complaint.complaint_type}</span>
                         </td>
                         <td>
                             <div class="tooltip">

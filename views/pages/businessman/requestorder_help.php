@@ -4,10 +4,10 @@
             <label for="complaintType">Complaint Type</label>
             <select id="complaintType" class="complaint-dropdown">
                 <option value="disabled selected">Select complaint type...</option>
-                <option value="order">Order Cancellation</option>
-                <option value="payment">Payment Problem</option>
-                <option value="service">Service Quality</option>
-                <option value="delivery">Delivery Issue</option>
+                <option value="order_cancellation">Order Cancellation</option>
+                <option value="payment_problem">Payment Problem</option>
+                <option value="service_quality">Service Quality</option>
+                <option value="delivery_issue">Delivery Issue</option>
                 <option value="other">Other</option>
             </select>
 </div>

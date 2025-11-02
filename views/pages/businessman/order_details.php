@@ -1402,17 +1402,6 @@
         <button class="complaintSupport" id="closeComplaintPopup">&times;</button>
         <h4>Complaint</h4> 
         <div class="form-group">
-            <label for="complaintType">Complaint Type</label>
-            <select id="complaintType" class="complaint-dropdown">
-                <!-- <option value="disabled selected">Select complaint type...</option>
-                <option value="order_cancellation">Order Cancellation</option>
-                <option value="payment_problem">Payment Problem</option>
-                <option value="service_quality">Service Quality</option>
-                <option value="delivery_issue">Delivery Issue</option>
-                <option value="other">Other</option> -->
-            </select>
-        </div>
-        <div class="form-group">
             <label for="complaintNotes">Notes</label>
             <textarea id="complaintNotes" placeholder="Description about your complaint..."></textarea>
         </div>
@@ -1543,36 +1532,36 @@
             // Get the last segment of the URL
 
 
-            async function loadComplaintTypes() {
-                try {
-                    console.log("types getting...");
+            // async function loadComplaintTypes() {
+            //     try {
+            //         console.log("types getting...");
                     
-                    const response = await fetch('/api/complaint-types');
-                    console.log('complaint type resonse: ',response);
+            //         const response = await fetch('/api/complaint-types');
+            //         console.log('complaint type resonse: ',response);
                     
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    console.log('complaint types-1: ', data);
+            //         if (!response.ok) {
+            //             throw new Error('Network response was not ok');
+            //         }
+            //         const data = await response.json();
+            //         console.log('complaint types-1: ', data);
                     
-                    const complaintTypeSelect = document.getElementById('complaintType');
+            //         const complaintTypeSelect = document.getElementById('complaintType');
 
-                    // Clear existing options
-                    complaintTypeSelect.innerHTML = '';
+            //         // Clear existing options
+            //         complaintTypeSelect.innerHTML = '';
 
-                    const complaints = data.data;
+            //         const complaints = data.data;
 
-                    complaints.forEach(type => {
-                        const option = document.createElement('option');
-                        option.value = type.complaint_type_name;
-                        option.textContent = type.complaint_type_name;
-                        complaintTypeSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error loading complaint types:', error);
-                }
-            }
+            //         complaints.forEach(type => {
+            //             const option = document.createElement('option');
+            //             option.value = type.complaint_type_name;
+            //             option.textContent = type.complaint_type_name;
+            //             complaintTypeSelect.appendChild(option);
+            //         });
+            //     } catch (error) {
+            //         console.error('Error loading complaint types:', error);
+            //     }
+            // }
 
 
             function updateCancelButtonVisibility(orderData) {
@@ -2883,7 +2872,7 @@ if (data.content_link) {
             
 
             async function submitComplaint() {
-                const complaintType = document.getElementById('complaintType');
+                //const complaintType = document.getElementById('complaintType');
                 //const complaintReason = document.getElementById('complaintReason');
                 const complaintNotes = document.getElementById('complaintNotes');
                 const fileInput = document.getElementById('proofs');
@@ -2903,7 +2892,7 @@ if (data.content_link) {
 
                 // Append text fields
                 formData.append('order_id', orderId);
-                formData.append('complaint_type', complaintType.value);
+                //formData.append('complaint_type', complaintType.value);
                 //formData.append('reason', complaintReason.value);
                 formData.append('content', complaintNotes.value);
 
