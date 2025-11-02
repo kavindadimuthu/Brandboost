@@ -830,12 +830,12 @@
           <!-- Rating filter buttons will be inserted here -->
           <label for="ratingSelect">Rating Select</label>
             <select id="rating" class="rating-dropdown">
-                <option value= 0 default>All Ratings</option>
+                <!-- <option value= 0 default>All Ratings</option>
                 <option value= 1 >1</option>
                 <option value= 2 >2</option>
                 <option value= 3 >3</option>
                 <option value= 4 >4</option>
-                <option value= 5 >5</option>
+                <option value= 5 >5</option> -->
             </select> 
          </div>
         <div class="reviews-list">
@@ -872,70 +872,70 @@
     // call another function if needed
     // handleRatingChange(selectedValue);
 
-    async function handleRatingChange(rating) {
-      try {
-        // Get the service ID from the URL path
-        const pathSegments = window.location.pathname.split('/');
-        const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
+    // async function handleRatingChange(rating) {
+    //   try {
+    //     // Get the service ID from the URL path
+    //     const pathSegments = window.location.pathname.split('/');
+    //     const serviceID = pathSegments[pathSegments.length - 1]; // Get the last segment
     
-        if (!serviceID) {
-          throw new Error('Service ID is required in the URL');
-        }
+    //     if (!serviceID) {
+    //       throw new Error('Service ID is required in the URL');
+    //     }
     
-        const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true&rating=${rating}`);
-        const result = await response.json();
+    //     const response = await fetch(`/api/service/${serviceID}?service=true&packages=true&include_user=true&rating=${rating}`);
+    //     const result = await response.json();
 
-        console.log('Filtered reviews result: ', result);
+    //     console.log('Filtered reviews result: ', result);
 
-        let total= result.reviews ? result.reviews.length : 0;
+    //     let total= result.reviews ? result.reviews.length : 0;
 
-        var rating1 = 0;
-        var rating2 = 0;
-        var rating3 = 0;
-        var rating4 = 0;
-        var rating5 = 0;
+    //     var rating1 = 0;
+    //     var rating2 = 0;
+    //     var rating3 = 0;
+    //     var rating4 = 0;
+    //     var rating5 = 0;
 
-        for (let i = 0; i < result.reviews.length; i++) {
-          var rate = result.reviews[i].rating;
+    //     for (let i = 0; i < result.reviews.length; i++) {
+    //       var rate = result.reviews[i].rating;
 
-          if (rate == 1){
-            rating1++;
-          } else if (rate == 2){
-            rating2++;
-          } else if (rate == 3){
-            rating3++;
-          } else if (rate == 4){
-            rating4++;
-          } else if (rate == 5){
-            rating5++;
-          } else {
-            continue;
-          }
-        }
-        const totalrate = rating1 + rating2 + rating3 + rating4 + rating5;
-        const rateave = (rating1*1 + rating2*2 + rating3*3 + rating4*4 + rating5*5)/totalrate;
+    //       if (rate == 1){
+    //         rating1++;
+    //       } else if (rate == 2){
+    //         rating2++;
+    //       } else if (rate == 3){
+    //         rating3++;
+    //       } else if (rate == 4){
+    //         rating4++;
+    //       } else if (rate == 5){
+    //         rating5++;
+    //       } else {
+    //         continue;
+    //       }
+    //     }
+    //     const totalrate = rating1 + rating2 + rating3 + rating4 + rating5;
+    //     const rateave = (rating1*1 + rating2*2 + rating3*3 + rating4*4 + rating5*5)/totalrate;
 
-        let rounded5 = parseFloat((rating5/totalrate*100).toFixed(1));
-        let rounded4 = parseFloat((rating4/totalrate*100).toFixed(1));
-        let rounded3 = parseFloat((rating3/totalrate*100).toFixed(1));
+    //     let rounded5 = parseFloat((rating5/totalrate*100).toFixed(1));
+    //     let rounded4 = parseFloat((rating4/totalrate*100).toFixed(1));
+    //     let rounded3 = parseFloat((rating3/totalrate*100).toFixed(1));
 
-        const percentages = {
-          distribution : {5: rounded5, 4: rounded4, 3: rounded3}, 
-          rateave, 
-          total
-        };
+    //     const percentages = {
+    //       distribution : {5: rounded5, 4: rounded4, 3: rounded3}, 
+    //       rateave, 
+    //       total
+    //     };
 
-        // Clear existing reviews
-        const reviewsList = document.querySelector('.reviews-list');
-        reviewsList.innerHTML = '';
+    //     // Clear existing reviews
+    //     const reviewsList = document.querySelector('.reviews-list');
+    //     reviewsList.innerHTML = '';
 
-        // Render filtered reviews
-        renderReviewsSection(result, percentages); // Pass null for percentages as we don't need to update that here
+    //     // Render filtered reviews
+    //     renderReviewsSection(result, percentages); // Pass null for percentages as we don't need to update that here
 
-      } catch (error) {
-        console.error('Error fetching filtered reviews:', error);
-      }
-    }
+    //   } catch (error) {
+    //     console.error('Error fetching filtered reviews:', error);
+    //   }
+    // }
 
     handleRatingChange(selectedValue);
 });
