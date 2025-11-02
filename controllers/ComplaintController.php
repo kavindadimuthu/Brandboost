@@ -14,6 +14,8 @@ use app\core\Utils\FileHandler;
 use app\models\Actions\Complaint;
 use app\models\Orders\Orders;
 
+use app\models\Actions\ComplaintTypes;
+
 class ComplaintController extends BaseController {
 
     /**
@@ -189,7 +191,9 @@ class ComplaintController extends BaseController {
             // For multipart/form-data, access directly from $_POST and $_FILES
             $orderId = $_POST['order_id'] ?? null;
             $content = $_POST['content'] ?? null;
-            //$complaintType = $_POST['complaint_type'] ?? null;
+            $complaintType = $_POST['complaint_type'] ?? null;
+            $reason = $_POST['reason'] ?? null;
+
 
             if (empty($orderId) || empty($content)) {
                 $response->sendJson([
@@ -228,16 +232,21 @@ class ComplaintController extends BaseController {
                 }
             }
 
+            error_log('orderId: ' . $orderId);
             $orderModel = new Orders();
             $returnedOrder = $orderModel->getOrderById($orderId);
+            error_log('order details: ');
+            error_log(print_r($returnedOrder, 1));
             $reportedUserId = $returnedOrder['seller_id'];
+            error_log('Reported User ID: ' . $reportedUserId);
 
             // Save complaint in DB
             $complaint = [
                 'order_id' => $orderId,
                 'complainant_user_id' => $userId ?? 0,
                 'reported_user_id' => $reportedUserId,
-                //'complaint_type' => $complaintType,
+                'complaint_type' => $complaintType,
+                //'complaint_reason' => $reason,
                 'description' => $content,
                 'proofs' => json_encode($savedFiles), // Store as JSON array
                 'status' => 'pending',
@@ -377,6 +386,7 @@ class ComplaintController extends BaseController {
                 'complaint_id' => $row['complaint_id'],
                 'complainant_user_id' => $row['complainant_user_id'],
                 'reported_user_id' => $row['reported_user_id'],
+                //'complaint_reason' => $row['complaint_reason'],
                 'complaint_type' => $row['complaint_type'],
                 'description' => $row['description'],
                 'status' => $row['status'],
@@ -426,5 +436,26 @@ class ComplaintController extends BaseController {
         return $formatter($complaint);
     }
 
+    public function getComplaintTypes($request, $response) {
+        try{
+            error_log('Fetching complaint types...');
+             error_log('ComplaintTypes model instantiated.');
+             $complaintTypesModel = $this->model('Actions\ComplaintTypes');
+             error_log('ComplaintTypes model instantiated successfully.');
+                $complaintTypes = $complaintTypesModel->getAllComplaintTypes();
+                // error_log('Complaint types fetched: ' . print_r($complaintTypes, true));
+                return $response->sendJson([
+                    'success' => true,
+                    'data' => $complaintTypes
+                ]);
+        }catch (\Exception $e) {
+            error_log('Error fetching complaint types: ' . $e->getMessage());
+            return $response->sendJson([
+                'success' => false,
+                'message' => 'Failed to fetch complaint types.'
+            ], 500);
+        }
+       
+    }
 
 }

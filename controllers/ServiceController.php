@@ -154,11 +154,12 @@ class ServiceController extends BaseController
 
         // Retrieve query parameters
         $queryParams = $request->getQueryParams();
-        // $serviceId = $queryParams['service_id'] ?? null;
+        //$serviceId = $queryParams['service_id'] ?? null;
         $serviceId = $queryParams['id'] ?? null;
         $includeAnalytics = $queryParams['include_analytics'] ?? false;
         $customPackageId = $queryParams['custom_package_id'] ?? false;
         $includeUser =  $queryParams['include_user'] ?? false;
+        $ratingFilter = $queryParams['rating'] ?? null;
 
         // Validate required parameter
         if (!$serviceId) {
@@ -189,7 +190,17 @@ class ServiceController extends BaseController
         $service['packages'] = array_values($packages);
 
         //fetch associated reviews for the service
-        $reviews = $serviceReviewModel->getByServiceId($serviceId);
+        if($ratingFilter){
+            $conditions = [
+                'service_id' => $serviceId,
+                'rating' => $ratingFilter
+            ];
+        } else {
+            $conditions = [
+                'service_id' => $serviceId
+            ];
+        }
+        $reviews = $serviceReviewModel->getByServiceId($conditions);
 
         // Fetch associated users for the reviews
         foreach ($reviews as &$review) {

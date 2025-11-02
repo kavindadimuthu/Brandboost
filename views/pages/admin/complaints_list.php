@@ -1029,10 +1029,14 @@ const filterDropdownBtn = document.getElementById('filterDropdownBtn');
                                 </div>
                             </div>
                         </td>
-                        <td>${complaint.complaint_type}</td>
-                        <td class="tooltip">
-                            <div class="truncate">${complaint.description}</div>
-                            <span class="tooltip-text">${complaint.description}</span>
+                        <td>
+                            <span class="badge badge-${complaint.complaint_type}">${complaint.complaint_type}</span>
+                        </td>
+                        <td>
+                            <div class="tooltip">
+                                <span class="truncate">${complaint.description}</span>
+                                <span class="tooltip-text">${complaint.description}</span>
+                            </div>
                         </td>
                         <td>
                             <span class="badge badge-${complaint.status}">${complaint.status}</span>

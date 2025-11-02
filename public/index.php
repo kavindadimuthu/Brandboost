@@ -231,6 +231,7 @@ $app->router->get('/api/complaint/{id}', 'ComplaintController@getComplaintDetail
 $app->router->post('/api/create-complaint', 'ComplaintController@CreateComplaint'); // Create Complaint
 $app->router->post('/api/update-complaint-status', 'ComplaintController@updateComplaintStatus'); // Update complaint status
 $app->router->post('/api/complaints-count', 'ComplaintController@getComplaintCountsSummary'); // Get complaint counts summary
+$app->router->get('/api/complaint-types', 'ComplaintController@getComplaintTypes'); // Get complaint types
 // ==================================
 // Admin actions Management APIs
 // ==================================
